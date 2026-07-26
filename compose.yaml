@@ -1,0 +1,31 @@
+services:
+  api:
+    build: .
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql+psycopg://sled:sled@db:5432/sled
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: sled
+      POSTGRES_USER: sled
+      POSTGRES_PASSWORD: sled
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sled -d sled"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - sled_postgres:/var/lib/postgresql/data
+
+volumes:
+  sled_postgres:
+

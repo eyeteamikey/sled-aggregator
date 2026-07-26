@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trustest-sled-aggregator"
+version = "0.1.0"
+description = "Backend-first public SLED procurement intelligence service"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+authors = [{ name = "TrustEST LLC" }]
+dependencies = [
+  "fastapi>=0.116,<1.0",
+  "pydantic>=2.11,<3.0",
+  "pydantic-settings>=2.10,<3.0",
+  "uvicorn[standard]>=0.35,<1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28,<1.0",
+  "pytest>=8.4,<9.0",
+  "pytest-asyncio>=1.1,<2.0",
+  "ruff>=0.12,<1.0",
+]
+database = [
+  "alembic>=1.16,<2.0",
+  "psycopg[binary]>=3.2,<4.0",
+  "sqlalchemy>=2.0,<3.0",
+]
+documents = [
+  "openpyxl>=3.1,<4.0",
+  "pypdf>=5.8,<6.0",
+  "python-docx>=1.2,<2.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sled_aggregator"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
+
