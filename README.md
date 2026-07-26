@@ -18,6 +18,7 @@ portal controls.
 - Access-state handling for public and restricted documents
 - Configuration for targeted OCR and bounded ZIP processing
 - PostgreSQL-ready runtime configuration
+- SQLAlchemy persistence adapter and Alembic migration baseline
 - Unit tests for normalization, classification, and connector registration
 - Docker and GitHub Actions development baseline
 
@@ -90,8 +91,8 @@ docker compose up --build
 - `POST /api/v1/documents/classify`
 - `GET /api/v1/connectors`
 
-The in-memory opportunity endpoint is a development seam. Persistence and
-scheduled connector execution are the next implementation layers.
+The opportunity service is repository-backed. PostgreSQL is the production
+adapter; an in-memory adapter supports deterministic unit testing.
 
 ## Data principles
 
@@ -146,11 +147,23 @@ docs/              Architecture and operating constraints
 
 ## Roadmap
 
-1. Add PostgreSQL persistence and migrations.
-2. Implement the first reusable WebProcure/Proactis connector against approved
+1. Implement the first reusable WebProcure/Proactis connector against approved
    public endpoints.
-3. Add connector execution jobs, change detection, and observability.
-4. Implement document retrieval, extraction, targeted OCR, and safe archives.
-5. Add profile/capability matching and explainable fit scoring.
-6. Feed teaming, compliance, risk, alert, and export workflows.
+2. Add connector execution jobs, change detection, and observability.
+3. Implement document retrieval, extraction, targeted OCR, and safe archives.
+4. Add profile/capability matching and explainable fit scoring.
+5. Feed teaming, compliance, risk, alert, and export workflows.
 
+## Database migrations
+
+Apply the current schema:
+
+```bash
+alembic upgrade head
+```
+
+Create a migration after changing SQLAlchemy models:
+
+```bash
+alembic revision --autogenerate -m "describe change"
+```

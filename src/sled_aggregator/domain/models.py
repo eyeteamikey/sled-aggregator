@@ -50,6 +50,8 @@ class CanonicalOpportunity(BaseModel):
     posted_at: datetime | None = None
     due_at: datetime | None = None
     categories: list[str] = Field(default_factory=list)
+    raw_payload: dict[str, Any] = Field(default_factory=dict)
+    last_seen_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     normalized_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
@@ -68,4 +70,3 @@ class DocumentClassification(BaseModel):
     role: DocumentRole
     score: float = Field(ge=0.0, le=1.0)
     rationale: list[str] = Field(default_factory=list)
-

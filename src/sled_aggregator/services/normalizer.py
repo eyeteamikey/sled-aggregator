@@ -27,6 +27,7 @@ class OpportunityNormalizer:
             posted_at=raw.posted_at,
             due_at=raw.due_at,
             categories=sorted({self._clean(item) for item in raw.categories if item.strip()}),
+            raw_payload=raw.raw_payload,
         )
 
     @staticmethod
@@ -36,4 +37,3 @@ class OpportunityNormalizer:
     @staticmethod
     def _slug(value: str) -> str:
         return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
-
