@@ -1,0 +1,13 @@
+# Let Codex automatically select the appropriate model.
+# You can add a model later if you want to pin one.
+
+model_reasoning_effort = "high"
+
+# Codex may read and modify files inside the current project.
+sandbox_mode = "workspace-write"
+
+# Ask permission before actions that require access beyond the sandbox.
+approval_policy = "on-request"
+
+# Use current internet results when research is needed.
+web_search = "live"
