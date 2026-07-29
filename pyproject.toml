@@ -13,6 +13,7 @@ authors = [{ name = "TrustEST LLC" }]
 dependencies = [
   "alembic>=1.16,<2.0",
   "fastapi>=0.116,<1.0",
+  "httpx>=0.28,<1.0",
   "pydantic>=2.11,<3.0",
   "pydantic-settings>=2.10,<3.0",
   "psycopg[binary]>=3.2,<4.0",
@@ -22,7 +23,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "httpx>=0.28,<1.0",
   "pytest>=8.4,<9.0",
   "pytest-asyncio>=1.1,<2.0",
   "ruff>=0.12,<1.0",
