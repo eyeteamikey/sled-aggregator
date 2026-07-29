@@ -37,6 +37,17 @@ class ConnectorRegistryTests(unittest.TestCase):
         self.assertEqual(connector.platform_family, "periscope/buyspeed")
         self.assertIn("U.S. Virgin Islands", connector.jurisdictions)
 
+    def test_peoplesoft_connector_and_aliases_are_registered(self) -> None:
+        from sled_aggregator.connectors.peoplesoft import PeopleSoftSourcingConnector
+
+        for key in (
+            "oracle/peoplesoft-sourcing",
+            "peoplesoft",
+            "peoplesoft/supplier-portal",
+            "california/cal-eprocure",
+        ):
+            self.assertIs(connector_registry.get(key), PeopleSoftSourcingConnector)
+
     def test_registers_and_describes_connector(self) -> None:
         registry = ConnectorRegistry()
         registry.register(ExampleConnector)
