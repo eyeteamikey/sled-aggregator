@@ -29,9 +29,7 @@ class DocumentClassifierTests(unittest.TestCase):
         self.assertEqual(result.eligibility, DocumentEligibility.EXCLUDE)
 
     def test_restricted_document_stops_retrieval(self) -> None:
-        result = self.classifier.classify(
-            candidate("RFP.pdf", access_state=AccessState.RESTRICTED)
-        )
+        result = self.classifier.classify(candidate("RFP.pdf", access_state=AccessState.RESTRICTED))
         self.assertEqual(result.eligibility, DocumentEligibility.RESTRICTED)
 
     def test_ambiguous_document_requires_review(self) -> None:
@@ -41,4 +39,3 @@ class DocumentClassifierTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

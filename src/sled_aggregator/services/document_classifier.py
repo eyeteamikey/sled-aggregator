@@ -67,4 +67,3 @@ class DocumentClassifier:
             score=0.5,
             rationale=["filename and label do not contain a decisive solicitation signal"],
         )
-

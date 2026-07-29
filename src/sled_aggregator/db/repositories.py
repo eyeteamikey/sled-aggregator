@@ -100,4 +100,3 @@ class SqlAlchemyOpportunityRepository:
             last_seen_at=record.last_seen_at,
             normalized_at=record.normalized_at,
         )
-

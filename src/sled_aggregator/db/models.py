@@ -20,9 +20,7 @@ class OpportunityRecord(Base):
         Index("ix_opportunities_jurisdiction", "jurisdiction"),
     )
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=lambda: str(uuid4())
-    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
     canonical_key: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     source_portal: Mapped[str] = mapped_column(String(100), nullable=False)
     source_record_id: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -36,16 +34,7 @@ class OpportunityRecord(Base):
     posted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     due_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     categories: Mapped[list[str]] = mapped_column(JSONB, nullable=False, default=list)
-    raw_payload: Mapped[dict[str, object]] = mapped_column(
-        JSONB, nullable=False, default=dict
-    )
-    first_seen_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
-    last_seen_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
-    normalized_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False
-    )
-
+    raw_payload: Mapped[dict[str, object]] = mapped_column(JSONB, nullable=False, default=dict)
+    first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    normalized_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

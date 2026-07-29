@@ -56,6 +56,47 @@ bounded retries, exponential backoff, jitter, and numeric or HTTP-date
 circuit breaker and health snapshot; a successful JSON response resets failure
 state. Non-JSON, malformed JSON, and unexpected response shapes fail closed.
 
+### Periscope S2G/BuySpeed connector
+
+The `periscope/buyspeed` connector is a platform-family adapter with separate
+portal presets for BidBuy (Illinois), COMMBUYS (Massachusetts), NevadaEPro,
+NJSTART (New Jersey), OregonBuys, and GVIBUY (U.S. Virgin Islands). Configuration
+owns public entry/search and detail URLs, variant, response strategy, request
+parameters, pagination origin, aliases, date formats, headers, optional public
+session initialization, and document-session requirements. This prevents an
+assumption observed on one BuySpeed deployment from silently becoming behavior
+for all deployments.
+
+The connector performs only public GET requests. JSON, HTML, and hybrid
+list/detail strategies normalize valid records into `RawOpportunity`; complete
+source fields and discovered document-link metadata stay in `raw_payload` for
+provenance. Pagination and results have independent hard caps, stable source IDs
+are deduplicated, repeated pages terminate discovery, and invalid required fields
+increment an observable skip count. When safe anonymous discovery is not
+configured, a preset can provide only its authoritative bid-board fallback and
+report `unsupported` rather than inventing results.
+
+Login and expired-session content returned with HTTP 200, authentication
+redirects, CAPTCHA/bot challenges, and 403 responses are explicit restricted
+states. Document links are metadata only and identify public,
+anonymous-session-dependent, or restricted access; no document extraction, OCR,
+login, challenge bypass, or bid workflow belongs to this connector.
+
+Retries are bounded and cover connection failures plus 429, 502, 503, and 504,
+with exponential backoff, jitter, and numeric or HTTP-date `Retry-After` support.
+Repeated failed discovery runs open a cooldown circuit. Health includes portal,
+jurisdiction, availability, access state, circuit state, failure count, last
+status, failure/success timestamps, and skipped records. Caller-injected
+transports remain caller-owned; connector-created clients are closed by the
+connector.
+
+Production verification is intentionally separated from parser assumptions:
+the six authoritative public portal entry points and platform identification are
+documented, while anonymous endpoints and response mappings are currently marked
+unverified. Tests use synthetic, non-sensitive fixtures and injected transports
+only and never depend on live portal availability. Live verification, richer
+variant adapters, and document retrieval are deferred follow-up work.
+
 ## Document pipeline
 
 The later document service will support PDF, Office files, HTML, text, CSV,

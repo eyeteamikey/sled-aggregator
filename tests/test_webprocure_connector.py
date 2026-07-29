@@ -111,9 +111,7 @@ class WebProcureConnectorTests(unittest.IsolatedAsyncioTestCase):
         for payload in ([{"id": "1"}], {"results": "bad"}, {"results": [{"id": "1"}]}):
             with self.subTest(payload=payload), self.assertRaises(WebProcureError):
                 await collect(
-                    WebProcureConnector(
-                        CONNECTICUT, transport=FakeTransport([response(payload)])
-                    )
+                    WebProcureConnector(CONNECTICUT, transport=FakeTransport([response(payload)]))
                 )
 
     async def test_retries_exponentially_after_502_and_503_then_recovers(self) -> None:
