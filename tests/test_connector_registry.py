@@ -24,9 +24,12 @@ class ConnectorRegistryTests(unittest.TestCase):
     def test_webprocure_connector_is_registered(self) -> None:
         connector = connector_registry.get("webprocure/proactis")
         self.assertEqual(connector.platform_family, "webprocure/proactis")
-        self.assertEqual(
-            connector.jurisdictions, ("Connecticut", "Missouri", "Rhode Island")
-        )
+        self.assertEqual(connector.jurisdictions, ("Connecticut", "Missouri", "Rhode Island"))
+
+    def test_periscope_connector_is_registered(self) -> None:
+        connector = connector_registry.get("periscope/buyspeed")
+        self.assertEqual(connector.platform_family, "periscope/buyspeed")
+        self.assertIn("U.S. Virgin Islands", connector.jurisdictions)
 
     def test_registers_and_describes_connector(self) -> None:
         registry = ConnectorRegistry()

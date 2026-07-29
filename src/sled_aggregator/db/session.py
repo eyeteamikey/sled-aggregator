@@ -24,4 +24,3 @@ def get_db_session() -> Iterator[Session]:
         yield session
     finally:
         session.close()
-

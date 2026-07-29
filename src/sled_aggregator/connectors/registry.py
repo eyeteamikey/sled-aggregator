@@ -39,6 +39,8 @@ connector_registry = ConnectorRegistry()
 
 # Production connector registration lives here so API discovery works without
 # requiring application startup side effects.
+from sled_aggregator.connectors.periscope import PeriscopeBuySpeedConnector  # noqa: E402
 from sled_aggregator.connectors.webprocure import WebProcureConnector  # noqa: E402
 
 connector_registry.register(WebProcureConnector)
+connector_registry.register(PeriscopeBuySpeedConnector)

@@ -17,4 +17,3 @@ class OpportunityService:
 
     def list(self, *, limit: int = 100, offset: int = 0) -> list[CanonicalOpportunity]:
         return self.repository.list(limit=limit, offset=offset)
-

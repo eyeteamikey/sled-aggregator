@@ -26,4 +26,3 @@ class InMemoryOpportunityRepository:
         created = key not in self._items
         self._items[key] = deepcopy(opportunity)
         return UpsertResult(opportunity=deepcopy(opportunity), created=created)
-

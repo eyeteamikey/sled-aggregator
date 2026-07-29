@@ -22,6 +22,8 @@ portal controls.
 - Unit tests for normalization, classification, and connector registration
 - Public WebProcure/PROACTIS discovery for Connecticut (CTsource), Missouri's
   legacy bid board, and Rhode Island (Ocean State Procures)
+- Configurable Periscope S2G/BuySpeed public discovery presets for Illinois,
+  Massachusetts, Nevada, New Jersey, Oregon, and the U.S. Virgin Islands
 - Docker and GitHub Actions development baseline
 
 ## Architecture
@@ -155,6 +157,38 @@ failure count, status, and failure time.
 The production full-text endpoint has recently returned 502 and 503 responses.
 Automated tests therefore use fixtures and test transports rather than requiring
 live portal availability.
+
+### Periscope S2G/BuySpeed
+
+Select the reusable connector with the `periscope/buyspeed` key. Presets provide
+authoritative public entry points for Illinois BidBuy, Massachusetts COMMBUYS,
+NevadaEPro, NJSTART, OregonBuys, and GVIBUY. Each preset independently controls
+its URLs, response strategy, query and pagination names, field aliases, date
+formats, optional anonymous-session initialization, detail URL construction,
+headers, and document-session behavior; sharing a platform family is not treated
+as proof that deployments behave identically.
+
+Discovery is asynchronous and GET-only, bounded by page, page-size, query-limit,
+and connector result caps, and stops on repeated pages. It supports configured
+JSON, HTML, and hybrid list/detail parsing, preserves unfamiliar source fields,
+deduplicates stable source IDs, and skips malformed records observably. Public
+document metadata for likely solicitation materials is retained in `raw_payload`
+with its authoritative URL, opportunity URL, and public, session-dependent, or
+restricted access state. The connector does not download or extract documents.
+
+Authentication redirects, login/session-expired pages, CAPTCHA challenges, and
+403 responses fail as restricted rather than becoming false empty results. The
+connector never logs in, registers, submits, stores credentials, circumvents a
+control, or retrieves restricted files. Transient 429, 502, 503, and 504 status
+codes and connection failures use bounded exponential backoff, jitter,
+`Retry-After`, cooldown circuit breaking, and portal-specific health reporting.
+
+Only the six public bid-board entry URLs and expected platform family are
+recorded as production facts. Anonymous list/detail endpoint behavior and field
+mappings were not live-verified for this change; presets explicitly mark that
+limitation and remain configurable. All parser, pagination, access-boundary,
+document-link, transport-ownership, and resilience behavior is fixture-tested
+with injected transports, so the unit suite makes no production portal calls.
 
 ## Project layout
 

@@ -16,4 +16,3 @@ async def list_opportunities() -> list[CanonicalOpportunity]:
 @router.post("/normalize", response_model=CanonicalOpportunity)
 async def normalize_opportunity(payload: RawOpportunity) -> CanonicalOpportunity:
     return normalizer.normalize(payload)
-

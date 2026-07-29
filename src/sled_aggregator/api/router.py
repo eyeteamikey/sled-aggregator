@@ -8,4 +8,3 @@ api_router = APIRouter(prefix=settings.api_prefix)
 api_router.include_router(opportunities.router)
 api_router.include_router(documents.router)
 api_router.include_router(connectors.router)
-

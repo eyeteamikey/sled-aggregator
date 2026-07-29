@@ -8,4 +8,3 @@ router = APIRouter(prefix="/connectors", tags=["connectors"])
 @router.get("")
 async def list_connectors() -> list[dict[str, object]]:
     return connector_registry.describe()
-

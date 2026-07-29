@@ -39,4 +39,3 @@ class OpportunityStatus(StrEnum):
     AWARDED = "awarded"
     CANCELLED = "cancelled"
     UNKNOWN = "unknown"
-

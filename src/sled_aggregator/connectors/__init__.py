@@ -1,2 +1,1 @@
 """Reusable platform-family connectors."""
-

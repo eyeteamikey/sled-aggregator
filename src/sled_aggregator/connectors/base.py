@@ -22,4 +22,3 @@ class BaseConnector(ABC):
         """Yield public opportunity records without performing portal mutations."""
         if False:
             yield
-
