@@ -223,3 +223,50 @@ Create a migration after changing SQLAlchemy models:
 ```bash
 alembic revision --autogenerate -m "describe change"
 ```
+
+### Infotech Bid Express / BidX
+
+Use `infotech/bid-express` (aliases: `infotech/bidx`, `bid-express`, and
+`bidx`) for this configurable family connector. BidX is transportation-focused:
+state DOT highway, bridge, construction letting, proposal, and bid-result data.
+Bid Express and Infotech Express also serve local agencies and support both
+construction and general procurement. Their routes, identifiers, formats,
+sessions, and access rules are configured independently rather than assumed to
+be interchangeable. Supported variants are `bidx_legacy`, `bidx_modern`,
+`bidexpress_general`, `infotech_express`, and
+`unknown_configurable_variant`.
+
+Configured-only presets record the public BidX directory coverage for 39 states,
+plus MBTA, the New Jersey Turnpike Authority, New York State Thruway Authority,
+and North Carolina DOT divisions. They intentionally contain no guessed agency
+IDs or listing endpoints and fall back to the authoritative directory. A portal
+becomes live-verified only after its agency identifier, anonymous listing route,
+detail behavior, and document behavior are confirmed. Directory presence is not
+a claim that every agency is currently reachable or fixture-tested behavior is
+production-verified.
+
+Configured public endpoints support asynchronous GET-only bounded discovery,
+keyword and jurisdiction filtering, agency parameters, JSON, HTML, XML, CSV, and
+hybrid detail strategies. Page size, page count, result count, duplicate IDs,
+and repeated pages are bounded. Complete platform fields—including letting,
+route, county, project, estimate, participation-goal, work-type, contact, award,
+and bid-result data without a current canonical field—remain in `raw_payload`.
+Stable identities add a verified agency identifier when one is configured.
+
+Document discovery records public proposal packages, plans, specifications,
+addenda, notices, forms, item lists, RFP/RFQ/IFB and SOW/PWS materials, bid tabs,
+and award links without downloading them. Metadata includes apparent type,
+opportunity link, anonymous-session need, and registration, login, subscription,
+or payment state. Restricted resources remain link-only. HTTP 200 login,
+registration, subscription, payment, Digital ID, CAPTCHA, maintenance, and error
+pages are explicit access boundaries, as are redirects and 403 responses; the
+connector never registers, logs in, pays, creates a Digital ID, bypasses a
+challenge, or submits a bid.
+
+Retries, exponential backoff with jitter, numeric and HTTP-date `Retry-After`,
+connection handling, transient 429/502/503/504 responses, cooldown circuit
+breaking, success reset, health snapshots, and transport ownership follow the
+existing connector conventions. CI uses only synthetic fixtures and injected
+transports. Live behavior remains limited by independently changing public
+routes, public-session rules, and agency policies; respectful live verification
+and document content retrieval are deferred.

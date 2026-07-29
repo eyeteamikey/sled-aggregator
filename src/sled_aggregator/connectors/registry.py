@@ -17,6 +17,17 @@ class ConnectorRegistry:
             raise ValueError("connectors must be public and read-only")
         self._connectors[name] = connector
 
+    def register_alias(self, alias: str, connector: type[BaseConnector]) -> None:
+        """Register an explicit family alias with the same safety checks as a connector."""
+        name = alias.strip().lower()
+        if not name:
+            raise ValueError("connector alias must not be blank")
+        if name in self._connectors:
+            raise ValueError(f"connector already registered: {name}")
+        if not connector.public_read_only:
+            raise ValueError("connectors must be public and read-only")
+        self._connectors[name] = connector
+
     def get(self, platform_family: str) -> type[BaseConnector]:
         key = platform_family.strip().lower()
         try:
@@ -39,8 +50,12 @@ connector_registry = ConnectorRegistry()
 
 # Production connector registration lives here so API discovery works without
 # requiring application startup side effects.
+from sled_aggregator.connectors.infotech import InfotechBidExpressConnector  # noqa: E402
 from sled_aggregator.connectors.periscope import PeriscopeBuySpeedConnector  # noqa: E402
 from sled_aggregator.connectors.webprocure import WebProcureConnector  # noqa: E402
 
 connector_registry.register(WebProcureConnector)
 connector_registry.register(PeriscopeBuySpeedConnector)
+connector_registry.register(InfotechBidExpressConnector)
+for _alias in ("infotech/bidx", "bid-express", "bidx"):
+    connector_registry.register_alias(_alias, InfotechBidExpressConnector)
