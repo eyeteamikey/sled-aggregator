@@ -25,6 +25,8 @@ portal controls.
 - Configurable Periscope S2G/BuySpeed public discovery presets for Illinois,
   Massachusetts, Nevada, New Jersey, Oregon, and the U.S. Virgin Islands
 - Docker and GitHub Actions development baseline
+- Virginia eVA public opportunity-board discovery with lot/round consolidation,
+  IVDetails/IVDetailsV2 enrichment, and access-aware document metadata
 
 ## Architecture
 
@@ -157,6 +159,38 @@ failure count, status, and failure time.
 The production full-text endpoint has recently returned 502 and 503 responses.
 Automated tests therefore use fixtures and test transports rather than requiring
 live portal availability.
+
+### Virginia eVA
+
+The `virginia/eva` connector (aliases `eva`, `virginia-business-opportunities`,
+and `cgi/eva`) models the public `PublicSearch.jsp` and `AllOpportunities.jsp`
+routes, including URL-encoded `status` and `agencyname` filters. It follows only
+public GET links to the separately parsed `IVDetails.jsp` and `IVDetailsV2.jsp`
+variants. The stable source identity is `rfp_id_lot`; `rfp_id_round` is version
+provenance, and the highest round is emitted rather than duplicated.
+
+Discovery is independently bounded by page, result, and detail limits. It stops
+on empty or repeated pages and supports keywords, reference/lot ID, agency,
+status, notice type, issue/closing dates, NIGP, and locality through configurable
+query parameters. Known IFB/RFP/RFQ/RFI, Quick Quote, unsealed, sole-source,
+emergency, award, cancellation, amendment, and notice types are mapped
+conservatively; the verbatim source value always remains in `raw_payload`.
+
+Document discovery retains authoritative eVA URLs, lot/round, apparent type,
+category, dates, attachment ID, and anonymous-session/account access state.
+It does not download, extract, or OCR attachments. Login, registration, session
+expiration, CAPTCHA, maintenance, and HTTP 403 pages fail closed; a stable 403
+is not retried and means only that this execution environment is blocked, not
+that vendor authentication is universally required. Transient failures retain
+the standard bounded retry, Retry-After, jitter, circuit, health, and HTTP-client
+ownership behavior.
+
+CI is fixture-only and does not contact eVA. A July 29, 2026 live check of
+robots.txt, search, board, open-status, and one agency-filtered board was blocked
+by the execution environment's CONNECT proxy (HTTP 403 before an origin
+response). Those routes are therefore `blocked`; list/detail parsing and
+document visibility are `fixture_verified`; both detail route templates are
+`configured_unverified`. No opportunity IDs were guessed or enumerated.
 
 ### Periscope S2G/BuySpeed
 

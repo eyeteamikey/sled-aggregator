@@ -193,3 +193,40 @@ attachment, and pagination behavior is fixture-verified but not live-verified.
 Adding a portal requires independently verifying its public route and boundary,
 then supplying a new `PeopleSoftSourcingPortal`; temporary state must never be
 copied between deployments.
+
+### Virginia eVA connector
+
+`virginia/eva` is intentionally jurisdiction-specific rather than advertised as
+a generic CGI Advantage/VSS adapter. `EVAPortal` owns the authoritative public
+search and Virginia Business Opportunities board routes plus both observed
+detail variants. Transport/session/search mechanics, tolerant HTML parsing, and
+normalization remain separate. Query, page, result, and detail caps prevent an
+unbounded historical crawl; empty results, repeated pages, access changes, and
+open circuits terminate collection.
+
+The eVA lot identifier is the persistence-facing source ID. Rounds are revisions
+of that identity: records are grouped by lot and the highest current round wins,
+while all observed rounds remain in provenance. Current detail URLs retain the
+variant, lot, and round; `PageTitle` is never identity. Earlier documents remain
+when useful (especially addenda), while every discovered link records its own
+round and access classification.
+
+Access detection examines successful HTTP bodies and redirect destinations for
+supplier/buyer login, registration, session expiry, authorization, maintenance,
+CAPTCHA, and unusable JavaScript shells. HTTP 403 is a terminal forbidden state,
+not an empty board or a transient retry target. The adapter does not log in,
+register, submit responses, accept terms, evade robots directives, solve
+challenges, or retrieve account-only files. Anonymous cookies stay within the
+connector-owned HTTP client and are never copied into raw payloads.
+
+Sanitized fixtures verify both detail strategies, round consolidation, changed
+deadlines, document/addendum/account-link classification, malformed records,
+access pages, transient retries, circuit recovery, health, and ownership. Live
+checks on July 29, 2026 were blocked by the cloud CONNECT proxy for robots.txt,
+PublicSearch, the board, open filtering, and the County of Roanoke filter; thus
+the origin's anonymous-session, redirect, document, and markup behavior remains
+unverified here. Diagnose changes with one respectful robots request, then one
+search/board request and a detail link already present on that board; compare
+sanitized markup with parser fixtures, stop on blocking, and never enumerate lot
+or round IDs. Document retrieval/extraction, OCR, authenticated workflows,
+generic CGI inheritance, and production availability monitoring are deferred.
