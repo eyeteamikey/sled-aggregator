@@ -26,6 +26,12 @@ class ConnectorRegistryTests(unittest.TestCase):
         self.assertEqual(connector.platform_family, "webprocure/proactis")
         self.assertEqual(connector.jurisdictions, ("Connecticut", "Missouri", "Rhode Island"))
 
+    def test_infotech_connector_and_aliases_are_registered(self) -> None:
+        from sled_aggregator.connectors.infotech import InfotechBidExpressConnector
+
+        for key in ("infotech/bid-express", "infotech/bidx", "bid-express", "bidx"):
+            self.assertIs(connector_registry.get(key), InfotechBidExpressConnector)
+
     def test_periscope_connector_is_registered(self) -> None:
         connector = connector_registry.get("periscope/buyspeed")
         self.assertEqual(connector.platform_family, "periscope/buyspeed")

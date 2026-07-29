@@ -107,3 +107,50 @@ bytes, file count, depth, encryption, paths, compression ratio, and type.
 Restricted documents produce metadata and a source link. User-authorized or
 user-uploaded retrieval is a separate future channel and must not weaken public
 connector controls.
+
+### Infotech Bid Express / BidX connector
+
+The `infotech/bid-express` family adapter separates five configurable product
+variants: legacy and modern BidX, general Bid Express, Infotech Express, and an
+unknown variant for safely modeled deployments. BidX primarily describes DOT
+lettings, proposals, construction documents, and bid results; Bid Express also
+covers local-agency construction and general procurement. Variant membership
+does not imply common endpoints, schemas, sessions, agency identifiers, or
+access policy.
+
+Agency configuration records agency, jurisdiction, variant, public base and
+listing/fallback URLs, verified identifier (when known), detail/document
+behavior, verification state, and access notes. The configured-only catalog
+mirrors the 39-state public directory coverage and named authority/division
+entries requested for this integration, but deliberately supplies no inferred
+IDs. Directory discovery can configure multiple agencies without separate
+connector classes. An authoritative directory fallback is retained where an
+anonymous opportunity route has not been verified.
+
+The adapter uses only bounded public GET navigation. Independently capped
+pagination/results, repeated-page fingerprints, stable-ID deduplication,
+keyword/jurisdiction/agency parameters, and optional public session and detail
+requests work with configured HTML, JSON, XML, CSV, or hybrid parsing. Canonical
+fields are populated where the compact domain model supports them; all remaining
+letting, proposal, location, route, project, contract, code, work type,
+participation goal, contact, estimate, award, and bid-result provenance remains
+in each raw payload.
+
+Discovered solicitation and result documents are metadata only. Links retain
+title, URL, parent opportunity, apparent extension, session need, link-only
+status, and public, registration, login, subscription, payment, or Digital ID
+classification. HTTP 200 access, CAPTCHA, maintenance, and generic-error pages,
+redirect targets, and forbidden responses fail closed and never become empty
+successful discovery. No authenticated, paid, submission, or challenge-bypass
+workflow exists.
+
+The resilience lifecycle includes request timeouts, bounded connection and
+429/502/503/504 retries, exponential backoff and jitter, both `Retry-After`
+forms, cooldown circuits, reset on success, and variant/agency/access-aware
+health. Injected clients remain caller-owned; connector-created clients close
+with the connector. Synthetic fixtures cover formats, pagination, documents,
+access boundaries, resilience, and ownership without contacting production.
+The directory catalog is configured-only, not a live-support guarantee. Endpoint
+verification, richer canonical fields, public directory parsing into persisted
+configuration, production monitoring, document retrieval/extraction, and OCR
+remain deferred.
