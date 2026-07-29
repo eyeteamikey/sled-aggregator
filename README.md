@@ -192,6 +192,69 @@ response). Those routes are therefore `blocked`; list/detail parsing and
 document visibility are `fixture_verified`; both detail route templates are
 `configured_unverified`. No opportunity IDs were guessed or enumerated.
 
+### Texas Electronic State Business Daily
+
+The `texas/esbd` connector (aliases `esbd`, `texas-esbd`, and
+`texas-smartbuy-esbd`) is a Texas-specific, public, read-only adapter for the
+Electronic State Business Daily presented at `https://www.txsmartbuy.gov/esbd`.
+It deliberately excludes Texas SmartBuy contracts and catalog products, CMBL
+vendor/registration records, Vendor Performance Tracking, shopping, and bid
+submission. The broad alias `texas-smartbuy` is reserved for a possible future
+contract/catalog connector.
+
+Discovery is asynchronous and bounded by configured page size, maximum pages,
+details, results, and concurrency. The query model supports keyword,
+solicitation ID, agency name/member number, status, NIGP class/item, posting
+and response dates. Punctuation is removed only from outbound NIGP filters while
+displayed codes remain intact. Empty or repeated pages stop a run, source IDs
+are deduplicated, and output order is deterministic. Parameter names and the
+detail template are `configured_unverified`; sanitized parsing is
+`fixture_verified`.
+
+An official ESBD internal ID is preferred for identity. If absent, the
+agency/member number plus solicitation ID prevents same-number bids from
+colliding. Addendum and award changes retain that identity. ESBD's documented
+post-deadline visibility gap is not treated as deletion: observations record
+`last_seen_at`, preserve source status, and declare an absence-is-not-deletion
+policy in provenance.
+
+Displayed deadlines use `America/Chicago`, including CST/CDT transitions; dates
+without a time are left unset rather than inventing midnight. Provenance retains
+the displayed deadline and available agency, NIGP, contact, HUB/HSP,
+value/quantity, conference, award, and addendum fields.
+
+Document discovery preserves exact public URLs, including every exposed
+`/core/media/media.nl` query/hash parameter. Relative links resolve against the
+official page, unsafe schemes are rejected, and internal media is distinguished
+from external links. Public response links and account-required documents remain
+metadata only. No document downloading, extraction, OCR, fabricated URLs,
+authentication, registration, CAPTCHA bypass, purchasing, or bid submission is
+implemented.
+
+HTTP 429/502/503/504 and connection failures receive bounded exponential
+backoff, jitter, and numeric or HTTP-date `Retry-After` handling. Login, CAPTCHA,
+forbidden, maintenance, generic-error, and incompatible HTTP 200 pages fail
+closed. Health reports the cooldown circuit, failures, last status and times,
+and access state. Injected clients remain caller-owned; created clients close.
+
+On July 29, 2026, the environment's CONNECT proxy returned HTTP 403 before an
+origin response for the requested official reference pages, ESBD landing page,
+and robots.txt. Posted, agency 305 Posted/Awarded, NIGP, detail, and attachment
+validation was therefore `blocked` rather than reported as successful. Fixture
+coverage is `fixture_verified`; live parameters, ordering, limits, pagination,
+wildcard semantics, sessions, redirects, CAPTCHA triggers, and delivery remain
+`configured_unverified`. No statewide-completeness claim is made.
+
+Official research entry points were:
+
+- `https://comptroller.texas.gov/purchasing/contact/outreach.php`
+- `https://comptroller.texas.gov/purchasing/vendor/information.php`
+- `https://comptroller.texas.gov/purchasing/members/`
+- `https://comptroller.texas.gov/purchasing/vendor/registration/`
+- `https://www.glo.texas.gov/open-government/doing-business-glo`
+- `https://www.txsmartbuy.gov/esbd`
+- `https://www.txsmartbuy.gov/robots.txt`
+
 ### Periscope S2G/BuySpeed
 
 Select the reusable connector with the `periscope/buyspeed` key. Presets provide
