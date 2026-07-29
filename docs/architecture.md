@@ -154,3 +154,42 @@ The directory catalog is configured-only, not a live-support guarantee. Endpoint
 verification, richer canonical fields, public directory parsing into persisted
 configuration, production monitoring, document retrieval/extraction, and OCR
 remain deferred.
+
+### Oracle PeopleSoft public sourcing connector
+
+`oracle/peoplesoft-sourcing` is the reusable, asynchronous adapter for public
+PeopleSoft Supplier Portal and Strategic Sourcing components. Deployment
+configuration owns authoritative entry and fallback URLs, response formats,
+field and query aliases, date formats, component/page hints, public guest
+context, department identifiers, and package, attachment, UNSPSC, and service
+area behavior. Cal eProcure / FI$Cal is the first preset, not a claim that all
+PeopleSoft installations share California's behavior.
+
+Anonymous landing cookies remain inside the HTTP client and hidden form fields
+remain ephemeral connector state; neither is persisted in an opportunity.
+Only GET navigation is implemented. Login, registration, bid response, Digital
+ID, account management, payment, private communication, CAPTCHA bypass, and
+restricted attachment retrieval are outside the connector boundary.
+
+Search and parsing support configured HTML, PeopleSoft partial pages, JSON,
+XML, and CSV. Independent page and result caps, repeated-page detection, stable
+ID deduplication, detail enrichment, and malformed-record skips prevent
+unbounded or misleading collection. Stable California identity combines
+jurisdiction, Business Unit, and Event ID. Rounds and versions describe the
+same underlying event by default and are retained in provenance rather than
+creating duplicates.
+
+Document discovery is link metadata only. It classifies likely solicitation
+packages and attachments, omits entries explicitly marked superseded, and
+retains access and anonymous-session requirements. HTTP 200 login,
+registration, expired-session, CAPTCHA, maintenance, and authorization pages
+fail closed. Retries, both `Retry-After` forms, jitter, cooldown circuits,
+health state, and caller/connector transport ownership follow existing connector
+conventions.
+
+CI is entirely sanitized and fixture-driven. The Cal eProcure public entry and
+fallback are configured, while component search, guest detail, package,
+attachment, and pagination behavior is fixture-verified but not live-verified.
+Adding a portal requires independently verifying its public route and boundary,
+then supplying a new `PeopleSoftSourcingPortal`; temporary state must never be
+copied between deployments.

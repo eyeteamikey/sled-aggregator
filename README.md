@@ -270,3 +270,44 @@ existing connector conventions. CI uses only synthetic fixtures and injected
 transports. Live behavior remains limited by independently changing public
 routes, public-session rules, and agency policies; respectful live verification
 and document content retrieval are deferred.
+
+### Oracle PeopleSoft Strategic Sourcing
+
+Use `oracle/peoplesoft-sourcing` (aliases `peoplesoft`,
+`peoplesoft/supplier-portal`, and `california/cal-eprocure`) for configurable
+public Supplier Portal and Strategic Sourcing discovery. The initial Cal
+eProcure preset identifies California, FI$Cal, and the California State
+Contracts Register and preserves its authoritative event-search fallback. It
+does not promote temporary PeopleSoft component, action, cache, bidder, round,
+version, or session values to stable configuration.
+
+Discovery establishes a bounded anonymous session using public GET navigation,
+keeps hidden form state only in connector memory, and supports configurable
+HTML, partial-page HTML, JSON, XML, and CSV parsing. Query metadata covers event
+ID/name, Business Unit, status and date ranges, UNSPSC, service area/county,
+and current or historical events. Pagination, results, retries, and circuit
+recovery are bounded; repeated pages and stable event identities are
+deduplicated. California identities use `CA:Business Unit:Event ID`; event
+round/version stays as amendment provenance unless a future verified deployment
+requires it to distinguish materially separate records.
+
+Likely packages, solicitations, specifications, work statements, pricing,
+forms, addenda, Q&A, exhibits, insurance, and certifications are discovered as
+metadata only. Current entries retain title, apparent type, source and parent
+URLs, attachment ID, version, modified value, anonymous-session need, and access
+state; explicitly superseded entries are omitted while their source metadata
+remains in `raw_payload`. No document text, OCR, submission, registration,
+Digital ID, private message, login, or authenticated download is performed.
+
+HTTP 200 login, registration, CAPTCHA, maintenance, permission, and expired
+session pages fail closed, as do forbidden and unexpected responses. Fixture
+tests verify public-session state, parsing, fallback links, documents, access
+boundaries, retries, circuit recovery, and client ownership without contacting
+production. The public Cal eProcure entry points are configured; detailed
+component behavior, event-package downloads, attachments, and pagination were
+not live-validated in this change and remain configured/fixture-only.
+
+To add a deployment, create a `PeopleSoftSourcingPortal` preset with verified
+public entry/search URLs, response strategy, query/field aliases, date formats,
+and its independently observed session and document behavior. Never copy a
+California session token or infer that another PeopleSoft component is public.
