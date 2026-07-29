@@ -408,3 +408,49 @@ To add a deployment, create a `PeopleSoftSourcingPortal` preset with verified
 public entry/search URLs, response strategy, query/field aliases, date formats,
 and its independently observed session and document behavior. Never copy a
 California session token or infer that another PeopleSoft component is public.
+
+### Pennsylvania eMarketplace
+
+Use `pennsylvania/emarketplace` (aliases `pa-emarketplace`,
+`pennsylvania-emarketplace`, and `pa/emarketplace`) for bounded public discovery
+at `https://www.emarketplace.state.pa.us/Search.aspx`. It supports explicitly
+selected current and archived solicitation lanes and, when requested, the
+separate `Procurement.aspx` upcoming-procurement lane. Upcoming records remain
+forecasts, are not advertised opportunities available for response, and receive
+no deadline unless one is displayed.
+
+The query exposes exact solicitation number, keyword, agency, county, statewide,
+multiple-county, solicitation type, advertisement type, Small Business,
+SDB/VBE-goal, bid-open-date, posted-since, records-per-page, and bounded page and
+result controls. Public WebForms POSTs carry fresh `__VIEWSTATE`,
+`__VIEWSTATEGENERATOR`, and `__EVENTVALIDATION` values in memory only. One
+session refresh is allowed after an expired-state or invalid-postback response;
+cookies and hidden values never enter logs, fixtures, or provenance.
+
+Identity prefers the public SID (or upcoming procurement ID), then agency plus
+the string solicitation number. Current/archive copies deduplicate by that
+identity while amendments update the record; rebids with distinct SIDs remain
+distinct. Source status and dates are retained, Eastern dates use
+`America/New_York`, and due and opening times remain separate. Advertisement
+dates are not replaced: Pennsylvania says the solicitation and attachments
+control conflicts, which is recorded for later extraction.
+
+Detail enrichment preserves original files, flyers/addenda, tabulations, awards,
+contracts, contacts, delivery, duration, advertisement/type labels, and explicit
+Small Business/SDB/VBE data. Documents are metadata only—no bulk download, text
+extraction, archive expansion, or OCR occurs. Supplier Portal links are
+`supplier_portal_required`, JAGGAER response links are
+`external_account_required`, and PennDOT ECMS links are `external_system`; none
+is authenticated or submitted. COSTARS, supplier/vendor registration and
+directories, contract catalog/spend ingestion, JAGGAER qualification, and ECMS
+ingestion are outside this connector.
+
+The connector detects login, registration, MFA, CAPTCHA, restriction,
+maintenance, generic errors, forbidden responses, and expired WebForms state.
+It retries only connections and 429/502/503/504 with bounded exponential
+backoff, jitter, both Retry-After forms, concurrency, circuit health, and correct
+client ownership. Coverage is the public eMarketplace used by most general
+Commonwealth agencies—not every Pennsylvania SLED entity, notably not PennDOT
+highway and bridge construction in ECMS. No login, registration, MFA, CAPTCHA
+bypass, purchasing, qualification, bid submission, or access-control
+circumvention is performed.
