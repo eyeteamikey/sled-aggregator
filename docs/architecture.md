@@ -230,3 +230,51 @@ search/board request and a detail link already present on that board; compare
 sanitized markup with parser fixtures, stop on blocking, and never enumerate lot
 or round IDs. Document retrieval/extraction, OCR, authenticated workflows,
 generic CGI inheritance, and production availability monitoring are deferred.
+
+
+### Texas ESBD connector
+
+`texas/esbd` is separate from Texas SmartBuy contract/catalog data and from
+CMBL/vendor records. `ESBDPortal` contains the official SmartBuy origin, ESBD
+entry, and configurable detail template; `ESBDQuery` contains anonymous search
+filters. Transport, parsing, access classification, and normalization remain in
+the connector layer.
+
+Identity prefers the official ESBD record ID. The fallback is agency/member
+number plus solicitation ID, never title or an attachment ID. It remains stable
+across ordinary addenda and award reappearance. Collection emits no destructive
+absence event: Texas guidance describes a post-deadline period when a record can
+disappear until its award posts. Provenance records observation time, verbatim
+status, and `retain_last_known; absence_is_not_deletion`.
+
+The label-oriented parser tolerates missing optional fields but requires source
+or solicitation identity plus title and agency. Deadlines use the IANA
+`America/Chicago` zone, not a fixed offset; missing or malformed times are not
+inferred. Raw records retain displayed NIGP, deadline, value, quantity, contact,
+HUB/HSP, conference, award, and addendum information. Only outbound NIGP search
+values have punctuation removed.
+
+Documents retain title, filename/type, category, version, date, access, parent
+identity/URL, exact source URL, and internal-media/external classification. Only
+HTTP(S) is accepted. NetSuite-style media parameters and hashes are never
+removed, reconstructed, shared, or enumerated. External response/account links
+are preserved without automating authentication or submission.
+
+Page, detail, result, concurrency, retry, and timeout bounds prevent unbounded
+crawls. Duplicate records and repeated-page fingerprints stop predictably. Only
+connections and HTTP 429/502/503/504 retry, with both Retry-After forms,
+exponential delay, jitter, circuit health, and safe client ownership. HTTP 200
+login, CAPTCHA, maintenance, empty-error, and incompatible pages fail closed.
+
+Research began with the Comptroller outreach, vendor information, members, and
+registration pages, the GLO doing-business page, ESBD landing route, and
+robots.txt. On July 29, 2026 all were `blocked` by the execution environment's
+CONNECT proxy with HTTP 403 before an origin response. Thus the public GET model,
+filter names, ordering/caps, pagination, wildcard/ID behavior, session/cookies,
+redirects, robots policy, structured traffic, detail template, and attachment
+delivery are `configured_unverified`. Sanitized lifecycle, timezone, identity,
+document, false-success, resilience, ownership, and registry behavior is
+`fixture_verified`. Later validation should inspect the landing form/network
+first, then only one Posted, agency 305 Posted, agency 305 Awarded, and NIGP
+search, one linked detail, one exactly exposed attachment, and robots.txt. Stop
+on login, CAPTCHA, restriction, or throttling.
