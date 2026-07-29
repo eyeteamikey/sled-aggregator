@@ -278,3 +278,69 @@ document, false-success, resilience, ownership, and registry behavior is
 first, then only one Posted, agency 305 Posted, agency 305 Awarded, and NIGP
 search, one linked detail, one exactly exposed attachment, and robots.txt. Stop
 on login, CAPTCHA, restriction, or throttling.
+
+### Pennsylvania eMarketplace connector
+
+`PennsylvaniaEMarketplaceConnector` is jurisdiction-specific because the public
+eMarketplace WebForms schema and lifecycle are Commonwealth-owned. Its official
+routes are `Search.aspx`, `Solicitations.aspx?SID=…`, `Procurement.aspx`,
+`Procurement_Details.aspx?id=…`, and `bidtabs.aspx`; detail-page links may also
+identify official awards and contracts. Search transport stays outside domain
+models and performs anonymous GET initialization followed by public WebForms
+POSTs. Naming-container prefixes are tolerated, but form field names are
+explicit. `__VIEWSTATE`, `__VIEWSTATEGENERATOR`, `__EVENTVALIDATION`, event
+target/argument, cookies, and session state are ephemeral and excluded from raw
+payloads and sanitized fixtures.
+
+Each current, archived, and upcoming lane has independent page fingerprints and
+strict page, page-size, result, detail, concurrency, retry, and refresh bounds.
+Current and archive do not silently substitute for each other. SID is the
+solicitation identity; upcoming ID is namespaced separately; agency plus exact
+string solicitation number is the last source-derived fallback. Title never
+drives identity or upcoming-to-solicitation reconciliation. Disappearance is
+not deletion: archive reconciliation and retention of the most recent version
+are persistence-layer policy.
+
+Official type, advertisement, status, description, agency/department, county,
+delivery, contact, Small Business, SDB/VBE, prepared/start/amended/due/opening,
+duration, and related-link values remain in provenance. Canonical lifecycle maps
+only supported meanings; Created and unfamiliar states remain unknown. Upcoming
+procurements are canonical forecasts, never open solicitations. Eastern dates
+use the IANA zone and a missing due time produces no inferred midnight. Opening
+time never substitutes for due time. The document-control warning is recorded
+so later retrieval can compare advertisement metadata with authoritative
+solicitation content without this connector guessing.
+
+Document metadata preserves exact safe HTTP(S) URLs, displayed name, apparent
+type, section, category/version/date, parent, internal/external class, access,
+and retrieval eligibility. Original files, addenda, bid tabs, awards, and
+contract references remain distinguishable. A tabulation is not an award and
+the lowest bidder is never inferred to be the winner; the portal's 90-day bid
+tab archival is a lifecycle transition. ZIPs are not opened here, nor are
+documents downloaded, parsed, or OCRed.
+
+Supplier Portal, JAGGAER, ECMS, agency plan rooms, and public external hosts are
+classified rather than traversed. Login, registration, MFA, CAPTCHA, stable 403,
+restricted, maintenance, malformed shell, and external-account states are
+terminal. Transient requests use bounded retry/circuit conventions. PennDOT
+ECMS highway/bridge work, COSTARS, vendor registration/search, authenticated
+response and qualification, catalog/purchase-order/spend data, and
+non-eMarketplace local entities remain explicit coverage gaps.
+
+Official research also includes Pennsylvania DGS Finding Opportunities,
+Materials and Services Procurement, and Supplier Service Center guidance. Live
+validation status and exact requests are recorded in the pull request; all CI
+behavior is fixture-verified with injected transports and no live state.
+
+Live validation on July 29, 2026 attempted exactly one GET each for `robots.txt`,
+`Search.aspx`, `Procurement.aspx`, and `bidtabs.aspx`. Every request was `blocked`
+by the execution environment's CONNECT proxy with HTTP 403 before reaching the
+Commonwealth origin. No POST, detail, document, archive, exact-number, award, or
+contract request was attempted after robots access failed. Consequently the
+route and form configuration is `configured_unverified`; parser, WebForms-state,
+filter, pagination, lifecycle, document, access, resilience, and registry
+behavior is `fixture_verified`. A future respectful check must fetch robots
+first, inspect actual field names and form action, then perform only one bounded
+current search, one exact-number lookup from that result, its linked detail and
+one exposed file/addendum, one bounded archive search, one upcoming page, and
+one linked tabulation/award. Stop on restriction, login, CAPTCHA, or throttling.
