@@ -20,6 +20,8 @@ portal controls.
 - PostgreSQL-ready runtime configuration
 - SQLAlchemy persistence adapter and Alembic migration baseline
 - Unit tests for normalization, classification, and connector registration
+- Public WebProcure/PROACTIS discovery for Connecticut (CTsource), Missouri's
+  legacy bid board, and Rhode Island (Ocean State Procures)
 - Docker and GitHub Actions development baseline
 
 ## Architecture
@@ -133,6 +135,27 @@ connector_registry.register(ExampleConnector)
 Connector implementations must enforce public/read-only behavior, use bounded
 timeouts and rate limits, and return source URLs and access-state metadata.
 
+### WebProcure/PROACTIS
+
+The reusable WebProcure connector searches only the public full-text endpoint
+and supports bounded keyword or wildcard discovery for Connecticut, Missouri,
+and Rhode Island. It performs GET requests only: it does not submit bids,
+register vendors, automate login, bypass CAPTCHA or robots controls, store
+credentials, or retrieve restricted documents. Restricted content remains at
+its authoritative portal link.
+
+Every result retains its complete source record. An authoritative direct URL is
+used when supplied; otherwise the connector links to the configured public bid
+board (including Rhode Island's owner-organization OID). Transient 429, 502,
+503, and 504 responses and connection failures receive bounded exponential
+backoff with jitter and `Retry-After` support. Repeated failed collection runs
+open a configurable cooldown circuit, and connector health reports availability,
+failure count, status, and failure time.
+
+The production full-text endpoint has recently returned 502 and 503 responses.
+Automated tests therefore use fixtures and test transports rather than requiring
+live portal availability.
+
 ## Project layout
 
 ```text
@@ -147,9 +170,8 @@ docs/              Architecture and operating constraints
 
 ## Roadmap
 
-1. Implement the first reusable WebProcure/Proactis connector against approved
-   public endpoints.
-2. Add connector execution jobs, change detection, and observability.
+1. Add connector execution jobs, change detection, and observability.
+2. Add more reusable public portal-family connectors.
 3. Implement document retrieval, extraction, targeted OCR, and safe archives.
 4. Add profile/capability matching and explainable fit scoring.
 5. Feed teaming, compliance, risk, alert, and export workflows.

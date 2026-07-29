@@ -1,0 +1,19 @@
+{
+  "results": [
+    {
+      "_source": {
+        "solicitationId": "CT-100",
+        "solicitationTitle": "Cloud testing services",
+        "organizationName": "Department of Administrative Services",
+        "solicitationDescription": "Independent verification and validation",
+        "solicitationNumber": "RFP-2026-100",
+        "solicitationStatus": "Open",
+        "postedDate": "2026-07-01T12:00:00Z",
+        "dueDate": "2026-08-15T16:00:00Z",
+        "categories": [{"name": "IT Services"}],
+        "detailUrl": "https://webprocure.proactiscloud.com/public/solicitation/CT-100"
+      },
+      "highlight": {"title": ["Cloud testing services"]}
+    }
+  ]
+}

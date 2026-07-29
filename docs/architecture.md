@@ -34,6 +34,28 @@ Bonfire, DemandStar, PlanetBids, or jurisdiction-specific legacy systems.
 Jurisdiction configuration supplies tenant identifiers, public entry points,
 rate limits, and field mappings without duplicating transport code.
 
+### WebProcure/PROACTIS connector
+
+One configurable, asynchronous, GET-only connector covers Connecticut
+(CTsource, customer 51), Missouri (legacy bid board, customer 38), and Rhode
+Island (Ocean State Procures, customer 46 and owner OID 120002). Search is
+bounded by page size, maximum pages, and query result limit. Records are
+deduplicated by source opportunity ID before canonical `RawOpportunity`
+mapping, and the complete source record is retained as provenance.
+
+The connector uses an authoritative record URL when public search supplies one.
+When it does not, it preserves discoverability through the jurisdiction's
+public bid-board URL. It never follows that fallback into login walls or
+restricted-document retrieval and does not support submission, registration,
+CAPTCHA bypass, credential storage, or any other portal mutation.
+
+The public full-text endpoint is known to experience production 502 and 503
+outages. Connection failures and transient 429, 502, 503, and 504 responses use
+bounded retries, exponential backoff, jitter, and numeric or HTTP-date
+`Retry-After` values. Consecutive failed collection runs feed a configurable
+circuit breaker and health snapshot; a successful JSON response resets failure
+state. Non-JSON, malformed JSON, and unexpected response shapes fail closed.
+
 ## Document pipeline
 
 The later document service will support PDF, Office files, HTML, text, CSV,
@@ -44,4 +66,3 @@ bytes, file count, depth, encryption, paths, compression ratio, and type.
 Restricted documents produce metadata and a source link. User-authorized or
 user-uploaded retrieval is a separate future channel and must not weaken public
 connector controls.
-

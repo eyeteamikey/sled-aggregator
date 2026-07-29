@@ -2,7 +2,7 @@ import unittest
 from collections.abc import AsyncIterator
 
 from sled_aggregator.connectors.base import BaseConnector, ConnectorQuery
-from sled_aggregator.connectors.registry import ConnectorRegistry
+from sled_aggregator.connectors.registry import ConnectorRegistry, connector_registry
 from sled_aggregator.domain.models import RawOpportunity
 
 
@@ -21,6 +21,13 @@ class UnsafeConnector(ExampleConnector):
 
 
 class ConnectorRegistryTests(unittest.TestCase):
+    def test_webprocure_connector_is_registered(self) -> None:
+        connector = connector_registry.get("webprocure/proactis")
+        self.assertEqual(connector.platform_family, "webprocure/proactis")
+        self.assertEqual(
+            connector.jurisdictions, ("Connecticut", "Missouri", "Rhode Island")
+        )
+
     def test_registers_and_describes_connector(self) -> None:
         registry = ConnectorRegistry()
         registry.register(ExampleConnector)
@@ -41,4 +48,3 @@ class ConnectorRegistryTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
