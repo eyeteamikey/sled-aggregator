@@ -147,3 +147,49 @@ class DocumentRetrievalJobRecord(Base):
     lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class DocumentArtifactRecord(Base):
+    __tablename__ = "document_artifacts"
+    __table_args__ = (
+        UniqueConstraint("document_id", "content_sha256", name="uq_artifact_document_hash"),
+        Index("ix_artifacts_document_retrieved", "document_id", "retrieved_at"),
+        Index("ix_artifacts_sha256", "content_sha256"),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    document_id: Mapped[str] = mapped_column(ForeignKey("solicitation_documents.id", ondelete="CASCADE"), nullable=False)
+    content_sha256: Mapped[str] = mapped_column(String(64), nullable=False)
+    content_length: Mapped[int] = mapped_column(Integer, nullable=False)
+    storage_provider: Mapped[str] = mapped_column(String(50), nullable=False)
+    storage_key: Mapped[str] = mapped_column(Text, nullable=False)
+    final_url: Mapped[str] = mapped_column(Text, nullable=False)
+    declared_media_type: Mapped[str | None] = mapped_column(String(255))
+    detected_media_type: Mapped[str] = mapped_column(String(255), nullable=False)
+    displayed_filename: Mapped[str | None] = mapped_column(Text)
+    etag: Mapped[str | None] = mapped_column(Text)
+    last_modified: Mapped[str | None] = mapped_column(Text)
+    retrieved_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    last_checked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class DocumentDownloadAttemptRecord(Base):
+    __tablename__ = "document_download_attempts"
+    __table_args__ = (Index("ix_attempts_document_started", "document_id", "started_at"),)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    document_id: Mapped[str] = mapped_column(ForeignKey("solicitation_documents.id", ondelete="CASCADE"), nullable=False)
+    queue_job_id: Mapped[str] = mapped_column(ForeignKey("document_retrieval_jobs.id", ondelete="CASCADE"), nullable=False)
+    attempt_number: Mapped[int] = mapped_column(Integer, nullable=False)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    outcome: Mapped[str | None] = mapped_column(String(32))
+    http_status: Mapped[int | None] = mapped_column(Integer)
+    original_host: Mapped[str] = mapped_column(String(255), nullable=False)
+    final_host: Mapped[str | None] = mapped_column(String(255))
+    redirect_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    bytes_received: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    declared_media_type: Mapped[str | None] = mapped_column(String(255))
+    detected_media_type: Mapped[str | None] = mapped_column(String(255))
+    error_classification: Mapped[str | None] = mapped_column(String(64))
+    error_summary: Mapped[str | None] = mapped_column(String(512))
+    retry_scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    artifact_id: Mapped[str | None] = mapped_column(ForeignKey("document_artifacts.id", ondelete="SET NULL"))

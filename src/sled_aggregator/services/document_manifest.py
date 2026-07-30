@@ -115,6 +115,25 @@ class DocumentQueueService:
         job.retrieval_state, job.retrieved_at = RetrievalState.DOWNLOADED.value, now
         job.lease_owner = job.lease_token = job.lease_expires_at = None
 
+    def validate_lease(self, job: DocumentRetrievalJobRecord, *, owner: str, token: str,
+                       now: datetime) -> None:
+        if job.lease_owner != owner or job.lease_token != token or not job.lease_expires_at or job.lease_expires_at <= now:
+            raise InvalidLease("active lease owner and token are required")
+
+    def renew(self, job: DocumentRetrievalJobRecord, *, owner: str, token: str,
+              now: datetime, lease_seconds: int) -> None:
+        self.validate_lease(job, owner=owner, token=token, now=now)
+        job.lease_expires_at = now + timedelta(seconds=lease_seconds)
+        job.updated_at = now
+
+    def terminal(self, job: DocumentRetrievalJobRecord, *, owner: str, token: str,
+                 now: datetime, state: RetrievalState) -> None:
+        self.validate_lease(job, owner=owner, token=token, now=now)
+        transition(RetrievalState(job.retrieval_state), RetrievalState.DOWNLOADING)
+        transition(RetrievalState.DOWNLOADING, state)
+        job.retrieval_state, job.updated_at = state.value, now
+        job.lease_owner = job.lease_token = job.lease_expires_at = None
+
     def retry(self, job: DocumentRetrievalJobRecord, *, now: datetime, base_seconds: int, max_seconds: int) -> None:
         if job.attempt_count >= job.max_attempts:
             job.retrieval_state = RetrievalState.QUARANTINED.value

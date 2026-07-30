@@ -44,6 +44,9 @@ class DocumentDetail(DocumentSummary):
     relationship_type: str
     source_metadata: dict[str, object]
     content_sha256: str | None
+    content_length: int | None
+    detected_media_type: str | None
+    final_url: str | None
     extraction_state: str | None
     ocr_state: str | None
     structured_extraction_state: str | None
