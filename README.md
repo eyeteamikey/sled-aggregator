@@ -560,3 +560,42 @@ Authoritative starting points:
 - Michigan SIGMA: <https://www.michigan.gov/budget/budget-offices/sigma>
 - Michigan Contract Connect: <https://www.michigan.gov/dtmb/procurement/contractconnect>
 - ColoradoVSS information: <https://vss.state.co.us/>
+
+## Solicitation document manifest and retrieval queue
+
+The document pipeline is a public, read-only coordination layer:
+
+```text
+Connector discovery -> opportunity ingestion -> document candidate classification
+ -> document manifest -> eligibility and access checks -> durable retrieval queue
+ -> future downloader -> future parser/targeted OCR -> future structured extraction
+ -> opportunity evaluation and export
+```
+
+Connectors may supply optional `DocumentCandidate` metadata; connectors returning no documents remain
+compatible. Deterministic filename, title, category, and link-text signals classify likely procurement
+artifacts. Public HTTP(S) candidates alone are auto-queued. Metadata-only, login, registration,
+CAPTCHA, restricted, malformed, and unsafe links remain auditable but are never retrieval work.
+
+The PostgreSQL queue orders by priority (0–100), availability, discovery/creation time, and UUID. A
+worker claims rows using `FOR UPDATE SKIP LOCKED`, receives an expiring owner/token lease, and must
+present both to acknowledge work. Expired leases return to queued state; retries use bounded
+exponential backoff and exhausted work is quarantined. The unique document job constraint makes
+enqueue idempotent.
+
+Manifest identity follows source document ID, canonical URL, logical key/version, then a scoped
+fingerprint. Versions group by opportunity and conservative logical evidence. Explicit replacement of
+a primary or pricing revision may supersede its predecessor; addenda, amendments, Q&A, awards, and
+cancellations remain separately operative and auditable.
+
+Read-only endpoints are `GET /api/v1/documents`, `GET /api/v1/documents/opportunity/{id}`,
+`GET /api/v1/documents/{id}`, and `GET /api/v1/documents/queue/stats`. Operational endpoints are
+intentionally deferred until an authorization boundary exists. Settings use the `DOCUMENT_*`
+environment variables corresponding to fields in `Settings`.
+
+This stage does **not** download files, parse PDF/Office files, extract text, run OCR, inspect ZIP
+contents, perform LLM analysis, use authenticated portal sessions, bypass CAPTCHA/access controls,
+or submit bids. PR #13 will add a safe public downloader; PR #14 parsing and targeted OCR; PR #15
+structured RFP/SOW/PWS extraction and version reconciliation. Later work includes object storage,
+authorized operations, workers, retention/export/reprocessing, malware scanning, bounded archive
+handling, and evaluation integration.

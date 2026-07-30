@@ -445,3 +445,23 @@ MFA/verification, vendor maintenance, invoices, payments, private purchasing
 history, invited events, response workspaces, questions, amendment
 acknowledgement, pricing/upload, bid submission, CAPTCHA bypass, and access-control
 circumvention.
+
+## Document coordination layer
+
+`solicitation_documents` preserves normalized classification, authoritative/original URLs,
+provenance, access state, relationship/version metadata, and nullable future artifact fields without
+storing bodies or extracted text. `document_retrieval_jobs` is the one-to-one durable work record.
+The retrieval state machine is centralized: discovered becomes eligible/ineligible; eligible becomes
+queued; queued becomes leased/canceled; leased becomes downloading (or queued after expiry);
+downloading becomes downloaded, unchanged, an access boundary, not-found, or failed; failed may be
+retried; downloaded may be superseded; safe nonterminal states may be quarantined.
+
+Upsert and enqueue share a database transaction. Unique scoped identities and one job per document
+resolve concurrent insert races at the database boundary. PostgreSQL claims use row locks with
+`SKIP LOCKED`; lease tokens prevent stale acknowledgements. Unit tests structurally verify generated
+PostgreSQL SQL; a live PostgreSQL concurrency environment is still needed to validate multi-worker
+runtime behavior.
+
+Structured logs should identify document/job IDs, connector, tenant and state plus sanitized
+host/path only. Query strings, cookies, credentials, raw payloads, bodies and internal errors are not
+logging material. Pipeline counts are available through the bounded queue-statistics API.

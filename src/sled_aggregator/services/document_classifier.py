@@ -9,7 +9,8 @@ class DocumentClassifier:
         (DocumentRole.RFP, ("rfp", "request for proposal")),
         (DocumentRole.RFQ, ("rfq", "request for quotation", "request for quote")),
         (DocumentRole.IFB, ("ifb", "invitation for bid", "invitation to bid", "itb")),
-        (DocumentRole.AMENDMENT, ("amendment", "addendum", "revision")),
+        (DocumentRole.ADDENDUM, ("addendum",)),
+        (DocumentRole.AMENDMENT, ("amendment", "revision")),
         (
             DocumentRole.QUESTIONS_AND_ANSWERS,
             ("questions and answers", "q&a", "questions responses"),
@@ -23,6 +24,11 @@ class DocumentClassifier:
         (DocumentRole.SPECIFICATION, ("specification", "specifications", "technical specs")),
         (DocumentRole.REQUIRED_FORM, ("required form", "certification form")),
         (DocumentRole.SOLICITATION, ("solicitation",)),
+        (DocumentRole.AWARD_NOTICE, ("award notice", "notice of award")),
+        (DocumentRole.INTENT_TO_AWARD, ("intent to award",)),
+        (DocumentRole.BID_TABULATION, ("bid tabulation", "tabulation")),
+        (DocumentRole.EXHIBIT, ("exhibit",)),
+        (DocumentRole.APPENDIX, ("appendix",)),
     )
     _exclude_terms = (
         "vendor registration",
@@ -30,6 +36,8 @@ class DocumentClassifier:
         "marketing brochure",
         "annual report",
         "meeting agenda",
+        "login", "log in", "register", "registration", "respond now", "privacy",
+        "accessibility", "help", "terms of use", "vendor profile",
     )
 
     def classify(self, candidate: DocumentCandidate) -> DocumentClassification:
@@ -41,7 +49,7 @@ class DocumentClassifier:
                 rationale=[f"source access state is {candidate.access_state.value}"],
             )
 
-        text = f"{candidate.filename} {candidate.label or ''}".lower()
+        text = f"{candidate.filename} {candidate.label or ''} {candidate.category or ''}".lower()
         for term in self._exclude_terms:
             if term in text:
                 return DocumentClassification(
