@@ -1017,3 +1017,48 @@ automated, paid geographic aggregation is not used, and robots/CAPTCHA/bot restr
 are respected. Registration-gated references are preserved without queueing; approved
 public agency copies are preferred for retrieval. See `docs/architecture.md` for the
 profile, provenance, access-state, and safety model.
+
+### Public Purchase
+
+The `public-purchase` connector is a reusable, profile-driven, public-read-only connector for
+configured Public Purchase agency portals, including fixture-verified `/gems/{agency_slug}/...`
+routes. Explicit aliases are `publicpurchase`, `public-purchase-portal`,
+`public-purchase-gems`, and `the-public-group-public-purchase`; broad terms such as `public`,
+`purchase`, `bid-board`, `gems`, and `procurement` are intentionally not aliases. The `/gems/`
+route family is a Public Purchase route and is not an unrelated GEMS product. Public Purchase is
+distinct from BidNet Direct, PlanetBids, DemandStar/Euna OpenBids, Bid Express/BidX, Public
+Surplus, Vendor Registry, OpenGov, and Periscope BuySpeed.
+
+Public Purchase has separate access layers: an agency portal, free vendor account registration,
+separate agency enrollment, registered solicitation/document/notification access, electronic bid
+participation, and paid Bid Syndication for broader non-member-agency aggregation. Free
+registration is still an access boundary, not anonymous public access. The connector collects only
+anonymous public metadata, public details, and approved official-agency alternatives. It retains
+gated document metadata and links without queueing them; an approved public agency copy is
+preferred and may be queued through the existing manifest, safe downloader, parsing, targeted OCR,
+extraction, and version-reconciliation pipeline.
+
+Records use the stable identity `public-purchase:{profile_key}:{opportunity_id}` and preserve raw
+opportunity and agency identifiers, canonical and discovered URLs, official agency URLs, field
+provenance, and one of `public_purchase_member_agency`, `official_agency_mirror`,
+`syndicated_external_notice`, or `unknown`. Paid syndicated notices are not collected and Public
+Purchase is not represented as their authority.
+
+Profiles specify the jurisdiction and government level, agency name/slug/identifier, explicit
+Public Purchase and official procurement URLs, a fixture-supported listing and detail route,
+approved platform and agency document hosts, access expectations, bounds, statuses, parser
+variant, lifecycle status, verification information, and migration replacement. To add a profile,
+capture sanitized anonymous fixtures, use only observed routes, explicitly allow every host, set
+small page/result bounds, validate access-wall behavior, add registry/parser tests, and record a
+verification label and timestamp. Supported lifecycle states include active, legacy, migrated,
+configured-unverified, and unavailable. Verification labels include `fixture_verified`,
+`live_public_verified`, `configured_unverified`, metadata/gating states, policy blocks,
+`changed_markup`, `blocked`, migrated, and unavailable.
+
+The connector respects robots.txt, login and registration walls, agency enrollment, CAPTCHA, and
+technical blocks, and fails closed as changed markup rather than reporting a false empty result. It
+does not register, enroll with agencies, authenticate, subscribe, use Bid Syndication, automate
+notifications, submit questions, acknowledge addenda, submit responses, upload files, bypass
+CAPTCHA, or evade robots or technical restrictions. Fixture verification demonstrates behavior
+against captured test inputs. It does not prove that every live Public Purchase agency,
+opportunity, or attachment remains anonymously accessible.
