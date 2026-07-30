@@ -1,0 +1,57 @@
+jurisdiction_code,jurisdiction_name,jurisdiction_type,coverage_tier,source_key,source_name,source_level,source_role,platform_family,connector_name,connector_status,verification_status,discovery_access,detail_access,document_access,award_access,primary_source,source_status,migration_status,replacement_source,last_verified,evidence_url,priority,gap_reason,recommended_next_action
+AK,Alaska,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+AL,Alabama,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+AR,Arkansas,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+AS,American Samoa,territory,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified;territory_gap,Identify an authoritative source.
+AZ,Arizona,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+CA,California,state,2,ca-cal-eprocure,Cal eProcure,statewide,primary,oracle/peoplesoft-sourcing,oracle/peoplesoft-sourcing,fixture_only,fixture_verified,public,public,mixed,metadata_only,True,active,current,,,,2,incomplete_award_coverage;incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
+CO,Colorado,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+CT,Connecticut,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+DC,District of Columbia,district,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+DE,Delaware,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+FL,Florida,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+GA,Georgia,state,2,ga-gpr,Georgia Procurement Registry,statewide,primary,georgia/gpr,georgia/gpr,fixture_only,fixture_verified,public,public,mixed,public,True,active,current,,,,1,incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
+GU,Guam,territory,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified;territory_gap,Identify an authoritative source.
+HI,Hawaii,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+IA,Iowa,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+ID,Idaho,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+IL,Illinois,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+IN,Indiana,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+KS,Kansas,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+KY,Kentucky,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+LA,Louisiana,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+MA,Massachusetts,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+MD,Maryland,state,2,md-emma,eMaryland Marketplace Advantage,statewide,primary,maryland/emma,maryland/emma,fixture_only,fixture_verified,public,public,mixed,metadata_only,True,active,current,,,,1,incomplete_award_coverage;incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
+ME,Maine,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+MI,Michigan,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+MN,Minnesota,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+MO,Missouri,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+MP,Commonwealth of the Northern Mariana Islands,territory,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified;territory_gap,Identify an authoritative source.
+MS,Mississippi,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+MT,Montana,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+NC,North Carolina,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+ND,North Dakota,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+NE,Nebraska,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+NH,New Hampshire,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+NJ,New Jersey,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+NM,New Mexico,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+NV,Nevada,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+NY,New York,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+OH,Ohio,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+OK,Oklahoma,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+OR,Oregon,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+PA,Pennsylvania,state,2,pa-emarketplace,PA eMarketplace,statewide,primary,pennsylvania/emarketplace,pennsylvania/emarketplace,fixture_only,fixture_verified,public,public,public,metadata_only,True,active,current,,,,1,incomplete_award_coverage;incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
+PR,Puerto Rico,territory,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified;territory_gap,Identify an authoritative source.
+RI,Rhode Island,state,0,ri-rivip-external,RIVIP External Solicitations,supplemental,external notice,rhode-island/rivip-external,rhode-island/rivip-external,fixture_only,fixture_verified,public,public,mixed,metadata_only,False,active,partial,,,,2,incomplete_award_coverage;incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing;no_source_identified,Verify bounded anonymous live behavior.
+SC,South Carolina,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+SD,South Dakota,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+TN,Tennessee,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+TX,Texas,state,2,tx-esbd,Electronic State Business Daily,statewide,primary,texas/esbd,texas/esbd,fixture_only,fixture_verified,public,public,mixed,metadata_only,True,active,current,,,,1,incomplete_award_coverage;incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
+UT,Utah,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+VA,Virginia,state,2,va-eva,Virginia eVA,statewide,primary,virginia/eva,virginia/eva,fixture_only,fixture_verified,public,public,mixed,public,True,active,current,,,,1,incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
+VI,U.S. Virgin Islands,territory,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified;territory_gap,Identify an authoritative source.
+VT,Vermont,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+WA,Washington,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+WI,Wisconsin,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+WV,West Virginia,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+WY,Wyoming,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.

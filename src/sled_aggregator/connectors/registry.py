@@ -45,6 +45,24 @@ class ConnectorRegistry:
             for name, connector in sorted(self._connectors.items())
         ]
 
+    def inventory(self) -> list[dict[str, object]]:
+        """Return canonical connectors and aliases without duplicating registry data."""
+        grouped: dict[type[BaseConnector], list[str]] = {}
+        for name, connector in self._connectors.items():
+            grouped.setdefault(connector, []).append(name)
+        return [
+            {
+                "canonical_name": connector.platform_family,
+                "aliases": sorted(name for name in names if name != connector.platform_family),
+                "implementation_module": connector.__module__,
+                "jurisdictions": list(connector.jurisdictions),
+                "public_read_only": connector.public_read_only,
+            }
+            for connector, names in sorted(
+                grouped.items(), key=lambda item: item[0].platform_family
+            )
+        ]
+
 
 connector_registry = ConnectorRegistry()
 

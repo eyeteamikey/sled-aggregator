@@ -1,0 +1,634 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-07-30",
+  "jurisdictions": [
+    {
+      "code": "AK",
+      "abbreviation": "AK",
+      "name": "Alaska",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "02",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "AL",
+      "abbreviation": "AL",
+      "name": "Alabama",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "01",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "AR",
+      "abbreviation": "AR",
+      "name": "Arkansas",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "05",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "AS",
+      "abbreviation": "AS",
+      "name": "American Samoa",
+      "type": "territory",
+      "inhabited_territory": true,
+      "fips": "60",
+      "timezones": [
+        "Pacific/Pago_Pago"
+      ],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "AZ",
+      "abbreviation": "AZ",
+      "name": "Arizona",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "04",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "CA",
+      "abbreviation": "CA",
+      "name": "California",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "06",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "CO",
+      "abbreviation": "CO",
+      "name": "Colorado",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "08",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "CT",
+      "abbreviation": "CT",
+      "name": "Connecticut",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "09",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "DC",
+      "abbreviation": "DC",
+      "name": "District of Columbia",
+      "type": "district",
+      "inhabited_territory": false,
+      "fips": "11",
+      "timezones": [
+        "America/New_York"
+      ],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "DE",
+      "abbreviation": "DE",
+      "name": "Delaware",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "10",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "FL",
+      "abbreviation": "FL",
+      "name": "Florida",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "12",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "GA",
+      "abbreviation": "GA",
+      "name": "Georgia",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "13",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "GU",
+      "abbreviation": "GU",
+      "name": "Guam",
+      "type": "territory",
+      "inhabited_territory": true,
+      "fips": "66",
+      "timezones": [
+        "Pacific/Guam"
+      ],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "HI",
+      "abbreviation": "HI",
+      "name": "Hawaii",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "15",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "IA",
+      "abbreviation": "IA",
+      "name": "Iowa",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "19",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "ID",
+      "abbreviation": "ID",
+      "name": "Idaho",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "16",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "IL",
+      "abbreviation": "IL",
+      "name": "Illinois",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "17",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "IN",
+      "abbreviation": "IN",
+      "name": "Indiana",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "18",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "KS",
+      "abbreviation": "KS",
+      "name": "Kansas",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "20",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "KY",
+      "abbreviation": "KY",
+      "name": "Kentucky",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "21",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "LA",
+      "abbreviation": "LA",
+      "name": "Louisiana",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "22",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "MA",
+      "abbreviation": "MA",
+      "name": "Massachusetts",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "25",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "MD",
+      "abbreviation": "MD",
+      "name": "Maryland",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "24",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "ME",
+      "abbreviation": "ME",
+      "name": "Maine",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "23",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "MI",
+      "abbreviation": "MI",
+      "name": "Michigan",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "26",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "MN",
+      "abbreviation": "MN",
+      "name": "Minnesota",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "27",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "MO",
+      "abbreviation": "MO",
+      "name": "Missouri",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "29",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "MP",
+      "abbreviation": "MP",
+      "name": "Commonwealth of the Northern Mariana Islands",
+      "type": "territory",
+      "inhabited_territory": true,
+      "fips": "69",
+      "timezones": [
+        "Pacific/Saipan"
+      ],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "MS",
+      "abbreviation": "MS",
+      "name": "Mississippi",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "28",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "MT",
+      "abbreviation": "MT",
+      "name": "Montana",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "30",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "NC",
+      "abbreviation": "NC",
+      "name": "North Carolina",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "37",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "ND",
+      "abbreviation": "ND",
+      "name": "North Dakota",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "38",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "NE",
+      "abbreviation": "NE",
+      "name": "Nebraska",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "31",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "NH",
+      "abbreviation": "NH",
+      "name": "New Hampshire",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "33",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "NJ",
+      "abbreviation": "NJ",
+      "name": "New Jersey",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "34",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "NM",
+      "abbreviation": "NM",
+      "name": "New Mexico",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "35",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "NV",
+      "abbreviation": "NV",
+      "name": "Nevada",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "32",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "NY",
+      "abbreviation": "NY",
+      "name": "New York",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "36",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "OH",
+      "abbreviation": "OH",
+      "name": "Ohio",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "39",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "OK",
+      "abbreviation": "OK",
+      "name": "Oklahoma",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "40",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "OR",
+      "abbreviation": "OR",
+      "name": "Oregon",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "41",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "PA",
+      "abbreviation": "PA",
+      "name": "Pennsylvania",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "42",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "PR",
+      "abbreviation": "PR",
+      "name": "Puerto Rico",
+      "type": "territory",
+      "inhabited_territory": true,
+      "fips": "72",
+      "timezones": [
+        "America/Puerto_Rico"
+      ],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "RI",
+      "abbreviation": "RI",
+      "name": "Rhode Island",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "44",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "SC",
+      "abbreviation": "SC",
+      "name": "South Carolina",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "45",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "SD",
+      "abbreviation": "SD",
+      "name": "South Dakota",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "46",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "TN",
+      "abbreviation": "TN",
+      "name": "Tennessee",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "47",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "TX",
+      "abbreviation": "TX",
+      "name": "Texas",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "48",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "UT",
+      "abbreviation": "UT",
+      "name": "Utah",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "49",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "VA",
+      "abbreviation": "VA",
+      "name": "Virginia",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "51",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "VI",
+      "abbreviation": "VI",
+      "name": "U.S. Virgin Islands",
+      "type": "territory",
+      "inhabited_territory": true,
+      "fips": "78",
+      "timezones": [
+        "America/St_Thomas"
+      ],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "VT",
+      "abbreviation": "VT",
+      "name": "Vermont",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "50",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "WA",
+      "abbreviation": "WA",
+      "name": "Washington",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "53",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "WI",
+      "abbreviation": "WI",
+      "name": "Wisconsin",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "55",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "WV",
+      "abbreviation": "WV",
+      "name": "West Virginia",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "54",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    },
+    {
+      "code": "WY",
+      "abbreviation": "WY",
+      "name": "Wyoming",
+      "type": "state",
+      "inhabited_territory": false,
+      "fips": "56",
+      "timezones": [],
+      "active": true,
+      "primary": true
+    }
+  ]
+}

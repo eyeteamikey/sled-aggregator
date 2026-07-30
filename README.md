@@ -1081,3 +1081,27 @@ IDs use `rhode-island/rivip-external:{entity_key}:{external_bid_id}`. Historical
 records preserve RIVIP authority and replacement hints. Anonymous solicitation, addendum, result,
 and award files use the shared document pipeline; responses and gated links cannot. Fixture
 verification demonstrates behavior against captured inputs, not universal live accessibility.
+
+## Nationwide coverage audit
+
+The offline coverage control plane audits **56 primary jurisdictions**: 50 states, the District of
+Columbia, and five inhabited territories. Tribal procurement is a separate future coverage layer.
+As of 2026-07-30 it inventories 19 implemented connector families and 7 conservatively evidenced
+source profiles; 49 jurisdictions have no configured source in this initial registry. All 7 seeded
+profiles are fixture-verified, so none is represented as live or production-verified and none
+currently qualifies as complete public document-pipeline coverage.
+
+See the [full generated audit](docs/sled_coverage_audit.md), its
+[JSON](reports/sled_coverage_audit.json), and [CSV](reports/sled_coverage_audit.csv). Regenerate them
+without network access:
+
+```bash
+PYTHONPATH=src python -m sled_aggregator.coverage validate
+PYTHONPATH=src python -m sled_aggregator.coverage report --format json --as-of 2026-07-30 --output reports/sled_coverage_audit.json
+PYTHONPATH=src python -m sled_aggregator.coverage report --format csv --as-of 2026-07-30 --output reports/sled_coverage_audit.csv
+PYTHONPATH=src python -m sled_aggregator.coverage report --format markdown --as-of 2026-07-30 --output docs/sled_coverage_audit.md
+```
+
+A configured profile is not production verification. Fixture verification is not live
+verification, metadata access is not document access, and statewide sources do not imply complete
+local, education, transportation, authority, or quasi-public coverage.
