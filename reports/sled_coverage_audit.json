@@ -1,0 +1,2267 @@
+{
+  "as_of": "2026-07-30",
+  "connector_inventory": [
+    {
+      "aliases": [
+        "bid-net-direct",
+        "bidnet",
+        "bidnet-regional-purchasing-group",
+        "bidnetdirect"
+      ],
+      "canonical_name": "bidnet-direct",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 33,
+      "implementation_module": "sled_aggregator.connectors.bidnet_direct",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_bidnet_direct_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "advantage-vss",
+        "cgi-advantage",
+        "cgi-advantage-vss",
+        "cgi/vss",
+        "colorado/vss",
+        "maine/vss",
+        "michigan/sigma-vss"
+      ],
+      "canonical_name": "cgi/advantage-vss",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.cgi_advantage_vss",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Maine",
+        "Michigan",
+        "Colorado"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_cgi_advantage_vss_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "bonfire",
+        "bonfire-interactive",
+        "bonfirehub",
+        "euna-bonfire",
+        "euna-procurement-bonfire"
+      ],
+      "canonical_name": "euna/bonfire",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.euna_bonfire",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Anacortes, Washington",
+        "Bend, Oregon",
+        "Fairfax County, Virginia",
+        "Riverside County, California",
+        "Florence County, South Carolina",
+        "Texas",
+        "Charlotte, North Carolina",
+        "Test Territory"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_euna_bonfire_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "euna-ionwave",
+        "euna-procurement-ionwave",
+        "ion-wave",
+        "ionwave",
+        "ionwave-technologies",
+        "iwt"
+      ],
+      "canonical_name": "euna/ionwave",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.euna_ionwave",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Plano, Texas",
+        "Prosper, Texas",
+        "South Carolina",
+        "Missouri",
+        "Carrollton-Farmers Branch, Texas",
+        "Tennessee",
+        "Iowa",
+        "Test Territory"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_euna_ionwave_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "demand-star",
+        "demandstar",
+        "euna-demandstar",
+        "euna-openbids",
+        "euna-procurement-demandstar",
+        "euna/openbids",
+        "openbids"
+      ],
+      "canonical_name": "euna/openbids-demandstar",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.euna_openbids_demandstar",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_euna_openbids_demandstar_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "ga-gpr",
+        "ga-procurement-registry",
+        "georgia-gpr",
+        "georgia-procurement-registry",
+        "gpr-georgia"
+      ],
+      "canonical_name": "georgia/gpr",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 30,
+      "implementation_module": "sled_aggregator.connectors.georgia_gpr",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "GA"
+      ],
+      "test_references": [
+        "tests/test_georgia_gpr_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "bid-express",
+        "bidx",
+        "infotech/bidx"
+      ],
+      "canonical_name": "infotech/bid-express",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 3,
+      "implementation_module": "sled_aggregator.connectors.infotech",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Alabama",
+        "Alaska",
+        "Arizona",
+        "Arkansas",
+        "California",
+        "Colorado",
+        "Connecticut",
+        "Delaware",
+        "Florida",
+        "Georgia",
+        "Idaho",
+        "Indiana",
+        "Iowa",
+        "Kansas",
+        "Kentucky",
+        "Louisiana",
+        "Maine",
+        "Maryland",
+        "Massachusetts",
+        "Michigan",
+        "Minnesota",
+        "Mississippi",
+        "Missouri",
+        "Montana",
+        "Nebraska",
+        "New Jersey",
+        "New Mexico",
+        "New York",
+        "North Carolina",
+        "North Dakota",
+        "Ohio",
+        "Oklahoma",
+        "Oregon",
+        "South Carolina",
+        "Tennessee",
+        "Virginia",
+        "Washington",
+        "West Virginia",
+        "Wisconsin"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_infotech_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "jaggaer",
+        "jaggaer-public-event",
+        "jaggaer-sciquest",
+        "jaggaer/sourcing",
+        "sciquest",
+        "sciquest-sourcing"
+      ],
+      "canonical_name": "jaggaer/sciquest",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.jaggaer_sciquest",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Utah",
+        "Wisconsin",
+        "Georgia",
+        "Iowa"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_jaggaer_sciquest_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "emaryland-marketplace",
+        "emaryland-marketplace-advantage",
+        "emma-maryland",
+        "maryland-emma",
+        "md-emma"
+      ],
+      "canonical_name": "maryland/emma",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 6,
+      "implementation_module": "sled_aggregator.connectors.maryland_emma",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "MD"
+      ],
+      "test_references": [
+        "tests/test_maryland_emma_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "opengov",
+        "opengov-procurement",
+        "opengov-procurenow",
+        "procurenow",
+        "procurenow/opengov"
+      ],
+      "canonical_name": "opengov/procurement",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.opengov_procurement",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Arizona",
+        "Washington",
+        "Ohio",
+        "Connecticut",
+        "New Mexico"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_opengov_procurement_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "california/cal-eprocure",
+        "peoplesoft",
+        "peoplesoft/supplier-portal"
+      ],
+      "canonical_name": "oracle/peoplesoft-sourcing",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 4,
+      "implementation_module": "sled_aggregator.connectors.peoplesoft",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "California"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "CA"
+      ],
+      "test_references": [
+        "tests/test_peoplesoft_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "pa-emarketplace",
+        "pa/emarketplace",
+        "pennsylvania-emarketplace"
+      ],
+      "canonical_name": "pennsylvania/emarketplace",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 3,
+      "implementation_module": "sled_aggregator.connectors.pennsylvania_emarketplace",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Pennsylvania"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "PA"
+      ],
+      "test_references": [
+        "tests/test_pennsylvania_emarketplace_connector.py"
+      ]
+    },
+    {
+      "aliases": [],
+      "canonical_name": "periscope/buyspeed",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 2,
+      "implementation_module": "sled_aggregator.connectors.periscope",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Illinois",
+        "Massachusetts",
+        "Nevada",
+        "New Jersey",
+        "Oregon",
+        "U.S. Virgin Islands"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_periscope_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "pb-system",
+        "pbsystem",
+        "planet-bids",
+        "planetbids-portal",
+        "planetbids-vendor-portal"
+      ],
+      "canonical_name": "planetbids",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 4,
+      "implementation_module": "sled_aggregator.connectors.planetbids",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_planetbids_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "public-purchase-gems",
+        "public-purchase-portal",
+        "publicpurchase",
+        "the-public-group-public-purchase"
+      ],
+      "canonical_name": "public-purchase",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 35,
+      "implementation_module": "sled_aggregator.connectors.public_purchase",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_public_purchase_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "rhode-island-external-solicitations",
+        "rhode-island-rivip",
+        "ri-external-solicitations",
+        "ri-rivip-external",
+        "rivip-external"
+      ],
+      "canonical_name": "rhode-island/rivip-external",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 1,
+      "implementation_module": "sled_aggregator.connectors.rhode_island_rivip",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Rhode Island"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "RI"
+      ],
+      "test_references": [
+        "tests/test_rhode_island_rivip_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "esbd",
+        "texas-esbd",
+        "texas-smartbuy-esbd"
+      ],
+      "canonical_name": "texas/esbd",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 2,
+      "implementation_module": "sled_aggregator.connectors.texas_esbd",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Texas"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "TX"
+      ],
+      "test_references": [
+        "tests/test_texas_esbd_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "cgi/eva",
+        "eva",
+        "virginia-business-opportunities"
+      ],
+      "canonical_name": "virginia/eva",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 2,
+      "implementation_module": "sled_aggregator.connectors.eva",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Virginia"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "VA"
+      ],
+      "test_references": [
+        "tests/test_eva_connector.py"
+      ]
+    },
+    {
+      "aliases": [],
+      "canonical_name": "webprocure/proactis",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 1,
+      "implementation_module": "sled_aggregator.connectors.webprocure",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Connecticut",
+        "Missouri",
+        "Rhode Island"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_webprocure_connector.py"
+      ]
+    }
+  ],
+  "gap_analysis": [
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AK"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AL"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AR"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AS"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "AS"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AZ"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "CO"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "CT"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "DC"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "DE"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "FL"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "GA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "GA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "GA"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "GA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "GU"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "GU"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "HI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "IA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "ID"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "IL"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "IN"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "KS"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "KY"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "LA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MA"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "ME"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MN"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MO"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MP"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "MP"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MS"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MT"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NC"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "ND"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NE"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NH"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NJ"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NM"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NV"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NY"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "OH"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "OK"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "OR"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "PR"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "PR"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "SC"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "SD"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "TN"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "UT"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "VA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "VA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "VA"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "VA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "VI"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "VI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "VT"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "WA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "WI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "WV"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "WY"
+    }
+  ],
+  "generation_metadata": {
+    "generator": "sled_aggregator.coverage",
+    "network_requests": false,
+    "ordering": "jurisdiction code, source priority, stable key"
+  },
+  "jurisdiction_records": [
+    {
+      "abbreviation": "AK",
+      "active": true,
+      "code": "AK",
+      "coverage_tier": 0,
+      "fips": "02",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Alaska",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "AL",
+      "active": true,
+      "code": "AL",
+      "coverage_tier": 0,
+      "fips": "01",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Alabama",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "AR",
+      "active": true,
+      "code": "AR",
+      "coverage_tier": 0,
+      "fips": "05",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Arkansas",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "AS",
+      "active": true,
+      "code": "AS",
+      "coverage_tier": 0,
+      "fips": "60",
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "name": "American Samoa",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [
+        "Pacific/Pago_Pago"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "AZ",
+      "active": true,
+      "code": "AZ",
+      "coverage_tier": 0,
+      "fips": "04",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Arizona",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "CA",
+      "active": true,
+      "code": "CA",
+      "coverage_tier": 2,
+      "fips": "06",
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "name": "California",
+      "primary": true,
+      "source_keys": [
+        "ca-cal-eprocure"
+      ],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "CO",
+      "active": true,
+      "code": "CO",
+      "coverage_tier": 0,
+      "fips": "08",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Colorado",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "CT",
+      "active": true,
+      "code": "CT",
+      "coverage_tier": 0,
+      "fips": "09",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Connecticut",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "DC",
+      "active": true,
+      "code": "DC",
+      "coverage_tier": 0,
+      "fips": "11",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "District of Columbia",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [
+        "America/New_York"
+      ],
+      "type": "district"
+    },
+    {
+      "abbreviation": "DE",
+      "active": true,
+      "code": "DE",
+      "coverage_tier": 0,
+      "fips": "10",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Delaware",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "FL",
+      "active": true,
+      "code": "FL",
+      "coverage_tier": 0,
+      "fips": "12",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Florida",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "GA",
+      "active": true,
+      "code": "GA",
+      "coverage_tier": 2,
+      "fips": "13",
+      "gaps": [
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "name": "Georgia",
+      "primary": true,
+      "source_keys": [
+        "ga-gpr"
+      ],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "GU",
+      "active": true,
+      "code": "GU",
+      "coverage_tier": 0,
+      "fips": "66",
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "name": "Guam",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [
+        "Pacific/Guam"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "HI",
+      "active": true,
+      "code": "HI",
+      "coverage_tier": 0,
+      "fips": "15",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Hawaii",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "IA",
+      "active": true,
+      "code": "IA",
+      "coverage_tier": 0,
+      "fips": "19",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Iowa",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "ID",
+      "active": true,
+      "code": "ID",
+      "coverage_tier": 0,
+      "fips": "16",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Idaho",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "IL",
+      "active": true,
+      "code": "IL",
+      "coverage_tier": 0,
+      "fips": "17",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Illinois",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "IN",
+      "active": true,
+      "code": "IN",
+      "coverage_tier": 0,
+      "fips": "18",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Indiana",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "KS",
+      "active": true,
+      "code": "KS",
+      "coverage_tier": 0,
+      "fips": "20",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Kansas",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "KY",
+      "active": true,
+      "code": "KY",
+      "coverage_tier": 0,
+      "fips": "21",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Kentucky",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "LA",
+      "active": true,
+      "code": "LA",
+      "coverage_tier": 0,
+      "fips": "22",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Louisiana",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MA",
+      "active": true,
+      "code": "MA",
+      "coverage_tier": 0,
+      "fips": "25",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Massachusetts",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MD",
+      "active": true,
+      "code": "MD",
+      "coverage_tier": 2,
+      "fips": "24",
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "name": "Maryland",
+      "primary": true,
+      "source_keys": [
+        "md-emma"
+      ],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "ME",
+      "active": true,
+      "code": "ME",
+      "coverage_tier": 0,
+      "fips": "23",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Maine",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MI",
+      "active": true,
+      "code": "MI",
+      "coverage_tier": 0,
+      "fips": "26",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Michigan",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MN",
+      "active": true,
+      "code": "MN",
+      "coverage_tier": 0,
+      "fips": "27",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Minnesota",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MO",
+      "active": true,
+      "code": "MO",
+      "coverage_tier": 0,
+      "fips": "29",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Missouri",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MP",
+      "active": true,
+      "code": "MP",
+      "coverage_tier": 0,
+      "fips": "69",
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "name": "Commonwealth of the Northern Mariana Islands",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [
+        "Pacific/Saipan"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "MS",
+      "active": true,
+      "code": "MS",
+      "coverage_tier": 0,
+      "fips": "28",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Mississippi",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MT",
+      "active": true,
+      "code": "MT",
+      "coverage_tier": 0,
+      "fips": "30",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Montana",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NC",
+      "active": true,
+      "code": "NC",
+      "coverage_tier": 0,
+      "fips": "37",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "North Carolina",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "ND",
+      "active": true,
+      "code": "ND",
+      "coverage_tier": 0,
+      "fips": "38",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "North Dakota",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NE",
+      "active": true,
+      "code": "NE",
+      "coverage_tier": 0,
+      "fips": "31",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Nebraska",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NH",
+      "active": true,
+      "code": "NH",
+      "coverage_tier": 0,
+      "fips": "33",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "New Hampshire",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NJ",
+      "active": true,
+      "code": "NJ",
+      "coverage_tier": 0,
+      "fips": "34",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "New Jersey",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NM",
+      "active": true,
+      "code": "NM",
+      "coverage_tier": 0,
+      "fips": "35",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "New Mexico",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NV",
+      "active": true,
+      "code": "NV",
+      "coverage_tier": 0,
+      "fips": "32",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Nevada",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NY",
+      "active": true,
+      "code": "NY",
+      "coverage_tier": 0,
+      "fips": "36",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "New York",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "OH",
+      "active": true,
+      "code": "OH",
+      "coverage_tier": 0,
+      "fips": "39",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Ohio",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "OK",
+      "active": true,
+      "code": "OK",
+      "coverage_tier": 0,
+      "fips": "40",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Oklahoma",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "OR",
+      "active": true,
+      "code": "OR",
+      "coverage_tier": 0,
+      "fips": "41",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Oregon",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "PA",
+      "active": true,
+      "code": "PA",
+      "coverage_tier": 2,
+      "fips": "42",
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "name": "Pennsylvania",
+      "primary": true,
+      "source_keys": [
+        "pa-emarketplace"
+      ],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "PR",
+      "active": true,
+      "code": "PR",
+      "coverage_tier": 0,
+      "fips": "72",
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "name": "Puerto Rico",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [
+        "America/Puerto_Rico"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "RI",
+      "active": true,
+      "code": "RI",
+      "coverage_tier": 0,
+      "fips": "44",
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing",
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Rhode Island",
+      "primary": true,
+      "source_keys": [
+        "ri-rivip-external"
+      ],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "SC",
+      "active": true,
+      "code": "SC",
+      "coverage_tier": 0,
+      "fips": "45",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "South Carolina",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "SD",
+      "active": true,
+      "code": "SD",
+      "coverage_tier": 0,
+      "fips": "46",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "South Dakota",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "TN",
+      "active": true,
+      "code": "TN",
+      "coverage_tier": 0,
+      "fips": "47",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Tennessee",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "TX",
+      "active": true,
+      "code": "TX",
+      "coverage_tier": 2,
+      "fips": "48",
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "name": "Texas",
+      "primary": true,
+      "source_keys": [
+        "tx-esbd"
+      ],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "UT",
+      "active": true,
+      "code": "UT",
+      "coverage_tier": 0,
+      "fips": "49",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Utah",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "VA",
+      "active": true,
+      "code": "VA",
+      "coverage_tier": 2,
+      "fips": "51",
+      "gaps": [
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "name": "Virginia",
+      "primary": true,
+      "source_keys": [
+        "va-eva"
+      ],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "VI",
+      "active": true,
+      "code": "VI",
+      "coverage_tier": 0,
+      "fips": "78",
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "name": "U.S. Virgin Islands",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [
+        "America/St_Thomas"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "VT",
+      "active": true,
+      "code": "VT",
+      "coverage_tier": 0,
+      "fips": "50",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Vermont",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "WA",
+      "active": true,
+      "code": "WA",
+      "coverage_tier": 0,
+      "fips": "53",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Washington",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "WI",
+      "active": true,
+      "code": "WI",
+      "coverage_tier": 0,
+      "fips": "55",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Wisconsin",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "WV",
+      "active": true,
+      "code": "WV",
+      "coverage_tier": 0,
+      "fips": "54",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "West Virginia",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "WY",
+      "active": true,
+      "code": "WY",
+      "coverage_tier": 0,
+      "fips": "56",
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "name": "Wyoming",
+      "primary": true,
+      "source_keys": [],
+      "timezones": [],
+      "type": "state"
+    }
+  ],
+  "jurisdiction_source_mappings": [
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "CA",
+      "source_key": "ca-cal-eprocure"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "GA",
+      "source_key": "ga-gpr"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "MD",
+      "source_key": "md-emma"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "PA",
+      "source_key": "pa-emarketplace"
+    },
+    {
+      "coverage_tier": 0,
+      "jurisdiction_code": "RI",
+      "source_key": "ri-rivip-external"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "TX",
+      "source_key": "tx-esbd"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "VA",
+      "source_key": "va-eva"
+    }
+  ],
+  "prioritized_recommendations": [
+    {
+      "factors": {
+        "blocked_penalty": 0,
+        "complexity": 2,
+        "documents": 2,
+        "jurisdictions_unlocked": 5,
+        "maintenance_risk": 1,
+        "public_access": 2,
+        "reuse": 3,
+        "statewide_impact": 1,
+        "territory_impact": 0
+      },
+      "family": "Tyler Munis/VSS public bid search",
+      "priority_band": "P1",
+      "recommended_next_action": "Build a reusable family only after confirming common public markup.",
+      "score": 36
+    },
+    {
+      "factors": {
+        "blocked_penalty": 0,
+        "complexity": 1,
+        "documents": 1,
+        "jurisdictions_unlocked": 3,
+        "maintenance_risk": 1,
+        "public_access": 3,
+        "reuse": 3,
+        "statewide_impact": 1,
+        "territory_impact": 1
+      },
+      "family": "public CSV, RSS, XML, and JSON feeds",
+      "priority_band": "P1",
+      "recommended_next_action": "Inventory stable official feeds and implement a reusable feed connector.",
+      "score": 33
+    },
+    {
+      "factors": {
+        "blocked_penalty": 0,
+        "complexity": 2,
+        "documents": 1,
+        "jurisdictions_unlocked": 4,
+        "maintenance_risk": 2,
+        "public_access": 2,
+        "reuse": 3,
+        "statewide_impact": 2,
+        "territory_impact": 0
+      },
+      "family": "Oracle Cloud Procurement",
+      "priority_band": "P1",
+      "recommended_next_action": "Research public tenant APIs; a new connector may be required.",
+      "score": 31
+    },
+    {
+      "factors": {
+        "blocked_penalty": 0,
+        "complexity": 2,
+        "documents": 1,
+        "jurisdictions_unlocked": 4,
+        "maintenance_risk": 1,
+        "public_access": 2,
+        "reuse": 3,
+        "statewide_impact": 1,
+        "territory_impact": 0
+      },
+      "family": "Vendor Registry",
+      "priority_band": "P1",
+      "recommended_next_action": "Confirm anonymous discovery and document boundaries.",
+      "score": 30
+    },
+    {
+      "factors": {
+        "blocked_penalty": 1,
+        "complexity": 3,
+        "documents": 1,
+        "jurisdictions_unlocked": 3,
+        "maintenance_risk": 3,
+        "public_access": 1,
+        "reuse": 1,
+        "statewide_impact": 2,
+        "territory_impact": 3
+      },
+      "family": "territory-specific legacy portals",
+      "priority_band": "P3",
+      "recommended_next_action": "Research authoritative territory sources without bypassing access controls.",
+      "score": 15
+    }
+  ],
+  "schema_version": "1.0",
+  "source_records": [
+    {
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "connector_name": "oracle/peoplesoft-sourcing",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "expected_coverage_impact": "statewide",
+      "fixture_references": [
+        "tests/fixtures/peoplesoft_results.html"
+      ],
+      "jurisdiction_code": "CA",
+      "key": "ca-cal-eprocure",
+      "migration_status": "current",
+      "name": "Cal eProcure",
+      "official_url": "https://caleprocure.ca.gov/",
+      "platform_family": "oracle/peoplesoft-sourcing",
+      "priority": 2,
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "verification_status": "fixture_verified"
+    },
+    {
+      "authoritative": true,
+      "award_access": "public",
+      "connector_name": "georgia/gpr",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "expected_coverage_impact": "statewide",
+      "fixture_references": [
+        "tests/fixtures/georgia_gpr_listing.html"
+      ],
+      "jurisdiction_code": "GA",
+      "key": "ga-gpr",
+      "migration_status": "current",
+      "name": "Georgia Procurement Registry",
+      "official_url": "https://ssl.doas.state.ga.us/gpr/",
+      "platform_family": "georgia/gpr",
+      "priority": 1,
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "verification_status": "fixture_verified"
+    },
+    {
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "connector_name": "maryland/emma",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "expected_coverage_impact": "statewide",
+      "fixture_references": [
+        "tests/fixtures/maryland_emma_listing.html"
+      ],
+      "jurisdiction_code": "MD",
+      "key": "md-emma",
+      "migration_status": "current",
+      "name": "eMaryland Marketplace Advantage",
+      "official_url": "https://emma.maryland.gov/",
+      "platform_family": "maryland/emma",
+      "priority": 1,
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "verification_status": "fixture_verified"
+    },
+    {
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "connector_name": "pennsylvania/emarketplace",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "expected_coverage_impact": "statewide",
+      "fixture_references": [
+        "tests/fixtures/pennsylvania_emarketplace_search.html"
+      ],
+      "jurisdiction_code": "PA",
+      "key": "pa-emarketplace",
+      "migration_status": "current",
+      "name": "PA eMarketplace",
+      "official_url": "https://www.emarketplace.state.pa.us/",
+      "platform_family": "pennsylvania/emarketplace",
+      "priority": 1,
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "verification_status": "fixture_verified"
+    },
+    {
+      "authoritative": false,
+      "award_access": "metadata_only",
+      "connector_name": "rhode-island/rivip-external",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "expected_coverage_impact": "local and education external notices",
+      "fixture_references": [
+        "tests/fixtures/rivip_external_results.html"
+      ],
+      "jurisdiction_code": "RI",
+      "key": "ri-rivip-external",
+      "migration_status": "partial",
+      "name": "RIVIP External Solicitations",
+      "official_url": "https://www.purchasing.ri.gov/RIVIP/ExternalBids.aspx",
+      "platform_family": "rhode-island/rivip-external",
+      "priority": 2,
+      "source_level": "supplemental",
+      "source_role": "external notice",
+      "source_status": "active",
+      "supplemental": true,
+      "verification_status": "fixture_verified"
+    },
+    {
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "connector_name": "texas/esbd",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "expected_coverage_impact": "statewide",
+      "fixture_references": [
+        "tests/fixtures/texas_esbd_results.html"
+      ],
+      "jurisdiction_code": "TX",
+      "key": "tx-esbd",
+      "migration_status": "current",
+      "name": "Electronic State Business Daily",
+      "official_url": "https://www.txsmartbuy.gov/esbd",
+      "platform_family": "texas/esbd",
+      "priority": 1,
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "verification_status": "fixture_verified"
+    },
+    {
+      "authoritative": true,
+      "award_access": "public",
+      "connector_name": "virginia/eva",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "expected_coverage_impact": "statewide",
+      "fixture_references": [
+        "tests/fixtures/eva_board.html"
+      ],
+      "jurisdiction_code": "VA",
+      "key": "va-eva",
+      "migration_status": "current",
+      "name": "Virginia eVA",
+      "official_url": "https://eva.virginia.gov/",
+      "platform_family": "virginia/eva",
+      "priority": 1,
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "verification_status": "fixture_verified"
+    }
+  ],
+  "summary": {
+    "automated_access_block_count": 0,
+    "captcha_count": 0,
+    "changed_markup_count": 0,
+    "coverage_tier_distribution": {
+      "0": 50,
+      "1": 0,
+      "2": 6,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0
+    },
+    "implemented_connector_count": 19,
+    "jurisdiction_count": 56,
+    "login_required_count": 0,
+    "metadata_only_count": 0,
+    "migrated_source_count": 0,
+    "missing_source_count": 49,
+    "payment_required_count": 0,
+    "public_detail_count": 7,
+    "public_discovery_count": 7,
+    "public_document_pipeline_count": 0,
+    "registration_required_count": 0,
+    "robots_policy_count": 0,
+    "source_count": 7,
+    "subscription_required_count": 0,
+    "unverified_source_count": 7
+  },
+  "validation_warnings": []
+}
