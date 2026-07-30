@@ -59,6 +59,7 @@ from sled_aggregator.connectors.euna_openbids_demandstar import (  # noqa: E402
     EunaOpenBidsDemandStarConnector,
 )
 from sled_aggregator.connectors.eva import EVAConnector  # noqa: E402
+from sled_aggregator.connectors.georgia_gpr import GeorgiaGPRConnector  # noqa: E402
 from sled_aggregator.connectors.infotech import InfotechBidExpressConnector  # noqa: E402
 from sled_aggregator.connectors.jaggaer_sciquest import JaggaerSciQuestConnector  # noqa: E402
 from sled_aggregator.connectors.maryland_emma import MarylandEMMAConnector  # noqa: E402
@@ -89,6 +90,7 @@ connector_registry.register(EunaIonWaveConnector)
 connector_registry.register(EunaOpenBidsDemandStarConnector)
 connector_registry.register(PlanetBidsConnector)
 connector_registry.register(MarylandEMMAConnector)
+connector_registry.register(GeorgiaGPRConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
@@ -173,3 +175,12 @@ for _alias in (
     "md-emma",
 ):
     connector_registry.register_alias(_alias, MarylandEMMAConnector)
+
+for _alias in (
+    "georgia-gpr",
+    "ga-gpr",
+    "georgia-procurement-registry",
+    "ga-procurement-registry",
+    "gpr-georgia",
+):
+    connector_registry.register_alias(_alias, GeorgiaGPRConnector)

@@ -14,6 +14,8 @@ class AccessState(StrEnum):
     CAPTCHA_REQUIRED = "captcha_required"
     VENDOR_PROFILE_REQUIRED = "vendor_profile_required"
     RESPONSE_SYSTEM_EXTERNAL = "response_system_external"
+    EXTERNAL_RESPONSE_SYSTEM = "external_response_system"
+    MIGRATED = "migrated"
     RESTRICTED = "restricted"
     UNAVAILABLE = "unavailable"
     NOT_FOUND = "not_found"

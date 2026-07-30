@@ -621,3 +621,27 @@ solicitation discovery. Public document candidates reuse the existing manifest, 
 queue, downloader, parser, targeted OCR, structured extraction, and reconciliation
 services rather than weakening their redirect, SSRF, MIME, HTML-wall or archive policy.
 Fixture verification is explicitly distinct from universal live availability.
+
+## Georgia GPR notification and transition boundary
+
+`georgia/gpr` is a public-notification connector, not a sourcing-session
+connector. Its profile contains jurisdiction/entity metadata, exact platform and
+document host allowlists, discovery bounds, markup variant, expected access,
+verification status, transition state, and optional replacement metadata. This
+keeps reusable GPR mechanics separate from Georgia agency and local-government
+configuration.
+
+The normalized opportunity retains the GPR notice URL and identifier separately
+from upstream event identifiers and external response URLs. Linked systems are
+classified (`gpr_direct`, `gawork_marketplace`, `team_georgia_marketplace`,
+`peoplesoft`, `esource`, `jaggaer_sourcing_director`, `bid_express`,
+`agency_hosted`, `external_portal`, or `unknown`) but are never invoked by the
+parser. This separation is required for the July 1, 2026 GA@WORK transition and
+for local notices whose response workflow remains elsewhere.
+
+Collection fails closed on login/registration/migration/error markup or an
+unexpected response shape. Pagination, results, retries, timeouts, backoff, and
+circuit state are bounded per profile; permanent access boundaries are not
+retried. Public documents enter the existing manifest and retrieval pipeline,
+while gated candidates retain relationship and access metadata without anonymous
+queue insertion.
