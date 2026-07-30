@@ -465,3 +465,11 @@ runtime behavior.
 Structured logs should identify document/job IDs, connector, tenant and state plus sanitized
 host/path only. Query strings, cookies, credentials, raw payloads, bodies and internal errors are not
 logging material. Pipeline counts are available through the bounded queue-statistics API.
+
+## Public document retrieval
+
+`documents.policy`, `fetcher`, `validation`, `storage`, and `worker` separate URL policy, HTTP redirects/streaming, MIME/access-page classification, atomic storage, and lease-aware persistence. Append-oriented `document_artifacts` retains each distinct manifest hash; `document_download_attempts` holds bounded audits. Safe read metadata excludes storage keys and lease credentials.
+
+Workers claim PR #12 jobs using `FOR UPDATE SKIP LOCKED`, commit before I/O, then recheck owner, token and expiration before persistence. Lease loss prevents acknowledgement. Transient failures reschedule with bounded backoff; permanent access/policy/validation outcomes are terminal. Since storage and PostgreSQL cannot be atomic together, deterministic keys, verification and artifact lookup enable idempotent reconciliation.
+
+Production should add egress controls, tenant-approved portal/CDN hosts, durable private volumes and an external scheduler. Future work is PR #14 parsing/targeted OCR, PR #15 structured extraction/version reconciliation, object storage, malware scanning, retention, authorized operations, live validation, downloads and evaluation integration.

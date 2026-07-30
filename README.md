@@ -599,3 +599,13 @@ or submit bids. PR #13 will add a safe public downloader; PR #14 parsing and tar
 structured RFP/SOW/PWS extraction and version reconciliation. Later work includes object storage,
 authorized operations, workers, retention/export/reprocessing, malware scanning, bounded archive
 handling, and evaluation integration.
+
+## Safe public document downloader
+
+The document pipeline is connector discovery → opportunity ingestion → canonical manifest → durable retrieval queue → safe downloader → bounded validation → streaming SHA-256 → artifact storage → future parser/OCR/structured extraction → evaluation and export. Run the disabled-by-default one-shot worker with `DOCUMENT_DOWNLOADER_ENABLED=true python -m sled_aggregator.documents.worker --once` (or `--batch-size 10`).
+
+Only current, eligible, explicitly public manifest entries with valid leases are fetched. Every redirect is checked against HTTP(S), ports, host affinity/allowlist, and public-IP SSRF rules. Files stream through unpredictable temporary names, use a configurable 100 MiB default limit, and are incrementally SHA-256 hashed. Detection covers PDF, ZIP/OOXML containers (without inspection), legacy Office, RTF, text/CSV, XML, HTML, PNG and JPEG. Bounded HTML inspection rejects login, registration, CAPTCHA/bot challenge, denied, missing, expired-session and maintenance pages. ETag/Last-Modified conditional GET and hash equality detect unchanged bytes.
+
+The `local` adapter atomically commits deterministic identifier/hash keys under `DOCUMENT_STORAGE_ROOT` (default `/tmp/sled-aggregator/documents`) without exposing paths. Artifact rows preserve versions and attempt rows preserve bounded audit provenance. Deterministic keys and checksum verification reconcile retries across the unavoidable storage/database boundary. Timeouts, network errors, 408/425/429 and 5xx are retryable; unsafe, restricted, login/registration/CAPTCHA, missing, oversized, unsupported and suspicious responses are terminal. Standard httpx cannot pin a prevalidated DNS answer to its socket, so production egress filtering remains necessary.
+
+`DOCUMENT_DOWNLOAD_*` variables configure timeouts, chunk/file and redirect/attempt limits, batch/concurrency, User-Agent, allowed ports/hosts, probes, and temporary storage. This downloader does **not** parse files, extract text, run OCR, inspect ZIP contents, analyze requirements, use LLMs, authenticate to portals, bypass CAPTCHA/registration, or submit bids. PR #14 is parsing/targeted OCR; PR #15 is structured extraction/version reconciliation. Cloud adapters, malware scanning, scheduling, authorized controls, retention, live validation, user downloads and evaluation integration are later work.
