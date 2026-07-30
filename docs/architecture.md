@@ -670,3 +670,45 @@ reconciliation pipeline; the connector implements no private downloader or OCR p
 
 Fixture verification demonstrates behavior against captured test inputs. It does not prove
 every live BidNet Direct opportunity or document remains anonymously accessible.
+
+## Public Purchase connector
+
+`public-purchase` models Public Purchase as a configurable agency-portal family rather than a
+single jurisdiction. A profile owns the observed `/gems/{agency_slug}/...` routes, agency identity,
+explicit host allowlists, discovery limits, expected access model, parser variant, lifecycle and
+verification state, and optional replacement. Transport, boundary detection, parsing,
+normalization, and document-candidate creation remain separate. Every redirect is revalidated;
+non-HTTPS, credential-bearing, loopback, link-local, private/reserved, and unapproved hosts fail
+closed. Pagination and results are bounded, repeated payloads and identifiers are suppressed, and
+unexpected response shapes produce `changed_markup`.
+
+The access model distinguishes anonymous public data from `public_metadata_only`, vendor
+`registration_required`, `agency_enrollment_required`, `login_required`,
+`subscription_required`, `paid_syndication_required`, `bid_participation_required`, official
+`external_public_source`, robots and automated-access blocks, CAPTCHA, restricted, unavailable,
+and unknown resources. Free registration and subsequent agency enrollment are access boundaries.
+No credentials, cookies, tokens, account creation, enrollment, paid Bid Syndication, notifications,
+questions, acknowledgements, uploads, pricing entry, or electronic responses are supported.
+
+Normalized identities are agency-qualified as
+`public-purchase:{profile_key}:{opportunity_id}`. Raw identifiers and URLs remain separate, and
+field-level source provenance plus member-agency, official-mirror, syndicated-external, or unknown
+classification is retained. Public Purchase member records and official mirrors are in scope;
+an anonymously visible external notice retains its upstream authority and reconciliation metadata
+and should defer to the upstream platform connector.
+
+Document references (solicitation packages, specifications, plans, forms, addenda, Q&A, results,
+and awards) retain their relationship, source and agency URLs, label, filename, category, MIME
+hint, timestamps, access state, version, raw metadata, and retrieval eligibility. Only approved,
+anonymously public candidates enter manifest reconciliation and the durable queue. Gated platform
+references remain visible as incomplete coverage; an equivalent approved official-agency copy can
+be queued without losing its Public Purchase relationship. The shared safe downloader, document
+parser, targeted OCR, structured extraction, and version reconciliation are reused unchanged.
+
+Retries are limited to transient 429/502/503/504 and transport failures, honoring Retry-After with
+bounded exponential backoff and jitter. Permanent access boundaries are not retried. Per-profile
+health includes failure counts, circuit state, last status/failure/success, cooldown and recovery.
+Robots rules, CAPTCHA, and technical restrictions are respected without browser impersonation,
+proxy rotation, or evasion. Fixture verification is mandatory; `configured_unverified` is used
+when bounded anonymous live verification is unavailable. Fixture verification demonstrates
+behavior against captured test inputs and is not universal live-access proof.
