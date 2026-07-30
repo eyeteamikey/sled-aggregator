@@ -6,6 +6,8 @@ class AccessState(StrEnum):
     PUBLIC_METADATA_ONLY = "public_metadata_only"
     LOGIN_REQUIRED = "login_required"
     REGISTRATION_REQUIRED = "registration_required"
+    PROSPECTIVE_BIDDER_REQUIRED = "prospective_bidder_required"
+    INVITATION_ONLY = "invitation_only"
     SUBSCRIPTION_REQUIRED = "subscription_required"
     PAYMENT_REQUIRED = "payment_required"
     CAPTCHA = "captcha"

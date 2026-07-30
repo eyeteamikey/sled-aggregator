@@ -865,3 +865,46 @@ POST. Follow-up **SLED Connector PR #19** will add Euna Procurement/DemandStar a
 separate family. Later candidates include PlanetBids, BidNet Direct, Public Purchase, SAP Ariba,
 Workday Strategic Sourcing, state-specific portals, scheduled execution, live validation,
 markup-change detection, preset expansion, and capability-profile matching.
+
+### PlanetBids agency portals
+
+`planetbids` is the public-read-only connector family for configured, agency-specific
+PlanetBids vendor portals. Supported explicit aliases are `planet-bids`,
+`planetbids-portal`, `planetbids-vendor-portal`, `pb-system`, and `pbsystem`.
+VendorLine is a separate aggregation/subscription product and is neither an alias nor
+a data source.
+
+A `PlanetBidsProfile` supplies the agency identity, jurisdiction, official procurement
+page, portal/list/detail URLs, approved portal and document hosts, strict collection
+bounds, parser variant, access expectation, verification status, and migration or
+replacement metadata. Add a profile only after checking an authoritative agency page,
+a public PlanetBids page, or a sanitized fixture; record verification notes rather than
+assuming all opportunities and files are public. Profiles may be `active`,
+`configured_unverified`, `legacy`, `migrated`, or `unavailable`.
+
+Discovery uses bounded anonymous GET requests and fixture-supported embedded JSON or
+semantic HTML. It deduplicates tenant-qualified records, detects repeated pages and
+changed markup, applies query filters, then retrieves public detail pages. Stable IDs
+have the form `planetbids:{profile_key}:{upstream_id}` so identical solicitation
+numbers at different agencies never collide. Detail payloads preserve field
+provenance, canonical and official URLs, public Q&A, addenda, results, award data, and
+per-resource access state when supplied upstream.
+
+Document candidates flow into the existing manifest, safe downloader, parser, targeted
+OCR, structured extraction, and version-reconciliation pipeline. Access is classified
+per opportunity and file: a public page may mix public attachments with
+`login_required`, `registration_required`, `prospective_bidder_required`, restricted,
+or invitation-only resources. Only direct public candidates are retrieval-eligible;
+gated links remain visible as incomplete-document provenance and are never treated as
+failed public downloads.
+
+The connector never registers or authenticates vendors, joins bidder lists, RSVPs,
+submits questions, acknowledges addenda, submits bids, accesses sealed responses or
+invitation-only solicitations, uses VendorLine paid aggregation, bypasses CAPTCHA, or
+circumvents portal controls. It uses no POST navigation. Migrated and inactive profiles
+fail closed and retain replacement metadata without relabeling the replacement system.
+
+Fixture-verified behavior demonstrates connector behavior against captured test inputs.
+It does not prove that every PlanetBids agency portal, opportunity, or document remains
+anonymously accessible. Portal generations and agency configuration differ; unsupported
+markup is reported as `changed_markup`. No live profile is enabled by this change.

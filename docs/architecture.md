@@ -580,3 +580,19 @@ boundary. Migration metadata retains the historical source while handing current
 the existing OpenGov or Bonfire connector, and configured authoritative agency fallbacks remain
 bounded. Fixture verification is not live verification, and legacy/retired tenants do not imply
 active or statewide coverage.
+
+## PlanetBids connector family
+
+PlanetBids transport, agency profile validation, listing/detail parsing, access-boundary
+classification, normalization, and per-profile health are separated in the reusable
+`planetbids` connector. Profiles authorize exact HTTPS hosts and bound page size, page
+count, results, retries, timeouts, backoff, and circuit state. Redirected attachments
+remain the responsibility of the shared safe downloader, which revalidates every hop;
+the connector does not weaken SSRF, MIME, size, HTML-wall, archive, or filename rules.
+
+Embedded fixture JSON and semantic server HTML are supported without a browser. Public
+Q&A, addenda, tabulations, intent-to-award, and award resources become provenance-rich
+document candidates. Mixed public and gated resources retain independent access states,
+and only anonymous direct files enter retrieval. Platform identity is agency-qualified,
+while migration metadata prevents stale PlanetBids portals from being treated as the
+current platform. VendorLine is explicitly out of scope.

@@ -69,6 +69,7 @@ from sled_aggregator.connectors.pennsylvania_emarketplace import (  # noqa: E402
 )
 from sled_aggregator.connectors.peoplesoft import PeopleSoftSourcingConnector  # noqa: E402
 from sled_aggregator.connectors.periscope import PeriscopeBuySpeedConnector  # noqa: E402
+from sled_aggregator.connectors.planetbids import PlanetBidsConnector  # noqa: E402
 from sled_aggregator.connectors.texas_esbd import TexasESBDConnector  # noqa: E402
 from sled_aggregator.connectors.webprocure import WebProcureConnector  # noqa: E402
 
@@ -85,6 +86,7 @@ connector_registry.register(OpenGovProcurementConnector)
 connector_registry.register(BonfireProcurementConnector)
 connector_registry.register(EunaIonWaveConnector)
 connector_registry.register(EunaOpenBidsDemandStarConnector)
+connector_registry.register(PlanetBidsConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
@@ -151,3 +153,12 @@ for _alias in (
     "euna-procurement-demandstar",
 ):
     connector_registry.register_alias(_alias, EunaOpenBidsDemandStarConnector)
+
+for _alias in (
+    "planet-bids",
+    "planetbids-portal",
+    "planetbids-vendor-portal",
+    "pb-system",
+    "pbsystem",
+):
+    connector_registry.register_alias(_alias, PlanetBidsConnector)
