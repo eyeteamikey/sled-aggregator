@@ -17,6 +17,7 @@ portal controls.
 - Document eligibility classification
 - Access-state handling for public and restricted documents
 - Configuration for targeted OCR and bounded ZIP processing
+- Content-sniffed parsing and normalized, provenance-bearing text/table storage
 - PostgreSQL-ready runtime configuration
 - SQLAlchemy persistence adapter and Alembic migration baseline
 - Unit tests for normalization, classification, and connector registration
@@ -98,6 +99,59 @@ docker compose up --build
 - `POST /api/v1/opportunities/normalize`
 - `POST /api/v1/documents/classify`
 - `GET /api/v1/connectors`
+- `GET /api/v1/documents/{id}/extraction`
+- `GET /api/v1/documents/{id}/extraction/blocks?page=&sheet=&limit=&offset=`
+- `GET /api/v1/documents/{id}/extraction/tables`
+- `GET /api/v1/documents/{id}/extraction/text?maximum_characters=`
+- `GET /api/v1/documents/extraction/health`
+
+## Document extraction
+
+The public-document flow is connector discovery → opportunity ingestion → document
+manifest → safe downloader → validated artifact → content-sniffed parser → native
+extraction → page-specific OCR decision → normalized blocks/tables → future structured
+RFP extraction. Parsing is not semantic RFP analysis and does not use an LLM.
+
+Supported formats are PDF (native text and page-level OCR classification), DOCX,
+XLSX, CSV, TSV, text, HTML, XML, RTF, and bounded ZIP. DOC, XLS, PPT, PPTX,
+macro-enabled OOXML, encrypted PDF, and nested archives are deferred and reported as
+unsupported or conversion-required; no office converter is launched. The optional
+`documents` extra uses pypdf (BSD-3-Clause), openpyxl (MIT), python-docx (MIT), and
+defusedxml (Python Software Foundation license). Runtime OCR uses the optional system
+Tesseract executable (Apache-2.0); service startup does not depend on it.
+
+PDF native text is usable when a page has at least 40 alphanumeric characters and five
+words with no more than a 5% replacement-character ratio. A below-threshold page is
+OCR-eligible only when it contains a raster image. Blank pages are skipped, native-text
+pages are never OCR'd, and mixed PDFs classify only deficient image pages for OCR.
+Tesseract is disabled by default and current PDF extraction reports `unavailable` when
+rendering/OCR is required; it never silently pretends OCR ran.
+
+DOCX relationships are not followed. HTML scripts, styles, forms, navigation, and frames
+are ignored. XML DTD/entity declarations are quarantined. XLSX opens read-only with
+formula expressions preserved as inert text (`data_only=False`, `keep_links=False`), so
+no formula, macro, data connection, or external relationship is executed. ZIP entries
+are inspected in memory without extract-all: absolute, traversal, drive-letter, symlink,
+encrypted, nested, oversized, excessive-count, total-size, and compression-ratio cases
+are rejected or skipped.
+
+Extraction identity is artifact SHA-256 plus parser name/version. Successful identical
+results are reused; a changed hash or parser version produces another auditable result,
+and older results are retained while only the newest is marked current. Blocks preserve
+page, sheet, paragraph, archive-entry, table and cell-range coordinates with stable
+normalized offsets. Tables retain rows separately from flattened search text.
+
+Run a bounded batch with:
+
+```bash
+python -m sled_aggregator.documents.extraction_worker --once
+python -m sled_aggregator.documents.extraction_worker --batch-size 10
+python -m sled_aggregator.documents.extraction_worker --ocr-health
+```
+
+All parsing is local to artifacts previously approved by the downloader. It fetches no
+links, executes no document content, authenticates to no portal, and bypasses no CAPTCHA
+or access control.
 
 The opportunity service is repository-backed. PostgreSQL is the production
 adapter; an in-memory adapter supports deterministic unit testing.

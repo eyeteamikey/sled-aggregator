@@ -52,6 +52,37 @@ class Settings(BaseSettings):
     document_download_allowed_hosts: tuple[str, ...] = ()
     document_download_html_probe_bytes: int = Field(default=32768, ge=1024, le=262144)
     document_download_error_probe_bytes: int = Field(default=8192, ge=512, le=65536)
+    document_extraction_enabled: bool = True
+    document_extraction_auto_enqueue: bool = True
+    document_extraction_batch_size: int = Field(default=10, ge=1, le=100)
+    document_extraction_concurrency: int = Field(default=1, ge=1, le=16)
+    document_extraction_max_attempts: int = Field(default=3, ge=1, le=20)
+    document_extraction_lease_seconds: int = Field(default=600, ge=30, le=86400)
+    document_extraction_max_artifact_bytes: int = Field(default=100 * 1024 * 1024, ge=1024)
+    document_extraction_max_characters: int = Field(default=5_000_000, ge=1000)
+    document_extraction_max_blocks: int = Field(default=10_000, ge=1)
+    document_extraction_max_tables: int = Field(default=1_000, ge=1)
+    document_pdf_max_pages: int = Field(default=500, ge=1)
+    document_pdf_native_text_min_characters: int = Field(default=40, ge=0)
+    document_pdf_native_text_min_words: int = Field(default=5, ge=0)
+    document_pdf_max_replacement_ratio: float = Field(default=0.05, ge=0, le=1)
+    document_ocr_enabled: bool = False
+    document_ocr_provider: str = "tesseract"
+    document_ocr_language: str = "eng"
+    document_ocr_dpi: int = Field(default=200, ge=72, le=600)
+    document_ocr_timeout_seconds: int = Field(default=60, ge=1, le=600)
+    document_ocr_max_pages: int = Field(default=25, ge=0, le=500)
+    document_ocr_max_pixels: int = Field(default=25_000_000, ge=1_000_000)
+    document_zip_enabled: bool = True
+    document_zip_max_entries: int = Field(default=100, ge=1, le=5000)
+    document_zip_max_entry_bytes: int = Field(default=25 * 1024 * 1024, ge=1024)
+    document_zip_max_total_bytes: int = Field(default=100 * 1024 * 1024, ge=1024)
+    document_zip_max_compression_ratio: float = Field(default=100, ge=1, le=1000)
+    document_zip_max_nesting_depth: int = Field(default=0, ge=0, le=3)
+    document_spreadsheet_max_sheets: int = Field(default=50, ge=1)
+    document_spreadsheet_max_rows: int = Field(default=100_000, ge=1)
+    document_spreadsheet_max_columns: int = Field(default=1_000, ge=1)
+    document_spreadsheet_max_cells: int = Field(default=1_000_000, ge=1)
 
     @model_validator(mode="after")
     def validate_document_retry_bounds(self) -> "Settings":
@@ -65,6 +96,8 @@ class Settings(BaseSettings):
             raise ValueError("document download ports must be between 1 and 65535")
         if self.document_download_retry_max_seconds < self.document_download_retry_base_seconds:
             raise ValueError("document download retry maximum must be at least the base")
+        if self.document_zip_max_entry_bytes > self.document_zip_max_total_bytes:
+            raise ValueError("ZIP entry limit cannot exceed total limit")
         return self
 
 
