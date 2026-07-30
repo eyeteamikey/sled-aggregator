@@ -30,6 +30,36 @@ portal controls.
   IVDetails/IVDetailsV2 enrichment, and access-aware document metadata
 - Public JAGGAER/SciQuest event discovery and detail/document-metadata enrichment
   for Utah U3P, UW System ShopUW+, Georgia Sourcing Director, and Iowa IMPACS
+- Configurable, bounded, anonymous Euna OpenBids (formerly DemandStar) discovery,
+  detail enrichment, and access-aware document metadata. Its canonical family is
+  `euna/openbids-demandstar`; aliases include `demandstar`, `openbids`, and
+  `euna/openbids`. It is separate from Euna Bonfire and IonWave.
+
+### Euna OpenBids / DemandStar
+
+DemandStar is now named **Euna OpenBids**, although legacy DemandStar URLs,
+agency references, branding, and workflows remain. Profiles validate an explicit
+platform/document host allowlist, bound page size/pages/results, and qualify every
+upstream identifier with the agency profile key. Migrated and legacy profiles retain
+provenance but are not collected as current DemandStar agencies.
+
+The connector uses anonymous GET requests only. Public metadata is retained when a
+document requires registration, login, subscription, or payment; such candidates are
+marked incomplete and are not queued for anonymous retrieval. Public candidates feed
+the existing manifest, safe downloader, parsing, targeted OCR, structured extraction,
+and version-reconciliation pipeline.
+
+It does **not** register supplier accounts, log in, purchase subscriptions, pay package
+fees, submit bids, acknowledge addenda, join planholder lists, bypass CAPTCHA or other
+controls, or retrieve private supplier responses. To add an agency, create a
+`DemandStarProfile`, choose conservative bounds, allow only verified platform and
+official document hosts, start as `configured_unverified`, and promote verification
+only after sanitized fixture or bounded public verification.
+
+Fixture-verified behavior demonstrates parser and connector behavior against captured
+test inputs. It does not prove that every live Euna OpenBids/DemandStar agency or
+endpoint is currently anonymously accessible. Markup and anonymous access vary by
+agency, and gated documents leave downstream evaluation explicitly incomplete.
 
 ## Architecture
 
@@ -741,7 +771,7 @@ Connector expansion includes the reusable OpenGov Procurement/ProcureNow connect
 
 The `euna/bonfire` connector is a reusable, anonymous, GET-only connector for agency-specific
 `https://{tenant}.bonfirehub.com` portals. Registry aliases are `bonfire`, `bonfirehub`,
-`euna-bonfire`, `euna-procurement-bonfire`, `bonfire-interactive`, and `euna-procurement`;
+`euna-bonfire`, `euna-procurement-bonfire`, and `bonfire-interactive`;
 the deliberately omitted bare `euna` name prevents collision with IonWave, DemandStar,
 EqualLevel, and other distinct Euna product families.
 

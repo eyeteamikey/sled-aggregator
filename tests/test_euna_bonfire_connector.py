@@ -104,7 +104,6 @@ class BonfireConnectorTests(unittest.IsolatedAsyncioTestCase):
             "euna-bonfire",
             "euna-procurement-bonfire",
             "bonfire-interactive",
-            "euna-procurement",
         ):
             self.assertIs(connector_registry.get(alias), BonfireProcurementConnector)
         with self.assertRaises(KeyError):
