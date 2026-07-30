@@ -508,3 +508,27 @@ logging material. Pipeline counts are available through the bounded queue-statis
 Workers claim PR #12 jobs using `FOR UPDATE SKIP LOCKED`, commit before I/O, then recheck owner, token and expiration before persistence. Lease loss prevents acknowledgement. Transient failures reschedule with bounded backoff; permanent access/policy/validation outcomes are terminal. Since storage and PostgreSQL cannot be atomic together, deterministic keys, verification and artifact lookup enable idempotent reconciliation.
 
 Production should add egress controls, tenant-approved portal/CDN hosts, durable private volumes and an external scheduler. Future work is PR #14 parsing/targeted OCR, PR #15 structured extraction/version reconciliation, object storage, malware scanning, retention, authorized operations, live validation, downloads and evaluation integration.
+
+## Solicitation intelligence and reconciliation
+
+Semantic extraction is isolated from format parsers. `DeterministicSolicitationExtractor` delegates
+heading recognition, evidence resolution, authority classification, field/requirement/deliverable/
+evaluation/contact/code extraction, while `SolicitationReconciler` applies a separate field-specific
+policy. Extractor identity combines opportunity/document version, artifact hash and parser version
+(from the source extraction), extractor version, schema version, and configuration fingerprint.
+Identical successful identities are reused; changed artifacts, parsers, extractor versions, schemas,
+or bounded configuration permit a new immutable run.
+
+Important facts and evidence, sections, requirements, deliverables, factors, contacts, codes,
+conflicts, changes, and snapshots are normalized relational objects. Snapshot JSON is a bounded read
+model, not the only source of truth. A content fingerprint prevents duplicate snapshots. The ledger
+preserves prior/new facts and controlling evidence. Addenda coexist with the primary and change only
+explicit fields. Q&A is informational unless official text explicitly modifies a clause. Cancellation
+changes effective status without erasing history; awards add post-award facts only. Unresolved
+same-authority conflicts are never silently selected by discovery time.
+
+Confidence is a transparent `high`/`medium`/`low` heuristic, not calibrated probability.
+Completeness distinguishes absent fields from failed processing and includes source/parser/OCR
+warnings. Evidence quotations and context are bounded and reference the stored block, page, sheet,
+archive member or table coordinates. This preserves a direct explanation for every authoritative
+fact without duplicating whole documents.

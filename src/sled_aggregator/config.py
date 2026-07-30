@@ -83,6 +83,24 @@ class Settings(BaseSettings):
     document_spreadsheet_max_rows: int = Field(default=100_000, ge=1)
     document_spreadsheet_max_columns: int = Field(default=1_000, ge=1)
     document_spreadsheet_max_cells: int = Field(default=1_000_000, ge=1)
+    solicitation_intelligence_enabled: bool = True
+    solicitation_intelligence_auto_enqueue: bool = True
+    solicitation_intelligence_batch_size: int = Field(default=10, ge=1, le=100)
+    solicitation_intelligence_concurrency: int = Field(default=1, ge=1, le=16)
+    solicitation_intelligence_max_attempts: int = Field(default=3, ge=1, le=20)
+    solicitation_intelligence_lease_seconds: int = Field(default=600, ge=30, le=86400)
+    solicitation_intelligence_retry_base_seconds: int = Field(default=60, ge=0, le=86400)
+    solicitation_intelligence_retry_max_seconds: int = Field(default=3600, ge=0, le=604800)
+    solicitation_intelligence_max_fields: int = Field(default=1000, ge=1, le=10000)
+    solicitation_intelligence_max_requirements: int = Field(default=2000, ge=1, le=10000)
+    solicitation_intelligence_max_deliverables: int = Field(default=500, ge=1, le=5000)
+    solicitation_intelligence_max_evaluation_factors: int = Field(default=250, ge=1, le=2000)
+    solicitation_intelligence_max_contacts: int = Field(default=100, ge=1, le=1000)
+    solicitation_intelligence_max_evidence_quote_chars: int = Field(default=500, ge=32, le=4000)
+    solicitation_intelligence_context_window_chars: int = Field(default=800, ge=32, le=8000)
+    solicitation_intelligence_min_confidence: int = Field(default=40, ge=0, le=100)
+    solicitation_intelligence_reconcile_qa: bool = True
+    solicitation_intelligence_export_enabled: bool = True
 
     @model_validator(mode="after")
     def validate_document_retry_bounds(self) -> "Settings":
@@ -98,6 +116,8 @@ class Settings(BaseSettings):
             raise ValueError("document download retry maximum must be at least the base")
         if self.document_zip_max_entry_bytes > self.document_zip_max_total_bytes:
             raise ValueError("ZIP entry limit cannot exceed total limit")
+        if self.solicitation_intelligence_retry_max_seconds < self.solicitation_intelligence_retry_base_seconds:
+            raise ValueError("intelligence retry maximum must be at least the base")
         return self
 
 
