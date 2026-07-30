@@ -1008,3 +1008,12 @@ use `fixture_verified`, `live_public_verified`, `configured_unverified`,
 `public_metadata_only`, `registration_required`, `login_required`,
 `external_response_system`, `legacy`, `migrated`, `changed_markup`, `blocked`, or
 `unavailable` explicitly rather than treating an access boundary as empty data.
+
+### BidNet Direct
+
+The `bidnet-direct` connector supports bounded anonymous metadata discovery for configured
+member agencies and regional purchasing groups. BidNet document registration is not
+automated, paid geographic aggregation is not used, and robots/CAPTCHA/bot restrictions
+are respected. Registration-gated references are preserved without queueing; approved
+public agency copies are preferred for retrieval. See `docs/architecture.md` for the
+profile, provenance, access-state, and safety model.

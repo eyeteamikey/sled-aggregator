@@ -50,6 +50,7 @@ connector_registry = ConnectorRegistry()
 
 # Production connector registration lives here so API discovery works without
 # requiring application startup side effects.
+from sled_aggregator.connectors.bidnet_direct import BidNetDirectConnector  # noqa: E402
 from sled_aggregator.connectors.cgi_advantage_vss import (  # noqa: E402
     CGIAdvantageVSSConnector,
 )
@@ -91,6 +92,7 @@ connector_registry.register(EunaOpenBidsDemandStarConnector)
 connector_registry.register(PlanetBidsConnector)
 connector_registry.register(MarylandEMMAConnector)
 connector_registry.register(GeorgiaGPRConnector)
+connector_registry.register(BidNetDirectConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
@@ -184,3 +186,11 @@ for _alias in (
     "gpr-georgia",
 ):
     connector_registry.register_alias(_alias, GeorgiaGPRConnector)
+
+for _alias in (
+    "bidnet",
+    "bid-net-direct",
+    "bidnetdirect",
+    "bidnet-regional-purchasing-group",
+):
+    connector_registry.register_alias(_alias, BidNetDirectConnector)
