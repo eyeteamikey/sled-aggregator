@@ -344,3 +344,74 @@ first, inspect actual field names and form action, then perform only one bounded
 current search, one exact-number lookup from that result, its linked detail and
 one exposed file/addendum, one bounded archive search, one upcoming page, and
 one linked tabulation/award. Stop on restriction, login, CAPTCHA, or throttling.
+
+## CGI Advantage VSS connector family
+
+`CGIAdvantageVSSConnector` is a tenant-configured adapter rather than three
+jurisdiction-specific implementations. `CGIAdvantageVSSPortal` holds the
+Advantage4, AltSelfService, or link-only variant and all tenant facts: routes,
+response strategy, IANA timezone, guest/session requirements, independently
+verified search/detail/attachment/award/contract capabilities, validation state,
+restrictions, allowed attachment hosts, availability policy, and enabled state.
+The initial catalog contains Maine, Michigan SIGMA, and ColoradoVSS. Unverified
+presets fail closed before transport; a future deployment can be added without a
+new connector class, but CGI branding is not verification.
+
+The collection pipeline is:
+
+1. Reject disabled or unverified public search and an open tenant circuit.
+2. If configured, load the official landing page and follow only its public guest
+   action; keep cookies in that connector instance's in-memory client.
+3. Build a bounded tenant search with conservative filters, terminate on a
+   repeated page, and deduplicate by tenant plus stable internal ID or complete
+   solicitation number.
+4. Optionally enrich from a verified detail route. Nonempty detail fields
+   supplement list fields; empty values do not erase list data.
+5. Normalize the parent opportunity while retaining original fields, dates,
+   status/type, commodity lines, instructions, explicit awards, contract links,
+   attachment metadata, access state, validation level, and source route in raw
+   provenance.
+
+A guest session may be refreshed once after explicit expiry. Login,
+registration, verification, invitation-only, CAPTCHA, forbidden, maintenance,
+scheduled-unavailable, empty SPA, malformed, and SSO/login redirects are
+classified as false-success/access outcomes instead of empty search results.
+Transient 429/502/503/504 and connection failures use bounded backoff and
+`Retry-After`; health and circuit state belong to the tenant connector instance.
+Caller-injected transports remain caller-owned, while connector-created clients
+are closed by the connector.
+
+Solicitation IDs are never numeric. Tenant namespacing prevents the same number
+on Maine and Michigan from colliding. A trailing component is retained as
+round/version provenance but is not assigned semantics without source evidence.
+Lifecycle mapping is deliberately narrow: closing is not an award, an empty
+award area is not no-award, and only explicitly displayed awardees and amounts
+are retained. Commodity lines remain children of one opportunity, preserve
+unknown taxonomies, and are not summed or translated to NAICS.
+
+Attachment URLs are resolved only from source-provided links. Unsafe schemes,
+URL credentials, private/local address literals, metadata names, and unapproved
+cross-tenant hosts are rejected. Metadata discovery never guesses attachment
+IDs, downloads every file, extracts text, invokes OCR, opens a response
+workspace, or executes archives/macros. The later document retrieval pipeline
+must use the same tenant session when public access requires it, validate every
+redirect and final host, cap bytes/archive entries, verify content rather than
+extension, and classify HTML login content as restricted.
+
+Validation on 2026-07-30 was blocked by the execution network's HTTP 403 proxy
+policy for all official application and robots routes. Therefore Maine is
+fixture-verified and capability-gated, while Michigan and Colorado remain
+configured-unverified and disabled. No structured background endpoint is
+claimed. Maine's documented October 1, 2025 RFP transition is a source boundary;
+older Maine archive pages are outside this connector. Colorado's published
+availability windows are modeled as tenant configuration but no exact hours are
+hardcoded without successful current validation. Fixtures are sanitized HTML
+representations of both branded landing variants and shared semantic detail
+concepts, with no cookies, CSRF material, credentials, vendor-private data, or
+bid responses.
+
+The public-only boundary excludes login, registration, account activation,
+MFA/verification, vendor maintenance, invoices, payments, private purchasing
+history, invited events, response workspaces, questions, amendment
+acknowledgement, pricing/upload, bid submission, CAPTCHA bypass, and access-control
+circumvention.

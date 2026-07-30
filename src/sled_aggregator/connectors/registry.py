@@ -50,6 +50,9 @@ connector_registry = ConnectorRegistry()
 
 # Production connector registration lives here so API discovery works without
 # requiring application startup side effects.
+from sled_aggregator.connectors.cgi_advantage_vss import (  # noqa: E402
+    CGIAdvantageVSSConnector,
+)
 from sled_aggregator.connectors.eva import EVAConnector  # noqa: E402
 from sled_aggregator.connectors.infotech import InfotechBidExpressConnector  # noqa: E402
 from sled_aggregator.connectors.pennsylvania_emarketplace import (  # noqa: E402
@@ -67,6 +70,7 @@ connector_registry.register(PeopleSoftSourcingConnector)
 connector_registry.register(EVAConnector)
 connector_registry.register(TexasESBDConnector)
 connector_registry.register(PennsylvaniaEMarketplaceConnector)
+connector_registry.register(CGIAdvantageVSSConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
@@ -77,3 +81,13 @@ for _alias in ("esbd", "texas-esbd", "texas-smartbuy-esbd"):
     connector_registry.register_alias(_alias, TexasESBDConnector)
 for _alias in ("pa-emarketplace", "pennsylvania-emarketplace", "pa/emarketplace"):
     connector_registry.register_alias(_alias, PennsylvaniaEMarketplaceConnector)
+for _alias in (
+    "cgi/vss",
+    "cgi-advantage",
+    "cgi-advantage-vss",
+    "advantage-vss",
+    "maine/vss",
+    "michigan/sigma-vss",
+    "colorado/vss",
+):
+    connector_registry.register_alias(_alias, CGIAdvantageVSSConnector)
