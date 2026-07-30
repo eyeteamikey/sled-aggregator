@@ -955,3 +955,56 @@ profiles are modeled explicitly, while untested configurations remain
 captured test inputs. It does not prove that every live eMMA page, agency, solicitation,
 contract, or attachment is currently anonymously accessible. No live verification was
 performed for this change.
+
+### Georgia Procurement Registry (GPR)
+
+The `georgia/gpr` connector models GPR as Georgia's free public-notification and
+bid-advertising layer for state agencies and participating local governments,
+universities, authorities, and commissions. Explicit aliases are `georgia-gpr`,
+`ga-gpr`, `georgia-procurement-registry`, `ga-procurement-registry`, and
+`gpr-georgia`; broad names such as `gpr`, `georgia`, `gawork`, and `marketplace`
+are deliberately not registered.
+
+Discovery is anonymous, GET-only, bounded by configured page/result limits, and
+supports fixture-verified keyword, title, description, event number, status,
+response type, government type/entity, posted/closing/award date, and NIGP
+filters. Open, under-evaluation, closed, awarded, and cancelled records retain
+structured upstream status and type. Stable identities qualify the raw GPR ID by
+profile, with entity and record-type qualifiers when a notice ID indicates a
+collision risk. Every extracted source value is retained in the raw payload with
+provenance.
+
+Georgia launched **GA@WORK on July 1, 2026**. GPR remains the modeled discovery
+and public-notification source, while linked GA@WORK Marketplace, Team Georgia
+Marketplace/PeopleSoft, eSource, JAGGAER Sourcing Director, Bid Express,
+agency-hosted, offline, and unknown response systems are classified as separate
+relationships. Legacy URLs, transition state, external event IDs, and response
+URLs are preserved; a link is not assumed public merely because its GPR notice is
+public. State migration and local-government notices can therefore coexist
+without conflation.
+
+Public GPR attachments, addenda, amendments, Q&A, tabulations, and awards become
+access-aware document candidates for manifest reconciliation, the durable queue,
+safe download, parsing, targeted OCR, structured extraction, and version
+reconciliation. Only anonymously retrievable candidates are queue-eligible.
+Login, registration, restricted, migrated, unavailable, external-system, and
+unknown resources preserve metadata but are not downloaded. The existing safe
+downloader remains responsible for redirect/DNS/SSRF validation, bounds, MIME
+checking, HTML-wall detection, checksums, archive safety, and provenance.
+
+The connector does not register, authenticate, use published guest credentials,
+submit bids, upload responses, access supplier accounts, invoices, payments or
+buyer portals, invoke linked submission systems, or bypass access controls. To
+add a verified source variant, create a `GeorgiaGPRProfile` with conservative
+bounds, exact HTTPS host allowlists, transition and replacement metadata, and
+`configured_unverified` status; add sanitized fixtures before promoting its
+verification label.
+
+Fixture-verified behavior demonstrates connector behavior against captured test
+inputs. It does not prove that every live GPR, GA@WORK, legacy Team Georgia
+Marketplace, JAGGAER, or agency endpoint remains anonymously accessible. Live
+markup, redirects, document availability, and response-system access may change;
+use `fixture_verified`, `live_public_verified`, `configured_unverified`,
+`public_metadata_only`, `registration_required`, `login_required`,
+`external_response_system`, `legacy`, `migrated`, `changed_markup`, `blocked`, or
+`unavailable` explicitly rather than treating an access boundary as empty data.
