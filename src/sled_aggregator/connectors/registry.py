@@ -56,6 +56,9 @@ from sled_aggregator.connectors.cgi_advantage_vss import (  # noqa: E402
 from sled_aggregator.connectors.eva import EVAConnector  # noqa: E402
 from sled_aggregator.connectors.infotech import InfotechBidExpressConnector  # noqa: E402
 from sled_aggregator.connectors.jaggaer_sciquest import JaggaerSciQuestConnector  # noqa: E402
+from sled_aggregator.connectors.opengov_procurement import (  # noqa: E402
+    OpenGovProcurementConnector,
+)
 from sled_aggregator.connectors.pennsylvania_emarketplace import (  # noqa: E402
     PennsylvaniaEMarketplaceConnector,
 )
@@ -73,6 +76,7 @@ connector_registry.register(TexasESBDConnector)
 connector_registry.register(PennsylvaniaEMarketplaceConnector)
 connector_registry.register(CGIAdvantageVSSConnector)
 connector_registry.register(JaggaerSciQuestConnector)
+connector_registry.register(OpenGovProcurementConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
@@ -102,3 +106,11 @@ for _alias in (
     "jaggaer-public-event",
 ):
     connector_registry.register_alias(_alias, JaggaerSciQuestConnector)
+for _alias in (
+    "opengov",
+    "opengov-procurement",
+    "procurenow",
+    "procurenow/opengov",
+    "opengov-procurenow",
+):
+    connector_registry.register_alias(_alias, OpenGovProcurementConnector)
