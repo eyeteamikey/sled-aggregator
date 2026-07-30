@@ -663,3 +663,49 @@ Only current, eligible, explicitly public manifest entries with valid leases are
 The `local` adapter atomically commits deterministic identifier/hash keys under `DOCUMENT_STORAGE_ROOT` (default `/tmp/sled-aggregator/documents`) without exposing paths. Artifact rows preserve versions and attempt rows preserve bounded audit provenance. Deterministic keys and checksum verification reconcile retries across the unavoidable storage/database boundary. Timeouts, network errors, 408/425/429 and 5xx are retryable; unsafe, restricted, login/registration/CAPTCHA, missing, oversized, unsupported and suspicious responses are terminal. Standard httpx cannot pin a prevalidated DNS answer to its socket, so production egress filtering remains necessary.
 
 `DOCUMENT_DOWNLOAD_*` variables configure timeouts, chunk/file and redirect/attempt limits, batch/concurrency, User-Agent, allowed ports/hosts, probes, and temporary storage. This downloader does **not** parse files, extract text, run OCR, inspect ZIP contents, analyze requirements, use LLMs, authenticate to portals, bypass CAPTCHA/registration, or submit bids. PR #14 is parsing/targeted OCR; PR #15 is structured extraction/version reconciliation. Cloud adapters, malware scanning, scheduling, authorized controls, retention, live validation, user downloads and evaluation integration are later work.
+
+## Structured solicitation intelligence
+
+The document pipeline now continues from normalized text blocks and tables into deterministic,
+evidence-backed schema version `1.0`:
+
+```
+connector discovery -> opportunity ingestion -> document manifest -> safe download
+-> artifact validation -> parsing and targeted OCR -> normalized blocks and tables
+-> deterministic structured extraction -> evidence-backed facts -> document reconciliation
+-> effective opportunity snapshot -> change ledger -> JSON export
+-> future capability matching and evaluation
+```
+
+Facts retain normalized and original values, typed value metadata, the source-status vocabulary
+`explicit`, `derived`, `inferred`, `conflicting`, `superseded`, and `unknown`, heuristic confidence,
+and bounded evidence references. Missing information remains unknown rather than being fabricated.
+Requirements use `mandatory`, `prohibited`, `conditional`, `recommended`, `optional`,
+`informational`, or `unclear` strength. OCR evidence and its confidence remain identified.
+
+Authority is field-specific: cancellation controls cancellation status; explicitly controlling revised
+primaries take precedence; formal amendments/addenda modify only fields they address; official Q&A
+controls only when it explicitly modifies the solicitation; then primary solicitations, attachments,
+and notices follow. Award material adds post-award facts and never rewrites pre-award history.
+Same-authority incompatible values remain visible in explicit conflict groups until resolved.
+
+Run one bounded batch with:
+
+```bash
+python -m sled_aggregator.documents.intelligence_worker --once
+python -m sled_aggregator.documents.intelligence_worker --batch-size 10
+```
+
+Read-only routes under `/api/v1/opportunities/{id}/intelligence` provide the summary, snapshot,
+facts, dates, contacts, requirements, deliverables, evaluation factors, codes, document authority,
+change ledger, unresolved conflicts, evidence, sections, extraction status, and deterministic
+`export.json`. Lists are bounded. Exports have stable ordering, bounded evidence, authoritative URLs,
+and exclude storage and lease internals.
+
+Configuration uses the `SOLICITATION_INTELLIGENCE_*` environment variables represented in
+`Settings`. Extraction never fetches a URL, authenticates to a portal, executes document content,
+or sends solicitation content to an external LLM. No external LLM is used in this implementation.
+Future work includes capability/profile matching, qualification scoring, pursuit recommendations,
+compliance matrices, optional semantic providers, authorized human conflict resolution, hybrid
+search, amendment alerts, CSV/XLSX exports, user authorization, and a live connector harness.
+Connector expansion resumes with PR #16, the OpenGov Procurement/ProcureNow connector.
