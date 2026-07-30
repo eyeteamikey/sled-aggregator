@@ -736,3 +736,49 @@ Future work includes capability/profile matching, qualification scoring, pursuit
 compliance matrices, optional semantic providers, authorized human conflict resolution, hybrid
 search, amendment alerts, CSV/XLSX exports, user authorization, and a live connector harness.
 Connector expansion includes the reusable OpenGov Procurement/ProcureNow connector.
+
+### Euna Procurement / Bonfire connector
+
+The `euna/bonfire` connector is a reusable, anonymous, GET-only connector for agency-specific
+`https://{tenant}.bonfirehub.com` portals. Registry aliases are `bonfire`, `bonfirehub`,
+`euna-bonfire`, `euna-procurement-bonfire`, `bonfire-interactive`, and `euna-procurement`;
+the deliberately omitted bare `euna` name prevents collision with IonWave, DemandStar,
+EqualLevel, and other distinct Euna product families.
+
+Production presets cover Anacortes (city, WA), Bend (city, OR), Fairfax County Government
+(county, VA), Fairfax County Public Schools (school district, VA), Corona-Norco USD (school
+district, CA), Florence 1 Schools (school district, SC), Region 10 ESC (cooperative purchasing
+organization, TX), and the registration-required Charlotte pilot (city, NC). A non-production
+fixture-only tenant demonstrates configuration-driven parsing. Presets are fixture verified,
+not proof of live production availability; Charlotte is explicitly `registration_required`.
+One tenant is not statewide coverage.
+
+Bonfire is transitioning into Euna Supplier Network branding while agency portals may remain
+on `bonfirehub.com`. Supported variants are `bonfire_legacy`, `bonfire_current`,
+`euna_branded_bonfire`, `euna_supplier_network_redirect`, `public_upstream_fallback`,
+`registration_required_portal`, and `configured_unknown`. Verification/access classification
+covers fixture/live public verification, metadata-only, registration/login/CAPTCHA boundaries,
+changed markup, migration, blocking, and unavailability. Euna ownership does not make Bonfire,
+IonWave, and DemandStar one parser family.
+
+Discovery uses bounded public HTML or explicitly observed fixture-backed JSON, bounded pages and
+results, duplicate suppression, exact IDs/numbers, and local keyword/status/department/date
+filtering. Semantic listing/detail parsing retains tenant-qualified source identity, raw payload,
+field provenance, authoritative portal and configured agency fallback URLs. It recognizes public
+document, addendum, Q&A, award and bid-tabulation metadata. Public metadata does not prove public
+document access: registration/login/CAPTCHA-gated files remain manifest metadata and are never
+queued. Public candidates flow through the shared manifest, safe downloader, parser/targeted OCR,
+and structured extraction/reconciliation services; the connector never downloads or parses files.
+
+Each connector instance owns an isolated anonymous client unless one is injected. Requests have
+bounded retries (including both Retry-After forms), jitter/backoff, a per-instance tenant circuit
+breaker, safe redirect validation, exact approved-host checks, and private/loopback/link-local URL
+rejection. No account is created; no login, CAPTCHA, registration, question, addendum
+acknowledgement, or response submission is attempted. To add a tenant, create a typed
+`BonfirePortal` with its exact `{tenant}.bonfirehub.com` hostname and explicitly enumerate any
+agency fallback, CDN, or Euna migration hosts. Pipeline stages remain separated.
+
+Follow-up: SLED Connector PR #18 will add Euna Procurement/IonWave as a separate parser family.
+Later work includes DemandStar, PlanetBids, BidNet Direct, Public Purchase, SAP Ariba, Workday
+Strategic Sourcing, remaining state systems, a live validation harness, markup-change detection,
+preset expansion, scheduled runs, and capability-profile matching.
