@@ -782,3 +782,56 @@ Follow-up: SLED Connector PR #18 will add Euna Procurement/IonWave as a separate
 Later work includes DemandStar, PlanetBids, BidNet Direct, Public Purchase, SAP Ariba, Workday
 Strategic Sourcing, remaining state systems, a live validation harness, markup-change detection,
 preset expansion, scheduled runs, and capability-profile matching.
+
+## Euna Procurement / IonWave connector
+
+Use canonical family `euna/ionwave` (aliases `ionwave`, `ion-wave`,
+`ionwave-technologies`, `euna-ionwave`, `euna-procurement-ionwave`, and `iwt`) for
+IonWave tenant applications. IonWave is part of Euna Procurement, but it remains a distinct
+parser and route family from Bonfire and the future DemandStar connector. The connector uses
+anonymous GET requests only: it never creates an account, logs in, registers, submits an ASP.NET
+form/view state, acknowledges an addendum, asks a question, or submits a response.
+
+Configured public routes include `/SourcingEvents.aspx?SourceType=1`, the alternate
+`/CurrentSourcingEvents.aspx`, and `/PublicDetail.aspx?bidID={BID_ID}&SourceType=1`.
+Presentation parameters such as sort, page, row index, and transient ASP.NET state are removed
+from canonical detail URLs. If filtering or pagination requires an ASP.NET POST, the connector
+uses a bounded initial GET list and local filters rather than submitting the form. Direct public
+detail access does not prove that any particular document is public: every attachment is
+classified independently, and registration/login-required metadata is retained but not queued.
+
+Production presets are Plano ISD (`pisd.ionwave.net`), Town of Prosper
+(`prospertx.ionwave.net`), Clemson University (`clemson.ionwave.net`), University of Missouri
+System (`umsystembids.ionwave.net`), Carrollton-Farmers Branch ISD
+(`cfbpurchasing.ionwave.net`), MTSU (`mtsource.ionwave.net`), and the Iowa DOT legacy portal
+(`iowadotebid.ionwave.net`). A non-production `fixture-public.ionwave.net` preset proves that
+routes and parsing are configuration-driven. Variants distinguish classic/modern IonWave,
+Euna branding, list/detail capabilities, registration-required access, agency upstream
+fallbacks, OpenGov/Bonfire migrations, legacy archives, and unknown configurations.
+
+Discovery supports bounded current, closed, awarded, and canceled metadata where configured,
+local keyword/identifier/department/status/date filters, duplicate suppression, direct details,
+and explicitly configured authoritative agency fallback pages. Detail fixtures cover labeled
+metadata, documents, addenda, Q&A, and awards. Public candidates flow through the shared
+manifest and retrieval queue, safe downloader, parsing/targeted OCR, structured extraction,
+reconciliation, and effective snapshot services. The connector itself never downloads or parses
+files. Redirects and links are restricted to the exact configured IonWave/agency/document hosts;
+HTTPS, credential, port, loopback/private/link-local/metadata, and deceptive-host checks apply.
+Retries, Retry-After, timeouts, bounded exponential backoff, and per-tenant circuit breakers are
+supported without persisting or logging anonymous ASP.NET cookies.
+
+Migration metadata preserves historical IonWave provenance and hands active coverage to
+`opengov/procurement` or `euna/bonfire`; retired portals are not represented as active coverage.
+Agency fallbacks are explicit and bounded, never arbitrary crawls or third-party aggregators.
+Fixture verification is not live proof, and one tenant is not comprehensive statewide coverage.
+Registration may be required for access or only for responses, and public details do not prove
+public documents. IonWave portals vary by tenant; changed branding and markup are reported
+rather than bypassed.
+
+To add a tenant, define an `IonWavePortal` with the exact `{tenant}.ionwave.net` host, route
+shapes, capabilities, limits, timezone, verification/access status, and explicitly approved
+upstream/document hosts, then add sanitized fixtures. Do not invent attachment routes or enable
+POST. Follow-up **SLED Connector PR #19** will add Euna Procurement/DemandStar as another
+separate family. Later candidates include PlanetBids, BidNet Direct, Public Purchase, SAP Ariba,
+Workday Strategic Sourcing, state-specific portals, scheduled execution, live validation,
+markup-change detection, preset expansion, and capability-profile matching.
