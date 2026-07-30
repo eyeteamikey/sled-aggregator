@@ -6,6 +6,8 @@ class AccessState(StrEnum):
     PUBLIC_METADATA_ONLY = "public_metadata_only"
     LOGIN_REQUIRED = "login_required"
     REGISTRATION_REQUIRED = "registration_required"
+    SUBSCRIPTION_REQUIRED = "subscription_required"
+    PAYMENT_REQUIRED = "payment_required"
     CAPTCHA = "captcha"
     RESTRICTED = "restricted"
     UNAVAILABLE = "unavailable"
@@ -14,6 +16,7 @@ class AccessState(StrEnum):
     UNSUPPORTED = "unsupported"
     TRANSIENT_ERROR = "transient_error"
     REMOVED = "removed"
+    UNKNOWN = "unknown"
 
 
 class DocumentEligibility(StrEnum):

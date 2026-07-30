@@ -55,6 +55,9 @@ from sled_aggregator.connectors.cgi_advantage_vss import (  # noqa: E402
 )
 from sled_aggregator.connectors.euna_bonfire import BonfireProcurementConnector  # noqa: E402
 from sled_aggregator.connectors.euna_ionwave import EunaIonWaveConnector  # noqa: E402
+from sled_aggregator.connectors.euna_openbids_demandstar import (  # noqa: E402
+    EunaOpenBidsDemandStarConnector,
+)
 from sled_aggregator.connectors.eva import EVAConnector  # noqa: E402
 from sled_aggregator.connectors.infotech import InfotechBidExpressConnector  # noqa: E402
 from sled_aggregator.connectors.jaggaer_sciquest import JaggaerSciQuestConnector  # noqa: E402
@@ -81,6 +84,7 @@ connector_registry.register(JaggaerSciQuestConnector)
 connector_registry.register(OpenGovProcurementConnector)
 connector_registry.register(BonfireProcurementConnector)
 connector_registry.register(EunaIonWaveConnector)
+connector_registry.register(EunaOpenBidsDemandStarConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
@@ -119,13 +123,31 @@ for _alias in (
 ):
     connector_registry.register_alias(_alias, OpenGovProcurementConnector)
 for _alias in (
-    "bonfire", "bonfirehub", "euna-bonfire", "euna-procurement-bonfire",
-    "bonfire-interactive", "euna-procurement",
+    "bonfire",
+    "bonfirehub",
+    "euna-bonfire",
+    "euna-procurement-bonfire",
+    "bonfire-interactive",
 ):
     connector_registry.register_alias(_alias, BonfireProcurementConnector)
 
 for _alias in (
-    "ionwave", "ion-wave", "ionwave-technologies", "euna-ionwave",
-    "euna-procurement-ionwave", "iwt",
+    "ionwave",
+    "ion-wave",
+    "ionwave-technologies",
+    "euna-ionwave",
+    "euna-procurement-ionwave",
+    "iwt",
 ):
     connector_registry.register_alias(_alias, EunaIonWaveConnector)
+
+for _alias in (
+    "demandstar",
+    "demand-star",
+    "euna-demandstar",
+    "euna-openbids",
+    "openbids",
+    "euna/openbids",
+    "euna-procurement-demandstar",
+):
+    connector_registry.register_alias(_alias, EunaOpenBidsDemandStarConnector)
