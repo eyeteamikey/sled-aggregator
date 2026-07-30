@@ -1062,3 +1062,22 @@ notifications, submit questions, acknowledge addenda, submit responses, upload f
 CAPTCHA, or evade robots or technical restrictions. Fixture verification demonstrates behavior
 against captured test inputs. It does not prove that every live Public Purchase agency,
 opportunity, or attachment remains anonymously accessible.
+
+### Rhode Island RIVIP External Solicitations
+
+`rhode-island/rivip-external` collects bounded anonymous notices for Rhode Island external
+entities: municipalities, schools, higher education, quasi-public agencies, authorities,
+commissions, grants, delegated authorities, and other explicitly listed entities. Supported
+aliases are `ri-rivip-external`, `rhode-island-rivip`, `rivip-external`,
+`ri-external-solicitations`, and `rhode-island-external-solicitations`; broad aliases are rejected.
+
+This source is separate from OSP/WebProcure, RIFANS, BidNet Direct, RhodyBuy, legacy RIVIP, and
+the public-copy response repository. Allowlisted Web Forms POSTs perform only anonymous search or
+pagination, refresh hidden state, and are bounded. No business record is modified. The connector
+never authenticates, registers, uses agency posting, posts or bids, accesses RIFANS or financial
+data, solves CAPTCHA, invokes response systems, or broadly ingests vendor responses.
+
+IDs use `rhode-island/rivip-external:{entity_key}:{external_bid_id}`. Historical and migrated
+records preserve RIVIP authority and replacement hints. Anonymous solicitation, addendum, result,
+and award files use the shared document pipeline; responses and gated links cannot. Fixture
+verification demonstrates behavior against captured inputs, not universal live accessibility.

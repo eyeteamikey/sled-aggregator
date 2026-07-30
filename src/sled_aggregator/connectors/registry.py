@@ -74,6 +74,7 @@ from sled_aggregator.connectors.peoplesoft import PeopleSoftSourcingConnector  #
 from sled_aggregator.connectors.periscope import PeriscopeBuySpeedConnector  # noqa: E402
 from sled_aggregator.connectors.planetbids import PlanetBidsConnector  # noqa: E402
 from sled_aggregator.connectors.public_purchase import PublicPurchaseConnector  # noqa: E402
+from sled_aggregator.connectors.rhode_island_rivip import RIVIPExternalConnector  # noqa: E402
 from sled_aggregator.connectors.texas_esbd import TexasESBDConnector  # noqa: E402
 from sled_aggregator.connectors.webprocure import WebProcureConnector  # noqa: E402
 
@@ -95,6 +96,7 @@ connector_registry.register(MarylandEMMAConnector)
 connector_registry.register(GeorgiaGPRConnector)
 connector_registry.register(BidNetDirectConnector)
 connector_registry.register(PublicPurchaseConnector)
+connector_registry.register(RIVIPExternalConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
@@ -204,3 +206,12 @@ for _alias in (
     "the-public-group-public-purchase",
 ):
     connector_registry.register_alias(_alias, PublicPurchaseConnector)
+
+for _alias in (
+    "ri-rivip-external",
+    "rhode-island-rivip",
+    "rivip-external",
+    "ri-external-solicitations",
+    "rhode-island-external-solicitations",
+):
+    connector_registry.register_alias(_alias, RIVIPExternalConnector)
