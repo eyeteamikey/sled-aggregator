@@ -1,41 +1,61 @@
 ## Motivation
-Add anonymous procurement intelligence for configurable, agency-specific PlanetBids portals without using VendorLine or crossing participation boundaries.
+
+Add bounded public procurement intelligence for Maryland eMaryland Marketplace Advantage (eMMA) while preserving the product's anonymous, read-only boundary.
 
 ## Description
-Adds the `planetbids` family, explicit aliases, sanitized fixtures, tests, and operator documentation.
 
-## Platform architecture
-Separates transport, profile configuration, HTML/JSON parsing, normalization, per-resource access classification, document extraction, and per-profile health. PlanetBids uses agency-specific vendor portals.
+- Adds canonical `maryland/emma` connector and explicit non-ambiguous aliases.
+- Adds configuration-driven statewide/issuing-organization identity, exact host allowlists, collection bounds, access expectations, lifecycle state, and verification metadata.
+- Adds fixture-proven public listing/detail/notice, attachment, addendum, Q&A, tabulation, and award parsing with field provenance and stable identity.
 
-## Agency-profile configuration
-Profiles define tenant identity, jurisdiction, official and portal URLs, exact approved hosts, collection bounds, variant, verification notes, lifecycle state, and replacement metadata.
+## eMMA platform behavior
+
+Public Solicitations are the supported primary collection surface. eMMA can carry Maryland agency, local-government, county, school, university, authority, and commission notices, but no universal coverage is asserted. Upstream types and UNSPSC/socioeconomic metadata are preserved only when explicit.
 
 ## Public access boundaries
-Some metadata and documents can be public, while agencies can restrict individual documents behind login. Some resources require prospective-bidder participation and some solicitations are invitation-only. The connector does not register, authenticate, participate, acknowledge, RSVP, ask, or submit.
+
+Participation requires vendor actions this connector does not perform. It never registers, authenticates, uses Maryland or MDOT SSO, adds/acknowledges solicitations, submits responses, uploads files, accesses unpublished sourcing projects, or replays authenticated sessions.
 
 ## Discovery and detail behavior
-Anonymous GET-only discovery is bounded, filtered, deduplicated, stably ordered, and tenant-qualified. Detail records preserve raw payload, authoritative links, and field provenance.
+
+Collection uses bounded GET requests, stable ordering and identity, duplicate/repeated-page suppression, strict page/result limits, local filters, changed-markup detection, and fail-closed normalization.
+
+## Public notices and alternate systems
+
+Notices may point to BidX/Bid Express, Bonfire, Bid Locker, an agency page, offline instructions, or another public portal. The relationship and platform hint are preserved for downstream reconciliation. External response systems remain separate connectors and are never invoked or operated from eMMA.
 
 ## Document pipeline integration
-Public candidates feed the existing manifest and safe retrieval pipeline. Gated candidates retain access state but are not queued. Shared downloading, parsing, targeted OCR, structured extraction, and version reconciliation remain unchanged.
 
-## Q&A, addenda, results, and awards
-Publicly released resources are preserved separately with source metadata; prospective-bidder lists are not treated as submissions or awards.
+Anonymous direct files become provenance-rich `DocumentCandidate` records for the existing manifest, durable queue, safe downloader, parsing/targeted OCR, structured extraction, and version reconciliation pipeline. Addenda preserve version and relationship metadata; gated/submission links are ineligible.
+
+## CAPTCHA policy
+
+Public Contracts may present CAPTCHA. CAPTCHA is detected and reported as `captcha_required`, never solved or bypassed, and never treated as an empty result. A blocked contract resource does not disable a separately public solicitation surface.
 
 ## Resilience and safety
-Exact HTTPS allowlists, credential/IP rejection, bounded retries and exponential backoff, Retry-After, per-profile circuits, changed-markup detection, and owned-client lifecycle behavior are covered. VendorLine aggregation and paid functionality are not used.
 
-## Migration handling
-Legacy, migrated, and unavailable profiles fail closed and can identify a replacement without aliasing it to PlanetBids.
+Exact HTTPS host checks, private-address rejection, bounded retries/backoff/jitter, Retry-After support, repeated-page detection, per-profile circuit state, and owned/injected client lifecycle rules apply. The existing downloader retains SSRF, redirect, DNS, MIME, size, streaming, filename, checksum, HTML-wall, and archive protections.
+
+## Reusable page.aspx components
+
+Narrow helpers parse allow-listed hidden fields and stable links for fixture-supported pages. They do not submit state, automate forms, add a browser dependency, register generic ASP.NET aliases, or claim compatibility with unrelated sites.
 
 ## Verification status
-Behavior is `fixture_verified`; no live portal is configured. Fixture tests do not prove that every live agency remains anonymously accessible. No live verification was performed.
+
+Behavior and sanitized inputs are `fixture_verified`; untested profiles remain `configured_unverified`, and migrated/unavailable states fail closed. Fixture verification is not proof that every live eMMA page, agency, solicitation, contract, or attachment is anonymously accessible. No live checks were performed.
 
 ## Testing
-The full unit, compile, Ruff lint/format, and diff checks were run (see final task report).
+
+- `PYTHONPATH=src python -m unittest discover -s tests -v`
+- `PYTHONPATH=src python -m compileall src tests`
+- `ruff check .`
+- `ruff format --check .`
+- `git diff --check`
 
 ## Known limitations
-Only fixture-demonstrated public GET shapes are supported. POST-only search, authentication, CAPTCHA, VendorLine, participation actions, private APIs, sealed responses, and invitation-only content are intentionally unsupported.
+
+No POST-only search navigation, login, SSO, vendor-profile interaction, CAPTCHA solving, external-system submission, broad project-ID enumeration, or universal ASP.NET compatibility is implemented. Live markup and access can vary by resource and issuing organization.
 
 ## Codex Cloud publication notes
-The changes are ready for publication through the Codex Cloud Create PR button. No fetch, pull, push, shell GitHub authentication, or shell PR publication is required.
+
+Any future live checks must be at most two bounded anonymous GETs. This local branch and commit are ready for inspection and publication through the Codex Cloud **Create PR** button; no shell GitHub authentication or remote publication command is required.

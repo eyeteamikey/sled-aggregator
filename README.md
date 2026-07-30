@@ -908,3 +908,50 @@ Fixture-verified behavior demonstrates connector behavior against captured test 
 It does not prove that every PlanetBids agency portal, opportunity, or document remains
 anonymously accessible. Portal generations and agency configuration differ; unsupported
 markup is reported as `changed_markup`. No live profile is enabled by this change.
+
+## Maryland eMMA public connector
+
+Use canonical connector `maryland/emma`; supported aliases are `maryland-emma`,
+`emma-maryland`, `emaryland-marketplace`, `emaryland-marketplace-advantage`, and
+`md-emma`. Broad names such as `emma`, `maryland`, `marketplace`, `aspnet`, and
+`page-aspx` are intentionally not registered. eMMA publishes notices from Maryland
+state agencies and participating counties, municipalities, schools, universities,
+authorities, and commissions, but this does not imply universal statewide coverage.
+
+The primary surface is Public Solicitations. Bounded anonymous GET discovery and detail
+parsing preserve project/solicitation/notice identity, issuing organization, upstream
+type (including PORFP and public notice), dates, public UNSPSC codes, explicit SBR/MBE/
+WBE/VSBE designations, provenance, results/awards, and independently classified document
+links. Notices may identify BidX/Bid Express, Bonfire, Bid Locker, an agency page, or
+another response process. Those hints support downstream reconciliation; eMMA never
+invokes the other connector or follows a link into submission.
+
+Public files, addenda, Q&A, tabulations, and awards enter the shared manifest, retrieval
+queue, SSRF-safe downloader, parsing/targeted-OCR, structured extraction, and version
+reconciliation pipeline. Only anonymous direct files are eligible. The downloader still
+owns DNS/redirect validation, size/MIME limits, HTML-wall detection, sanitized filenames,
+checksums, and archive bounds. An addendum retains its relationship and history; it is not
+assumed to replace every earlier document.
+
+CAPTCHA, login, Maryland/MDOT SSO, registration, vendor-profile actions, restrictions,
+and external response systems are detected as access boundaries, never empty results.
+Public Contracts may independently be `captcha_required` without disabling a public
+solicitation surface. The connector never registers, logs in, uses SSO, adds or
+acknowledges a solicitation, submits or uploads a response, solves CAPTCHA, accesses an
+unpublished sourcing project, or operates BidX, Bonfire, Bid Locker, or any other linked
+submission system.
+
+`MarylandEMMAProfile` configures jurisdiction/agency identity, exact portal and document
+hosts, public URLs, collection limits, status, markup variant, expected access model, and
+verification notes. To add a verified organization or variant, use authoritative URLs,
+exact allowlists and bounded limits, then add sanitized fixtures covering its markup and
+record the verification timestamp/status. Shared `page.aspx` helpers only parse allow-listed
+hidden state and stable links; they do not POST forms, automate ASP.NET, add a browser, or
+claim compatibility with unrelated sites.
+
+The included profile and behavior are `fixture_verified`; migrations and unavailable
+profiles are modeled explicitly, while untested configurations remain
+`configured_unverified`. Fixture-verified behavior proves connector behavior against
+captured test inputs. It does not prove that every live eMMA page, agency, solicitation,
+contract, or attachment is currently anonymously accessible. No live verification was
+performed for this change.

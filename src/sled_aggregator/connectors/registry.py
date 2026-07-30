@@ -61,6 +61,7 @@ from sled_aggregator.connectors.euna_openbids_demandstar import (  # noqa: E402
 from sled_aggregator.connectors.eva import EVAConnector  # noqa: E402
 from sled_aggregator.connectors.infotech import InfotechBidExpressConnector  # noqa: E402
 from sled_aggregator.connectors.jaggaer_sciquest import JaggaerSciQuestConnector  # noqa: E402
+from sled_aggregator.connectors.maryland_emma import MarylandEMMAConnector  # noqa: E402
 from sled_aggregator.connectors.opengov_procurement import (  # noqa: E402
     OpenGovProcurementConnector,
 )
@@ -87,6 +88,7 @@ connector_registry.register(BonfireProcurementConnector)
 connector_registry.register(EunaIonWaveConnector)
 connector_registry.register(EunaOpenBidsDemandStarConnector)
 connector_registry.register(PlanetBidsConnector)
+connector_registry.register(MarylandEMMAConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
@@ -162,3 +164,12 @@ for _alias in (
     "pbsystem",
 ):
     connector_registry.register_alias(_alias, PlanetBidsConnector)
+
+for _alias in (
+    "maryland-emma",
+    "emma-maryland",
+    "emaryland-marketplace",
+    "emaryland-marketplace-advantage",
+    "md-emma",
+):
+    connector_registry.register_alias(_alias, MarylandEMMAConnector)
