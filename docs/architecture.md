@@ -645,3 +645,28 @@ circuit state are bounded per profile; permanent access boundaries are not
 retried. Public documents enter the existing manifest and retrieval pipeline,
 while gated candidates retain relationship and access metadata without anonymous
 queue insertion.
+
+## BidNet Direct connector
+
+`bidnet-direct` is a reusable, profile-driven platform-family connector for explicitly
+configured regional purchasing groups and member agencies. It collects only metadata
+that BidNet Direct exposes anonymously and keeps member-agency originals,
+regional-group originals, agency mirrors, external aggregation, and unknown provenance
+separate. Tenant-qualified source IDs prevent solicitation numbers shared by agencies
+from colliding.
+
+Profiles explicitly allow BidNet and authoritative agency hosts, bound pages/results,
+and record lifecycle and fixture/live verification. Every URL and redirect is validated;
+private, reserved, link-local, credential-bearing, non-HTTPS, and unapproved cross-host
+locations fail closed. Robots restrictions, bot blocks, CAPTCHA, registration, login,
+subscription, premium aggregation, and bid-participation pages are terminal boundaries,
+not empty results. No credentials are accepted and no vendor or bid action is implemented.
+
+Document labels remain discoverable when downloads require registration. Such candidates
+are retained as incomplete but are not retrieval-eligible. An explicitly approved official
+agency copy can coexist as a public candidate and is the only copy queued. Candidates use
+the shared manifest, downloader, parsing, targeted OCR, extraction, and version
+reconciliation pipeline; the connector implements no private downloader or OCR path.
+
+Fixture verification demonstrates behavior against captured test inputs. It does not prove
+every live BidNet Direct opportunity or document remains anonymously accessible.

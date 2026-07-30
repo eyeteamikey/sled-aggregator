@@ -1,61 +1,62 @@
 ## Motivation
 
-Add bounded public procurement intelligence for Maryland eMaryland Marketplace Advantage (eMMA) while preserving the product's anonymous, read-only boundary.
+Add reusable public procurement intelligence for BidNet Direct member agencies and regional purchasing groups without crossing registration, subscription, or bid-participation boundaries.
 
 ## Description
 
-- Adds canonical `maryland/emma` connector and explicit non-ambiguous aliases.
-- Adds configuration-driven statewide/issuing-organization identity, exact host allowlists, collection bounds, access expectations, lifecycle state, and verification metadata.
-- Adds fixture-proven public listing/detail/notice, attachment, addendum, Q&A, tabulation, and award parsing with field provenance and stable identity.
+Adds the canonical `bidnet-direct` connector, explicit aliases, configurable profiles, bounded anonymous listing/detail collection, normalized tenant-qualified identities, provenance, policy-boundary detection, document discovery, health reporting, deterministic fixtures, and tests.
 
-## eMMA platform behavior
+## Platform architecture
 
-Public Solicitations are the supported primary collection surface. eMMA can carry Maryland agency, local-government, county, school, university, authority, and commission notices, but no universal coverage is asserted. Upstream types and UNSPSC/socioeconomic metadata are preserved only when explicit.
+Transport is separate from parsing and normalization. Profiles provide group and agency identity, URLs, exact host allowlists, lifecycle and verification metadata, discovery bounds, retry policy, and circuit-breaker settings. Transport is read-only and does not accept credentials.
 
-## Public access boundaries
+## Public metadata behavior
 
-Participation requires vendor actions this connector does not perform. It never registers, authenticates, uses Maryland or MDOT SSO, adds/acknowledges solicitations, submits responses, uploads files, accesses unpublished sourcing projects, or replays authenticated sessions.
+Public metadata is collected only when anonymously exposed. Discovery is bounded by configured pages/results, suppresses duplicate records and repeated pages, uses stable ordering, supports fixture-verified filters, and fails closed on malformed or changed markup instead of treating an access page as empty.
 
-## Discovery and detail behavior
+## Registration and subscription boundaries
 
-Collection uses bounded GET requests, stable ordering and identity, duplicate/repeated-page suppression, strict page/result limits, local filters, changed-markup detection, and fail-closed normalization.
+BidNet documents may require registration. Registration is not automated. Login, free registered accounts, notification features, saved searches, paid aggregation, subscriptions, bid intent, questions, addendum acknowledgements, uploads, pricing, and submissions are never used. Paid aggregation is not used.
 
-## Public notices and alternate systems
+## Member-agency versus aggregated provenance
 
-Notices may point to BidX/Bid Express, Bonfire, Bid Locker, an agency page, offline instructions, or another public portal. The relationship and platform hint are preserved for downstream reconciliation. External response systems remain separate connectors and are never invoked or operated from eMMA.
+Member-agency originals, regional-group originals, external aggregation, agency mirrors, and unknown records remain distinct. External upstream authority and reconciliation metadata are preserved; paid aggregated content is not ingested. Records from different tenants do not merge merely because titles or solicitation numbers match.
 
 ## Document pipeline integration
 
-Anonymous direct files become provenance-rich `DocumentCandidate` records for the existing manifest, durable queue, safe downloader, parsing/targeted OCR, structured extraction, and version reconciliation pipeline. Addenda preserve version and relationship metadata; gated/submission links are ineligible.
+Document candidates preserve opportunity linkage, labels, filenames, categories, versions, access state, and raw provenance. Registration-gated candidates remain visible but are not retrieval eligible. Public candidates feed the existing manifest, safe downloader, parsing, targeted OCR, structured extraction, and version-reconciliation pipeline; no BidNet-specific downloader or OCR path is introduced.
 
-## CAPTCHA policy
+## Official agency alternatives
 
-Public Contracts may present CAPTCHA. CAPTCHA is detected and reported as `captcha_required`, never solved or bypassed, and never treated as an empty result. A blocked contract resource does not disable a separately public solicitation surface.
+Explicitly approved official agency document hosts are supported. Official agency copies are preferred when publicly available. A gated BidNet reference and public agency reference are both retained, but only the public agency copy is eligible for queueing. Arbitrary third-party aggregator substitution and unrestricted agency crawling are not supported.
+
+## Robots and automated-access policy
+
+Robots restrictions and technical blocks are respected. Robots-policy pages, automated-access blocks, CAPTCHA, unsafe URLs, and unapproved redirects fail closed. The connector does not rotate proxies or user agents, automate browsers, solve CAPTCHA, replay cookies, or evade controls.
 
 ## Resilience and safety
 
-Exact HTTPS host checks, private-address rejection, bounded retries/backoff/jitter, Retry-After support, repeated-page detection, per-profile circuit state, and owned/injected client lifecycle rules apply. The existing downloader retains SSRF, redirect, DNS, MIME, size, streaming, filename, checksum, HTML-wall, and archive protections.
-
-## Reusable page.aspx components
-
-Narrow helpers parse allow-listed hidden fields and stable links for fixture-supported pages. They do not submit state, automate forms, add a browser dependency, register generic ASP.NET aliases, or claim compatibility with unrelated sites.
+Requests have bounded timeouts and retries with exponential backoff, jitter, and Retry-After handling for transient failures. Stable access boundaries are not retried. Profiles have isolated circuit breakers, cooldown/recovery, failure/success timestamps, status codes, and health snapshots. HTTPS host allowlists and IP/credential checks reject private, reserved, loopback, link-local, credential-bearing, and unapproved locations.
 
 ## Verification status
 
-Behavior and sanitized inputs are `fixture_verified`; untested profiles remain `configured_unverified`, and migrated/unavailable states fail closed. Fixture verification is not proof that every live eMMA page, agency, solicitation, contract, or attachment is anonymously accessible. No live checks were performed.
+The included profile and sanitized fixtures are `fixture_verified`. No live requests were made because this change ships no verified production tenant profile. Fixture verification is not universal live verification. Fixture verification demonstrates behavior against captured test inputs; it does not prove every live BidNet Direct opportunity or document remains anonymously accessible. Any future live checks must be bounded anonymous requests.
 
 ## Testing
 
-- `PYTHONPATH=src python -m unittest discover -s tests -v`
+- `PYTHONPATH=src python -m unittest discover -s tests -v` (219 tests)
 - `PYTHONPATH=src python -m compileall src tests`
 - `ruff check .`
-- `ruff format --check .`
+- `ruff format --check` for all changed Python files
 - `git diff --check`
+- credential-pattern scan of the implementation and fixtures
+
+The repository-wide `ruff format --check .` also reports nine pre-existing files outside this change that require formatting; those unrelated files were preserved.
 
 ## Known limitations
 
-No POST-only search navigation, login, SSO, vendor-profile interaction, CAPTCHA solving, external-system submission, broad project-ID enumeration, or universal ASP.NET compatibility is implemented. Live markup and access can vary by resource and issuing organization.
+Anonymous availability varies by tenant and may change. Registered-only documents remain metadata references. The connector neither discovers every BidNet tenant nor performs nationwide aggregation, registered-vendor searches, bid actions, or unrestricted agency crawling. Production profiles require explicit host and fixture/live verification before activation.
 
 ## Codex Cloud publication notes
 
-Any future live checks must be at most two bounded anonymous GETs. This local branch and commit are ready for inspection and publication through the Codex Cloud **Create PR** button; no shell GitHub authentication or remote publication command is required.
+The implementation is committed locally on `agent/bidnet-direct-connector`. No fetch, pull, push, GitHub authentication, shell PR creation, or remote modification was attempted. The PR is ready for publication through Create PR after inspecting the Codex Cloud Diff.
