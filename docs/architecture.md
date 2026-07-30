@@ -596,3 +596,28 @@ document candidates. Mixed public and gated resources retain independent access 
 and only anonymous direct files enter retrieval. Platform identity is agency-qualified,
 while migration metadata prevents stale PlanetBids portals from being treated as the
 current platform. VendorLine is explicitly out of scope.
+
+## Maryland eMMA connector
+
+`maryland/emma` separates profile configuration, anonymous GET transport, narrow
+`page.aspx` mechanics, listing/detail/notice parsing, access classification,
+normalization, document candidates, and per-profile resilience. An allow-listing
+`HTMLParser` extracts embedded structured data, stable links, and only the ASP.NET hidden
+markers needed to understand fixture pagination. Hidden values are never submitted;
+there is no generic ASP.NET connector or POST/browser automation.
+
+Stable IDs are `maryland/emma:{profile_key}:{upstream_id}` and retain raw project,
+solicitation, notice, agency and record-type metadata, preventing same-number records at
+different organizations or parent/secondary competitions from being merged. External
+response URLs carry platform hints but are neither traversed nor materialized as duplicate
+opportunities. Exact HTTPS host validation and bounded pages/results/retries apply before
+transport. Repeated-body detection, deduplication, markup checks, Retry-After backoff and
+per-profile circuit health provide safe termination.
+
+Access is resource-specific. Public metadata can coexist with vendor-profile, login,
+registration, external-system or CAPTCHA boundaries. CAPTCHA is terminal for that
+resource and is never retried or solved; contract-search failure remains isolated from
+solicitation discovery. Public document candidates reuse the existing manifest, durable
+queue, downloader, parser, targeted OCR, structured extraction, and reconciliation
+services rather than weakening their redirect, SSRF, MIME, HTML-wall or archive policy.
+Fixture verification is explicitly distinct from universal live availability.
