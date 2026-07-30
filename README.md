@@ -615,6 +615,33 @@ Authoritative starting points:
 - Michigan Contract Connect: <https://www.michigan.gov/dtmb/procurement/contractconnect>
 - ColoradoVSS information: <https://vss.state.co.us/>
 
+## OpenGov Procurement / ProcureNow
+
+Use `opengov/procurement` for the configurable, anonymous OpenGov Procurement
+(historically ProcureNow) portal family. Explicit aliases include `opengov`,
+`opengov-procurement`, `procurenow`, `procurenow/opengov`, and
+`opengov-procurenow`; aliases for unrelated OpenGov product families are
+intentionally excluded. Production presets cover the City of Phoenix, Seattle,
+Cleveland, Bridgeport, Gallup, and Mohave County. A new tenant is configuration,
+not a new connector class.
+
+Discovery prefers the public embed project list and is bounded by page, page
+size, and result limits. Exact project/solicitation identifiers plus keyword,
+status, department, release-date, and due-date filters run locally when the
+tenant does not expose a stable anonymous GET search. Detail enrichment uses
+only configured public project pages. Genuine zero results, malformed markup,
+JavaScript-only shells, login/registration interstitials, CAPTCHA, restrictions,
+and transient failures remain distinct outcomes.
+
+Project documents, attachments, addenda, notices, public Q&A, and award links
+are retained as metadata with source provenance and safe-host validation.
+`document_candidates()` converts that metadata to the established manifest and
+retrieval-queue input. The connector never retrieves attachment bodies, parses,
+runs OCR, performs semantic extraction, registers, follows projects, accepts
+terms, acknowledges addenda, or submits responses. All network operations are
+anonymous GETs with bounded redirects, retries, per-tenant circuit state, and
+fixture-backed tests; CI does not depend on live OpenGov access.
+
 ## Solicitation document manifest and retrieval queue
 
 The document pipeline is a public, read-only coordination layer:
@@ -708,4 +735,4 @@ or sends solicitation content to an external LLM. No external LLM is used in thi
 Future work includes capability/profile matching, qualification scoring, pursuit recommendations,
 compliance matrices, optional semantic providers, authorized human conflict resolution, hybrid
 search, amendment alerts, CSV/XLSX exports, user authorization, and a live connector harness.
-Connector expansion resumes with PR #16, the OpenGov Procurement/ProcureNow connector.
+Connector expansion includes the reusable OpenGov Procurement/ProcureNow connector.
