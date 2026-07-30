@@ -532,3 +532,25 @@ Completeness distinguishes absent fields from failed processing and includes sou
 warnings. Evidence quotations and context are bounded and reference the stored block, page, sheet,
 archive member or table coordinates. This preserves a direct explanation for every authoritative
 fact without duplicating whole documents.
+
+## Euna Procurement / Bonfire platform family
+
+`euna/bonfire` follows the platform-family connector boundary: request construction, semantic
+HTML/verified JSON parsing, normalization, access/migration classification, URL validation, and
+health state are separate from persistence and every document-processing stage. Tenant-qualified
+IDs (`bonfire:{tenant}:opportunity:{id}`) prevent cross-tenant merging, including Fairfax County
+Government versus FCPS. Deterministic solicitation-number or content fingerprints are used only
+when a Bonfire opportunity ID is unavailable.
+
+The connector only performs anonymous GET requests against an exact configured tenant host and
+explicitly allowlisted upstream/document/migration hosts. It neither guesses Bonfire APIs nor
+uses protected supplier endpoints. JavaScript shells, login/registration pages, CAPTCHA/bot
+challenges, maintenance, tenant removal, changed markup, and Supplier Network migrations are not
+reported as successful empty listings. Agency fallback pages must be individually configured and
+retain separate provenance.
+
+Document links become the canonical `DocumentCandidate` inputs. Public files are eligible for the
+shared manifest/retrieval pipeline; registration/login/CAPTCHA metadata is retained but not queued.
+Addenda, amendments, Q&A, and awards retain category and relationship metadata so shared document
+extraction and reconciliation—not the connector—decide effective solicitation facts. Public plan
+holder/follower collection is disabled pending a documented need and privacy review.
