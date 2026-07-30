@@ -554,3 +554,29 @@ shared manifest/retrieval pipeline; registration/login/CAPTCHA metadata is retai
 Addenda, amendments, Q&A, and awards retain category and relationship metadata so shared document
 extraction and reconciliation—not the connector—decide effective solicitation facts. Public plan
 holder/follower collection is disabled pending a documented need and privacy review.
+
+## Euna Procurement / IonWave platform family
+
+`euna/ionwave` is an anonymous, GET-only platform-family connector for exact configured
+`{tenant}.ionwave.net` hosts. Ownership by Euna does not join the IonWave, Bonfire, or
+DemandStar parser families. Request construction, access/migration classification, semantic
+list/detail/document/addenda/Q&A/award parsing, normalization, and health reporting remain
+focused components. Tenant configuration owns the classic ASPX or modern routes and capabilities;
+POST-only view-state search is intentionally unsupported and bounded initial lists are filtered
+locally.
+
+Tenant-qualified `ionwave:{tenant}:bid:{bidID}` identities (then normalized solicitation number,
+then a deterministic tenant fingerprint) prevent cross-tenant collisions. Canonical detail URLs
+retain `bidID` and required `SourceType` while removing presentation and transient state. Exact
+host allowlists and safe-URL checks apply to every request, link, and redirect. Anonymous cookies
+are client-local and ephemeral; view state and cookies are never persisted, logged, or submitted.
+
+Attachment visibility is not download authorization. The connector emits provenance-rich
+`DocumentCandidate` metadata with independent access states; only eligible public candidates pass
+to the shared manifest/queue and PR #13–#15 download, native parsing/targeted OCR, evidence-backed
+extraction, reconciliation, effective snapshot, and change-ledger pipeline. Registration/login,
+CAPTCHA, sealed-response, evaluation, and private supplier content remain outside the product
+boundary. Migration metadata retains the historical source while handing current discovery to
+the existing OpenGov or Bonfire connector, and configured authoritative agency fallbacks remain
+bounded. Fixture verification is not live verification, and legacy/retired tenants do not imply
+active or statewide coverage.
