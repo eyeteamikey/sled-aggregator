@@ -108,6 +108,36 @@ Restricted documents produce metadata and a source link. User-authorized or
 user-uploaded retrieval is a separate future channel and must not weaken public
 connector controls.
 
+### JAGGAER/SciQuest public event connector
+
+`jaggaer/sciquest` separates tenant configuration from shared request,
+classification, list/detail parsing, normalization, and document-link
+classification. Presets model Utah U3P, UW System ShopUW+, Georgia Sourcing
+Director, and Iowa IMPACS without assuming identical markup or claiming broader
+statewide coverage. CustomerOrg, entry/discovery URLs, tab and event-number
+parameters, headers, remote-versus-local keyword behavior, parser strategy,
+detail/document capabilities, request/page/result bounds, retries, and circuit
+settings are tenant facts. Additional tenants require configuration, not another
+connector class.
+
+Only anonymous public GET requests are allowed. Per-instance clients isolate
+tenant cookies; connector-owned clients close while injected clients remain
+caller-owned. Stable JAGGAER IDs take precedence over tenant-qualified event
+numbers and deterministic stable-attribute hashes. Detail data and document
+metadata remain in raw provenance, including upstream registry links. Supplier
+response registration does not make otherwise public event metadata restricted,
+while individual login-gated files retain their own access state.
+
+URL validation permits reviewed HTTPS hosts only and rejects credentials,
+loopback/private/link-local/metadata destinations, foreign document hosts, and
+unsafe schemes. Pagination, redirects, response size through the HTTP client,
+retries, and results remain bounded. CAPTCHA, login/registration pages,
+JavaScript-only shells, malformed shapes, and non-HTML/non-JSON responses fail
+closed. Per-tenant retry and circuit state prevents one CustomerOrg outage from
+disabling another. Fixture/fake-transport tests never contact JAGGAER. This stage
+discovers links only: file download, structured extraction, OCR, authenticated
+supplier workflows, POST searches, and CAPTCHA handling are deliberately absent.
+
 ### Infotech Bid Express / BidX connector
 
 The `infotech/bid-express` family adapter separates five configurable product

@@ -27,6 +27,8 @@ portal controls.
 - Docker and GitHub Actions development baseline
 - Virginia eVA public opportunity-board discovery with lot/round consolidation,
   IVDetails/IVDetailsV2 enrichment, and access-aware document metadata
+- Public JAGGAER/SciQuest event discovery and detail/document-metadata enrichment
+  for Utah U3P, UW System ShopUW+, Georgia Sourcing Director, and Iowa IMPACS
 
 ## Architecture
 
@@ -138,6 +140,44 @@ connector_registry.register(ExampleConnector)
 
 Connector implementations must enforce public/read-only behavior, use bounded
 timeouts and rate limits, and return source URLs and access-state metadata.
+
+### JAGGAER/SciQuest public events
+
+The `jaggaer/sciquest` connector is a configurable platform-family adapter for
+the public `Router/PublicEvent` surface. Fixture-verified presets cover Utah U3P
+(`StateOfUtah`), University of Wisconsin System ShopUW+ (`UWisconsin`), Georgia
+Sourcing Director (`Georgia`), and Iowa IMPACS (`DASIowa`). Utah includes many
+participating public entities, so the source issuer is preserved. Wisconsin is
+limited to UW System events. Georgia is a secondary source to the Georgia
+Procurement Registry rather than complete statewide registry coverage. Iowa's
+public state bid interface can likewise remain the authoritative upstream link.
+
+Discovery is bounded by tenant-configurable pages, page size, and result count;
+supports exact event number, status, issuer and date filters; deduplicates stable
+tenant-qualified identities; and performs local keyword filtering unless a
+preset explicitly verifies remote GET filtering (currently Georgia). Public
+detail enrichment retains original fields, issuing organization, source dates,
+codes, contacts, award/upstream data, and access provenance in `raw_payload`.
+
+The connector identifies metadata and safe links for solicitation packages,
+specifications, scope/pricing files, addenda, amendments, Q&A, and award notices.
+Attachment discovery does **not** download or parse files; text extraction and
+OCR are separate future stages. “Respond Now” can require registration while
+event details remain public. The connector never logs in, registers, submits a
+response, uses POST, enters supplier areas, or bypasses CAPTCHA/access controls.
+Login, registration, CAPTCHA, maintenance, malformed responses, JavaScript-only
+shells, and transient failures are explicit access states.
+
+Retries cover connection failures and HTTP 408/409/425/429/500/502/503/504 with
+bounded exponential backoff, jitter, both `Retry-After` forms, and a per-tenant
+cooldown circuit. HTTPS/host validation rejects credentials, local/private
+destinations, unsafe schemes, foreign attachment hosts, and transient canonical
+URL parameters. Tests use only sanitized fixtures and fake transports; no live
+JAGGAER dependency exists in CI. Add a tenant by constructing `JaggaerPortal`
+with a reviewed `CustomerOrg`, public URLs, capabilities, limits, parser strategy,
+and allowed document hosts—no new connector class is needed. POST-backed searches,
+authenticated documents, browser automation, downloading, extraction, and OCR
+remain unsupported.
 
 ### WebProcure/PROACTIS
 
