@@ -454,3 +454,69 @@ Commonwealth agencies—not every Pennsylvania SLED entity, notably not PennDOT
 highway and bridge construction in ECMS. No login, registration, MFA, CAPTCHA
 bypass, purchasing, qualification, bid submission, or access-control
 circumvention is performed.
+
+## CGI Advantage Vendor Self-Service
+
+Use `cgi/advantage-vss` for the configurable, public-read-only CGI Advantage
+Vendor Self-Service family. Explicit aliases are `cgi/vss`, `cgi-advantage`,
+`cgi-advantage-vss`, and `advantage-vss`; tenant aliases are `maine/vss`,
+`michigan/sigma-vss`, and `colorado/vss`. The intentionally ambiguous `vss`,
+`sigma`, `advantage`, `vendor-portal`, and `supplier-portal` names are not
+registered.
+
+The portal model keeps Advantage4 and legacy AltSelfService routes, timezone,
+guest bootstrap, anonymous-session requirements, verified capabilities,
+validation level/date, restrictions, attachment hosts, and availability schedule
+separate for every tenant. Maine is an enabled public-guest preset with
+fixture-verified parsing; because live access was blocked by the execution
+network, public collection remains capability-gated. Michigan SIGMA and
+ColoradoVSS are configured-unverified and disabled until search, detail,
+attachment, award, and contract behavior are independently live-validated.
+Branding alone never enables another CGI tenant.
+
+Discovery is bounded by page, page-size, and record limits. It supports
+configuration for exact solicitation number, keyword, type, status, department,
+agency, buyer, commodity text/code, published/closing dates, and open/closed or
+award scopes only after a tenant route has been verified. Identifiers remain
+strings and are namespaced by tenant; stable public internal IDs take precedence
+and full solicitation numbers (including leading zeroes and suffixes) are the
+fallback. Unknown status and solicitation types remain unknown rather than being
+invented. Dates are parsed in the tenant's IANA timezone and date-only values are
+preserved in provenance rather than silently converted to midnight.
+
+Public detail enrichment retains commodity lines under one parent opportunity,
+public instructions, explicitly displayed awards, and related contract
+references. Attachment discovery records the displayed metadata and exact safe
+URL, parent identity, access state, session requirement, and retrieval
+eligibility. It rejects unsafe schemes, credentials, private/local address
+literals, metadata hosts, and unapproved cross-host downloads. Discovery does
+not download all files, extract document text, run OCR, open archives, or execute
+active content. A later retrieval stage must revalidate redirects, content type,
+size, and archive bounds and must treat HTML login responses as restricted.
+
+Guest initialization uses only the published public/guest control, keeps session
+state in the tenant-owned in-memory client, and refreshes an expired guest
+session at most once per collection. It never logs or persists cookies or hidden
+session material. Per-tenant health, retries for 429/502/503/504, numeric and
+HTTP-date `Retry-After`, bounded concurrency, exponential backoff, and circuit
+cooldown prevent one deployment's failure from opening another tenant's circuit.
+Login, registration, verification, CAPTCHA, invitation-only, stable forbidden,
+and scheduled-unavailable responses are classified and are not bypassed.
+
+The connector never logs in, registers a vendor, automates verification,
+accesses account purchasing/payment data, enters a response workspace, accepts
+terms, submits bids, or bypasses CAPTCHA. Maine guidance places current and
+historical RFPs published on or after **October 1, 2025** in VSS; older archive
+coverage must not be assumed. Colorado says most state agencies and many higher
+education institutions use ColoradoVSS, not every Colorado entity. Its published
+availability/maintenance schedule must be validated and configured before an
+enabled collector suppresses retries outside the operating window.
+
+Authoritative starting points:
+
+- CGI VSS overview: <https://www.cgi.com/us/en-us/brochures/cgi-advantage/cgi-advantage-vendor-self-service>
+- Maine VSS guidance: <https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system>
+- Maine RFP archives: <https://www.maine.gov/dafs/bbm/procurementservices/vendors/rfps/rfp-archives>
+- Michigan SIGMA: <https://www.michigan.gov/budget/budget-offices/sigma>
+- Michigan Contract Connect: <https://www.michigan.gov/dtmb/procurement/contractconnect>
+- ColoradoVSS information: <https://vss.state.co.us/>
