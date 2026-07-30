@@ -712,3 +712,30 @@ Robots rules, CAPTCHA, and technical restrictions are respected without browser 
 proxy rotation, or evasion. Fixture verification is mandatory; `configured_unverified` is used
 when bounded anonymous live verification is unavailable. Fixture verification demonstrates
 behavior against captured test inputs and is not universal live-access proof.
+
+## Rhode Island RIVIP External connector
+
+RIVIP External is a jurisdiction-specific public-read-only connector, not generic ASP.NET
+automation. Profiles own official landing, search, detail, document and legacy URLs, exact host
+allowlists, filters, bounds, timeout, markup variant, lifecycle/verification state, and optional
+replacement. Adding an entity or markup variant requires sanitized anonymous fixtures, observed
+controls, host review, and parser/registry tests.
+
+`PublicWebFormsNavigator` starts an anonymous session with GET and permits POST only to the public
+search URL. It allowlists search fields and the results pager, requires and refreshes view state,
+generator, and event validation, and applies page/result/submission and cycle bounds. Tokens are
+ephemeral and excluded from normalized data and logs. Missing/expired state, invalid validation,
+login/session/CAPTCHA pages, unknown controls, and changed markup fail closed.
+
+Entity-qualified IDs prevent entities that reuse bid numbers from colliding. Raw entity identity
+and type, external ID, solicitation number, URLs, lifecycle, replacement, and provenance remain
+distinct. Historical records retain RIVIP authority after migration; URI's pre-February 10, 2025
+records can remain legacy while RhodyBuy/JAGGAER is identified for newer work. This is a
+reconciliation hint, not cross-connector execution or title-based merging.
+
+Only anonymous allowlisted solicitation-side documents, addenda, results, and awards are eligible
+for the shared manifest, safe download, parsing, targeted OCR, extraction, and version pipeline.
+Public-copy responses are a separately governed repository and are not crawled or evaluated as
+requirements. The connector does not authenticate, register, use agency posting, mutate records,
+upload, bid, access RIFANS/financial data, solve CAPTCHA, invoke response platforms, or collect
+private records. Fixture verification is mandatory but is not universal live-access proof.
