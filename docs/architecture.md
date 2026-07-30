@@ -108,6 +108,41 @@ Restricted documents produce metadata and a source link. User-authorized or
 user-uploaded retrieval is a separate future channel and must not weaken public
 connector controls.
 
+### Extraction implementation
+
+`DocumentExtractionService` loads immutable artifacts only through `DocumentStorage`,
+then delegates content selection to `DocumentParserRegistry`; persistence, parsers, OCR
+policy/provider, normalization, and the bounded worker remain separate. Magic bytes and
+safe OOXML container members outrank detected/declared media types and extensions.
+Mismatches become warnings, while malformed, unsupported, or hostile inputs receive an
+explicit terminal classification.
+
+The extraction tables are `document_extractions`, `document_text_blocks`, and
+`document_tables`. They link opportunity → manifest document → downloaded artifact,
+retain source URL metadata and artifact hash, and preserve page/sheet/table/paragraph/
+archive coordinates. Full text is reconstructed from ordered bounded blocks rather than
+stored as an unbounded opaque diagnostic object.
+
+Defaults cap artifacts at 100 MiB, extracted text at 5,000,000 characters, blocks at
+10,000, tables at 1,000, PDFs at 500 pages, and OCR at 25 pages/25 million pixels.
+Spreadsheets cap 50 sheets, 100,000 rows, 1,000 columns, and 1,000,000 cells. ZIP caps
+100 entries, 25 MiB per entry, 100 MiB total, a 100:1 ratio, and zero nested depth.
+
+OCR thresholds are deterministic and page-specific: 40 alphanumeric characters, five
+words, and at most 5% Unicode replacement characters constitute usable native text.
+Only deficient pages with raster images require OCR. Blank pages do not. The optional
+Tesseract provider uses a fixed argv vector, no shell, a timeout, configurable English
+language default, and an availability/version health check. A production renderer is
+deferred, so image-only PDFs clearly report unavailable instead of rendering all pages.
+
+Extraction states include completed, completed-with-warnings, unsupported, malformed,
+failed, and quarantined; OCR reports not-needed, partially/fully-used, unavailable, or
+failed. Follow-up PR #15 will add structured RFP/SOW/PWS extraction and version
+reconciliation. PR #16+ resumes OpenGov Procurement/ProcureNow connector-family work.
+Later work includes isolated legacy Office conversion, production OCR images/languages,
+malware scanning, object storage, exports, full-text/hybrid search, live validation,
+evaluation integration, and authorized reprocessing controls.
+
 ### JAGGAER/SciQuest public event connector
 
 `jaggaer/sciquest` separates tenant configuration from shared request,

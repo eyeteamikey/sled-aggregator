@@ -6,7 +6,13 @@ from pydantic import BaseModel, ConfigDict
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from sled_aggregator.db.models import DocumentRetrievalJobRecord, SolicitationDocumentRecord
+from sled_aggregator.db.models import (
+    DocumentExtractionRecord,
+    DocumentRetrievalJobRecord,
+    DocumentTableRecord,
+    DocumentTextBlockRecord,
+    SolicitationDocumentRecord,
+)
 from sled_aggregator.db.session import get_db_session
 from sled_aggregator.domain.models import DocumentCandidate, DocumentClassification
 from sled_aggregator.services.document_classifier import DocumentClassifier
@@ -66,20 +72,42 @@ async def classify_document(payload: DocumentCandidate) -> DocumentClassificatio
 
 @router.get("", response_model=list[DocumentSummary])
 def list_documents(
-    session: DbSession, opportunity_id: str | None = None, document_type: str | None = None,
-    is_current: bool | None = None, access_state: str | None = None,
-    retrieval_state: str | None = None, connector: str | None = None,
-    tenant: str | None = None, jurisdiction: str | None = None,
-    limit: int = Query(100, ge=1, le=500), offset: int = Query(0, ge=0),
+    session: DbSession,
+    opportunity_id: str | None = None,
+    document_type: str | None = None,
+    is_current: bool | None = None,
+    access_state: str | None = None,
+    retrieval_state: str | None = None,
+    connector: str | None = None,
+    tenant: str | None = None,
+    jurisdiction: str | None = None,
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
 ) -> list[dict[str, object]]:
-    statement = select(SolicitationDocumentRecord, DocumentRetrievalJobRecord.retrieval_state).outerjoin(DocumentRetrievalJobRecord)
-    filters = {"opportunity_id": opportunity_id, "document_type": document_type, "is_current": is_current, "access_state": access_state, "connector": connector, "tenant": tenant, "jurisdiction": jurisdiction}
+    statement = select(
+        SolicitationDocumentRecord, DocumentRetrievalJobRecord.retrieval_state
+    ).outerjoin(DocumentRetrievalJobRecord)
+    filters = {
+        "opportunity_id": opportunity_id,
+        "document_type": document_type,
+        "is_current": is_current,
+        "access_state": access_state,
+        "connector": connector,
+        "tenant": tenant,
+        "jurisdiction": jurisdiction,
+    }
     for field, value in filters.items():
         if value is not None:
             statement = statement.where(getattr(SolicitationDocumentRecord, field) == value)
     if retrieval_state is not None:
         statement = statement.where(DocumentRetrievalJobRecord.retrieval_state == retrieval_state)
-    rows = session.execute(statement.order_by(SolicitationDocumentRecord.first_discovered_at, SolicitationDocumentRecord.id).limit(limit).offset(offset))
+    rows = session.execute(
+        statement.order_by(
+            SolicitationDocumentRecord.first_discovered_at, SolicitationDocumentRecord.id
+        )
+        .limit(limit)
+        .offset(offset)
+    )
     result = []
     for record, state in rows:
         item = _serialize(record)
@@ -90,12 +118,147 @@ def list_documents(
 
 @router.get("/queue/stats")
 def queue_stats(session: DbSession) -> dict[str, int]:
-    return dict(session.execute(select(DocumentRetrievalJobRecord.retrieval_state, func.count()).group_by(DocumentRetrievalJobRecord.retrieval_state)).all())
+    return dict(
+        session.execute(
+            select(DocumentRetrievalJobRecord.retrieval_state, func.count()).group_by(
+                DocumentRetrievalJobRecord.retrieval_state
+            )
+        ).all()
+    )
+
+
+def _current_extraction(session: Session, document_id: str) -> DocumentExtractionRecord:
+    record = session.scalar(
+        select(DocumentExtractionRecord).where(
+            DocumentExtractionRecord.document_id == document_id,
+            DocumentExtractionRecord.is_current.is_(True),
+        )
+    )
+    if record is None:
+        raise HTTPException(status_code=404, detail="document extraction not found")
+    return record
+
+
+@router.get("/extraction/health")
+def extraction_health(session: DbSession) -> dict[str, object]:
+    from sled_aggregator.config import get_settings
+    from sled_aggregator.documents.ocr import TesseractOcrProvider
+
+    settings, provider = get_settings(), TesseractOcrProvider()
+    counts = dict(
+        session.execute(
+            select(DocumentExtractionRecord.extraction_state, func.count()).group_by(
+                DocumentExtractionRecord.extraction_state
+            )
+        ).all()
+    )
+    return {
+        "enabled": settings.document_extraction_enabled,
+        "supported_formats": [
+            "pdf",
+            "docx",
+            "xlsx",
+            "csv",
+            "tsv",
+            "txt",
+            "html",
+            "xml",
+            "rtf",
+            "zip",
+        ],
+        "ocr_enabled": settings.document_ocr_enabled,
+        "ocr_provider_available": provider.available,
+        "ocr_provider_version": provider.version,
+        "counts": counts,
+    }
+
+
+@router.get("/{document_id}/extraction")
+def get_extraction(document_id: str, session: DbSession) -> dict[str, object]:
+    record = _current_extraction(session, document_id)
+    excluded = {"error_summary"}
+    return {
+        column.name: getattr(record, column.name)
+        for column in record.__table__.columns
+        if column.name not in excluded
+    }
+
+
+@router.get("/{document_id}/extraction/blocks")
+def list_extraction_blocks(
+    document_id: str,
+    session: DbSession,
+    page: int | None = None,
+    sheet: str | None = None,
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+) -> list[dict[str, object]]:
+    extraction = _current_extraction(session, document_id)
+    statement = select(DocumentTextBlockRecord).where(
+        DocumentTextBlockRecord.extraction_id == extraction.id
+    )
+    if page is not None:
+        statement = statement.where(DocumentTextBlockRecord.page_number == page)
+    if sheet is not None:
+        statement = statement.where(DocumentTextBlockRecord.sheet_name == sheet)
+    rows = session.scalars(
+        statement.order_by(DocumentTextBlockRecord.sequence).limit(limit).offset(offset)
+    )
+    return [{c.name: getattr(row, c.name) for c in row.__table__.columns} for row in rows]
+
+
+@router.get("/{document_id}/extraction/tables")
+def list_extraction_tables(
+    document_id: str,
+    session: DbSession,
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+) -> list[dict[str, object]]:
+    extraction = _current_extraction(session, document_id)
+    rows = session.scalars(
+        select(DocumentTableRecord)
+        .where(DocumentTableRecord.extraction_id == extraction.id)
+        .order_by(DocumentTableRecord.sequence)
+        .limit(limit)
+        .offset(offset)
+    )
+    return [{c.name: getattr(row, c.name) for c in row.__table__.columns} for row in rows]
+
+
+@router.get("/{document_id}/extraction/text")
+def reconstructed_text(
+    document_id: str,
+    session: DbSession,
+    maximum_characters: int = Query(100_000, ge=1, le=1_000_000),
+) -> dict[str, object]:
+    extraction = _current_extraction(session, document_id)
+    blocks = session.scalars(
+        select(DocumentTextBlockRecord.normalized_text)
+        .where(DocumentTextBlockRecord.extraction_id == extraction.id)
+        .order_by(DocumentTextBlockRecord.sequence)
+    )
+    text = "\n\n".join(blocks)
+    return {
+        "extraction_id": extraction.id,
+        "text": text[:maximum_characters],
+        "truncated": len(text) > maximum_characters,
+    }
 
 
 @router.get("/opportunity/{opportunity_id}", response_model=list[DocumentSummary])
-def list_opportunity_documents(opportunity_id: str, session: DbSession, limit: int = Query(100, ge=1, le=500), offset: int = Query(0, ge=0)) -> list[dict[str, object]]:
-    rows = session.scalars(select(SolicitationDocumentRecord).where(SolicitationDocumentRecord.opportunity_id == opportunity_id).order_by(SolicitationDocumentRecord.first_discovered_at, SolicitationDocumentRecord.id).limit(limit).offset(offset))
+def list_opportunity_documents(
+    opportunity_id: str,
+    session: DbSession,
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+) -> list[dict[str, object]]:
+    rows = session.scalars(
+        select(SolicitationDocumentRecord)
+        .where(SolicitationDocumentRecord.opportunity_id == opportunity_id)
+        .order_by(SolicitationDocumentRecord.first_discovered_at, SolicitationDocumentRecord.id)
+        .limit(limit)
+        .offset(offset)
+    )
     return [_serialize(record) for record in rows]
 
 
@@ -105,6 +268,10 @@ def get_document(document_id: str, session: DbSession) -> dict[str, object]:
     if record is None:
         raise HTTPException(status_code=404, detail="document not found")
     result = _serialize(record, detail=True)
-    job = session.scalar(select(DocumentRetrievalJobRecord).where(DocumentRetrievalJobRecord.document_id == document_id))
+    job = session.scalar(
+        select(DocumentRetrievalJobRecord).where(
+            DocumentRetrievalJobRecord.document_id == document_id
+        )
+    )
     result["retrieval_state"] = job.retrieval_state if job else None
     return result

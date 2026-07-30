@@ -193,3 +193,84 @@ class DocumentDownloadAttemptRecord(Base):
     error_summary: Mapped[str | None] = mapped_column(String(512))
     retry_scheduled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     artifact_id: Mapped[str | None] = mapped_column(ForeignKey("document_artifacts.id", ondelete="SET NULL"))
+
+
+class DocumentExtractionRecord(Base):
+    __tablename__ = "document_extractions"
+    __table_args__ = (
+        UniqueConstraint("artifact_id", "content_sha256", "parser_name", "parser_version", name="uq_extraction_identity"),
+        Index("ix_extractions_document_current", "document_id", "is_current"),
+        Index("ix_extractions_opportunity", "opportunity_id"),
+        Index("ix_extractions_state", "extraction_state"),
+        Index("ix_extractions_ocr_state", "ocr_state"),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    document_id: Mapped[str] = mapped_column(ForeignKey("solicitation_documents.id", ondelete="CASCADE"), nullable=False)
+    artifact_id: Mapped[str] = mapped_column(ForeignKey("document_artifacts.id", ondelete="CASCADE"), nullable=False)
+    opportunity_id: Mapped[str] = mapped_column(ForeignKey("opportunities.id", ondelete="CASCADE"), nullable=False)
+    parser_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    parser_version: Mapped[str] = mapped_column(String(100), nullable=False)
+    detected_format: Mapped[str] = mapped_column(String(32), nullable=False)
+    extraction_state: Mapped[str] = mapped_column(String(32), nullable=False)
+    ocr_state: Mapped[str] = mapped_column(String(32), nullable=False)
+    ocr_engine: Mapped[str | None] = mapped_column(String(100))
+    ocr_engine_version: Mapped[str | None] = mapped_column(String(100))
+    language: Mapped[str | None] = mapped_column(String(32))
+    native_text_character_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    ocr_text_character_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    total_character_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    unit_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    table_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    warning_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    content_sha256: Mapped[str] = mapped_column(String(64), nullable=False)
+    is_current: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    error_classification: Mapped[str | None] = mapped_column(String(64))
+    error_summary: Mapped[str | None] = mapped_column(String(512))
+    extraction_metadata: Mapped[dict[str, object]] = mapped_column(JSONB, nullable=False, default=dict)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class DocumentTextBlockRecord(Base):
+    __tablename__ = "document_text_blocks"
+    __table_args__ = (UniqueConstraint("extraction_id", "sequence", name="uq_block_sequence"), Index("ix_blocks_page_sheet", "extraction_id", "page_number", "sheet_name"))
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    extraction_id: Mapped[str] = mapped_column(ForeignKey("document_extractions.id", ondelete="CASCADE"), nullable=False)
+    sequence: Mapped[int] = mapped_column(Integer, nullable=False)
+    page_number: Mapped[int | None] = mapped_column(Integer)
+    sheet_name: Mapped[str | None] = mapped_column(String(255))
+    archive_entry: Mapped[str | None] = mapped_column(Text)
+    paragraph_index: Mapped[int | None] = mapped_column(Integer)
+    table_index: Mapped[int | None] = mapped_column(Integer)
+    row_start: Mapped[int | None] = mapped_column(Integer)
+    row_end: Mapped[int | None] = mapped_column(Integer)
+    column_start: Mapped[int | None] = mapped_column(Integer)
+    column_end: Mapped[int | None] = mapped_column(Integer)
+    block_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    heading_level: Mapped[int | None] = mapped_column(Integer)
+    raw_text: Mapped[str] = mapped_column(Text, nullable=False)
+    normalized_text: Mapped[str] = mapped_column(Text, nullable=False)
+    character_start: Mapped[int] = mapped_column(Integer, nullable=False)
+    character_end: Mapped[int] = mapped_column(Integer, nullable=False)
+    extraction_method: Mapped[str] = mapped_column(String(32), nullable=False)
+    ocr_confidence: Mapped[int | None] = mapped_column(Integer)
+    source_location: Mapped[dict[str, object]] = mapped_column(JSONB, nullable=False, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class DocumentTableRecord(Base):
+    __tablename__ = "document_tables"
+    __table_args__ = (UniqueConstraint("extraction_id", "sequence", name="uq_table_sequence"),)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    extraction_id: Mapped[str] = mapped_column(ForeignKey("document_extractions.id", ondelete="CASCADE"), nullable=False)
+    sequence: Mapped[int] = mapped_column(Integer, nullable=False)
+    page_number: Mapped[int | None] = mapped_column(Integer)
+    sheet_name: Mapped[str | None] = mapped_column(String(255))
+    archive_entry: Mapped[str | None] = mapped_column(Text)
+    row_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    column_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    structured_data: Mapped[list[object]] = mapped_column(JSONB, nullable=False)
+    flattened_text: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
