@@ -23,7 +23,7 @@ LA,Louisiana,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False
 MA,Massachusetts,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
 MD,Maryland,state,2,md-emma,eMaryland Marketplace Advantage,statewide,primary,maryland/emma,maryland/emma,fixture_only,fixture_verified,public,public,mixed,metadata_only,True,active,current,,,,1,incomplete_award_coverage;incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
 ME,Maine,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
-MI,Michigan,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+MI,Michigan,state,2,mi-detroit-oracle-fusion,City of Detroit Oracle Fusion Public Negotiations,local,supplemental,oracle/fusion-rest,oracle/fusion-rest,fixture_only,fixture_verified,public,public,public,metadata_only,True,active,current,,,,2,incomplete_award_coverage;incomplete_education_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
 MN,Minnesota,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
 MO,Missouri,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
 MP,Commonwealth of the Northern Mariana Islands,territory,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified;territory_gap,Identify an authoritative source.

@@ -85,6 +85,7 @@ from sled_aggregator.connectors.maryland_emma import MarylandEMMAConnector  # no
 from sled_aggregator.connectors.opengov_procurement import (  # noqa: E402
     OpenGovProcurementConnector,
 )
+from sled_aggregator.connectors.oracle_fusion_rest import OracleFusionRestConnector  # noqa: E402
 from sled_aggregator.connectors.pennsylvania_emarketplace import (  # noqa: E402
     PennsylvaniaEMarketplaceConnector,
 )
@@ -115,6 +116,14 @@ connector_registry.register(GeorgiaGPRConnector)
 connector_registry.register(BidNetDirectConnector)
 connector_registry.register(PublicPurchaseConnector)
 connector_registry.register(RIVIPExternalConnector)
+connector_registry.register(OracleFusionRestConnector)
+for _alias in (
+    "oracle-fusion-rest",
+    "oracle-cloud-procurement",
+    "oracle-fusion-procurement",
+    "oracle-supplier-negotiations",
+):
+    connector_registry.register_alias(_alias, OracleFusionRestConnector)
 for _alias in ("infotech/bidx", "bid-express", "bidx"):
     connector_registry.register_alias(_alias, InfotechBidExpressConnector)
 for _alias in ("peoplesoft", "peoplesoft/supplier-portal", "california/cal-eprocure"):
