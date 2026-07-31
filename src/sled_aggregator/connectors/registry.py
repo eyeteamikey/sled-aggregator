@@ -95,6 +95,7 @@ from sled_aggregator.connectors.planetbids import PlanetBidsConnector  # noqa: E
 from sled_aggregator.connectors.public_purchase import PublicPurchaseConnector  # noqa: E402
 from sled_aggregator.connectors.rhode_island_rivip import RIVIPExternalConnector  # noqa: E402
 from sled_aggregator.connectors.texas_esbd import TexasESBDConnector  # noqa: E402
+from sled_aggregator.connectors.tyler_munis_vss import TylerMunisVssConnector  # noqa: E402
 from sled_aggregator.connectors.webprocure import WebProcureConnector  # noqa: E402
 
 connector_registry.register(WebProcureConnector)
@@ -117,6 +118,9 @@ connector_registry.register(BidNetDirectConnector)
 connector_registry.register(PublicPurchaseConnector)
 connector_registry.register(RIVIPExternalConnector)
 connector_registry.register(OracleFusionRestConnector)
+connector_registry.register(TylerMunisVssConnector)
+for _alias in ("tyler-munis-vss", "munis-vss", "tyler/vss", "munis/vendor-self-service"):
+    connector_registry.register_alias(_alias, TylerMunisVssConnector)
 for _alias in (
     "oracle-fusion-rest",
     "oracle-cloud-procurement",

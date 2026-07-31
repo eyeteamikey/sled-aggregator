@@ -1118,3 +1118,13 @@ The connector never logs in, accepts supplier credentials, imports browser cooki
 responses, automates CAPTCHA, or falls back to stateful ADF POST traffic. Lucas County (OH),
 Jacksonville (FL), Virginia Beach (VA), and DC Water are researched legacy ADF tenants and are
 intentionally unsupported. Sanitized fixture evidence is not a guarantee of permanent live access.
+
+### Tyler Munis Vendor Self Service
+
+The reusable `tyler/munis-vss` connector provides bounded, anonymous public discovery
+for Summit County, Ohio and the City of Opelika, Alabama. Public Web Forms search,
+pagination, and detail selection use fresh ASP.NET state via POST; document retrieval
+remains GET-only through the existing safe downloader. Temporary document tokens are
+redacted and excluded from identity, login/restricted transitions fail closed, and
+Mobile, Alabama remains unsupported because only citizen self service was evidenced.
+See [the connector support guide](docs/tyler_munis_vss.md).

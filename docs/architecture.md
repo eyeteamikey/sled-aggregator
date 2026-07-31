@@ -759,3 +759,12 @@ Lucas County, Jacksonville, Virginia Beach, and DC Water were researched as publ
 Fusion tenants, but their workflows require stateful ADF POST traffic. They are not REST presets or
 coverage claims. Fixture verification describes the observed contract, not permanent availability;
 release-path 404/410, non-JSON, login/CAPTCHA markup, or schema drift fails closed.
+
+## Stateful public Web Forms connectors
+
+Tyler Munis VSS is an anonymous but stateful connector family. Its transport owns a
+cookie session, refreshes ASP.NET hidden state at every public navigation transition,
+and validates every redirect against a tenant hostname allowlist. POST is confined to
+search, pagination, and detail-selection postbacks; documents cross the established
+GET-only safe-download boundary. Session-dependent detail and document URLs are not
+stable identities, and sensitive query material is redacted.
