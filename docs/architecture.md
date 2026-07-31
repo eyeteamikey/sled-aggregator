@@ -739,3 +739,23 @@ Public-copy responses are a separately governed repository and are not crawled o
 requirements. The connector does not authenticate, register, use agency posting, mutate records,
 upload, bid, access RIFANS/financial data, solve CAPTCHA, invoke response platforms, or collect
 private records. Fixture verification is mandatory but is not universal live-access proof.
+
+## Oracle Fusion Procurement REST connector
+
+The `oracle/fusion-rest` platform family is deliberately separate from
+`oracle/peoplesoft-sourcing`. A validated profile owns the HTTPS host, complete versioned REST
+collection root, procurement business unit, public portal, host allowlists, page/result/retry bounds,
+and circuit policy. Detroit is the only supported preset. Collection is anonymous and GET-only,
+using offset pagination while `hasMore` and useful records continue. Query fields, status values,
+sort fields, and operators are allowlisted and Oracle literals are escaped.
+
+Attachments retain sanitized metadata and use durable REST enclosure routes; ephemeral signed
+Oracle content URLs are neither logged nor persisted. Amendment metadata retains its parent and
+version provenance for shared reconciliation. Downloads remain subject to the shared host,
+redirect, size, MIME/magic-byte, filename, checksum, extraction, and targeted OCR safeguards.
+No login, supplier response, bidding, CAPTCHA bypass, browser-cookie reuse, or ADF fallback exists.
+
+Lucas County, Jacksonville, Virginia Beach, and DC Water were researched as public-browser Oracle
+Fusion tenants, but their workflows require stateful ADF POST traffic. They are not REST presets or
+coverage claims. Fixture verification describes the observed contract, not permanent availability;
+release-path 404/410, non-JSON, login/CAPTCHA markup, or schema drift fails closed.

@@ -72,7 +72,7 @@ class CoverageAuditTests(unittest.TestCase):
 
     def test_inventory_is_canonical_and_aliases_unique(self):
         rows = connector_inventory(self.sdata["sources"])
-        self.assertEqual(len(rows), 19)
+        self.assertEqual(len(rows), 20)
         self.assertEqual(len({x["canonical_name"] for x in rows}), len(rows))
         aliases = [a for row in rows for a in row["aliases"]]
         self.assertEqual(len(aliases), len(set(aliases)))

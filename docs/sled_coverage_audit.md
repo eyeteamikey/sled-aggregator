@@ -1,6 +1,6 @@
 # Nationwide SLED Coverage Audit
 
-**Data as of:** 2026-07-30
+**Data as of:** 2026-07-31
 **Schema version:** 1.0
 **Generation:** deterministic and offline (no network requests)
 
@@ -9,10 +9,10 @@
 | Metric | Count |
 |---|---:|
 | Primary jurisdictions | 56 |
-| Sources | 7 |
-| Implemented connectors | 19 |
-| Public discovery | 7 |
-| Public detail | 7 |
+| Sources | 8 |
+| Implemented connectors | 20 |
+| Public discovery | 8 |
+| Public detail | 8 |
 | Public document pipeline | 0 |
 | Metadata only | 0 |
 | Registration required | 0 |
@@ -24,16 +24,16 @@
 | Automated-access blocked | 0 |
 | Changed markup | 0 |
 | Migrated sources | 0 |
-| Jurisdictions without a configured source | 49 |
-| Sources without live verification | 7 |
+| Jurisdictions without a configured source | 48 |
+| Sources without live verification | 8 |
 
 ### Coverage-tier distribution
 
 | Tier | Jurisdictions |
 |---:|---:|
-| 0 | 50 |
+| 0 | 49 |
 | 1 | 0 |
-| 2 | 6 |
+| 2 | 7 |
 | 3 | 0 |
 | 4 | 0 |
 | 5 | 0 |
@@ -67,7 +67,7 @@
 | MA | Massachusetts | state | 0 | — | no_source_identified |
 | MD | Maryland | state | 2 | md-emma | incomplete_award_coverage, incomplete_education_coverage, incomplete_local_coverage, incomplete_transportation_coverage, live_verification_missing |
 | ME | Maine | state | 0 | — | no_source_identified |
-| MI | Michigan | state | 0 | — | no_source_identified |
+| MI | Michigan | state | 2 | mi-detroit-oracle-fusion | incomplete_award_coverage, incomplete_education_coverage, incomplete_transportation_coverage, live_verification_missing |
 | MN | Minnesota | state | 0 | — | no_source_identified |
 | MO | Missouri | state | 0 | — | no_source_identified |
 | MP | Commonwealth of the Northern Mariana Islands | territory | 0 | — | no_source_identified, territory_gap |

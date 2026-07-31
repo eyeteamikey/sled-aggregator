@@ -1086,8 +1086,8 @@ verification demonstrates behavior against captured inputs, not universal live a
 
 The offline coverage control plane audits **56 primary jurisdictions**: 50 states, the District of
 Columbia, and five inhabited territories. Tribal procurement is a separate future coverage layer.
-As of 2026-07-30 it inventories 19 implemented connector families and 7 conservatively evidenced
-source profiles; 49 jurisdictions have no configured source in this initial registry. All 7 seeded
+As of 2026-07-30 it inventories 20 implemented connector families and 8 conservatively evidenced
+source profiles; 49 jurisdictions have no configured source in this initial registry. All 8 seeded
 profiles are fixture-verified, so none is represented as live or production-verified and none
 currently qualifies as complete public document-pipeline coverage.
 
@@ -1105,3 +1105,16 @@ PYTHONPATH=src python -m sled_aggregator.coverage report --format markdown --as-
 A configured profile is not production verification. Fixture verification is not live
 verification, metadata access is not document access, and statewide sources do not imply complete
 local, education, transportation, authority, or quasi-public coverage.
+
+### Oracle Fusion public REST
+
+`oracle/fusion-rest` is a reusable anonymous, GET-only connector for versioned Oracle Fusion
+Procurement REST resources. Its sole production preset is City of Detroit (`mi-detroit-oracle-fusion`,
+BU `300000007775375`). Discovery uses bounded `limit`/`offset` pages and allowlisted filters and
+sorting; attachment metadata, stable REST enclosure downloads, and amendment metadata are supported.
+Temporary Oracle signed `FileUrl` values are redacted and never become durable document URLs.
+
+The connector never logs in, accepts supplier credentials, imports browser cookies, submits bids or
+responses, automates CAPTCHA, or falls back to stateful ADF POST traffic. Lucas County (OH),
+Jacksonville (FL), Virginia Beach (VA), and DC Water are researched legacy ADF tenants and are
+intentionally unsupported. Sanitized fixture evidence is not a guarantee of permanent live access.

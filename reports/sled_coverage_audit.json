@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-07-30",
+  "as_of": "2026-07-31",
   "connector_inventory": [
     {
       "aliases": [
@@ -357,6 +357,36 @@
       "supported_jurisdictions": [],
       "test_references": [
         "tests/test_opengov_procurement_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "oracle-cloud-procurement",
+        "oracle-fusion-procurement",
+        "oracle-fusion-rest",
+        "oracle-supplier-negotiations"
+      ],
+      "canonical_name": "oracle/fusion-rest",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 7,
+      "implementation_module": "sled_aggregator.connectors.oracle_fusion_rest",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Michigan"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "MI"
+      ],
+      "test_references": [
+        "tests/test_oracle_fusion_rest_connector.py"
       ]
     },
     {
@@ -767,7 +797,19 @@
       "jurisdiction_code": "ME"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "MI"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "MI"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "MI"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "MI"
     },
     {
@@ -1390,15 +1432,20 @@
       "abbreviation": "MI",
       "active": true,
       "code": "MI",
-      "coverage_tier": 0,
+      "coverage_tier": 2,
       "fips": "26",
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "name": "Michigan",
       "primary": true,
-      "source_keys": [],
+      "source_keys": [
+        "mi-detroit-oracle-fusion"
+      ],
       "timezones": [],
       "type": "state"
     },
@@ -1950,6 +1997,11 @@
     },
     {
       "coverage_tier": 2,
+      "jurisdiction_code": "MI",
+      "source_key": "mi-detroit-oracle-fusion"
+    },
+    {
+      "coverage_tier": 2,
       "jurisdiction_code": "PA",
       "source_key": "pa-emarketplace"
     },
@@ -2136,6 +2188,33 @@
     {
       "authoritative": true,
       "award_access": "metadata_only",
+      "connector_name": "oracle/fusion-rest",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "expected_coverage_impact": "City of Detroit procurement",
+      "fixture_references": [
+        "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+        "tests/fixtures/oracle_fusion_rest_attachments.json",
+        "tests/fixtures/oracle_fusion_rest_amendments.json"
+      ],
+      "jurisdiction_code": "MI",
+      "key": "mi-detroit-oracle-fusion",
+      "migration_status": "current",
+      "name": "City of Detroit Oracle Fusion Public Negotiations",
+      "official_url": "https://ebkk.fa.us8.oraclecloud.com/fscmUI/faces/NegotiationAbstracts?prcBuId=300000007775375",
+      "platform_family": "oracle/fusion-rest",
+      "priority": 2,
+      "source_level": "local",
+      "source_role": "supplemental",
+      "source_status": "active",
+      "supplemental": true,
+      "verification_status": "fixture_verified"
+    },
+    {
+      "authoritative": true,
+      "award_access": "metadata_only",
       "connector_name": "pennsylvania/emarketplace",
       "connector_status": "fixture_only",
       "detail_access": "public",
@@ -2239,29 +2318,29 @@
     "captcha_count": 0,
     "changed_markup_count": 0,
     "coverage_tier_distribution": {
-      "0": 50,
+      "0": 49,
       "1": 0,
-      "2": 6,
+      "2": 7,
       "3": 0,
       "4": 0,
       "5": 0,
       "6": 0
     },
-    "implemented_connector_count": 19,
+    "implemented_connector_count": 20,
     "jurisdiction_count": 56,
     "login_required_count": 0,
     "metadata_only_count": 0,
     "migrated_source_count": 0,
-    "missing_source_count": 49,
+    "missing_source_count": 48,
     "payment_required_count": 0,
-    "public_detail_count": 7,
-    "public_discovery_count": 7,
+    "public_detail_count": 8,
+    "public_discovery_count": 8,
     "public_document_pipeline_count": 0,
     "registration_required_count": 0,
     "robots_policy_count": 0,
-    "source_count": 7,
+    "source_count": 8,
     "subscription_required_count": 0,
-    "unverified_source_count": 7
+    "unverified_source_count": 8
   },
   "validation_warnings": []
 }
