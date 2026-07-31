@@ -1,89 +1,56 @@
-## Motivation
+## Summary
 
-Coverage claims need an auditable control plane that distinguishes known portals, executable
-connectors, fixture evidence, current live behavior, metadata, documents, and access restrictions.
+Documents the evidence-gate review for a proposed Tyler Munis/VSS public bid
+connector. The gate did not pass because the review environment's outbound
+proxy rejected CONNECT tunnels to every named agency and portal host before a
+destination response could be observed.
 
-## Description
+No connector, profile, registry entry, coverage claim, generated coverage
+artifact, or fixture is added. This avoids inventing routes, markup, pagination,
+document behavior, or anonymous-access claims.
 
-Adds strict versioned jurisdiction/source registries, repository-derived connector inventory,
-deterministic tier and gap analysis, transparent recommendations, an offline CLI, JSON/CSV/Markdown
-reports, documentation, and regression tests. No procurement connector is added.
+## Tenants checked
 
-## Jurisdiction scope
+- Summit County, Ohio — agency page and exact VSS portal attempted.
+- Mobile, Alabama — exact candidate portal attempted.
+- Opelika, Alabama — exact candidate portal attempted.
 
-The audit covers 50 states, D.C., and five inhabited territories (56 primary jurisdictions). Tribal
-procurement is a separate future layer and is not included in this denominator.
+All attempts ended in an environmental proxy HTTP 403. This is not attributed
+to the agencies or Tyler. Anonymous listings, details, documents, login and
+registration boundaries, CAPTCHA, robots policy, and common markup therefore
+remain unknown.
 
-## Coverage schema
+## Safety
 
-Schema 1.0 validates canonical jurisdiction counts and uniqueness, strict vocabularies, connector
-joins, migration relationships, verification evidence, safe public URLs, and contradictory states.
-Unknown fields and unsupported future schema versions fail clearly.
+Research was anonymous and read-only. It used no credentials, cookies, session
+state, form submission, CAPTCHA bypass, evasion, vendor data, or downloaded
+solicitation files.
 
-## Connector inventory
+## Review value
 
-The inventory groups the authoritative runtime connector registry by implementation class, deriving
-canonical names and aliases rather than duplicating them. It joins source profiles and reports
-capabilities, fixtures, tests, orphaned implementations, and public-read-only policy.
+The evidence report records every candidate and URL, distinguishes the proxy
+failure from a destination access policy, maps each missing gate requirement,
+and specifies the sanitized public captures needed before implementation can
+resume.
 
-## Coverage tiers
+## Validation
 
-Deterministic tiers preserve the semantic progression from no known authoritative source (0), through
-identified/configured/metadata/detail/document-pipeline coverage, to bounded production verification
-(6). Fixture-only profiles remain tier 2. Gating, changed markup, and migration prevent inflated tiers.
-
-## Gap analysis
-
-Jurisdictions retain multiple simultaneous gaps across missing sources/connectors/profiles/fixtures,
-live verification, blocked discovery/detail, gated or unavailable documents, CAPTCHA, robots,
-automation, migration, local/education/transportation/award depth, and territories.
-
-## Prioritization
-
-Recommendations expose impact, anonymous access, documents, reuse, complexity, maintenance,
-blocking, authority, and territory factors plus deterministic scores and stable tie-breaking. Initial
-rankings are deterministic planning aids, not proof that a connector will work.
-
-## Generated reports
-
-Committed application JSON, flat one-row-per-jurisdiction-source CSV, and review-oriented Markdown
-are generated with the declared 2026-07-30 as-of date and stable ordering.
-
-## Verification methodology
-
-The audit does not perform network requests by default and never requires credentials. A configured
-source is not necessarily live-verified. Fixture verification is not live verification. Metadata-only
-coverage is not document-pipeline coverage. Registration-, login-, subscription-, payment-, CAPTCHA-,
-and robots-gated sources remain gaps.
-
-## Testing
-
-- `PYTHONPATH=src python -m unittest discover -s tests -v` (245 tests)
+- `PYTHONPATH=src python -m unittest discover -s tests -v`
 - `PYTHONPATH=src python -m compileall src tests`
 - `ruff check .`
-- `ruff format --check` for changed Python files
-- `PYTHONPATH=src python -m sled_aggregator.coverage validate`
-- two report generations with matching SHA-256 manifests
 - `git diff --check`
+- `PYTHONPATH=src python -m sled_aggregator.coverage validate`
+- `PYTHONPATH=src python -m sled_aggregator.coverage recommend`
 
-The repository-wide `ruff format --check .` continues to identify eight pre-existing files that are
-not formatted; this PR deliberately does not reformat unrelated work. All changed Python files pass.
+## Limitations
 
-## Initial findings
+No supported preset or transport/pagination contract can be claimed. A future
+review must retrieve reproducible anonymous responses from at least two tenants
+and satisfy every mandatory gate item before adding connector code or sanitized
+fixtures.
 
-The runtime registry contains 19 implemented connector families. The conservative seed has 7 source
-profiles across 7 jurisdictions, all fixture-verified and none live-verified. Six jurisdictions are
-tier 2; fifty remain tier 0 because Rhode Island's sole seeded source is supplemental rather than an
-authoritative statewide source. There is no claimed tier 5/6 production coverage.
+## Publication notes
 
-## Known limitations
-
-This initial audit seeds only claims directly demonstrated by committed profiles, fixtures, and
-documentation. It intentionally leaves unknown or missing data unknown. Statewide sources do not
-prove local, education, transportation, authority, or quasi-public depth. Tenant markup, public
-access, documents, and migrations may change.
-
-## Codex Cloud publication notes
-
-No fetch, pull, push, GitHub authentication, shell PR command, or remote modification was used. The
-PR is ready for publication through the Codex Cloud Create PR button.
+Base commit: `4c4182bff4bf945da9263521368ce3adb8e45cb1` (PR #27 merge).
+Do not merge this evidence-only PR as the requested connector implementation;
+resume research first from a network environment that can reach the candidates.
