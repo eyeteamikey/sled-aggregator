@@ -9,10 +9,10 @@
 | Metric | Count |
 |---|---:|
 | Primary jurisdictions | 56 |
-| Sources | 8 |
-| Implemented connectors | 20 |
-| Public discovery | 8 |
-| Public detail | 8 |
+| Sources | 10 |
+| Implemented connectors | 21 |
+| Public discovery | 10 |
+| Public detail | 10 |
 | Public document pipeline | 0 |
 | Metadata only | 0 |
 | Registration required | 0 |
@@ -24,16 +24,16 @@
 | Automated-access blocked | 0 |
 | Changed markup | 0 |
 | Migrated sources | 0 |
-| Jurisdictions without a configured source | 48 |
-| Sources without live verification | 8 |
+| Jurisdictions without a configured source | 46 |
+| Sources without live verification | 10 |
 
 ### Coverage-tier distribution
 
 | Tier | Jurisdictions |
 |---:|---:|
-| 0 | 49 |
+| 0 | 47 |
 | 1 | 0 |
-| 2 | 7 |
+| 2 | 9 |
 | 3 | 0 |
 | 4 | 0 |
 | 5 | 0 |
@@ -44,7 +44,7 @@
 | Code | Jurisdiction | Type | Tier | Sources | Gaps |
 |---|---|---|---:|---|---|
 | AK | Alaska | state | 0 | — | no_source_identified |
-| AL | Alabama | state | 0 | — | no_source_identified |
+| AL | Alabama | state | 2 | al-opelika-tyler-munis-vss | incomplete_award_coverage, incomplete_education_coverage, incomplete_transportation_coverage, live_verification_missing |
 | AR | Arkansas | state | 0 | — | no_source_identified |
 | AS | American Samoa | territory | 0 | — | no_source_identified, territory_gap |
 | AZ | Arizona | state | 0 | — | no_source_identified |
@@ -81,7 +81,7 @@
 | NM | New Mexico | state | 0 | — | no_source_identified |
 | NV | Nevada | state | 0 | — | no_source_identified |
 | NY | New York | state | 0 | — | no_source_identified |
-| OH | Ohio | state | 0 | — | no_source_identified |
+| OH | Ohio | state | 2 | oh-summit-county-tyler-munis-vss | incomplete_award_coverage, incomplete_education_coverage, incomplete_transportation_coverage, live_verification_missing |
 | OK | Oklahoma | state | 0 | — | no_source_identified |
 | OR | Oregon | state | 0 | — | no_source_identified |
 | PA | Pennsylvania | state | 2 | pa-emarketplace | incomplete_award_coverage, incomplete_education_coverage, incomplete_local_coverage, incomplete_transportation_coverage, live_verification_missing |
@@ -102,13 +102,13 @@
 
 ## Remaining platform-family gaps and prioritized next work
 
-| Band | Score | Family | Factors | Next action |
-|---|---:|---|---|---|
-| P1 | 36 | Tyler Munis/VSS public bid search | jurisdictions_unlocked=5, statewide_impact=1, public_access=2, documents=2, reuse=3, complexity=2, maintenance_risk=1, blocked_penalty=0, territory_impact=0 | Build a reusable family only after confirming common public markup. |
-| P1 | 33 | public CSV, RSS, XML, and JSON feeds | jurisdictions_unlocked=3, statewide_impact=1, public_access=3, documents=1, reuse=3, complexity=1, maintenance_risk=1, blocked_penalty=0, territory_impact=1 | Inventory stable official feeds and implement a reusable feed connector. |
-| P1 | 31 | Oracle Cloud Procurement | jurisdictions_unlocked=4, statewide_impact=2, public_access=2, documents=1, reuse=3, complexity=2, maintenance_risk=2, blocked_penalty=0, territory_impact=0 | Research public tenant APIs; a new connector may be required. |
-| P1 | 30 | Vendor Registry | jurisdictions_unlocked=4, statewide_impact=1, public_access=2, documents=1, reuse=3, complexity=2, maintenance_risk=1, blocked_penalty=0, territory_impact=0 | Confirm anonymous discovery and document boundaries. |
-| P3 | 15 | territory-specific legacy portals | jurisdictions_unlocked=3, statewide_impact=2, public_access=1, documents=1, reuse=1, complexity=3, maintenance_risk=3, blocked_penalty=1, territory_impact=3 | Research authoritative territory sources without bypassing access controls. |
+| Status | Band | Score | Family | Factors | Next action |
+|---|---|---:|---|---|---|
+| implemented_family | P1 | 36 | Tyler Munis/VSS public bid search | jurisdictions_unlocked=5, statewide_impact=1, public_access=2, documents=2, reuse=3, complexity=2, maintenance_risk=1, blocked_penalty=0, territory_impact=0 | Implemented as tyler/munis-vss; expand only with evidence-confirmed anonymous VSS tenants. |
+| unsupported_candidate | P1 | 33 | public CSV, RSS, XML, and JSON feeds | jurisdictions_unlocked=3, statewide_impact=1, public_access=3, documents=1, reuse=3, complexity=1, maintenance_risk=1, blocked_penalty=0, territory_impact=1 | Evidence review found no qualifying contract reproducible in this task; obtain official machine-readable contract evidence for two independent feeds, or one substantial statewide or territory-wide feed, before implementation. |
+| implemented_family | P1 | 31 | Oracle Cloud Procurement | jurisdictions_unlocked=4, statewide_impact=2, public_access=2, documents=1, reuse=3, complexity=2, maintenance_risk=2, blocked_penalty=0, territory_impact=0 | Implemented as oracle/fusion-rest; expand only with evidence-confirmed anonymous REST tenants. |
+| research_only_hypothesis | P1 | 30 | Vendor Registry | jurisdictions_unlocked=4, statewide_impact=1, public_access=2, documents=1, reuse=3, complexity=2, maintenance_risk=1, blocked_penalty=0, territory_impact=0 | Confirm anonymous discovery and document boundaries before treating this family as evidence-ready. |
+| blocked_family | P3 | 15 | territory-specific legacy portals | jurisdictions_unlocked=3, statewide_impact=2, public_access=1, documents=1, reuse=1, complexity=3, maintenance_risk=3, blocked_penalty=1, territory_impact=3 | Research authoritative territory sources without bypassing access controls; no reusable response contract is established. |
 
 ## Methodology and limitations
 

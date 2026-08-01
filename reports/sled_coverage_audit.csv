@@ -1,6 +1,6 @@
 jurisdiction_code,jurisdiction_name,jurisdiction_type,coverage_tier,source_key,source_name,source_level,source_role,platform_family,connector_name,connector_status,verification_status,discovery_access,detail_access,document_access,award_access,primary_source,source_status,migration_status,replacement_source,last_verified,evidence_url,priority,gap_reason,recommended_next_action
 AK,Alaska,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
-AL,Alabama,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+AL,Alabama,state,2,al-opelika-tyler-munis-vss,City of Opelika Tyler Munis Vendor Self Service,local,primary,tyler/munis-vss,tyler/munis-vss,fixture_only,fixture_verified,public,public,public,metadata_only,True,active,current,,,,2,incomplete_award_coverage;incomplete_education_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
 AR,Arkansas,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
 AS,American Samoa,territory,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified;territory_gap,Identify an authoritative source.
 AZ,Arizona,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
@@ -37,7 +37,7 @@ NJ,New Jersey,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,Fals
 NM,New Mexico,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
 NV,Nevada,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
 NY,New York,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
-OH,Ohio,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
+OH,Ohio,state,2,oh-summit-county-tyler-munis-vss,Summit County Tyler Munis Vendor Self Service,local,primary,tyler/munis-vss,tyler/munis-vss,fixture_only,fixture_verified,public,public,public,metadata_only,True,active,current,,,,2,incomplete_award_coverage;incomplete_education_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.
 OK,Oklahoma,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
 OR,Oregon,state,0,,,,,,,missing,unknown,unknown,unknown,unknown,unknown,False,,,,,,,no_source_identified,Identify an authoritative source.
 PA,Pennsylvania,state,2,pa-emarketplace,PA eMarketplace,statewide,primary,pennsylvania/emarketplace,pennsylvania/emarketplace,fixture_only,fixture_verified,public,public,public,metadata_only,True,active,current,,,,1,incomplete_award_coverage;incomplete_education_coverage;incomplete_local_coverage;incomplete_transportation_coverage;live_verification_missing,Verify bounded anonymous live behavior.

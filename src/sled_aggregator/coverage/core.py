@@ -525,6 +525,7 @@ def recommendations(hypotheses: list[dict]) -> list[dict]:
         rows.append(
             {
                 "family": item["family"],
+                "evidence_status": item.get("evidence_status", "research_only_hypothesis"),
                 "score": score,
                 "priority_band": band,
                 "factors": factors,
@@ -746,11 +747,11 @@ def render_markdown(report: dict) -> str:
         "",
         "## Remaining platform-family gaps and prioritized next work",
         "",
-        "| Band | Score | Family | Factors | Next action |",
-        "|---|---:|---|---|---|",
+        "| Status | Band | Score | Family | Factors | Next action |",
+        "|---|---|---:|---|---|---|",
     ]
     lines += [
-        f"| {r['priority_band']} | {r['score']} | {r['family']} | "
+        f"| {r['evidence_status']} | {r['priority_band']} | {r['score']} | {r['family']} | "
         + ", ".join(f"{k}={v}" for k, v in r["factors"].items())
         + f" | {r['recommended_next_action']} |"
         for r in report["prioritized_recommendations"]

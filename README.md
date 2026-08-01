@@ -1128,3 +1128,14 @@ remains GET-only through the existing safe downloader. Temporary document tokens
 redacted and excluded from identity, login/restricted transitions fail closed, and
 Mobile, Alabama remains unsupported because only citizen self service was evidenced.
 See [the connector support guide](docs/tyler_munis_vss.md).
+
+### Official public procurement feed evidence gate
+
+The proposed `official/public-feed` family is **not implemented**. A 2026-07-31
+review could not reproduce a qualifying authoritative feed contract because the
+task environment's outbound proxy rejected destination connections. Candidate
+official properties are not presets or jurisdiction coverage, and no response
+schema or fixture was invented. See the
+[evidence record](docs/official_public_feed_evidence.md) for candidates,
+limitations, and the exact evidence required to resume. Coverage recommendations
+now label this family `unsupported_candidate` rather than implementation-ready.
