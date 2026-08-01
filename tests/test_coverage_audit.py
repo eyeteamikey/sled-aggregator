@@ -133,6 +133,7 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(
             statuses["public CSV, RSS, XML, and JSON feeds"], "unsupported_candidate"
         )
+        self.assertEqual(statuses["Vendor Registry"], "unsupported_candidate")
 
     def test_reports_are_deterministic_and_parseable(self):
         report = build_report("2026-07-30", self.jdata, self.sdata)

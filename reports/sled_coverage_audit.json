@@ -2153,9 +2153,9 @@
       "score": 31
     },
     {
-      "evidence_status": "research_only_hypothesis",
+      "evidence_status": "unsupported_candidate",
       "factors": {
-        "blocked_penalty": 0,
+        "blocked_penalty": 1,
         "complexity": 2,
         "documents": 1,
         "jurisdictions_unlocked": 4,
@@ -2166,9 +2166,9 @@
         "territory_impact": 0
       },
       "family": "Vendor Registry",
-      "priority_band": "P1",
-      "recommended_next_action": "Confirm anonymous discovery and document boundaries before treating this family as evidence-ready.",
-      "score": 30
+      "priority_band": "P2",
+      "recommended_next_action": "Anonymous agency discovery was not reproducible in the 2026-08-01 evidence review; obtain sanitized listing and detail captures for two independently operated agencies before implementation.",
+      "score": 25
     },
     {
       "evidence_status": "blocked_family",
