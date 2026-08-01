@@ -1,56 +1,38 @@
-## Summary
+## Motivation
 
-Documents the evidence-gate review for a proposed Tyler Munis/VSS public bid
-connector. The gate did not pass because the review environment's outbound
-proxy rejected CONNECT tunnels to every named agency and portal host before a
-destination response could be observed.
+The audit ranked machine-readable public procurement feeds as a P1 lead, but a ranking is not proof of an authoritative, anonymously accessible feed. This change applies the mandatory evidence gate before introducing a reusable connector.
 
-No connector, profile, registry entry, coverage claim, generated coverage
-artifact, or fixture is added. This avoids inventing routes, markup, pagination,
-document behavior, or anonymous-access claims.
+## Evidence-gate result
 
-## Tenants checked
+The gate did not pass. The review did not confirm two independently operated feeds or one substantial statewide/territory-wide feed with a reproducible authoritative response contract. No connector, alias, profile, fixture, source record, or jurisdiction coverage is added.
 
-- Summit County, Ohio — agency page and exact VSS portal attempted.
-- Mobile, Alabama — exact candidate portal attempted.
-- Opelika, Alabama — exact candidate portal attempted.
+## Candidates and live validation
 
-All attempts ended in an environmental proxy HTTP 403. This is not attributed
-to the agencies or Tyler. Anonymous listings, details, documents, login and
-registration boundaries, CAPTCHA, robots policy, and common markup therefore
-remain unknown.
+Official candidate properties for NYC City Record/NYC Open Data, Massachusetts COMMBUYS/data.mass.gov, DC procurement/open data, Guam GSA, and USVI DPP were evaluated. On 2026-07-31 the task environment's outbound proxy returned HTTP 403 while establishing each HTTPS CONNECT tunnel, before destination TLS. This is an environment limitation, not a publisher access finding. Status, MIME, records, IDs/titles, links, pagination, authentication, CAPTCHA, rate limits, and robots behavior therefore remain unobserved.
 
-## Safety
+## Formats, jurisdictions, discovery, details, and documents
 
-Research was anonymous and read-only. It used no credentials, cookies, session
-state, form submission, CAPTCHA bypass, evasion, vendor data, or downloaded
-solicitation files.
+No format is implemented and no jurisdiction is claimed. No discovery/detail response or document link was observed. No sanitized fixture was fabricated. Conditional retrieval and pagination remain unspecified because evidence did not demonstrate them.
 
-## Review value
+## Public-access and security boundaries
 
-The evidence report records every candidate and URL, distinguishes the proxy
-failure from a destination access policy, maps each missing gate requirement,
-and specifies the sanitized public captures needed before implementation can
-resume.
+Research was anonymous, bounded, and GET-only. It used no credentials, cookies, registrations, browser automation, CAPTCHA bypass, form submission, bid/response workflow, or document download. Candidate URLs are evidence leads only, never production presets.
 
-## Validation
+## Coverage maintenance
+
+Generated JSON, CSV, and Markdown audit artifacts now distinguish `implemented_family`, `research_only_hypothesis`, `blocked_family`, and `unsupported_candidate`. Oracle Fusion and Tyler Munis/VSS are marked implemented rather than future work; the feed hypothesis is explicitly unsupported pending evidence.
+
+## Testing
 
 - `PYTHONPATH=src python -m unittest discover -s tests -v`
-- `PYTHONPATH=src python -m compileall src tests`
 - `ruff check .`
-- `git diff --check`
+- `PYTHONPATH=src python -m compileall src tests`
 - `PYTHONPATH=src python -m sled_aggregator.coverage validate`
 - `PYTHONPATH=src python -m sled_aggregator.coverage recommend`
+- `python -m pytest`
+- `python -m build`
+- `git diff --check`
 
-## Limitations
+## Known limitations and resumption
 
-No supported preset or transport/pagination contract can be claimed. A future
-review must retrieve reproducible anonymous responses from at least two tenants
-and satisfy every mandatory gate item before adding connector code or sanitized
-fixtures.
-
-## Publication notes
-
-Base commit: `4c4182bff4bf945da9263521368ce3adb8e45cb1` (PR #27 merge).
-Do not merge this evidence-only PR as the requested connector implementation;
-resume research first from a network environment that can reach the candidates.
+Network policy prevented destination validation. The evidence report identifies the exact official linkage, bounded response metadata, current-solicitation semantics, stable identity/title fields, terms, pagination, conditional retrieval, and sanitized fixture evidence needed before implementation can resume.

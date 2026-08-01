@@ -594,6 +594,38 @@
     },
     {
       "aliases": [
+        "munis-vss",
+        "munis/vendor-self-service",
+        "tyler-munis-vss",
+        "tyler/vss"
+      ],
+      "canonical_name": "tyler/munis-vss",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 3,
+      "implementation_module": "sled_aggregator.connectors.tyler_munis_vss",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Ohio",
+        "Alabama"
+      ],
+      "profile_count": 2,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "AL",
+        "OH"
+      ],
+      "test_references": [
+        "tests/test_tyler_munis_vss_connector.py"
+      ]
+    },
+    {
+      "aliases": [
         "cgi/eva",
         "eva",
         "virginia-business-opportunities"
@@ -653,7 +685,19 @@
       "jurisdiction_code": "AK"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "AL"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "AL"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "AL"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "AL"
     },
     {
@@ -869,7 +913,19 @@
       "jurisdiction_code": "NY"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "OH"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "OH"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "OH"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "OH"
     },
     {
@@ -1039,15 +1095,20 @@
       "abbreviation": "AL",
       "active": true,
       "code": "AL",
-      "coverage_tier": 0,
+      "coverage_tier": 2,
       "fips": "01",
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "name": "Alabama",
       "primary": true,
-      "source_keys": [],
+      "source_keys": [
+        "al-opelika-tyler-munis-vss"
+      ],
       "timezones": [],
       "type": "state"
     },
@@ -1664,15 +1725,20 @@
       "abbreviation": "OH",
       "active": true,
       "code": "OH",
-      "coverage_tier": 0,
+      "coverage_tier": 2,
       "fips": "39",
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "name": "Ohio",
       "primary": true,
-      "source_keys": [],
+      "source_keys": [
+        "oh-summit-county-tyler-munis-vss"
+      ],
       "timezones": [],
       "type": "state"
     },
@@ -1982,6 +2048,11 @@
   "jurisdiction_source_mappings": [
     {
       "coverage_tier": 2,
+      "jurisdiction_code": "AL",
+      "source_key": "al-opelika-tyler-munis-vss"
+    },
+    {
+      "coverage_tier": 2,
       "jurisdiction_code": "CA",
       "source_key": "ca-cal-eprocure"
     },
@@ -1999,6 +2070,11 @@
       "coverage_tier": 2,
       "jurisdiction_code": "MI",
       "source_key": "mi-detroit-oracle-fusion"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "OH",
+      "source_key": "oh-summit-county-tyler-munis-vss"
     },
     {
       "coverage_tier": 2,
@@ -2023,6 +2099,7 @@
   ],
   "prioritized_recommendations": [
     {
+      "evidence_status": "implemented_family",
       "factors": {
         "blocked_penalty": 0,
         "complexity": 2,
@@ -2036,10 +2113,11 @@
       },
       "family": "Tyler Munis/VSS public bid search",
       "priority_band": "P1",
-      "recommended_next_action": "Build a reusable family only after confirming common public markup.",
+      "recommended_next_action": "Implemented as tyler/munis-vss; expand only with evidence-confirmed anonymous VSS tenants.",
       "score": 36
     },
     {
+      "evidence_status": "unsupported_candidate",
       "factors": {
         "blocked_penalty": 0,
         "complexity": 1,
@@ -2053,10 +2131,11 @@
       },
       "family": "public CSV, RSS, XML, and JSON feeds",
       "priority_band": "P1",
-      "recommended_next_action": "Inventory stable official feeds and implement a reusable feed connector.",
+      "recommended_next_action": "Evidence review found no qualifying contract reproducible in this task; obtain official machine-readable contract evidence for two independent feeds, or one substantial statewide or territory-wide feed, before implementation.",
       "score": 33
     },
     {
+      "evidence_status": "implemented_family",
       "factors": {
         "blocked_penalty": 0,
         "complexity": 2,
@@ -2070,10 +2149,11 @@
       },
       "family": "Oracle Cloud Procurement",
       "priority_band": "P1",
-      "recommended_next_action": "Research public tenant APIs; a new connector may be required.",
+      "recommended_next_action": "Implemented as oracle/fusion-rest; expand only with evidence-confirmed anonymous REST tenants.",
       "score": 31
     },
     {
+      "evidence_status": "research_only_hypothesis",
       "factors": {
         "blocked_penalty": 0,
         "complexity": 2,
@@ -2087,10 +2167,11 @@
       },
       "family": "Vendor Registry",
       "priority_band": "P1",
-      "recommended_next_action": "Confirm anonymous discovery and document boundaries.",
+      "recommended_next_action": "Confirm anonymous discovery and document boundaries before treating this family as evidence-ready.",
       "score": 30
     },
     {
+      "evidence_status": "blocked_family",
       "factors": {
         "blocked_penalty": 1,
         "complexity": 3,
@@ -2104,12 +2185,38 @@
       },
       "family": "territory-specific legacy portals",
       "priority_band": "P3",
-      "recommended_next_action": "Research authoritative territory sources without bypassing access controls.",
+      "recommended_next_action": "Research authoritative territory sources without bypassing access controls; no reusable response contract is established.",
       "score": 15
     }
   ],
   "schema_version": "1.0",
   "source_records": [
+    {
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "connector_name": "tyler/munis-vss",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "expected_coverage_impact": "City of Opelika procurement only",
+      "fixture_references": [
+        "tests/fixtures/tyler_vss_opelika_results.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "jurisdiction_code": "AL",
+      "key": "al-opelika-tyler-munis-vss",
+      "migration_status": "current",
+      "name": "City of Opelika Tyler Munis Vendor Self Service",
+      "official_url": "https://ss.opelika-al.gov/vss/",
+      "platform_family": "tyler/munis-vss",
+      "priority": 2,
+      "source_level": "local",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "verification_status": "fixture_verified"
+    },
     {
       "authoritative": true,
       "award_access": "metadata_only",
@@ -2210,6 +2317,32 @@
       "source_role": "supplemental",
       "source_status": "active",
       "supplemental": true,
+      "verification_status": "fixture_verified"
+    },
+    {
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "connector_name": "tyler/munis-vss",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "expected_coverage_impact": "Summit County procurement only",
+      "fixture_references": [
+        "tests/fixtures/tyler_vss_results_1.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "jurisdiction_code": "OH",
+      "key": "oh-summit-county-tyler-munis-vss",
+      "migration_status": "current",
+      "name": "Summit County Tyler Munis Vendor Self Service",
+      "official_url": "https://summitcountyoh.munisselfservice.com/vss/",
+      "platform_family": "tyler/munis-vss",
+      "priority": 2,
+      "source_level": "local",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
       "verification_status": "fixture_verified"
     },
     {
@@ -2318,29 +2451,29 @@
     "captcha_count": 0,
     "changed_markup_count": 0,
     "coverage_tier_distribution": {
-      "0": 49,
+      "0": 47,
       "1": 0,
-      "2": 7,
+      "2": 9,
       "3": 0,
       "4": 0,
       "5": 0,
       "6": 0
     },
-    "implemented_connector_count": 20,
+    "implemented_connector_count": 21,
     "jurisdiction_count": 56,
     "login_required_count": 0,
     "metadata_only_count": 0,
     "migrated_source_count": 0,
-    "missing_source_count": 48,
+    "missing_source_count": 46,
     "payment_required_count": 0,
-    "public_detail_count": 8,
-    "public_discovery_count": 8,
+    "public_detail_count": 10,
+    "public_discovery_count": 10,
     "public_document_pipeline_count": 0,
     "registration_required_count": 0,
     "robots_policy_count": 0,
-    "source_count": 8,
+    "source_count": 10,
     "subscription_required_count": 0,
-    "unverified_source_count": 8
+    "unverified_source_count": 10
   },
   "validation_warnings": []
 }

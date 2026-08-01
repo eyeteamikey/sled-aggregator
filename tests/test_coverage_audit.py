@@ -127,6 +127,12 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(first, recommendations(self.sdata["family_hypotheses"]))
         self.assertTrue(all(x["factors"] and isinstance(x["score"], int) for x in first))
         self.assertEqual(first, sorted(first, key=lambda x: (-x["score"], x["family"])))
+        statuses = {x["family"]: x["evidence_status"] for x in first}
+        self.assertEqual(statuses["Oracle Cloud Procurement"], "implemented_family")
+        self.assertEqual(statuses["Tyler Munis/VSS public bid search"], "implemented_family")
+        self.assertEqual(
+            statuses["public CSV, RSS, XML, and JSON feeds"], "unsupported_candidate"
+        )
 
     def test_reports_are_deterministic_and_parseable(self):
         report = build_report("2026-07-30", self.jdata, self.sdata)

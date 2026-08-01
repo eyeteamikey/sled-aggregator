@@ -768,3 +768,14 @@ and validates every redirect against a tenant hostname allowlist. POST is confin
 search, pagination, and detail-selection postbacks; documents cross the established
 GET-only safe-download boundary. Session-dependent detail and document URLs are not
 stable identities, and sensitive query material is redacted.
+
+## Proposed official public-feed family
+
+No `official/public-feed` transport or parser exists. The evidence gate requires
+two independently operated authoritative machine-readable opportunity feeds, or
+one substantial statewide or territory-wide feed, before a reusable profile
+contract is designed. Open-data catalogs, procurement-themed datasets, and HTML
+export controls are not treated as feeds without an official link to current
+solicitations and a reproducible anonymous response. The blocked 2026-07-31
+review is recorded in `docs/official_public_feed_evidence.md`; it creates no
+source profile, format support, fixture contract, or coverage claim.
