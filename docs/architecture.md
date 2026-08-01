@@ -779,3 +779,18 @@ export controls are not treated as feeds without an official link to current
 solicitations and a reproducible anonymous response. The blocked 2026-07-31
 review is recorded in `docs/official_public_feed_evidence.md`; it creates no
 source profile, format support, fixture contract, or coverage claim.
+
+## Proposed Vendor Registry family
+
+No `vendor-registry` connector or profile exists. The 2026-08-01 evidence gate did not establish
+the anonymous listing request shared by two government agencies, so the architecture intentionally
+does not encode a guessed agency ID, route, request body, pagination scheme, detail parser, or
+document URL. An isolated public detail route would be detail-only evidence and is insufficient for
+independent opportunity discovery.
+
+Any future adapter must be agency-scoped, anonymous, bounded, and read-only, with exact HTTPS host
+allowlists and separate access classifications for solicitations and every document. Login,
+registration, electronic response, vendor accounts, questions, plan-holder data, and the paid
+cross-agency Lead Center are outside the product boundary. The evidence and safe capture procedure
+are recorded in `docs/vendor_registry_evidence.md`; this review adds no fixture, preset, source
+record, connector capability, or state/local coverage.

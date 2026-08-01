@@ -1139,3 +1139,14 @@ schema or fixture was invented. See the
 [evidence record](docs/official_public_feed_evidence.md) for candidates,
 limitations, and the exact evidence required to resume. Coverage recommendations
 now label this family `unsupported_candidate` rather than implementation-ready.
+
+### Vendor Registry evidence gate
+
+Vendor Registry is **not implemented**. The 2026-08-01 review could not reproduce an
+anonymous, agency-scoped listing contract for two independently operated agencies: outbound
+HTTPS was rejected before destination TLS and no manual capture was available. Search-indexed
+detail routes do not prove discovery, and no tenant identifier, request, pagination, document
+behavior, fixture, preset, or jurisdiction coverage was inferred. Public agency solicitations
+also remain distinct from vendor registration, accounts, electronic responses, and the paid Lead
+Center. See the [Vendor Registry evidence record](docs/vendor_registry_evidence.md) for candidates,
+unknown authentication/CAPTCHA/document findings, and the bounded HAR procedure needed to resume.

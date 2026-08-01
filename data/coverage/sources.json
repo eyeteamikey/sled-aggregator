@@ -295,10 +295,10 @@
       "reuse": 3,
       "complexity": 2,
       "maintenance_risk": 1,
-      "blocked_penalty": 0,
+      "blocked_penalty": 1,
       "territory_impact": 0,
-      "recommendation": "Confirm anonymous discovery and document boundaries before treating this family as evidence-ready.",
-      "evidence_status": "research_only_hypothesis"
+      "recommendation": "Anonymous agency discovery was not reproducible in the 2026-08-01 evidence review; obtain sanitized listing and detail captures for two independently operated agencies before implementation.",
+      "evidence_status": "unsupported_candidate"
     },
     {
       "family": "territory-specific legacy portals",
