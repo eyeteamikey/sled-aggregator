@@ -13,7 +13,7 @@
 | Implemented connectors | 21 |
 | Public discovery | 10 |
 | Public detail | 10 |
-| Public document pipeline | 0 |
+| Public document pipeline | 4 |
 | Metadata only | 0 |
 | Registration required | 0 |
 | Login required | 0 |

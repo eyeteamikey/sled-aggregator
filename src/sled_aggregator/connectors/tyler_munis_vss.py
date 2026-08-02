@@ -223,6 +223,7 @@ class TylerMunisVssConnector(BaseConnector):
     platform_family = "tyler/munis-vss"
     jurisdictions = ("Ohio", "Alabama")
     public_read_only = True
+    document_pipeline_compatible = True
 
     def __init__(
         self, profile: TylerMunisVssProfile = SUMMIT, transport: Transport | None = None

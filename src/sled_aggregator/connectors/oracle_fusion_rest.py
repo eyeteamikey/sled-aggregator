@@ -154,6 +154,7 @@ class OracleFusionRestConnector(BaseConnector):
     platform_family = "oracle/fusion-rest"
     jurisdictions = ("Michigan",)
     public_read_only = True
+    document_pipeline_compatible = True
 
     def __init__(
         self, profile: OracleFusionProfile = DETROIT, transport: GetTransport | None = None

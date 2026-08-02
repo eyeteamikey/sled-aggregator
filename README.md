@@ -1,5 +1,13 @@
 # TrustEST SLED Aggregator
 
+Connector collection can hand canonical document candidates to the durable
+manifest immediately after opportunity persistence. Oracle Fusion REST,
+Pennsylvania eMarketplace, and Tyler Munis/VSS are the first fixture-verified
+families on this shared path. Ingestion is metadata-only and non-networked;
+only confirmed public, policy-eligible documents are queued for the separate
+safe downloader. Restricted links remain visible as metadata and are never
+retrieved.
+
 Backend-first procurement-intelligence service for discovering, normalizing,
 and evaluating State, Local, Education, and Tribal opportunities.
 
