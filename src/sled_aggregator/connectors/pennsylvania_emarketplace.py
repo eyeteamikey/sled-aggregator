@@ -280,6 +280,7 @@ class _PAParser(HTMLParser):
 class PennsylvaniaEMarketplaceConnector(BaseConnector):
     platform_family = "pennsylvania/emarketplace"
     jurisdictions = ("Pennsylvania",)
+    document_pipeline_compatible = True
     _transient = frozenset({429, 502, 503, 504})
 
     def __init__(

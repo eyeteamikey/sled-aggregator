@@ -99,6 +99,35 @@ variant adapters, and document retrieval are deferred follow-up work.
 
 ## Document pipeline
 
+### Connector orchestration
+
+The collection boundary is now: connector discovery/detail → opportunity upsert
+→ canonical `DocumentCandidate` handoff → manifest/version reconciliation →
+bounded retrieval queue. `DocumentOrchestrationService` resolves the database
+parent, enforces provenance and per-run/per-opportunity limits, and returns an
+operational summary. It never performs network I/O. Oracle Fusion REST and Tyler
+Munis/VSS detail operations already emit candidates; the Pennsylvania adapter
+converts its normalized `document_links` payload. Other link-producing connectors
+remain outside this path until their contracts are fixture verified.
+
+Stable identity prefers connector, source opportunity, source document ID,
+category, and version evidence; canonicalized URLs are only a fallback. Signed
+and session parameters are stripped by URL canonicalization and must not become
+durable identity or logs. Newer versions supersede older current rows, while an
+older rediscovery cannot displace the current version. Database uniqueness on
+manifest identity and one queue job per document provides the final idempotency
+barrier.
+
+Only documents explicitly classified public and potentially solicitation-related
+are queued. Login, registration, payment, unavailable, and unknown candidates are
+preserved without retrieval. Downloader, parser, targeted image-only PDF OCR, and
+structured solicitation extraction continue in their existing workers, isolating
+failure to one document. Configuration controls manifest ingestion, automatic
+queueing, category allowlists, and document/collection limits. Adapting another
+connector requires sanitized fixtures, canonical candidates with provenance and
+stable IDs, restricted-document tests, registry capability evidence, and a
+collection-to-manifest integration test.
+
 The later document service will support PDF, Office files, HTML, text, CSV,
 images, and ZIP packages. OCR runs only on pages that do not contain usable
 embedded text. ZIP expansion is temporary and enforces configurable limits for

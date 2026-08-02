@@ -22,18 +22,21 @@ class InvalidLease(ValueError):
 class DocumentManifestService:
     """Upsert candidates and queue them in one caller-controlled transaction."""
 
-    def __init__(self, session: Session, *, max_attempts: int = 5, default_priority: int = 50) -> None:
+    def __init__(self, session: Session, *, max_attempts: int = 5, default_priority: int = 50, auto_enqueue: bool = True) -> None:
         self.session, self.max_attempts, self.default_priority = session, max_attempts, default_priority
+        self.auto_enqueue = auto_enqueue
         self.classifier = DocumentClassifier()
 
-    def upsert(self, *, candidate: DocumentCandidate, connector: str, tenant: str = "default", jurisdiction: str = "unknown", now: datetime | None = None) -> tuple[SolicitationDocumentRecord, bool]:
+    def upsert(self, *, candidate: DocumentCandidate, connector: str, tenant: str = "default", jurisdiction: str = "unknown", now: datetime | None = None, enqueue: bool = True) -> tuple[SolicitationDocumentRecord, bool]:
         now = now or datetime.now(UTC)
         classification = self.classifier.classify(candidate)
         try:
             canonical_url = canonicalize_document_url(str(candidate.source_document_url))
         except UnsafeDocumentUrl:
             canonical_url = None
-        identity_material = candidate.source_document_id or canonical_url or f"{candidate.filename}|{candidate.label}|{candidate.category}"
+        stable_document = candidate.source_document_id or canonical_url or f"{candidate.filename}|{candidate.label}|{candidate.category}"
+        version = candidate.version_number if candidate.version_number is not None else candidate.version_label
+        identity_material = f"{stable_document}|version:{version or 'base'}"
         identity_key = sha256(f"{connector}|{tenant}|{candidate.opportunity_id}|{identity_material}".encode()).hexdigest()
         record = self.session.scalar(select(SolicitationDocumentRecord).where(SolicitationDocumentRecord.opportunity_id == candidate.opportunity_id, SolicitationDocumentRecord.identity_key == identity_key))
         created = record is None
@@ -62,14 +65,27 @@ class DocumentManifestService:
         record.captcha_observed = candidate.access_state is AccessState.CAPTCHA
         record.publicly_retrievable = public and canonical_url is not None
         record.last_discovered_at, record.source_posted_at, record.source_modified_at = now, candidate.posted_at, candidate.modified_at
-        record.logical_document_key = sha256(f"{candidate.opportunity_id}|{candidate.category}|{filename.casefold()}".encode()).hexdigest()[:32]
+        record.logical_document_key = sha256(f"{candidate.opportunity_id}|{candidate.category}|{stable_document}".encode()).hexdigest()[:32]
         record.version_label, record.version_number = candidate.version_label, candidate.version_number
         record.addendum_number, record.amendment_number = candidate.addendum_number, candidate.amendment_number
         record.relationship_type = "related"
         record.is_current, record.is_operationally_required = True, classification.role.value in {"addendum", "amendment", "questions_and_answers"}
         record.extracted_text_available, record.updated_at = False, now
         self.session.flush()
-        if record.likely_solicitation_document and record.publicly_retrievable:
+        siblings = list(self.session.scalars(select(SolicitationDocumentRecord).where(
+            SolicitationDocumentRecord.opportunity_id == candidate.opportunity_id,
+            SolicitationDocumentRecord.logical_document_key == record.logical_document_key,
+            SolicitationDocumentRecord.id != record.id,
+        )))
+        for sibling in siblings:
+            older = (sibling.version_number or 0) <= (record.version_number or 0)
+            if older and created:
+                sibling.is_current = False
+                sibling.superseded_by_document_id = record.id
+                record.supersedes_document_id = sibling.id
+            elif not older:
+                record.is_current = False
+        if self.auto_enqueue and enqueue and record.is_current and record.likely_solicitation_document and record.publicly_retrievable:
             self.enqueue(record, now=now)
         return record, created
 

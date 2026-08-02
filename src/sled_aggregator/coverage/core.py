@@ -386,9 +386,10 @@ def connector_inventory(sources: list[dict]) -> list[dict]:
                 "document_link_capability": any(
                     s["document_access"] in {"public", "mixed"} for s in profiles
                 ),
-                "document_pipeline_compatible": any(
-                    s["document_access"] == "public" for s in profiles
-                ),
+                "document_pipeline_compatible": bool(item["document_pipeline_compatible"])
+                and bool(fixtures)
+                and bool(tests)
+                and any(s["document_access"] in {"public", "mixed"} for s in profiles),
                 "request_method_policy": "bounded public read-only",
                 "fixture_count": len(fixtures),
                 "test_references": tests,
@@ -579,7 +580,13 @@ def build_report(
         "coverage_tier_distribution": distribution,
         "public_discovery_count": count("discovery_access", {"public"}),
         "public_detail_count": count("detail_access", {"public"}),
-        "public_document_pipeline_count": sum(j["coverage_tier"] >= 5 for j in records),
+        "public_document_pipeline_count": sum(
+            bool(inventory.get(s.get("connector_name"), {}).get("document_pipeline_compatible"))
+            and s.get("document_access") in {"public", "mixed"}
+            and bool(s.get("fixture_references"))
+            and s.get("verification_status") in {"fixture_verified", "live_public_verified"}
+            for s in sources
+        ),
         "metadata_only_count": count("detail_access", {"metadata_only"}),
         "registration_required_count": count("document_access", {"registration_required"}),
         "login_required_count": count("document_access", {"login_required"}),

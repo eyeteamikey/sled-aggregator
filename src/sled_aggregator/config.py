@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     archive_max_depth: int = 3
     document_manifest_enabled: bool = True
     document_auto_enqueue_enabled: bool = True
+    document_max_per_opportunity: int = Field(default=50, ge=0, le=1000)
+    document_max_queued_per_collection: int = Field(default=500, ge=0, le=10000)
+    document_allowed_categories: tuple[str, ...] = ()
     document_queue_max_attempts: int = Field(default=5, ge=1, le=100)
     document_queue_default_priority: int = Field(default=50, ge=0, le=100)
     document_queue_lease_seconds: int = Field(default=300, ge=1, le=86400)

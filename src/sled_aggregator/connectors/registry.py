@@ -41,6 +41,7 @@ class ConnectorRegistry:
                 "platform_family": name,
                 "jurisdictions": list(connector.jurisdictions),
                 "public_read_only": connector.public_read_only,
+                "document_pipeline_compatible": connector.document_pipeline_compatible,
             }
             for name, connector in sorted(self._connectors.items())
         ]
@@ -57,6 +58,7 @@ class ConnectorRegistry:
                 "implementation_module": connector.__module__,
                 "jurisdictions": list(connector.jurisdictions),
                 "public_read_only": connector.public_read_only,
+                "document_pipeline_compatible": connector.document_pipeline_compatible,
             }
             for connector, names in sorted(
                 grouped.items(), key=lambda item: item[0].platform_family

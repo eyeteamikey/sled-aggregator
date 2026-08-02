@@ -2468,7 +2468,7 @@
     "payment_required_count": 0,
     "public_detail_count": 10,
     "public_discovery_count": 10,
-    "public_document_pipeline_count": 0,
+    "public_document_pipeline_count": 4,
     "registration_required_count": 0,
     "robots_policy_count": 0,
     "source_count": 10,

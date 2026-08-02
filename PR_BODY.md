@@ -1,54 +1,43 @@
-## Motivation
+## Motivation and root cause
 
-Vendor Registry was a P1 `research_only_hypothesis`, but a platform name and search-indexed detail route are not evidence of an anonymous agency discovery contract. This change applies the mandatory evidence gate before creating transport or coverage claims.
+Document infrastructure existed, and several connectors discovered attachments, but normal opportunity ingestion accepted only `RawOpportunity`. It discarded the separate canonical candidates returned by Oracle and Tyler detail hydration, while Pennsylvania retained normalized links only in `raw_payload`. No collection-to-manifest orchestration entry point existed. Coverage tiering also inferred pipeline support from public links rather than a verified connector capability.
 
-## Evidence-gate result
+## Description and end-to-end flow
 
-The gate did not pass. Anonymous discovery and detail could not be reproduced for two independently operated government agencies. No connector, alias, profile, fixture, source record, or jurisdiction coverage is added. The audit now classifies Vendor Registry as `unsupported_candidate`.
+This change adds one reusable, non-networked orchestration service and an optional collection handoff:
 
-## Agencies examined
+connector discovery/detail → opportunity persistence → candidate normalization → manifest upsert → version reconciliation → eligibility classification → bounded retrieval queue → existing safe downloader → parser → targeted OCR when needed → structured extraction.
 
-The task-provided Rockdale County, Georgia; City of Forest Hills, Tennessee; and City of Germantown, Tennessee leads were examined. The task environment's outbound proxy rejected HTTPS CONNECT before destination TLS for government and Vendor Registry destinations, and the web research integration returned HTTP 401. No publisher response was observed, so none is a preset and no Georgia- or Tennessee-wide coverage is claimed.
+The service checks the persisted parent and candidate provenance, applies category and run limits, preserves restricted metadata, suppresses duplicates, and returns a structured operational summary. The collection path remains compatible with connectors that return no documents.
 
-## Discovery and detail contracts
+## Connectors integrated
 
-No listing route, method, tenant/agency identifier, request body, filters, paging, empty-state semantics, background API, or stable listing identity was inferred. The supplied `vrapp.vendorregistry.com/Bids/View/Bid/{solicitation-guid}` shape remains a detail research lead only and does not prove independent discovery. No detail fields or markup contract were fabricated.
+- Oracle Fusion REST (City of Detroit): existing detail attachment candidates.
+- Pennsylvania eMarketplace: adapter for normalized `document_links`.
+- Tyler Munis/VSS (Summit County and Opelika): existing detail candidates with redacted transient URL metadata and deterministic source IDs.
 
-## Document behavior
+Other document-link families remain unclaimed pending adapter evidence.
 
-No document was requested and public, registration-required, login-required, unavailable, metadata-only, and unknown behavior could not be distinguished. Document access therefore remains unknown. No file URL, signed token, fixture, or manifest behavior was invented.
+## Manifest, queue, versions, and security
 
-## Paid-service and public-only boundary
+Stable identity includes connector, opportunity, stable source document ID (or sanitized fallback), and version evidence. Logical identity reconciles versions, prevents older rediscovery from replacing newer content, and retains lineage. Existing uniqueness constraints suppress duplicate manifests and jobs. Only confirmed public, current, eligible records can enqueue; restricted records remain metadata-only. Ingestion never downloads and URL validation/canonicalization continues to reject unsafe destinations and strip transient parameters.
 
-A future connector may read only solicitations deliberately published for anonymous government-agency viewing. Vendor registration, vendor accounts, electronic responses, questions, plan holders, authenticated/gated files, and the paid cross-agency Lead Center remain out of scope. The review used no login, registration, credentials, cookies, bid workflow, broad search, CAPTCHA bypass, or document download.
+## OCR and processing
 
-## Authentication and CAPTCHA findings
-
-Authentication, registration, CAPTCHA, subscription, migration, and live document states are unknown because the proxy failure occurred before destination TLS. The evidence report explicitly avoids interpreting an environment failure as a portal access boundary.
-
-## Security controls
-
-The evidence report defines a bounded, anonymous HAR capture procedure for two agencies, sanitization requirements, exact-host review, one listing/detail per agency, and at most one clearly public small document. It forbids committing HARs, cookies, credentials, antiforgery values, tokens, signed URLs, analytics, personal data, and paid content.
+The existing downloader/extraction workers remain stage boundaries. Successful downloads hand off to parsing; native-text PDFs bypass OCR while insufficient/image-only pages use the existing bounded OCR policy before structured solicitation extraction.
 
 ## Testing
 
-- `PYTHONPATH=src python -m unittest discover -s tests -v`
-- `ruff check .`
-- `PYTHONPATH=src python -m compileall src tests`
-- `PYTHONPATH=src python -m sled_aggregator.coverage validate`
-- `PYTHONPATH=src python -m sled_aggregator.coverage recommend`
-- `python -m pytest`
-- `python -m build`
-- `git diff --check`
+Added fixture-shaped tests for collection handoff, documentless connectors, and Pennsylvania public/restricted normalization. Existing Oracle, Pennsylvania, Tyler, manifest, SSRF/downloader, parsing, OCR, structured extraction, and coverage suites provide regression coverage. No live portal download is claimed.
 
-## Live validation
+## Migration
 
-Bounded anonymous HTTPS attempts were made on 2026-08-01. The outbound proxy returned HTTP 403 while establishing CONNECT tunnels, before destination TLS. This is an environment limitation, not live Vendor Registry validation. No repeated search, login, registration, response, submission, or document request was made.
+No schema migration is required. Existing manifest and queue uniqueness constraints support this orchestration path.
 
-## Coverage changes
+## Coverage
 
-Coverage impact is zero. Vendor Registry changes from `research_only_hypothesis` to `unsupported_candidate`, with its blocked penalty recorded and deterministic JSON/Markdown audit artifacts regenerated. No local, county, municipal, statewide, or document capability is added.
+Pipeline compatibility is now derived from an explicit connector implementation capability plus source access evidence, fixture references, and tests. The four evidence-backed source presets count; generic public document-link claims do not.
 
-## Known limitations and resumption
+## Known limitations
 
-Current official links, final hostnames, destination statuses, response MIME, listing/detail schemas, stable agency IDs, paging, filters, additions/addenda/Q&A/awards, authentication, CAPTCHA, and documents remain unverified. Resume only with sanitized captures from official government links for two independently operated agencies following `docs/vendor_registry_evidence.md`.
+Retrieval remains disabled by default at the downloader boundary. Tyler expired-link reacquisition still requires the connector detail workflow to be invoked by a future retry coordinator; no session state or raw token is persisted. The remaining audited connector families require separate canonical adapters and fixtures.
