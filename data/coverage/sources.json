@@ -49,6 +49,7 @@
       ],
       "evidence_type": "sanitized_fixture_and_automated_test",
       "evidence_location": [
+        "https://www.dgs.ca.gov/PD/Resources/Page-Content/Procurement-Division-Resources-List-Folder/Cal-eProcure",
         "tests/fixtures/peoplesoft_results.html"
       ],
       "fixture_location": [
@@ -59,10 +60,13 @@
       ],
       "last_verified_date": null,
       "known_limitations": [
-        "statewide"
+        "Live access could not be established from the Codex Cloud shell because its outbound CONNECT proxy returned 403 before reaching the California hosts.",
+        "Fixture evidence supports discovery, detail, and attachment parsing but does not constitute live validation.",
+        "Award, education, local, and transportation coverage remain incomplete."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Repeat a bounded anonymous GET validation from an environment permitted to reach California government hosts.",
+      "evidence_url": "https://www.dgs.ca.gov/PD/Resources/Page-Content/Procurement-Division-Resources-List-Folder/Cal-eProcure"
     },
     {
       "key": "ga-gpr",
@@ -823,6 +827,20 @@
       "sanitization_status": "sanitized",
       "notes": "Committed fixture exercised by automated connector tests.",
       "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "ca-cal-eprocure-official-landing-1",
+      "source_id": "ca-cal-eprocure",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://www.dgs.ca.gov/PD/Resources/Page-Content/Procurement-Division-Resources-List-Folder/Cal-eProcure",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "California Department of General Services identifies Cal eProcure as the state procurement source and links its public portal.",
+      "limitations": "This source-identity evidence does not establish current anonymous search, detail, or document operability."
     }
   ]
 }
