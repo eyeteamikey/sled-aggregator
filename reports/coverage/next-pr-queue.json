@@ -1,0 +1,246 @@
+[
+  {
+    "connector_family": "oracle/peoplesoft-sourcing",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/peoplesoft_results.html"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "CA"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate California anonymous statewide collection",
+    "recommended_order": 1,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "ca-cal-eprocure"
+    ],
+    "task_type": "live_validation"
+  },
+  {
+    "connector_family": "georgia/gpr",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/georgia_gpr_listing.html"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "GA"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Georgia anonymous statewide collection",
+    "recommended_order": 2,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "ga-gpr"
+    ],
+    "task_type": "live_validation"
+  },
+  {
+    "connector_family": "maryland/emma",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/maryland_emma_listing.html"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "MD"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Maryland anonymous statewide collection",
+    "recommended_order": 3,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "md-emma"
+    ],
+    "task_type": "live_validation"
+  },
+  {
+    "connector_family": "pennsylvania/emarketplace",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/pennsylvania_emarketplace_search.html"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "PA"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Pennsylvania anonymous statewide collection",
+    "recommended_order": 4,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "pa-emarketplace"
+    ],
+    "task_type": "live_validation"
+  },
+  {
+    "connector_family": "texas/esbd",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/texas_esbd_results.html"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "TX"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Texas anonymous statewide collection",
+    "recommended_order": 5,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "tx-esbd"
+    ],
+    "task_type": "live_validation"
+  },
+  {
+    "connector_family": "virginia/eva",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/eva_board.html"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "VA"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Virginia anonymous statewide collection",
+    "recommended_order": 6,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "va-eva"
+    ],
+    "task_type": "live_validation"
+  },
+  {
+    "connector_family": null,
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/tyler_vss_opelika_results.html",
+      "tests/fixtures/tyler_vss_detail.html"
+    ],
+    "evidence_required": [
+      "official primary statewide source evidence"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "AL"
+    ],
+    "priority_band": "P2",
+    "proposed_title": "Research authoritative statewide coverage for Alabama",
+    "recommended_order": 7,
+    "risk_level": "high",
+    "score": 20,
+    "source_ids": [
+      "al-opelika-tyler-munis-vss"
+    ],
+    "task_type": "coverage_correction"
+  },
+  {
+    "connector_family": null,
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+      "tests/fixtures/oracle_fusion_rest_attachments.json",
+      "tests/fixtures/oracle_fusion_rest_amendments.json"
+    ],
+    "evidence_required": [
+      "official primary statewide source evidence"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "MI"
+    ],
+    "priority_band": "P2",
+    "proposed_title": "Research authoritative statewide coverage for Michigan",
+    "recommended_order": 8,
+    "risk_level": "high",
+    "score": 20,
+    "source_ids": [
+      "mi-detroit-oracle-fusion"
+    ],
+    "task_type": "coverage_correction"
+  },
+  {
+    "connector_family": null,
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/tyler_vss_results_1.html",
+      "tests/fixtures/tyler_vss_detail.html"
+    ],
+    "evidence_required": [
+      "official primary statewide source evidence"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "OH"
+    ],
+    "priority_band": "P2",
+    "proposed_title": "Research authoritative statewide coverage for Ohio",
+    "recommended_order": 9,
+    "risk_level": "high",
+    "score": 20,
+    "source_ids": [
+      "oh-summit-county-tyler-munis-vss"
+    ],
+    "task_type": "coverage_correction"
+  },
+  {
+    "connector_family": null,
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/rivip_external_results.html"
+    ],
+    "evidence_required": [
+      "official primary statewide source evidence"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "RI"
+    ],
+    "priority_band": "P2",
+    "proposed_title": "Research authoritative statewide coverage for Rhode Island",
+    "recommended_order": 10,
+    "risk_level": "high",
+    "score": 20,
+    "source_ids": [
+      "ri-rivip-external"
+    ],
+    "task_type": "coverage_correction"
+  }
+]

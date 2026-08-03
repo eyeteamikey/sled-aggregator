@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0",
-  "as_of": "2026-07-30",
+  "schema_version": "2.0",
+  "as_of": "2026-08-03",
   "jurisdictions": [
     {
       "code": "AK",
@@ -11,7 +11,28 @@
       "fips": "02",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "AK",
+      "jurisdiction_name": "Alaska",
+      "jurisdiction_type": "state",
+      "postal_code": "AK",
+      "fips_code": "02",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "AL",
@@ -22,7 +43,28 @@
       "fips": "01",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "AL",
+      "jurisdiction_name": "Alabama",
+      "jurisdiction_type": "state",
+      "postal_code": "AL",
+      "fips_code": "01",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "evidence_pending",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "AR",
@@ -33,7 +75,28 @@
       "fips": "05",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "AR",
+      "jurisdiction_name": "Arkansas",
+      "jurisdiction_type": "state",
+      "postal_code": "AR",
+      "fips_code": "05",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "AS",
@@ -46,7 +109,28 @@
         "Pacific/Pago_Pago"
       ],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "AS",
+      "jurisdiction_name": "American Samoa",
+      "jurisdiction_type": "territory",
+      "postal_code": "AS",
+      "fips_code": "60",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "AZ",
@@ -57,7 +141,28 @@
       "fips": "04",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "AZ",
+      "jurisdiction_name": "Arizona",
+      "jurisdiction_type": "state",
+      "postal_code": "AZ",
+      "fips_code": "04",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "CA",
@@ -68,7 +173,26 @@
       "fips": "06",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "CA",
+      "jurisdiction_name": "California",
+      "jurisdiction_type": "state",
+      "postal_code": "CA",
+      "fips_code": "06",
+      "primary_source_id": "ca-cal-eprocure",
+      "supplemental_source_ids": [],
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "fixture_verified",
+      "detail_status": "fixture_verified",
+      "attachment_status": "fixture_verified",
+      "document_pipeline_status": "compatible",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [],
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "CO",
@@ -79,7 +203,28 @@
       "fips": "08",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "CO",
+      "jurisdiction_name": "Colorado",
+      "jurisdiction_type": "state",
+      "postal_code": "CO",
+      "fips_code": "08",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "CT",
@@ -90,7 +235,28 @@
       "fips": "09",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "CT",
+      "jurisdiction_name": "Connecticut",
+      "jurisdiction_type": "state",
+      "postal_code": "CT",
+      "fips_code": "09",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "DC",
@@ -103,7 +269,28 @@
         "America/New_York"
       ],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "DC",
+      "jurisdiction_name": "District of Columbia",
+      "jurisdiction_type": "district",
+      "postal_code": "DC",
+      "fips_code": "11",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "DE",
@@ -114,7 +301,28 @@
       "fips": "10",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "DE",
+      "jurisdiction_name": "Delaware",
+      "jurisdiction_type": "state",
+      "postal_code": "DE",
+      "fips_code": "10",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "FL",
@@ -125,7 +333,28 @@
       "fips": "12",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "FL",
+      "jurisdiction_name": "Florida",
+      "jurisdiction_type": "state",
+      "postal_code": "FL",
+      "fips_code": "12",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "GA",
@@ -136,7 +365,26 @@
       "fips": "13",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "GA",
+      "jurisdiction_name": "Georgia",
+      "jurisdiction_type": "state",
+      "postal_code": "GA",
+      "fips_code": "13",
+      "primary_source_id": "ga-gpr",
+      "supplemental_source_ids": [],
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "fixture_verified",
+      "detail_status": "fixture_verified",
+      "attachment_status": "fixture_verified",
+      "document_pipeline_status": "compatible",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [],
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "GU",
@@ -149,7 +397,28 @@
         "Pacific/Guam"
       ],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "GU",
+      "jurisdiction_name": "Guam",
+      "jurisdiction_type": "territory",
+      "postal_code": "GU",
+      "fips_code": "66",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "HI",
@@ -160,7 +429,28 @@
       "fips": "15",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "HI",
+      "jurisdiction_name": "Hawaii",
+      "jurisdiction_type": "state",
+      "postal_code": "HI",
+      "fips_code": "15",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "IA",
@@ -171,7 +461,28 @@
       "fips": "19",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "IA",
+      "jurisdiction_name": "Iowa",
+      "jurisdiction_type": "state",
+      "postal_code": "IA",
+      "fips_code": "19",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "ID",
@@ -182,7 +493,28 @@
       "fips": "16",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "ID",
+      "jurisdiction_name": "Idaho",
+      "jurisdiction_type": "state",
+      "postal_code": "ID",
+      "fips_code": "16",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "IL",
@@ -193,7 +525,28 @@
       "fips": "17",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "IL",
+      "jurisdiction_name": "Illinois",
+      "jurisdiction_type": "state",
+      "postal_code": "IL",
+      "fips_code": "17",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "IN",
@@ -204,7 +557,28 @@
       "fips": "18",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "IN",
+      "jurisdiction_name": "Indiana",
+      "jurisdiction_type": "state",
+      "postal_code": "IN",
+      "fips_code": "18",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "KS",
@@ -215,7 +589,28 @@
       "fips": "20",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "KS",
+      "jurisdiction_name": "Kansas",
+      "jurisdiction_type": "state",
+      "postal_code": "KS",
+      "fips_code": "20",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "KY",
@@ -226,7 +621,28 @@
       "fips": "21",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "KY",
+      "jurisdiction_name": "Kentucky",
+      "jurisdiction_type": "state",
+      "postal_code": "KY",
+      "fips_code": "21",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "LA",
@@ -237,7 +653,28 @@
       "fips": "22",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "LA",
+      "jurisdiction_name": "Louisiana",
+      "jurisdiction_type": "state",
+      "postal_code": "LA",
+      "fips_code": "22",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "MA",
@@ -248,7 +685,28 @@
       "fips": "25",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "MA",
+      "jurisdiction_name": "Massachusetts",
+      "jurisdiction_type": "state",
+      "postal_code": "MA",
+      "fips_code": "25",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "MD",
@@ -259,7 +717,26 @@
       "fips": "24",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "MD",
+      "jurisdiction_name": "Maryland",
+      "jurisdiction_type": "state",
+      "postal_code": "MD",
+      "fips_code": "24",
+      "primary_source_id": "md-emma",
+      "supplemental_source_ids": [],
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "fixture_verified",
+      "detail_status": "fixture_verified",
+      "attachment_status": "fixture_verified",
+      "document_pipeline_status": "compatible",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [],
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "ME",
@@ -270,7 +747,28 @@
       "fips": "23",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "ME",
+      "jurisdiction_name": "Maine",
+      "jurisdiction_type": "state",
+      "postal_code": "ME",
+      "fips_code": "23",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "MI",
@@ -281,7 +779,28 @@
       "fips": "26",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "MI",
+      "jurisdiction_name": "Michigan",
+      "jurisdiction_type": "state",
+      "postal_code": "MI",
+      "fips_code": "26",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "evidence_pending",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "MN",
@@ -292,7 +811,28 @@
       "fips": "27",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "MN",
+      "jurisdiction_name": "Minnesota",
+      "jurisdiction_type": "state",
+      "postal_code": "MN",
+      "fips_code": "27",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "MO",
@@ -303,7 +843,28 @@
       "fips": "29",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "MO",
+      "jurisdiction_name": "Missouri",
+      "jurisdiction_type": "state",
+      "postal_code": "MO",
+      "fips_code": "29",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "MP",
@@ -316,7 +877,28 @@
         "Pacific/Saipan"
       ],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "MP",
+      "jurisdiction_name": "Commonwealth of the Northern Mariana Islands",
+      "jurisdiction_type": "territory",
+      "postal_code": "MP",
+      "fips_code": "69",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "MS",
@@ -327,7 +909,28 @@
       "fips": "28",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "MS",
+      "jurisdiction_name": "Mississippi",
+      "jurisdiction_type": "state",
+      "postal_code": "MS",
+      "fips_code": "28",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "MT",
@@ -338,7 +941,28 @@
       "fips": "30",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "MT",
+      "jurisdiction_name": "Montana",
+      "jurisdiction_type": "state",
+      "postal_code": "MT",
+      "fips_code": "30",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "NC",
@@ -349,7 +973,28 @@
       "fips": "37",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "NC",
+      "jurisdiction_name": "North Carolina",
+      "jurisdiction_type": "state",
+      "postal_code": "NC",
+      "fips_code": "37",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "ND",
@@ -360,7 +1005,28 @@
       "fips": "38",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "ND",
+      "jurisdiction_name": "North Dakota",
+      "jurisdiction_type": "state",
+      "postal_code": "ND",
+      "fips_code": "38",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "NE",
@@ -371,7 +1037,28 @@
       "fips": "31",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "NE",
+      "jurisdiction_name": "Nebraska",
+      "jurisdiction_type": "state",
+      "postal_code": "NE",
+      "fips_code": "31",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "NH",
@@ -382,7 +1069,28 @@
       "fips": "33",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "NH",
+      "jurisdiction_name": "New Hampshire",
+      "jurisdiction_type": "state",
+      "postal_code": "NH",
+      "fips_code": "33",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "NJ",
@@ -393,7 +1101,28 @@
       "fips": "34",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "NJ",
+      "jurisdiction_name": "New Jersey",
+      "jurisdiction_type": "state",
+      "postal_code": "NJ",
+      "fips_code": "34",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "NM",
@@ -404,7 +1133,28 @@
       "fips": "35",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "NM",
+      "jurisdiction_name": "New Mexico",
+      "jurisdiction_type": "state",
+      "postal_code": "NM",
+      "fips_code": "35",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "NV",
@@ -415,7 +1165,28 @@
       "fips": "32",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "NV",
+      "jurisdiction_name": "Nevada",
+      "jurisdiction_type": "state",
+      "postal_code": "NV",
+      "fips_code": "32",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "NY",
@@ -426,7 +1197,28 @@
       "fips": "36",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "NY",
+      "jurisdiction_name": "New York",
+      "jurisdiction_type": "state",
+      "postal_code": "NY",
+      "fips_code": "36",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "OH",
@@ -437,7 +1229,28 @@
       "fips": "39",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "OH",
+      "jurisdiction_name": "Ohio",
+      "jurisdiction_type": "state",
+      "postal_code": "OH",
+      "fips_code": "39",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "evidence_pending",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "OK",
@@ -448,7 +1261,28 @@
       "fips": "40",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "OK",
+      "jurisdiction_name": "Oklahoma",
+      "jurisdiction_type": "state",
+      "postal_code": "OK",
+      "fips_code": "40",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "OR",
@@ -459,7 +1293,28 @@
       "fips": "41",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "OR",
+      "jurisdiction_name": "Oregon",
+      "jurisdiction_type": "state",
+      "postal_code": "OR",
+      "fips_code": "41",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "PA",
@@ -470,7 +1325,26 @@
       "fips": "42",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "PA",
+      "jurisdiction_name": "Pennsylvania",
+      "jurisdiction_type": "state",
+      "postal_code": "PA",
+      "fips_code": "42",
+      "primary_source_id": "pa-emarketplace",
+      "supplemental_source_ids": [],
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "fixture_verified",
+      "detail_status": "fixture_verified",
+      "attachment_status": "fixture_verified",
+      "document_pipeline_status": "compatible",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [],
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "PR",
@@ -483,7 +1357,28 @@
         "America/Puerto_Rico"
       ],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "PR",
+      "jurisdiction_name": "Puerto Rico",
+      "jurisdiction_type": "territory",
+      "postal_code": "PR",
+      "fips_code": "72",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "RI",
@@ -494,7 +1389,30 @@
       "fips": "44",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "RI",
+      "jurisdiction_name": "Rhode Island",
+      "jurisdiction_type": "state",
+      "postal_code": "RI",
+      "fips_code": "44",
+      "primary_source_id": null,
+      "supplemental_source_ids": [
+        "ri-rivip-external"
+      ],
+      "coverage_tier": 0,
+      "coverage_status": "evidence_pending",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "SC",
@@ -505,7 +1423,28 @@
       "fips": "45",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "SC",
+      "jurisdiction_name": "South Carolina",
+      "jurisdiction_type": "state",
+      "postal_code": "SC",
+      "fips_code": "45",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "SD",
@@ -516,7 +1455,28 @@
       "fips": "46",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "SD",
+      "jurisdiction_name": "South Dakota",
+      "jurisdiction_type": "state",
+      "postal_code": "SD",
+      "fips_code": "46",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "TN",
@@ -527,7 +1487,28 @@
       "fips": "47",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "TN",
+      "jurisdiction_name": "Tennessee",
+      "jurisdiction_type": "state",
+      "postal_code": "TN",
+      "fips_code": "47",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "TX",
@@ -538,7 +1519,26 @@
       "fips": "48",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "TX",
+      "jurisdiction_name": "Texas",
+      "jurisdiction_type": "state",
+      "postal_code": "TX",
+      "fips_code": "48",
+      "primary_source_id": "tx-esbd",
+      "supplemental_source_ids": [],
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "fixture_verified",
+      "detail_status": "fixture_verified",
+      "attachment_status": "fixture_verified",
+      "document_pipeline_status": "compatible",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [],
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "UT",
@@ -549,7 +1549,28 @@
       "fips": "49",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "UT",
+      "jurisdiction_name": "Utah",
+      "jurisdiction_type": "state",
+      "postal_code": "UT",
+      "fips_code": "49",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "VA",
@@ -560,7 +1581,26 @@
       "fips": "51",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "VA",
+      "jurisdiction_name": "Virginia",
+      "jurisdiction_type": "state",
+      "postal_code": "VA",
+      "fips_code": "51",
+      "primary_source_id": "va-eva",
+      "supplemental_source_ids": [],
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "fixture_verified",
+      "detail_status": "fixture_verified",
+      "attachment_status": "fixture_verified",
+      "document_pipeline_status": "compatible",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [],
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "VI",
@@ -573,7 +1613,28 @@
         "America/St_Thomas"
       ],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "VI",
+      "jurisdiction_name": "U.S. Virgin Islands",
+      "jurisdiction_type": "territory",
+      "postal_code": "VI",
+      "fips_code": "78",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "VT",
@@ -584,7 +1645,28 @@
       "fips": "50",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "VT",
+      "jurisdiction_name": "Vermont",
+      "jurisdiction_type": "state",
+      "postal_code": "VT",
+      "fips_code": "50",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "WA",
@@ -595,7 +1677,28 @@
       "fips": "53",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "WA",
+      "jurisdiction_name": "Washington",
+      "jurisdiction_type": "state",
+      "postal_code": "WA",
+      "fips_code": "53",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "WI",
@@ -606,7 +1709,28 @@
       "fips": "55",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "WI",
+      "jurisdiction_name": "Wisconsin",
+      "jurisdiction_type": "state",
+      "postal_code": "WI",
+      "fips_code": "55",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "WV",
@@ -617,7 +1741,28 @@
       "fips": "54",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "WV",
+      "jurisdiction_name": "West Virginia",
+      "jurisdiction_type": "state",
+      "postal_code": "WV",
+      "fips_code": "54",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     },
     {
       "code": "WY",
@@ -628,7 +1773,28 @@
       "fips": "56",
       "timezones": [],
       "active": true,
-      "primary": true
+      "primary": true,
+      "jurisdiction_id": "WY",
+      "jurisdiction_name": "Wyoming",
+      "jurisdiction_type": "state",
+      "postal_code": "WY",
+      "fips_code": "56",
+      "primary_source_id": null,
+      "supplemental_source_ids": [],
+      "coverage_tier": 0,
+      "coverage_status": "unresearched",
+      "operational_status": "not_operational",
+      "discovery_status": "unknown",
+      "detail_status": "unknown",
+      "attachment_status": "unknown",
+      "document_pipeline_status": "not_established",
+      "live_validation_status": "not_validated",
+      "last_verified_at": null,
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
     }
   ]
 }

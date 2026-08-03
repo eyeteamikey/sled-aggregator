@@ -1,0 +1,52 @@
+# Missing primary statewide coverage
+
+- Alaska (AK): Research and register an authoritative statewide source with evidence.
+- Alabama (AL): Research and register an authoritative statewide source with evidence.
+- Arkansas (AR): Research and register an authoritative statewide source with evidence.
+- American Samoa (AS): Research and register an authoritative statewide source with evidence.
+- Arizona (AZ): Research and register an authoritative statewide source with evidence.
+- Colorado (CO): Research and register an authoritative statewide source with evidence.
+- Connecticut (CT): Research and register an authoritative statewide source with evidence.
+- District of Columbia (DC): Research and register an authoritative statewide source with evidence.
+- Delaware (DE): Research and register an authoritative statewide source with evidence.
+- Florida (FL): Research and register an authoritative statewide source with evidence.
+- Guam (GU): Research and register an authoritative statewide source with evidence.
+- Hawaii (HI): Research and register an authoritative statewide source with evidence.
+- Iowa (IA): Research and register an authoritative statewide source with evidence.
+- Idaho (ID): Research and register an authoritative statewide source with evidence.
+- Illinois (IL): Research and register an authoritative statewide source with evidence.
+- Indiana (IN): Research and register an authoritative statewide source with evidence.
+- Kansas (KS): Research and register an authoritative statewide source with evidence.
+- Kentucky (KY): Research and register an authoritative statewide source with evidence.
+- Louisiana (LA): Research and register an authoritative statewide source with evidence.
+- Massachusetts (MA): Research and register an authoritative statewide source with evidence.
+- Maine (ME): Research and register an authoritative statewide source with evidence.
+- Michigan (MI): Research and register an authoritative statewide source with evidence.
+- Minnesota (MN): Research and register an authoritative statewide source with evidence.
+- Missouri (MO): Research and register an authoritative statewide source with evidence.
+- Commonwealth of the Northern Mariana Islands (MP): Research and register an authoritative statewide source with evidence.
+- Mississippi (MS): Research and register an authoritative statewide source with evidence.
+- Montana (MT): Research and register an authoritative statewide source with evidence.
+- North Carolina (NC): Research and register an authoritative statewide source with evidence.
+- North Dakota (ND): Research and register an authoritative statewide source with evidence.
+- Nebraska (NE): Research and register an authoritative statewide source with evidence.
+- New Hampshire (NH): Research and register an authoritative statewide source with evidence.
+- New Jersey (NJ): Research and register an authoritative statewide source with evidence.
+- New Mexico (NM): Research and register an authoritative statewide source with evidence.
+- Nevada (NV): Research and register an authoritative statewide source with evidence.
+- New York (NY): Research and register an authoritative statewide source with evidence.
+- Ohio (OH): Research and register an authoritative statewide source with evidence.
+- Oklahoma (OK): Research and register an authoritative statewide source with evidence.
+- Oregon (OR): Research and register an authoritative statewide source with evidence.
+- Puerto Rico (PR): Research and register an authoritative statewide source with evidence.
+- Rhode Island (RI): Research and register an authoritative statewide source with evidence.
+- South Carolina (SC): Research and register an authoritative statewide source with evidence.
+- South Dakota (SD): Research and register an authoritative statewide source with evidence.
+- Tennessee (TN): Research and register an authoritative statewide source with evidence.
+- Utah (UT): Research and register an authoritative statewide source with evidence.
+- U.S. Virgin Islands (VI): Research and register an authoritative statewide source with evidence.
+- Vermont (VT): Research and register an authoritative statewide source with evidence.
+- Washington (WA): Research and register an authoritative statewide source with evidence.
+- Wisconsin (WI): Research and register an authoritative statewide source with evidence.
+- West Virginia (WV): Research and register an authoritative statewide source with evidence.
+- Wyoming (WY): Research and register an authoritative statewide source with evidence.

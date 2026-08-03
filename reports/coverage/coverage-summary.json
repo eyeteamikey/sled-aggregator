@@ -1,0 +1,4925 @@
+{
+  "as_of": "2026-08-03",
+  "connector_inventory": [
+    {
+      "aliases": [
+        "bid-net-direct",
+        "bidnet",
+        "bidnet-regional-purchasing-group",
+        "bidnetdirect"
+      ],
+      "canonical_name": "bidnet-direct",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 33,
+      "implementation_module": "sled_aggregator.connectors.bidnet_direct",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_bidnet_direct_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "advantage-vss",
+        "cgi-advantage",
+        "cgi-advantage-vss",
+        "cgi/vss",
+        "colorado/vss",
+        "maine/vss",
+        "michigan/sigma-vss"
+      ],
+      "canonical_name": "cgi/advantage-vss",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.cgi_advantage_vss",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Maine",
+        "Michigan",
+        "Colorado"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_cgi_advantage_vss_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "bonfire",
+        "bonfire-interactive",
+        "bonfirehub",
+        "euna-bonfire",
+        "euna-procurement-bonfire"
+      ],
+      "canonical_name": "euna/bonfire",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.euna_bonfire",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Anacortes, Washington",
+        "Bend, Oregon",
+        "Fairfax County, Virginia",
+        "Riverside County, California",
+        "Florence County, South Carolina",
+        "Texas",
+        "Charlotte, North Carolina",
+        "Test Territory"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_euna_bonfire_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "euna-ionwave",
+        "euna-procurement-ionwave",
+        "ion-wave",
+        "ionwave",
+        "ionwave-technologies",
+        "iwt"
+      ],
+      "canonical_name": "euna/ionwave",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.euna_ionwave",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Plano, Texas",
+        "Prosper, Texas",
+        "South Carolina",
+        "Missouri",
+        "Carrollton-Farmers Branch, Texas",
+        "Tennessee",
+        "Iowa",
+        "Test Territory"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_euna_ionwave_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "demand-star",
+        "demandstar",
+        "euna-demandstar",
+        "euna-openbids",
+        "euna-procurement-demandstar",
+        "euna/openbids",
+        "openbids"
+      ],
+      "canonical_name": "euna/openbids-demandstar",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.euna_openbids_demandstar",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_euna_openbids_demandstar_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "ga-gpr",
+        "ga-procurement-registry",
+        "georgia-gpr",
+        "georgia-procurement-registry",
+        "gpr-georgia"
+      ],
+      "canonical_name": "georgia/gpr",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 30,
+      "implementation_module": "sled_aggregator.connectors.georgia_gpr",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "GA"
+      ],
+      "test_references": [
+        "tests/test_georgia_gpr_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "bid-express",
+        "bidx",
+        "infotech/bidx"
+      ],
+      "canonical_name": "infotech/bid-express",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 3,
+      "implementation_module": "sled_aggregator.connectors.infotech",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Alabama",
+        "Alaska",
+        "Arizona",
+        "Arkansas",
+        "California",
+        "Colorado",
+        "Connecticut",
+        "Delaware",
+        "Florida",
+        "Georgia",
+        "Idaho",
+        "Indiana",
+        "Iowa",
+        "Kansas",
+        "Kentucky",
+        "Louisiana",
+        "Maine",
+        "Maryland",
+        "Massachusetts",
+        "Michigan",
+        "Minnesota",
+        "Mississippi",
+        "Missouri",
+        "Montana",
+        "Nebraska",
+        "New Jersey",
+        "New Mexico",
+        "New York",
+        "North Carolina",
+        "North Dakota",
+        "Ohio",
+        "Oklahoma",
+        "Oregon",
+        "South Carolina",
+        "Tennessee",
+        "Virginia",
+        "Washington",
+        "West Virginia",
+        "Wisconsin"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_infotech_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "jaggaer",
+        "jaggaer-public-event",
+        "jaggaer-sciquest",
+        "jaggaer/sourcing",
+        "sciquest",
+        "sciquest-sourcing"
+      ],
+      "canonical_name": "jaggaer/sciquest",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.jaggaer_sciquest",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Utah",
+        "Wisconsin",
+        "Georgia",
+        "Iowa"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_jaggaer_sciquest_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "emaryland-marketplace",
+        "emaryland-marketplace-advantage",
+        "emma-maryland",
+        "maryland-emma",
+        "md-emma"
+      ],
+      "canonical_name": "maryland/emma",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 6,
+      "implementation_module": "sled_aggregator.connectors.maryland_emma",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "MD"
+      ],
+      "test_references": [
+        "tests/test_maryland_emma_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "opengov",
+        "opengov-procurement",
+        "opengov-procurenow",
+        "procurenow",
+        "procurenow/opengov"
+      ],
+      "canonical_name": "opengov/procurement",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 0,
+      "implementation_module": "sled_aggregator.connectors.opengov_procurement",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Arizona",
+        "Washington",
+        "Ohio",
+        "Connecticut",
+        "New Mexico"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_opengov_procurement_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "oracle-cloud-procurement",
+        "oracle-fusion-procurement",
+        "oracle-fusion-rest",
+        "oracle-supplier-negotiations"
+      ],
+      "canonical_name": "oracle/fusion-rest",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 7,
+      "implementation_module": "sled_aggregator.connectors.oracle_fusion_rest",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Michigan"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "MI"
+      ],
+      "test_references": [
+        "tests/test_oracle_fusion_rest_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "california/cal-eprocure",
+        "peoplesoft",
+        "peoplesoft/supplier-portal"
+      ],
+      "canonical_name": "oracle/peoplesoft-sourcing",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 4,
+      "implementation_module": "sled_aggregator.connectors.peoplesoft",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "California"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "CA"
+      ],
+      "test_references": [
+        "tests/test_peoplesoft_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "pa-emarketplace",
+        "pa/emarketplace",
+        "pennsylvania-emarketplace"
+      ],
+      "canonical_name": "pennsylvania/emarketplace",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 3,
+      "implementation_module": "sled_aggregator.connectors.pennsylvania_emarketplace",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Pennsylvania"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "PA"
+      ],
+      "test_references": [
+        "tests/test_pennsylvania_emarketplace_connector.py"
+      ]
+    },
+    {
+      "aliases": [],
+      "canonical_name": "periscope/buyspeed",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 2,
+      "implementation_module": "sled_aggregator.connectors.periscope",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Illinois",
+        "Massachusetts",
+        "Nevada",
+        "New Jersey",
+        "Oregon",
+        "U.S. Virgin Islands"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_periscope_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "pb-system",
+        "pbsystem",
+        "planet-bids",
+        "planetbids-portal",
+        "planetbids-vendor-portal"
+      ],
+      "canonical_name": "planetbids",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 4,
+      "implementation_module": "sled_aggregator.connectors.planetbids",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_planetbids_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "public-purchase-gems",
+        "public-purchase-portal",
+        "publicpurchase",
+        "the-public-group-public-purchase"
+      ],
+      "canonical_name": "public-purchase",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 35,
+      "implementation_module": "sled_aggregator.connectors.public_purchase",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "configurable"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_public_purchase_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "rhode-island-external-solicitations",
+        "rhode-island-rivip",
+        "ri-external-solicitations",
+        "ri-rivip-external",
+        "rivip-external"
+      ],
+      "canonical_name": "rhode-island/rivip-external",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 1,
+      "implementation_module": "sled_aggregator.connectors.rhode_island_rivip",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Rhode Island"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "RI"
+      ],
+      "test_references": [
+        "tests/test_rhode_island_rivip_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "esbd",
+        "texas-esbd",
+        "texas-smartbuy-esbd"
+      ],
+      "canonical_name": "texas/esbd",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 2,
+      "implementation_module": "sled_aggregator.connectors.texas_esbd",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Texas"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "TX"
+      ],
+      "test_references": [
+        "tests/test_texas_esbd_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "munis-vss",
+        "munis/vendor-self-service",
+        "tyler-munis-vss",
+        "tyler/vss"
+      ],
+      "canonical_name": "tyler/munis-vss",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 3,
+      "implementation_module": "sled_aggregator.connectors.tyler_munis_vss",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Ohio",
+        "Alabama"
+      ],
+      "profile_count": 2,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "AL",
+        "OH"
+      ],
+      "test_references": [
+        "tests/test_tyler_munis_vss_connector.py"
+      ]
+    },
+    {
+      "aliases": [
+        "cgi/eva",
+        "eva",
+        "virginia-business-opportunities"
+      ],
+      "canonical_name": "virginia/eva",
+      "detail_capability": true,
+      "discovery_capability": true,
+      "document_link_capability": true,
+      "document_pipeline_compatible": true,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 2,
+      "implementation_module": "sled_aggregator.connectors.eva",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Virginia"
+      ],
+      "profile_count": 1,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [
+        "VA"
+      ],
+      "test_references": [
+        "tests/test_eva_connector.py"
+      ]
+    },
+    {
+      "aliases": [],
+      "canonical_name": "webprocure/proactis",
+      "detail_capability": false,
+      "discovery_capability": true,
+      "document_link_capability": false,
+      "document_pipeline_compatible": false,
+      "documented_limitations": "Profile and access claims remain tenant-specific.",
+      "fixture_count": 1,
+      "implementation_module": "sled_aggregator.connectors.webprocure",
+      "implementation_status": "implemented",
+      "jurisdictions": [
+        "Connecticut",
+        "Missouri",
+        "Rhode Island"
+      ],
+      "profile_count": 0,
+      "public_read_only": true,
+      "registry_presence": true,
+      "request_method_policy": "bounded public read-only",
+      "supported_jurisdictions": [],
+      "test_references": [
+        "tests/test_webprocure_connector.py"
+      ]
+    }
+  ],
+  "gap_analysis": [
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AK"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AL"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AR"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AS"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "AS"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "AZ"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "CA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "CO"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "CT"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "DC"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "DE"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "FL"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "GA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "GA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "GA"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "GA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "GU"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "GU"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "HI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "IA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "ID"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "IL"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "IN"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "KS"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "KY"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "LA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MA"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "MD"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "ME"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MN"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MO"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MP"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "MP"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MS"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "MT"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NC"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "ND"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NE"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NH"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NJ"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NM"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NV"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "NY"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "OH"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "OK"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "OR"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "PA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "PR"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "PR"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "SC"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "SD"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "TN"
+    },
+    {
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "TX"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "UT"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "VA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "VA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "VA"
+    },
+    {
+      "gap_type": "live_verification_missing",
+      "jurisdiction_code": "VA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "VI"
+    },
+    {
+      "gap_type": "territory_gap",
+      "jurisdiction_code": "VI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "VT"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "WA"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "WI"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "WV"
+    },
+    {
+      "gap_type": "no_source_identified",
+      "jurisdiction_code": "WY"
+    }
+  ],
+  "generation_metadata": {
+    "generator": "sled_aggregator.coverage",
+    "network_requests": false,
+    "ordering": "jurisdiction code, source priority, stable key"
+  },
+  "jurisdiction_records": [
+    {
+      "abbreviation": "AK",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "AK",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "02",
+      "fips_code": "02",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "AK",
+      "jurisdiction_name": "Alaska",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Alaska",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "AK",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "AL",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "AL",
+      "connector": null,
+      "coverage_status": "evidence_pending",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "01",
+      "fips_code": "01",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "AL",
+      "jurisdiction_name": "Alabama",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": true,
+      "name": "Alabama",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "AL",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [
+        "al-opelika-tyler-munis-vss"
+      ],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "AR",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "AR",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "05",
+      "fips_code": "05",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "AR",
+      "jurisdiction_name": "Arkansas",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Arkansas",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "AR",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "AS",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "AS",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "60",
+      "fips_code": "60",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "jurisdiction_id": "AS",
+      "jurisdiction_name": "American Samoa",
+      "jurisdiction_type": "territory",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "American Samoa",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "AS",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [
+        "Pacific/Pago_Pago"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "AZ",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "AZ",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "04",
+      "fips_code": "04",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "AZ",
+      "jurisdiction_name": "Arizona",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Arizona",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "AZ",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "CA",
+      "active": true,
+      "attachment_capable": true,
+      "attachment_status": "fixture_verified",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "code": "CA",
+      "connector": "oracle/peoplesoft-sourcing",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "fixture_verified",
+      "discovery_capable": true,
+      "discovery_status": "fixture_verified",
+      "document_pipeline_capable": true,
+      "document_pipeline_status": "compatible",
+      "fips": "06",
+      "fips_code": "06",
+      "fixture_verified": true,
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "CA",
+      "jurisdiction_name": "California",
+      "jurisdiction_type": "state",
+      "known_gaps": [],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "California",
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "baseline_operational",
+      "platform_family": "oracle/peoplesoft-sourcing",
+      "postal_code": "CA",
+      "primary": true,
+      "primary_source_id": "ca-cal-eprocure",
+      "primary_source_name": "Cal eProcure",
+      "source_keys": [
+        "ca-cal-eprocure"
+      ],
+      "statewide_source_keys": [
+        "ca-cal-eprocure"
+      ],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "CO",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "CO",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "08",
+      "fips_code": "08",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "CO",
+      "jurisdiction_name": "Colorado",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Colorado",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "CO",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "CT",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "CT",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "09",
+      "fips_code": "09",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "CT",
+      "jurisdiction_name": "Connecticut",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Connecticut",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "CT",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "DC",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "DC",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "11",
+      "fips_code": "11",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "DC",
+      "jurisdiction_name": "District of Columbia",
+      "jurisdiction_type": "district",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "District of Columbia",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "DC",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [
+        "America/New_York"
+      ],
+      "type": "district"
+    },
+    {
+      "abbreviation": "DE",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "DE",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "10",
+      "fips_code": "10",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "DE",
+      "jurisdiction_name": "Delaware",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Delaware",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "DE",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "FL",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "FL",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "12",
+      "fips_code": "12",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "FL",
+      "jurisdiction_name": "Florida",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Florida",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "FL",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "GA",
+      "active": true,
+      "attachment_capable": true,
+      "attachment_status": "fixture_verified",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "code": "GA",
+      "connector": "georgia/gpr",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "fixture_verified",
+      "discovery_capable": true,
+      "discovery_status": "fixture_verified",
+      "document_pipeline_capable": true,
+      "document_pipeline_status": "compatible",
+      "fips": "13",
+      "fips_code": "13",
+      "fixture_verified": true,
+      "gaps": [
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "GA",
+      "jurisdiction_name": "Georgia",
+      "jurisdiction_type": "state",
+      "known_gaps": [],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Georgia",
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "baseline_operational",
+      "platform_family": "georgia/gpr",
+      "postal_code": "GA",
+      "primary": true,
+      "primary_source_id": "ga-gpr",
+      "primary_source_name": "Georgia Procurement Registry",
+      "source_keys": [
+        "ga-gpr"
+      ],
+      "statewide_source_keys": [
+        "ga-gpr"
+      ],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "GU",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "GU",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "66",
+      "fips_code": "66",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "jurisdiction_id": "GU",
+      "jurisdiction_name": "Guam",
+      "jurisdiction_type": "territory",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Guam",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "GU",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [
+        "Pacific/Guam"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "HI",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "HI",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "15",
+      "fips_code": "15",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "HI",
+      "jurisdiction_name": "Hawaii",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Hawaii",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "HI",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "IA",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "IA",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "19",
+      "fips_code": "19",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "IA",
+      "jurisdiction_name": "Iowa",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Iowa",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "IA",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "ID",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "ID",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "16",
+      "fips_code": "16",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "ID",
+      "jurisdiction_name": "Idaho",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Idaho",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "ID",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "IL",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "IL",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "17",
+      "fips_code": "17",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "IL",
+      "jurisdiction_name": "Illinois",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Illinois",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "IL",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "IN",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "IN",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "18",
+      "fips_code": "18",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "IN",
+      "jurisdiction_name": "Indiana",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Indiana",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "IN",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "KS",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "KS",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "20",
+      "fips_code": "20",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "KS",
+      "jurisdiction_name": "Kansas",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Kansas",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "KS",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "KY",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "KY",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "21",
+      "fips_code": "21",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "KY",
+      "jurisdiction_name": "Kentucky",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Kentucky",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "KY",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "LA",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "LA",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "22",
+      "fips_code": "22",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "LA",
+      "jurisdiction_name": "Louisiana",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Louisiana",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "LA",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MA",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "MA",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "25",
+      "fips_code": "25",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "MA",
+      "jurisdiction_name": "Massachusetts",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Massachusetts",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "MA",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MD",
+      "active": true,
+      "attachment_capable": true,
+      "attachment_status": "fixture_verified",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "code": "MD",
+      "connector": "maryland/emma",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "fixture_verified",
+      "discovery_capable": true,
+      "discovery_status": "fixture_verified",
+      "document_pipeline_capable": true,
+      "document_pipeline_status": "compatible",
+      "fips": "24",
+      "fips_code": "24",
+      "fixture_verified": true,
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "MD",
+      "jurisdiction_name": "Maryland",
+      "jurisdiction_type": "state",
+      "known_gaps": [],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Maryland",
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "baseline_operational",
+      "platform_family": "maryland/emma",
+      "postal_code": "MD",
+      "primary": true,
+      "primary_source_id": "md-emma",
+      "primary_source_name": "eMaryland Marketplace Advantage",
+      "source_keys": [
+        "md-emma"
+      ],
+      "statewide_source_keys": [
+        "md-emma"
+      ],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "ME",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "ME",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "23",
+      "fips_code": "23",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "ME",
+      "jurisdiction_name": "Maine",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Maine",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "ME",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MI",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "MI",
+      "connector": null,
+      "coverage_status": "evidence_pending",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "26",
+      "fips_code": "26",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "MI",
+      "jurisdiction_name": "Michigan",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": true,
+      "name": "Michigan",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "MI",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [
+        "mi-detroit-oracle-fusion"
+      ],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MN",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "MN",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "27",
+      "fips_code": "27",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "MN",
+      "jurisdiction_name": "Minnesota",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Minnesota",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "MN",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MO",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "MO",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "29",
+      "fips_code": "29",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "MO",
+      "jurisdiction_name": "Missouri",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Missouri",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "MO",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MP",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "MP",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "69",
+      "fips_code": "69",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "jurisdiction_id": "MP",
+      "jurisdiction_name": "Commonwealth of the Northern Mariana Islands",
+      "jurisdiction_type": "territory",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Commonwealth of the Northern Mariana Islands",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "MP",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [
+        "Pacific/Saipan"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "MS",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "MS",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "28",
+      "fips_code": "28",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "MS",
+      "jurisdiction_name": "Mississippi",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Mississippi",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "MS",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "MT",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "MT",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "30",
+      "fips_code": "30",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "MT",
+      "jurisdiction_name": "Montana",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Montana",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "MT",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NC",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "NC",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "37",
+      "fips_code": "37",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "NC",
+      "jurisdiction_name": "North Carolina",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "North Carolina",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "NC",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "ND",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "ND",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "38",
+      "fips_code": "38",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "ND",
+      "jurisdiction_name": "North Dakota",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "North Dakota",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "ND",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NE",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "NE",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "31",
+      "fips_code": "31",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "NE",
+      "jurisdiction_name": "Nebraska",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Nebraska",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "NE",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NH",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "NH",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "33",
+      "fips_code": "33",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "NH",
+      "jurisdiction_name": "New Hampshire",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "New Hampshire",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "NH",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NJ",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "NJ",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "34",
+      "fips_code": "34",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "NJ",
+      "jurisdiction_name": "New Jersey",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "New Jersey",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "NJ",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NM",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "NM",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "35",
+      "fips_code": "35",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "NM",
+      "jurisdiction_name": "New Mexico",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "New Mexico",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "NM",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NV",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "NV",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "32",
+      "fips_code": "32",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "NV",
+      "jurisdiction_name": "Nevada",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Nevada",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "NV",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "NY",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "NY",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "36",
+      "fips_code": "36",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "NY",
+      "jurisdiction_name": "New York",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "New York",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "NY",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "OH",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "OH",
+      "connector": null,
+      "coverage_status": "evidence_pending",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "39",
+      "fips_code": "39",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "OH",
+      "jurisdiction_name": "Ohio",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": true,
+      "name": "Ohio",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "OH",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [
+        "oh-summit-county-tyler-munis-vss"
+      ],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "OK",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "OK",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "40",
+      "fips_code": "40",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "OK",
+      "jurisdiction_name": "Oklahoma",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Oklahoma",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "OK",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "OR",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "OR",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "41",
+      "fips_code": "41",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "OR",
+      "jurisdiction_name": "Oregon",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Oregon",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "OR",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "PA",
+      "active": true,
+      "attachment_capable": true,
+      "attachment_status": "fixture_verified",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "code": "PA",
+      "connector": "pennsylvania/emarketplace",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "fixture_verified",
+      "discovery_capable": true,
+      "discovery_status": "fixture_verified",
+      "document_pipeline_capable": true,
+      "document_pipeline_status": "compatible",
+      "fips": "42",
+      "fips_code": "42",
+      "fixture_verified": true,
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "PA",
+      "jurisdiction_name": "Pennsylvania",
+      "jurisdiction_type": "state",
+      "known_gaps": [],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Pennsylvania",
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "baseline_operational",
+      "platform_family": "pennsylvania/emarketplace",
+      "postal_code": "PA",
+      "primary": true,
+      "primary_source_id": "pa-emarketplace",
+      "primary_source_name": "PA eMarketplace",
+      "source_keys": [
+        "pa-emarketplace"
+      ],
+      "statewide_source_keys": [
+        "pa-emarketplace"
+      ],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "PR",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "PR",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "72",
+      "fips_code": "72",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "jurisdiction_id": "PR",
+      "jurisdiction_name": "Puerto Rico",
+      "jurisdiction_type": "territory",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Puerto Rico",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "PR",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [
+        "America/Puerto_Rico"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "RI",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "RI",
+      "connector": null,
+      "coverage_status": "evidence_pending",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "44",
+      "fips_code": "44",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "RI",
+      "jurisdiction_name": "Rhode Island",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": true,
+      "name": "Rhode Island",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "RI",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [
+        "ri-rivip-external"
+      ],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [
+        "ri-rivip-external"
+      ],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "SC",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "SC",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "45",
+      "fips_code": "45",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "SC",
+      "jurisdiction_name": "South Carolina",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "South Carolina",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "SC",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "SD",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "SD",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "46",
+      "fips_code": "46",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "SD",
+      "jurisdiction_name": "South Dakota",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "South Dakota",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "SD",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "TN",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "TN",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "47",
+      "fips_code": "47",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "TN",
+      "jurisdiction_name": "Tennessee",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Tennessee",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "TN",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "TX",
+      "active": true,
+      "attachment_capable": true,
+      "attachment_status": "fixture_verified",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "code": "TX",
+      "connector": "texas/esbd",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "fixture_verified",
+      "discovery_capable": true,
+      "discovery_status": "fixture_verified",
+      "document_pipeline_capable": true,
+      "document_pipeline_status": "compatible",
+      "fips": "48",
+      "fips_code": "48",
+      "fixture_verified": true,
+      "gaps": [
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "TX",
+      "jurisdiction_name": "Texas",
+      "jurisdiction_type": "state",
+      "known_gaps": [],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Texas",
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "baseline_operational",
+      "platform_family": "texas/esbd",
+      "postal_code": "TX",
+      "primary": true,
+      "primary_source_id": "tx-esbd",
+      "primary_source_name": "Electronic State Business Daily",
+      "source_keys": [
+        "tx-esbd"
+      ],
+      "statewide_source_keys": [
+        "tx-esbd"
+      ],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "UT",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "UT",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "49",
+      "fips_code": "49",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "UT",
+      "jurisdiction_name": "Utah",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Utah",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "UT",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "VA",
+      "active": true,
+      "attachment_capable": true,
+      "attachment_status": "fixture_verified",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "code": "VA",
+      "connector": "virginia/eva",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "fixture_verified",
+      "discovery_capable": true,
+      "discovery_status": "fixture_verified",
+      "document_pipeline_capable": true,
+      "document_pipeline_status": "compatible",
+      "fips": "51",
+      "fips_code": "51",
+      "fixture_verified": true,
+      "gaps": [
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "VA",
+      "jurisdiction_name": "Virginia",
+      "jurisdiction_type": "state",
+      "known_gaps": [],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Virginia",
+      "next_action": "Perform bounded lawful live validation.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "baseline_operational",
+      "platform_family": "virginia/eva",
+      "postal_code": "VA",
+      "primary": true,
+      "primary_source_id": "va-eva",
+      "primary_source_name": "Virginia eVA",
+      "source_keys": [
+        "va-eva"
+      ],
+      "statewide_source_keys": [
+        "va-eva"
+      ],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "VI",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "VI",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "78",
+      "fips_code": "78",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified",
+        "territory_gap"
+      ],
+      "inhabited_territory": true,
+      "jurisdiction_id": "VI",
+      "jurisdiction_name": "U.S. Virgin Islands",
+      "jurisdiction_type": "territory",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "U.S. Virgin Islands",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "VI",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [
+        "America/St_Thomas"
+      ],
+      "type": "territory"
+    },
+    {
+      "abbreviation": "VT",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "VT",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "50",
+      "fips_code": "50",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "VT",
+      "jurisdiction_name": "Vermont",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Vermont",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "VT",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "WA",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "WA",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "53",
+      "fips_code": "53",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "WA",
+      "jurisdiction_name": "Washington",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Washington",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "WA",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "WI",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "WI",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "55",
+      "fips_code": "55",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "WI",
+      "jurisdiction_name": "Wisconsin",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Wisconsin",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "WI",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "WV",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "WV",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "54",
+      "fips_code": "54",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "WV",
+      "jurisdiction_name": "West Virginia",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "West Virginia",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "WV",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    },
+    {
+      "abbreviation": "WY",
+      "active": true,
+      "attachment_capable": false,
+      "attachment_status": "unknown",
+      "authentication": "unknown",
+      "baseline_operational": false,
+      "blocker": "primary statewide source not evidence-backed",
+      "captcha": "unknown",
+      "code": "WY",
+      "connector": null,
+      "coverage_status": "unresearched",
+      "coverage_tier": 0,
+      "detail_capable": false,
+      "detail_status": "unknown",
+      "discovery_capable": false,
+      "discovery_status": "unknown",
+      "document_pipeline_capable": false,
+      "document_pipeline_status": "not_established",
+      "fips": "56",
+      "fips_code": "56",
+      "fixture_verified": false,
+      "gaps": [
+        "no_source_identified"
+      ],
+      "inhabited_territory": false,
+      "jurisdiction_id": "WY",
+      "jurisdiction_name": "Wyoming",
+      "jurisdiction_type": "state",
+      "known_gaps": [
+        "authoritative_primary_statewide_source_not_evidence_backed"
+      ],
+      "last_verified_at": null,
+      "live_validation_status": "not_validated",
+      "live_verified": false,
+      "local_evidence_only": false,
+      "name": "Wyoming",
+      "next_action": "Research and register an authoritative statewide source with evidence.",
+      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
+      "operational_status": "not_operational",
+      "platform_family": null,
+      "postal_code": "WY",
+      "primary": true,
+      "primary_source_id": null,
+      "primary_source_name": null,
+      "source_keys": [],
+      "statewide_source_keys": [],
+      "supplemental_source_ids": [],
+      "timezones": [],
+      "type": "state"
+    }
+  ],
+  "jurisdiction_source_mappings": [
+    {
+      "coverage_tier": 0,
+      "jurisdiction_code": "AL",
+      "source_key": "al-opelika-tyler-munis-vss"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "CA",
+      "source_key": "ca-cal-eprocure"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "GA",
+      "source_key": "ga-gpr"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "MD",
+      "source_key": "md-emma"
+    },
+    {
+      "coverage_tier": 0,
+      "jurisdiction_code": "MI",
+      "source_key": "mi-detroit-oracle-fusion"
+    },
+    {
+      "coverage_tier": 0,
+      "jurisdiction_code": "OH",
+      "source_key": "oh-summit-county-tyler-munis-vss"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "PA",
+      "source_key": "pa-emarketplace"
+    },
+    {
+      "coverage_tier": 0,
+      "jurisdiction_code": "RI",
+      "source_key": "ri-rivip-external"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "TX",
+      "source_key": "tx-esbd"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "VA",
+      "source_key": "va-eva"
+    }
+  ],
+  "prioritized_recommendations": [
+    {
+      "connector_family": "oracle/peoplesoft-sourcing",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/peoplesoft_results.html"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "CA"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate California anonymous statewide collection",
+      "recommended_order": 1,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "ca-cal-eprocure"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "georgia/gpr",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/georgia_gpr_listing.html"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "GA"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Georgia anonymous statewide collection",
+      "recommended_order": 2,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "ga-gpr"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "maryland/emma",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/maryland_emma_listing.html"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "MD"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Maryland anonymous statewide collection",
+      "recommended_order": 3,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "md-emma"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "pennsylvania/emarketplace",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/pennsylvania_emarketplace_search.html"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "PA"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Pennsylvania anonymous statewide collection",
+      "recommended_order": 4,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "pa-emarketplace"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "texas/esbd",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/texas_esbd_results.html"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "TX"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Texas anonymous statewide collection",
+      "recommended_order": 5,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "tx-esbd"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "virginia/eva",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/eva_board.html"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "VA"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Virginia anonymous statewide collection",
+      "recommended_order": 6,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "va-eva"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": null,
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/tyler_vss_opelika_results.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "evidence_required": [
+        "official primary statewide source evidence"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "AL"
+      ],
+      "priority_band": "P2",
+      "proposed_title": "Research authoritative statewide coverage for Alabama",
+      "recommended_order": 7,
+      "risk_level": "high",
+      "score": 20,
+      "source_ids": [
+        "al-opelika-tyler-munis-vss"
+      ],
+      "task_type": "coverage_correction"
+    },
+    {
+      "connector_family": null,
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+        "tests/fixtures/oracle_fusion_rest_attachments.json",
+        "tests/fixtures/oracle_fusion_rest_amendments.json"
+      ],
+      "evidence_required": [
+        "official primary statewide source evidence"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "MI"
+      ],
+      "priority_band": "P2",
+      "proposed_title": "Research authoritative statewide coverage for Michigan",
+      "recommended_order": 8,
+      "risk_level": "high",
+      "score": 20,
+      "source_ids": [
+        "mi-detroit-oracle-fusion"
+      ],
+      "task_type": "coverage_correction"
+    },
+    {
+      "connector_family": null,
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/tyler_vss_results_1.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "evidence_required": [
+        "official primary statewide source evidence"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "OH"
+      ],
+      "priority_band": "P2",
+      "proposed_title": "Research authoritative statewide coverage for Ohio",
+      "recommended_order": 9,
+      "risk_level": "high",
+      "score": 20,
+      "source_ids": [
+        "oh-summit-county-tyler-munis-vss"
+      ],
+      "task_type": "coverage_correction"
+    },
+    {
+      "connector_family": null,
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/rivip_external_results.html"
+      ],
+      "evidence_required": [
+        "official primary statewide source evidence"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "RI"
+      ],
+      "priority_band": "P2",
+      "proposed_title": "Research authoritative statewide coverage for Rhode Island",
+      "recommended_order": 10,
+      "risk_level": "high",
+      "score": 20,
+      "source_ids": [
+        "ri-rivip-external"
+      ],
+      "task_type": "coverage_correction"
+    }
+  ],
+  "schema_version": "2.0",
+  "source_records": [
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "public",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "tyler/munis-vss",
+      "connector_name": "tyler/munis-vss",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/tyler_vss_opelika_results.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "City of Opelika procurement only",
+      "fixture_location": [
+        "tests/fixtures/tyler_vss_opelika_results.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/tyler_vss_opelika_results.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "jurisdiction_code": "AL",
+      "jurisdiction_id": "AL",
+      "jurisdiction_scope": "local",
+      "key": "al-opelika-tyler-munis-vss",
+      "known_limitations": [
+        "City of Opelika procurement only"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "City of Opelika Tyler Munis Vendor Self Service",
+      "official_landing_page": "https://ss.opelika-al.gov/vss/",
+      "official_url": "https://ss.opelika-al.gov/vss/",
+      "owning_public_entity": "City of Opelika Tyler Munis Vendor Self Service",
+      "platform_family": "tyler/munis-vss",
+      "portal_profile_key": "al-opelika-tyler-munis-vss",
+      "priority": 2,
+      "public_bid_board_url": "https://ss.opelika-al.gov/vss/",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "source_level": "local",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_tyler_munis_vss_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "oracle/peoplesoft-sourcing",
+      "connector_name": "oracle/peoplesoft-sourcing",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/peoplesoft_results.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/peoplesoft_results.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/peoplesoft_results.html"
+      ],
+      "jurisdiction_code": "CA",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "ca-cal-eprocure",
+      "known_limitations": [
+        "statewide"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "Cal eProcure",
+      "official_landing_page": "https://caleprocure.ca.gov/",
+      "official_url": "https://caleprocure.ca.gov/",
+      "owning_public_entity": "Cal eProcure",
+      "platform_family": "oracle/peoplesoft-sourcing",
+      "portal_profile_key": "ca-cal-eprocure",
+      "priority": 2,
+      "public_bid_board_url": "https://caleprocure.ca.gov/",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "ca-cal-eprocure",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_peoplesoft_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "public",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "georgia/gpr",
+      "connector_name": "georgia/gpr",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/georgia_gpr_listing.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/georgia_gpr_listing.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/georgia_gpr_listing.html"
+      ],
+      "jurisdiction_code": "GA",
+      "jurisdiction_id": "GA",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "ga-gpr",
+      "known_limitations": [
+        "statewide"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "Georgia Procurement Registry",
+      "official_landing_page": "https://ssl.doas.state.ga.us/gpr/",
+      "official_url": "https://ssl.doas.state.ga.us/gpr/",
+      "owning_public_entity": "Georgia Procurement Registry",
+      "platform_family": "georgia/gpr",
+      "portal_profile_key": "ga-gpr",
+      "priority": 1,
+      "public_bid_board_url": "https://ssl.doas.state.ga.us/gpr/",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "ga-gpr",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_georgia_gpr_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "maryland/emma",
+      "connector_name": "maryland/emma",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/maryland_emma_listing.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/maryland_emma_listing.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/maryland_emma_listing.html"
+      ],
+      "jurisdiction_code": "MD",
+      "jurisdiction_id": "MD",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "md-emma",
+      "known_limitations": [
+        "statewide"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "eMaryland Marketplace Advantage",
+      "official_landing_page": "https://emma.maryland.gov/",
+      "official_url": "https://emma.maryland.gov/",
+      "owning_public_entity": "eMaryland Marketplace Advantage",
+      "platform_family": "maryland/emma",
+      "portal_profile_key": "md-emma",
+      "priority": 1,
+      "public_bid_board_url": "https://emma.maryland.gov/",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "md-emma",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_maryland_emma_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "public",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "oracle/fusion-rest",
+      "connector_name": "oracle/fusion-rest",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+        "tests/fixtures/oracle_fusion_rest_attachments.json",
+        "tests/fixtures/oracle_fusion_rest_amendments.json"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "City of Detroit procurement",
+      "fixture_location": [
+        "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+        "tests/fixtures/oracle_fusion_rest_attachments.json",
+        "tests/fixtures/oracle_fusion_rest_amendments.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+        "tests/fixtures/oracle_fusion_rest_attachments.json",
+        "tests/fixtures/oracle_fusion_rest_amendments.json"
+      ],
+      "jurisdiction_code": "MI",
+      "jurisdiction_id": "MI",
+      "jurisdiction_scope": "local",
+      "key": "mi-detroit-oracle-fusion",
+      "known_limitations": [
+        "City of Detroit procurement"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "City of Detroit Oracle Fusion Public Negotiations",
+      "official_landing_page": "https://ebkk.fa.us8.oraclecloud.com/fscmUI/faces/NegotiationAbstracts?prcBuId=300000007775375",
+      "official_url": "https://ebkk.fa.us8.oraclecloud.com/fscmUI/faces/NegotiationAbstracts?prcBuId=300000007775375",
+      "owning_public_entity": "City of Detroit Oracle Fusion Public Negotiations",
+      "platform_family": "oracle/fusion-rest",
+      "portal_profile_key": "mi-detroit-oracle-fusion",
+      "priority": 2,
+      "public_bid_board_url": "https://ebkk.fa.us8.oraclecloud.com/fscmUI/faces/NegotiationAbstracts?prcBuId=300000007775375",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "mi-detroit-oracle-fusion",
+      "source_level": "local",
+      "source_role": "supplemental",
+      "source_status": "active",
+      "supplemental": true,
+      "test_location": [
+        "tests/test_oracle_fusion_rest_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "public",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "tyler/munis-vss",
+      "connector_name": "tyler/munis-vss",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/tyler_vss_results_1.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "Summit County procurement only",
+      "fixture_location": [
+        "tests/fixtures/tyler_vss_results_1.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/tyler_vss_results_1.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "jurisdiction_code": "OH",
+      "jurisdiction_id": "OH",
+      "jurisdiction_scope": "local",
+      "key": "oh-summit-county-tyler-munis-vss",
+      "known_limitations": [
+        "Summit County procurement only"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "Summit County Tyler Munis Vendor Self Service",
+      "official_landing_page": "https://summitcountyoh.munisselfservice.com/vss/",
+      "official_url": "https://summitcountyoh.munisselfservice.com/vss/",
+      "owning_public_entity": "Summit County Tyler Munis Vendor Self Service",
+      "platform_family": "tyler/munis-vss",
+      "portal_profile_key": "oh-summit-county-tyler-munis-vss",
+      "priority": 2,
+      "public_bid_board_url": "https://summitcountyoh.munisselfservice.com/vss/",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "source_level": "local",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_tyler_munis_vss_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "public",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "pennsylvania/emarketplace",
+      "connector_name": "pennsylvania/emarketplace",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/pennsylvania_emarketplace_search.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/pennsylvania_emarketplace_search.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/pennsylvania_emarketplace_search.html"
+      ],
+      "jurisdiction_code": "PA",
+      "jurisdiction_id": "PA",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "pa-emarketplace",
+      "known_limitations": [
+        "statewide"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "PA eMarketplace",
+      "official_landing_page": "https://www.emarketplace.state.pa.us/",
+      "official_url": "https://www.emarketplace.state.pa.us/",
+      "owning_public_entity": "PA eMarketplace",
+      "platform_family": "pennsylvania/emarketplace",
+      "portal_profile_key": "pa-emarketplace",
+      "priority": 1,
+      "public_bid_board_url": "https://www.emarketplace.state.pa.us/",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "pa-emarketplace",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_pennsylvania_emarketplace_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": false,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "rhode-island/rivip-external",
+      "connector_name": "rhode-island/rivip-external",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/rivip_external_results.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "local and education external notices",
+      "fixture_location": [
+        "tests/fixtures/rivip_external_results.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/rivip_external_results.html"
+      ],
+      "jurisdiction_code": "RI",
+      "jurisdiction_id": "RI",
+      "jurisdiction_scope": "supplemental_statewide",
+      "key": "ri-rivip-external",
+      "known_limitations": [
+        "local and education external notices"
+      ],
+      "last_verified_date": null,
+      "migration_status": "partial",
+      "name": "RIVIP External Solicitations",
+      "official_landing_page": "https://www.purchasing.ri.gov/RIVIP/ExternalBids.aspx",
+      "official_url": "https://www.purchasing.ri.gov/RIVIP/ExternalBids.aspx",
+      "owning_public_entity": "RIVIP External Solicitations",
+      "platform_family": "rhode-island/rivip-external",
+      "portal_profile_key": "ri-rivip-external",
+      "priority": 2,
+      "public_bid_board_url": "https://www.purchasing.ri.gov/RIVIP/ExternalBids.aspx",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "ri-rivip-external",
+      "source_level": "supplemental",
+      "source_role": "external notice",
+      "source_status": "active",
+      "supplemental": true,
+      "test_location": [
+        "tests/test_rhode_island_rivip_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "texas/esbd",
+      "connector_name": "texas/esbd",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/texas_esbd_results.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/texas_esbd_results.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/texas_esbd_results.html"
+      ],
+      "jurisdiction_code": "TX",
+      "jurisdiction_id": "TX",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "tx-esbd",
+      "known_limitations": [
+        "statewide"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "Electronic State Business Daily",
+      "official_landing_page": "https://www.txsmartbuy.gov/esbd",
+      "official_url": "https://www.txsmartbuy.gov/esbd",
+      "owning_public_entity": "Electronic State Business Daily",
+      "platform_family": "texas/esbd",
+      "portal_profile_key": "tx-esbd",
+      "priority": 1,
+      "public_bid_board_url": "https://www.txsmartbuy.gov/esbd",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "tx-esbd",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_texas_esbd_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "public",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "virginia/eva",
+      "connector_name": "virginia/eva",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "compatible",
+      "evidence_location": [
+        "tests/fixtures/eva_board.html"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/eva_board.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/eva_board.html"
+      ],
+      "jurisdiction_code": "VA",
+      "jurisdiction_id": "VA",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "va-eva",
+      "known_limitations": [
+        "statewide"
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "Virginia eVA",
+      "official_landing_page": "https://eva.virginia.gov/",
+      "official_url": "https://eva.virginia.gov/",
+      "owning_public_entity": "Virginia eVA",
+      "platform_family": "virginia/eva",
+      "portal_profile_key": "va-eva",
+      "priority": 1,
+      "public_bid_board_url": "https://eva.virginia.gov/",
+      "public_detail_url_pattern": null,
+      "public_search_url": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "va-eva",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_eva_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    }
+  ],
+  "summary": {
+    "attachment_capable_jurisdiction_count": 6,
+    "authentication_blocked_jurisdiction_count": 0,
+    "automated_access_block_count": 0,
+    "baseline_operational_count": 6,
+    "captcha_affected_jurisdiction_count": 0,
+    "captcha_count": 0,
+    "changed_markup_count": 0,
+    "connector_family_counts": {
+      "georgia/gpr": 1,
+      "maryland/emma": 1,
+      "oracle/peoplesoft-sourcing": 1,
+      "pennsylvania/emarketplace": 1,
+      "texas/esbd": 1,
+      "virginia/eva": 1
+    },
+    "coverage_tier_distribution": {
+      "0": 50,
+      "1": 0,
+      "2": 6,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0
+    },
+    "detail_capable_jurisdiction_count": 6,
+    "discovery_capable_jurisdiction_count": 6,
+    "document_pipeline_capable_jurisdiction_count": 6,
+    "implemented_connector_count": 21,
+    "jurisdiction_count": 56,
+    "lacking_primary_source_count": 50,
+    "live_validated_jurisdiction_count": 0,
+    "local_evidence_only_count": 4,
+    "login_required_count": 0,
+    "metadata_only_count": 0,
+    "migrated_source_count": 0,
+    "missing_source_count": 46,
+    "operational_status_distribution": {
+      "baseline_operational": 6,
+      "not_operational": 50
+    },
+    "payment_required_count": 0,
+    "public_detail_count": 10,
+    "public_discovery_count": 10,
+    "public_document_pipeline_count": 10,
+    "registration_required_count": 0,
+    "robots_policy_count": 0,
+    "source_count": 10,
+    "subscription_required_count": 0,
+    "unverified_source_count": 10
+  },
+  "validation_warnings": []
+}

@@ -11,7 +11,7 @@ from urllib.parse import urlsplit
 
 from sled_aggregator.connectors.registry import connector_registry
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "2.0"
 ROOT = Path(__file__).resolve().parents[3]
 JURISDICTIONS_PATH = ROOT / "data/coverage/jurisdictions.json"
 SOURCES_PATH = ROOT / "data/coverage/sources.json"
@@ -124,6 +124,48 @@ SOURCE_FIELDS = {
     "priority",
     "expected_coverage_impact",
     "covers_levels",
+    "source_id",
+    "jurisdiction_id",
+    "jurisdiction_scope",
+    "owning_public_entity",
+    "official_landing_page",
+    "public_bid_board_url",
+    "public_search_url",
+    "public_detail_url_pattern",
+    "connector_key",
+    "connector_alias",
+    "portal_profile_key",
+    "anonymous_discovery_classification",
+    "anonymous_detail_classification",
+    "attachment_classification",
+    "document_pipeline_classification",
+    "captcha_classification",
+    "robots_access_notes",
+    "allowed_http_methods",
+    "evidence_type",
+    "evidence_location",
+    "fixture_location",
+    "test_location",
+    "last_verified_date",
+    "known_limitations",
+    "blocker_reason",
+    "recommended_next_action",
+}
+
+STATEWIDE_SCOPES = {"statewide", "territory-wide"}
+LIFECYCLE_STATUSES = {
+    "unresearched",
+    "source_identified",
+    "evidence_pending",
+    "connector_family_identified",
+    "connector_available",
+    "fixture_verified",
+    "live_verified",
+    "partially_operational",
+    "operational",
+    "blocked",
+    "retired",
+    "replaced",
 }
 
 
@@ -204,10 +246,149 @@ def validate(jdata: dict | None = None, sdata: dict | None = None) -> list[Valid
                 JURISDICTIONS_PATH, "registry", "name", names, "remove duplicate canonical names"
             )
         )
+    required_jurisdiction_fields = {
+        "jurisdiction_id",
+        "jurisdiction_name",
+        "jurisdiction_type",
+        "postal_code",
+        "fips_code",
+        "primary_source_id",
+        "supplemental_source_ids",
+        "coverage_tier",
+        "coverage_status",
+        "operational_status",
+        "discovery_status",
+        "detail_status",
+        "attachment_status",
+        "document_pipeline_status",
+        "live_validation_status",
+        "last_verified_at",
+        "known_gaps",
+        "next_action",
+        "notes",
+    }
+    for jurisdiction in jurisdictions:
+        code = str(jurisdiction.get("code", "<missing>"))
+        missing = sorted(required_jurisdiction_fields - set(jurisdiction))
+        if missing:
+            issues.append(
+                _issue(
+                    JURISDICTIONS_PATH,
+                    code,
+                    "required_fields",
+                    missing,
+                    "add all authoritative jurisdiction control-plane fields",
+                )
+            )
+        if jurisdiction.get("jurisdiction_id") != code:
+            issues.append(
+                _issue(
+                    JURISDICTIONS_PATH,
+                    code,
+                    "jurisdiction_id",
+                    jurisdiction.get("jurisdiction_id"),
+                    "match the stable code",
+                )
+            )
+        if jurisdiction.get("jurisdiction_type") not in JURISDICTION_TYPES:
+            issues.append(
+                _issue(
+                    JURISDICTIONS_PATH,
+                    code,
+                    "jurisdiction_type",
+                    jurisdiction.get("jurisdiction_type"),
+                    "use state, district, or territory",
+                )
+            )
+        if jurisdiction.get("coverage_status") not in LIFECYCLE_STATUSES:
+            issues.append(
+                _issue(
+                    JURISDICTIONS_PATH,
+                    code,
+                    "coverage_status",
+                    jurisdiction.get("coverage_status"),
+                    "use an explicit lifecycle status",
+                )
+            )
     canonical = {x["canonical_name"] for x in connector_registry.inventory()}
     keys: set[str] = set()
     sources = sdata.get("sources", [])
     all_keys = {s.get("key") for s in sources}
+    evidence = sdata.get("evidence", [])
+    evidence_ids = [item.get("evidence_id") for item in evidence]
+    if len(evidence_ids) != len(set(evidence_ids)):
+        issues.append(
+            _issue(
+                SOURCES_PATH,
+                "evidence",
+                "evidence_id",
+                evidence_ids,
+                "use unique stable evidence IDs",
+            )
+        )
+    for item in evidence:
+        if item.get("source_id") not in all_keys:
+            issues.append(
+                _issue(
+                    SOURCES_PATH,
+                    str(item.get("evidence_id")),
+                    "source_id",
+                    item.get("source_id"),
+                    "reference an existing source",
+                )
+            )
+        location = item.get("location")
+        if (
+            location
+            and not str(location).startswith(("http://", "https://"))
+            and not (ROOT / location).is_file()
+        ):
+            issues.append(
+                _issue(
+                    SOURCES_PATH,
+                    str(item.get("evidence_id")),
+                    "location",
+                    location,
+                    "reference a committed artifact or official HTTP(S) URL",
+                )
+            )
+    for jurisdiction in jurisdictions:
+        primary = jurisdiction.get("primary_source_id")
+        if primary and primary not in all_keys:
+            issues.append(
+                _issue(
+                    JURISDICTIONS_PATH,
+                    jurisdiction["code"],
+                    "primary_source_id",
+                    primary,
+                    "reference an existing source",
+                )
+            )
+        if primary:
+            source = next((s for s in sources if s.get("key") == primary), {})
+            if (
+                source.get("jurisdiction_code") != jurisdiction["code"]
+                or source.get("source_level") not in STATEWIDE_SCOPES
+            ):
+                issues.append(
+                    _issue(
+                        JURISDICTIONS_PATH,
+                        jurisdiction["code"],
+                        "primary_source_id",
+                        primary,
+                        "reference an authoritative statewide source in this jurisdiction",
+                    )
+                )
+        if jurisdiction.get("operational_status") == "baseline_operational" and not primary:
+            issues.append(
+                _issue(
+                    JURISDICTIONS_PATH,
+                    jurisdiction["code"],
+                    "operational_status",
+                    "baseline_operational",
+                    "register a qualifying primary statewide source",
+                )
+            )
     for source in sources:
         key = str(source.get("key", "<missing>"))
         unknown = set(source) - SOURCE_FIELDS
@@ -321,6 +502,31 @@ def validate(jdata: dict | None = None, sdata: dict | None = None) -> list[Valid
                     "reference at least one committed fixture",
                 )
             )
+        if source.get("verification_status") == "fixture_verified" and not any(
+            item.get("source_id") == key for item in evidence
+        ):
+            issues.append(
+                _issue(
+                    SOURCES_PATH,
+                    key,
+                    "evidence",
+                    None,
+                    "add evidence records for affirmative fixture claims",
+                )
+            )
+        if source.get("document_pipeline_classification") == "compatible":
+            from sled_aggregator.services.document_orchestration import PIPELINE_CONNECTORS
+
+            if source.get("connector_name") not in PIPELINE_CONNECTORS:
+                issues.append(
+                    _issue(
+                        SOURCES_PATH,
+                        key,
+                        "document_pipeline_classification",
+                        "compatible",
+                        "register the connector in PIPELINE_CONNECTORS",
+                    )
+                )
         replacement = source.get("replacement_source")
         if replacement and not replacement.startswith("external:") and replacement not in all_keys:
             issues.append(
@@ -536,6 +742,62 @@ def recommendations(hypotheses: list[dict]) -> list[dict]:
     return sorted(rows, key=lambda x: (-x["score"], x["family"]))
 
 
+def recommendation_queue(records: list[dict], sources: list[dict]) -> list[dict]:
+    """Create planning work only from registered sources and explicit registry gaps."""
+    rows: list[dict] = []
+    order = 1
+    for record in records:
+        primary = next((s for s in sources if s["key"] == record.get("primary_source_id")), None)
+        if primary and not record["live_verified"]:
+            rows.append(
+                {
+                    "recommended_order": order,
+                    "proposed_title": f"Validate {record['name']} anonymous statewide collection",
+                    "task_type": "live_validation",
+                    "jurisdiction_ids": [record["code"]],
+                    "source_ids": [primary["key"]],
+                    "connector_family": primary["platform_family"],
+                    "evidence_available": primary.get("fixture_references", []),
+                    "evidence_required": ["dated bounded anonymous live-validation result"],
+                    "expected_baseline_coverage_increase": 0,
+                    "expected_document_pipeline_increase": 0,
+                    "risk_level": "medium",
+                    "dependencies": [],
+                    "score": 50,
+                    "priority_band": "P1",
+                }
+            )
+            order += 1
+    for record in records:
+        if not record["local_evidence_only"] and record.get("primary_source_id"):
+            continue
+        actual = [s for s in sources if s["jurisdiction_code"] == record["code"]]
+        if not actual:
+            continue  # unidentified sources are intentionally never ranked
+        rows.append(
+            {
+                "recommended_order": order,
+                "proposed_title": f"Research authoritative statewide coverage for {record['name']}",
+                "task_type": "coverage_correction"
+                if record["local_evidence_only"]
+                else "source_research",
+                "jurisdiction_ids": [record["code"]],
+                "source_ids": [s["key"] for s in actual],
+                "connector_family": None,
+                "evidence_available": [p for s in actual for p in s.get("fixture_references", [])],
+                "evidence_required": ["official primary statewide source evidence"],
+                "expected_baseline_coverage_increase": 0,
+                "expected_document_pipeline_increase": 0,
+                "risk_level": "high",
+                "dependencies": [],
+                "score": 20,
+                "priority_band": "P2",
+            }
+        )
+        order += 1
+    return rows
+
+
 def build_report(
     as_of: str | None = None, jdata: dict | None = None, sdata: dict | None = None
 ) -> dict:
@@ -548,12 +810,48 @@ def build_report(
     records, mappings, all_gaps = [], [], []
     for jurisdiction in sorted(jdata["jurisdictions"], key=lambda j: j["code"]):
         linked = [s for s in sources if s["jurisdiction_code"] == jurisdiction["code"]]
-        value, gaps = tier(linked, inventory), gaps_for(jurisdiction, linked)
+        statewide = [s for s in linked if s.get("source_level") in STATEWIDE_SCOPES]
+        value, gaps = tier(statewide, inventory), gaps_for(jurisdiction, statewide)
+        primary = next(
+            (s for s in statewide if s["key"] == jurisdiction.get("primary_source_id")), None
+        )
+        fixture = bool(primary and primary.get("verification_status") == "fixture_verified")
+        discovery = bool(primary and fixture and primary.get("discovery_access") == "public")
+        details = bool(discovery and primary.get("detail_access") == "public")
+        attachments = bool(details and primary.get("document_access") in {"public", "mixed"})
+        pipeline = bool(
+            attachments and primary.get("document_pipeline_classification") == "compatible"
+        )
+        live = bool(
+            primary
+            and primary.get("verification_status") == "live_public_verified"
+            and primary.get("last_verified")
+        )
+        baseline = bool(primary and discovery and primary.get("connector_name") in inventory)
         records.append(
             {
                 **jurisdiction,
                 "coverage_tier": value,
                 "source_keys": [s["key"] for s in linked],
+                "statewide_source_keys": [s["key"] for s in statewide],
+                "local_evidence_only": bool(linked and not statewide),
+                "primary_source_name": primary.get("name") if primary else None,
+                "platform_family": primary.get("platform_family") if primary else None,
+                "connector": primary.get("connector_name") if primary else None,
+                "fixture_verified": fixture,
+                "discovery_capable": discovery,
+                "detail_capable": details,
+                "attachment_capable": attachments,
+                "document_pipeline_capable": pipeline,
+                "live_verified": live,
+                "baseline_operational": baseline,
+                "authentication": primary.get("authentication_requirement")
+                if primary
+                else "unknown",
+                "captcha": primary.get("captcha_classification") if primary else "unknown",
+                "blocker": primary.get("blocker_reason")
+                if primary
+                else "primary statewide source not evidence-backed",
                 "gaps": gaps,
             }
         )
@@ -573,11 +871,39 @@ def build_report(
     def count(field: str, values: set[str]) -> int:
         return sum(s[field] in values for s in sources)
 
+    operational_distribution: dict[str, int] = {}
+    for record in records:
+        status = record["operational_status"]
+        operational_distribution[status] = operational_distribution.get(status, 0) + 1
+    family_counts: dict[str, int] = {}
+    for record in records:
+        if record["platform_family"]:
+            family_counts[record["platform_family"]] = (
+                family_counts.get(record["platform_family"], 0) + 1
+            )
     summary = {
         "jurisdiction_count": len(records),
         "source_count": len(sources),
         "implemented_connector_count": len(inventory_rows),
         "coverage_tier_distribution": distribution,
+        "operational_status_distribution": dict(sorted(operational_distribution.items())),
+        "baseline_operational_count": sum(j["baseline_operational"] for j in records),
+        "discovery_capable_jurisdiction_count": sum(j["discovery_capable"] for j in records),
+        "detail_capable_jurisdiction_count": sum(j["detail_capable"] for j in records),
+        "attachment_capable_jurisdiction_count": sum(j["attachment_capable"] for j in records),
+        "document_pipeline_capable_jurisdiction_count": sum(
+            j["document_pipeline_capable"] for j in records
+        ),
+        "live_validated_jurisdiction_count": sum(j["live_verified"] for j in records),
+        "lacking_primary_source_count": sum(not j.get("primary_source_id") for j in records),
+        "local_evidence_only_count": sum(j["local_evidence_only"] for j in records),
+        "authentication_blocked_jurisdiction_count": sum(
+            j["authentication"] not in {"none", "unknown"} for j in records
+        ),
+        "captcha_affected_jurisdiction_count": sum(
+            j["captcha"] not in {"none", "none_observed_in_fixture", "unknown"} for j in records
+        ),
+        "connector_family_counts": dict(sorted(family_counts.items())),
         "public_discovery_count": count("discovery_access", {"public"}),
         "public_detail_count": count("detail_access", {"public"}),
         "public_document_pipeline_count": sum(
@@ -612,7 +938,7 @@ def build_report(
         "source_records": sources,
         "jurisdiction_source_mappings": mappings,
         "gap_analysis": all_gaps,
-        "prioritized_recommendations": recommendations(sdata.get("family_hypotheses", [])),
+        "prioritized_recommendations": recommendation_queue(records, sources),
         "validation_warnings": [i.as_dict() for i in issues if i.severity == "warning"],
         "generation_metadata": {
             "generator": "sled_aggregator.coverage",
@@ -754,13 +1080,12 @@ def render_markdown(report: dict) -> str:
         "",
         "## Remaining platform-family gaps and prioritized next work",
         "",
-        "| Status | Band | Score | Family | Factors | Next action |",
-        "|---|---|---:|---|---|---|",
+        "| Order | Type | Jurisdictions | Sources | Proposed title |",
+        "|---:|---|---|---|---|",
     ]
     lines += [
-        f"| {r['evidence_status']} | {r['priority_band']} | {r['score']} | {r['family']} | "
-        + ", ".join(f"{k}={v}" for k, v in r["factors"].items())
-        + f" | {r['recommended_next_action']} |"
+        f"| {r['recommended_order']} | {r['task_type']} | {', '.join(r['jurisdiction_ids'])} | "
+        f"{', '.join(r['source_ids'])} | {r['proposed_title']} |"
         for r in report["prioritized_recommendations"]
     ]
     lines += [
@@ -779,3 +1104,71 @@ def render_markdown(report: dict) -> str:
 
 def render(report: dict, format: str) -> str:
     return {"json": render_json, "csv": render_csv, "markdown": render_markdown}[format](report)
+
+
+def render_capability_matrix(report: dict) -> str:
+    lines = [
+        "# Authoritative 56-jurisdiction capability matrix",
+        "",
+        "Fixture verification is not live verification. Local evidence is excluded from statewide completion.",
+        "",
+        "| Jurisdiction | Primary source | Family | Connector | Discovery | Details | Attachments | Pipeline | Fixture | Live | Auth | CAPTCHA | Tier | Operational | Blocker | Next action |",
+        "|---|---|---|---|---:|---:|---:|---:|---:|---:|---|---|---:|---|---|---|",
+    ]
+
+    def yes(value: bool) -> str:
+        return "yes" if value else "no"
+
+    for j in report["jurisdiction_records"]:
+        lines.append(
+            f"| {j['name']} ({j['code']}) | {j['primary_source_name'] or '—'} | {j['platform_family'] or '—'} | {j['connector'] or '—'} | {yes(j['discovery_capable'])} | {yes(j['detail_capable'])} | {yes(j['attachment_capable'])} | {yes(j['document_pipeline_capable'])} | {yes(j['fixture_verified'])} | {yes(j['live_verified'])} | {j['authentication']} | {j['captcha']} | {j['coverage_tier']} | {j['operational_status']} | {j['blocker'] or '—'} | {j['next_action']} |"
+        )
+    return "\n".join(lines) + "\n"
+
+
+def generated_reports(report: dict) -> dict[str, str]:
+    missing = [j for j in report["jurisdiction_records"] if not j.get("primary_source_id")]
+    blocked = [s for s in report["source_records"] if s.get("blocker_reason")]
+    pipeline = [j for j in report["jurisdiction_records"] if j["document_pipeline_capable"]]
+    families = report["summary"]["connector_family_counts"]
+    queue = report["prioritized_recommendations"]
+
+    def md_list(title: str, rows: list[str]) -> str:
+        return "# " + title + "\n\n" + ("\n".join(rows) if rows else "None.") + "\n"
+
+    return {
+        "coverage-summary.json": render_json(report),
+        "capability-matrix.md": render_capability_matrix(report),
+        "connector-family-reuse.md": md_list(
+            "Connector-family reuse",
+            [f"- `{k}`: {v} primary statewide jurisdiction(s)" for k, v in families.items()],
+        ),
+        "missing-coverage.md": md_list(
+            "Missing primary statewide coverage",
+            [f"- {j['name']} ({j['code']}): {j['next_action']}" for j in missing],
+        ),
+        "blocked-sources.md": md_list(
+            "Blocked sources", [f"- `{s['key']}`: {s['blocker_reason']}" for s in blocked]
+        ),
+        "document-pipeline-readiness.md": md_list(
+            "Document-pipeline ready jurisdictions",
+            [f"- {j['name']} ({j['code']}): `{j['primary_source_id']}`" for j in pipeline],
+        ),
+        "next-pr-queue.json": json.dumps(queue, indent=2, sort_keys=True) + "\n",
+    }
+
+
+def write_generated_reports(directory: Path | None = None) -> None:
+    directory = directory or ROOT / "reports/coverage"
+    directory.mkdir(parents=True, exist_ok=True)
+    for name, content in generated_reports(build_report()).items():
+        (directory / name).write_text(content)
+
+
+def report_drift(directory: Path | None = None) -> list[str]:
+    directory = directory or ROOT / "reports/coverage"
+    return [
+        name
+        for name, content in generated_reports(build_report()).items()
+        if not (directory / name).is_file() or (directory / name).read_text() != content
+    ]
