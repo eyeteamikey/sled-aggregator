@@ -67,6 +67,7 @@ class GeorgiaGPRTests(unittest.IsolatedAsyncioTestCase):
         for adjacent in ("peoplesoft", "jaggaer", "bidx"):
             self.assertIsNot(connector_registry.get(adjacent), GeorgiaGPRConnector)
         self.assertTrue(GeorgiaGPRConnector.public_read_only)
+        self.assertTrue(GeorgiaGPRConnector.document_pipeline_compatible)
 
     def test_profile_validation_transition_and_replacement_metadata(self):
         self.assertTrue(
@@ -132,6 +133,8 @@ class GeorgiaGPRTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(docs[1].filename, "Addendum_1.pdf")
         self.assertEqual(sum(d.publicly_retrievable for d in docs), 2)
         self.assertEqual(docs[-1].access_state, AccessState.LOGIN_REQUIRED)
+        self.assertEqual(docs[1].addendum_number, "1")
+        self.assertEqual(docs[1].version_number, 2)
 
     async def test_statuses_and_fixture_verified_filters(self):
         _, _, items = await self.collect(

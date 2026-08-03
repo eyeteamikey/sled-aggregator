@@ -107,6 +107,7 @@ class MarylandEMMATests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(item.raw_payload["unspsc_codes"], ["77121700"])
         self.assertIn("source_provenance", item.raw_payload)
         docs = c.document_candidates(item)
+        self.assertTrue(c.document_pipeline_compatible)
         self.assertEqual(len(docs), 6)
         self.assertEqual(docs[0].filename, "RFP_26_100.pdf")
         self.assertEqual(docs[-1].access_state, AccessState.VENDOR_PROFILE_REQUIRED)

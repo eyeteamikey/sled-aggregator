@@ -1,43 +1,76 @@
-## Motivation and root cause
+## Motivation
 
-Document infrastructure existed, and several connectors discovered attachments, but normal opportunity ingestion accepted only `RawOpportunity`. It discarded the separate canonical candidates returned by Oracle and Tyler detail hydration, while Pennsylvania retained normalized links only in `raw_payload`. No collection-to-manifest orchestration entry point existed. Coverage tiering also inferred pipeline support from public links rather than a verified connector capability.
+Connect Georgia GPR, Maryland eMMA, and Virginia eVA's existing document-link
+contracts to the shared document orchestration path without introducing retrieval in
+connector discovery.
 
-## Description and end-to-end flow
+## Prerequisite verification
 
-This change adds one reusable, non-networked orchestration service and an optional collection handoff:
+The Codex Cloud workspace started at merge commit `fc262b6`, “Merge pull request #32
+from eyeteamikey/codex/prepare-codex-cloud-pr-for-document-pipeline”. Master content
+includes `DocumentOrchestrationService`, canonical `DocumentCandidate`, connector
+capability reporting, opportunity-first handoff, manifest reconciliation, and queueing.
 
-connector discovery/detail → opportunity persistence → candidate normalization → manifest upsert → version reconciliation → eligibility classification → bounded retrieval queue → existing safe downloader → parser → targeted OCR when needed → structured extraction.
+## Evidence gate and description
 
-The service checks the persisted parent and candidate provenance, applies category and run limits, preserves restricted metadata, suppresses duplicates, and returns a structured operational summary. The collection path remains compatible with connectors that return no documents.
+All three connectors pass the independent gate using sanitized detail fixtures and
+injected transports. Each emits canonical candidates with parent provenance, stable
+attachment identity, explicit access state, and deduplication. Public documents are
+eligible for the existing manifest/queue. Gated documents remain metadata-only.
 
-## Connectors integrated
+### Georgia GPR
 
-- Oracle Fusion REST (City of Detroit): existing detail attachment candidates.
-- Pennsylvania eMarketplace: adapter for normalized `document_links`.
-- Tyler Munis/VSS (Summit County and Opelika): existing detail candidates with redacted transient URL metadata and deterministic source IDs.
+Enables the fixture-backed adapter for public solicitation files and addenda. It uses
+the profile's explicit official/approved host allowlists and preserves login-required
+GA@WORK attachment metadata without queueing it.
 
-Other document-link families remain unclaimed pending adapter evidence.
+### Maryland eMMA
 
-## Manifest, queue, versions, and security
+Enables the fixture-backed adapter for multiple attachments, addenda, Q&A, bid tabs,
+and awards. Supplier-profile/login rows remain restricted and duplicate URLs are
+suppressed.
 
-Stable identity includes connector, opportunity, stable source document ID (or sanitized fallback), and version evidence. Logical identity reconciles versions, prevents older rediscovery from replacing newer content, and retains lineage. Existing uniqueness constraints suppress duplicate manifests and jobs. Only confirmed public, current, eligible records can enqueue; restricted records remain metadata-only. Ingestion never downloads and URL validation/canonicalization continues to reject unsafe destinations and strip transient parameters.
+### Virginia eVA
 
-## OCR and processing
+Adds a canonical adapter over `document_links`. Explicit attachment IDs are preferred;
+the fallback combines lot, round, and attachment path. Transient query material is not
+included in identity or raw metadata. Free-account and login transitions are never
+automated.
 
-The existing downloader/extraction workers remain stage boundaries. Successful downloads hand off to parsing; native-text PDFs bypass OCR while insufficient/image-only pages use the existing bounded OCR policy before structured solicitation extraction.
+## Pipeline integration and versions
+
+The three families are added to the orchestration compatibility set. Numeric source
+versions and eVA rounds feed shared manifest reconciliation; addendum/amendment numbers
+remain distinct and queryable. No connector-specific queue, downloader, parser, OCR, or
+extraction code is introduced.
+
+## Security controls
+
+Adapters require HTTPS and explicit connector host approval, reject unsafe/malformed
+links, do not forward credentials, and never perform login, registration, CAPTCHA, or
+bid submission. Retrieval redirects remain subject to the existing safe downloader.
 
 ## Testing
 
-Added fixture-shaped tests for collection handoff, documentless connectors, and Pennsylvania public/restricted normalization. Existing Oracle, Pennsylvania, Tyler, manifest, SSRF/downloader, parsing, OCR, structured extraction, and coverage suites provide regression coverage. No live portal download is claimed.
+Fixture tests cover normalization, capability reporting, public/restricted states,
+deduplication, version/addendum metadata, and eVA canonical adaptation. The full unit,
+lint, compile, coverage validation/recommendation, and repository checks are run before
+publication.
 
-## Migration
+## Live validation
 
-No schema migration is required. Existing manifest and queue uniqueness constraints support this orchestration path.
+Not performed. This change relies on sanitized fixture evidence and does not interpret
+network availability as an access classification.
 
-## Coverage
+## Coverage changes
 
-Pipeline compatibility is now derived from an explicit connector implementation capability plus source access evidence, fixture references, and tests. The four evidence-backed source presets count; generic public document-link claims do not.
+The derived `public_document_pipeline_count` increases from 4 to 7. Generated JSON and
+Markdown coverage reports are refreshed; the count is computed from registry
+capabilities rather than hardcoded.
 
-## Known limitations
+## Known limitations and exclusions
 
-Retrieval remains disabled by default at the downloader boundary. Tyler expired-link reacquisition still requires the connector detail workflow to be invoked by a future retry coordinator; no session state or raw token is persisted. The remaining audited connector families require separate canonical adapters and fixtures.
+No requested connector is excluded. Verification remains fixture-only. eVA temporary
+public links may require reacquisition through its public detail workflow. Future host
+or markup changes fail closed until allowlists and fixtures are updated. Rows without a
+safe source URL are skipped because the canonical model requires one.

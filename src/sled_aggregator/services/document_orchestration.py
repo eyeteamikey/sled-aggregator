@@ -20,7 +20,10 @@ from sled_aggregator.domain.models import CanonicalOpportunity, DocumentCandidat
 from sled_aggregator.services.document_manifest import DocumentManifestService
 
 PIPELINE_CONNECTORS = frozenset(
-    {"oracle/fusion-rest", "pennsylvania/emarketplace", "tyler/munis-vss"}
+    {
+        "georgia/gpr", "maryland/emma", "oracle/fusion-rest",
+        "pennsylvania/emarketplace", "tyler/munis-vss", "virginia/eva",
+    }
 )
 
 

@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-07-31",
+  "as_of": "2026-08-03",
   "connector_inventory": [
     {
       "aliases": [
@@ -178,7 +178,7 @@
       "detail_capability": true,
       "discovery_capability": true,
       "document_link_capability": true,
-      "document_pipeline_compatible": false,
+      "document_pipeline_compatible": true,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
       "fixture_count": 30,
       "implementation_module": "sled_aggregator.connectors.georgia_gpr",
@@ -307,7 +307,7 @@
       "detail_capability": true,
       "discovery_capability": true,
       "document_link_capability": true,
-      "document_pipeline_compatible": false,
+      "document_pipeline_compatible": true,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
       "fixture_count": 6,
       "implementation_module": "sled_aggregator.connectors.maryland_emma",
@@ -634,7 +634,7 @@
       "detail_capability": true,
       "discovery_capability": true,
       "document_link_capability": true,
-      "document_pipeline_compatible": false,
+      "document_pipeline_compatible": true,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
       "fixture_count": 2,
       "implementation_module": "sled_aggregator.connectors.eva",
@@ -2468,7 +2468,7 @@
     "payment_required_count": 0,
     "public_detail_count": 10,
     "public_discovery_count": 10,
-    "public_document_pipeline_count": 4,
+    "public_document_pipeline_count": 7,
     "registration_required_count": 0,
     "robots_policy_count": 0,
     "source_count": 10,

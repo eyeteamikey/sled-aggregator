@@ -327,6 +327,7 @@ def parse_page(
 
 class GeorgiaGPRConnector(BaseConnector):
     platform_family = CANONICAL_FAMILY
+    document_pipeline_compatible = True
     jurisdictions = ("configurable",)
     public_read_only = True
     _transient = frozenset({429, 502, 503, 504})
@@ -567,16 +568,30 @@ class GeorgiaGPRConnector(BaseConnector):
                     category=doc.get("category") or self._category(label),
                     source_detail_url=opportunity.source.opportunity_url,
                     version_label=doc.get("version"),
+                    version_number=self._document_version(doc.get("version")),
                     addendum_number=doc.get("addendumNumber"),
+                    amendment_number=doc.get("amendmentNumber"),
+                    posted_at=self._datetime(doc.get("postedDate")),
+                    modified_at=self._datetime(doc.get("modifiedDate")),
                     publicly_retrievable=state is AccessState.PUBLIC and doc.get("direct", True),
                     raw_metadata={
-                        **doc,
+                        **self._sanitized_document_metadata(doc),
                         "authoritative_opportunity_url": str(opportunity.source.opportunity_url),
                         "intermediate": not doc.get("direct", True),
                     },
                 )
             )
         return result
+
+    @staticmethod
+    def _document_version(value):
+        match = re.search(r"\d+", str(value or ""))
+        return int(match.group()) if match else None
+
+    @staticmethod
+    def _sanitized_document_metadata(doc):
+        blocked = {"url", "token", "signature", "session", "cookie"}
+        return {k: v for k, v in doc.items() if k.casefold() not in blocked}
 
     async def _get(self, url, params=None):
         if self._circuit_open():
