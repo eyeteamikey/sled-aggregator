@@ -27,6 +27,9 @@ dev = [
   "pytest-asyncio>=1.1,<2.0",
   "ruff>=0.12,<1.0",
 ]
+validation = [
+  "playwright>=1.45,<2.0",
+]
 documents = [
   "openpyxl>=3.1,<4.0",
   "pypdf>=5.8,<6.0",
