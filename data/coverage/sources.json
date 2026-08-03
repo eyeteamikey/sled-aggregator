@@ -1287,6 +1287,142 @@
       "blocker_reason": null,
       "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
       "evidence_url": "https://dpp.vi.gov/gvibuy"
+    },
+    {
+      "key": "ct-ctsource",
+      "jurisdiction_code": "CT",
+      "name": "CTsource",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
+      "platform_family": "webprocure/proactis",
+      "connector_name": "webprocure/proactis",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "metadata_only",
+      "document_access": "unknown",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "ct-ctsource",
+      "jurisdiction_id": "CT",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Connecticut Department of Administrative Services",
+      "official_landing_page": "https://portal.ct.gov/das/ctsource/ctsource",
+      "public_bid_board_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
+      "public_search_url": "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols",
+      "public_detail_url_pattern": null,
+      "connector_key": "webprocure/proactis",
+      "connector_alias": null,
+      "portal_profile_key": "connecticut/ctsource",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "metadata_only",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "unknown",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://portal.ct.gov/das/ctsource/ctsource",
+        "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "test_location": [
+        "tests/test_webprocure_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixture establishes bounded discovery and record normalization only; separate public detail and attachment retrieval are not established.",
+        "The production full-text endpoint was unreachable from the Codex Cloud network, so current tenant availability and access walls remain unknown."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of one discovery page from a permitted network before classifying any live capability.",
+      "evidence_url": "https://portal.ct.gov/das/ctsource/ctsource"
+    },
+    {
+      "key": "ri-ocean-state-procures",
+      "jurisdiction_code": "RI",
+      "name": "Ocean State Procures",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
+      "platform_family": "webprocure/proactis",
+      "connector_name": "webprocure/proactis",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "metadata_only",
+      "document_access": "unknown",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "ri-ocean-state-procures",
+      "jurisdiction_id": "RI",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Rhode Island Division of Purchases",
+      "official_landing_page": "https://www.purchasing.ri.gov/",
+      "public_bid_board_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
+      "public_search_url": "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols",
+      "public_detail_url_pattern": null,
+      "connector_key": "webprocure/proactis",
+      "connector_alias": null,
+      "portal_profile_key": "rhode-island/ocean-state-procures",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "metadata_only",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "unknown",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://www.purchasing.ri.gov/",
+        "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "test_location": [
+        "tests/test_webprocure_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixture establishes bounded discovery and record normalization only; separate public detail and attachment retrieval are not established.",
+        "The production full-text endpoint was unreachable from the Codex Cloud network, so current tenant availability and access walls remain unknown."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of one discovery page from a permitted network before classifying any live capability.",
+      "evidence_url": "https://www.purchasing.ri.gov/"
     }
   ],
   "evidence": [
@@ -1822,6 +1958,66 @@
       "sanitization_status": "synthetic_public_contract",
       "notes": "Sanitized BuySpeed fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
       "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+    },
+    {
+      "evidence_id": "ct-ctsource-official-guidance-1",
+      "source_id": "ct-ctsource",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://portal.ct.gov/das/ctsource/ctsource",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official CT procurement guidance identifies the statewide source; the configured public bid-board profile supplies its WebProcure tenant contract.",
+      "limitations": "Official guidance establishes source identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "ct-ctsource-sanitized-fixture-1",
+      "source_id": "ct-ctsource",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/webprocure_results.json",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "The sanitized WebProcure fixture exercises deterministic GET construction, parsing, deduplication, normalization, and raw provenance without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; detail and document retrieval are not established."
+    },
+    {
+      "evidence_id": "ri-ocean-state-procures-official-guidance-1",
+      "source_id": "ri-ocean-state-procures",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://www.purchasing.ri.gov/",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official RI procurement guidance identifies the statewide source; the configured public bid-board profile supplies its WebProcure tenant contract.",
+      "limitations": "Official guidance establishes source identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "ri-ocean-state-procures-sanitized-fixture-1",
+      "source_id": "ri-ocean-state-procures",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/webprocure_results.json",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "The sanitized WebProcure fixture exercises deterministic GET construction, parsing, deduplication, normalization, and raw provenance without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; detail and document retrieval are not established."
     }
   ]
 }

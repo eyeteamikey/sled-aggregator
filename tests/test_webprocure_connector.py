@@ -50,7 +50,10 @@ async def collect(connector: WebProcureConnector, query: ConnectorQuery | None =
 class WebProcureConnectorTests(unittest.IsolatedAsyncioTestCase):
     def test_portal_presets_and_rhode_island_oid(self) -> None:
         self.assertEqual((CONNECTICUT.customer_id, MISSOURI.customer_id), (51, 38))
+        self.assertEqual(CONNECTICUT.profile_key, "connecticut/ctsource")
+        self.assertEqual(CONNECTICUT.jurisdiction_code, "CT")
         self.assertEqual(RHODE_ISLAND.customer_id, 46)
+        self.assertEqual(RHODE_ISLAND.profile_key, "rhode-island/ocean-state-procures")
         self.assertEqual(RHODE_ISLAND.owner_oid, 120002)
         self.assertIn("oid=120002", RHODE_ISLAND.bid_board_url)
 
@@ -106,6 +109,19 @@ class WebProcureConnectorTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual(items, [])
         self.assertEqual(transport.calls, [])
+
+    async def test_jurisdiction_code_routes_and_foreign_backlink_fails_closed(self) -> None:
+        record = {
+            "results": [
+                {"id": "CT-1", "title": "Safe fallback", "url": "https://evil.example/bid"}
+            ]
+        }
+        transport = FakeTransport([response(record)])
+        items = await collect(
+            WebProcureConnector(CONNECTICUT, transport=transport),
+            ConnectorQuery(jurisdiction="CT"),
+        )
+        self.assertEqual(str(items[0].source.opportunity_url), CONNECTICUT.bid_board_url)
 
     async def test_missing_fields_and_malformed_shapes_are_rejected(self) -> None:
         for payload in ([{"id": "1"}], {"results": "bad"}, {"results": [{"id": "1"}]}):

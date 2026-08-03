@@ -6,7 +6,6 @@
 - American Samoa (AS): Research and register an authoritative statewide source with evidence.
 - Arizona (AZ): Research and register an authoritative statewide source with evidence.
 - Colorado (CO): Research and register an authoritative statewide source with evidence.
-- Connecticut (CT): Research and register an authoritative statewide source with evidence.
 - District of Columbia (DC): Research and register an authoritative statewide source with evidence.
 - Delaware (DE): Research and register an authoritative statewide source with evidence.
 - Florida (FL): Research and register an authoritative statewide source with evidence.
@@ -32,7 +31,6 @@
 - Ohio (OH): Research and register an authoritative statewide source with evidence.
 - Oklahoma (OK): Research and register an authoritative statewide source with evidence.
 - Puerto Rico (PR): Research and register an authoritative statewide source with evidence.
-- Rhode Island (RI): Research and register an authoritative statewide source with evidence.
 - South Carolina (SC): Research and register an authoritative statewide source with evidence.
 - South Dakota (SD): Research and register an authoritative statewide source with evidence.
 - Tennessee (TN): Research and register an authoritative statewide source with evidence.

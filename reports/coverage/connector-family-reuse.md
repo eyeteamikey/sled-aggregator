@@ -9,3 +9,4 @@
 - `periscope/buyspeed`: 6 primary statewide jurisdiction(s)
 - `texas/esbd`: 1 primary statewide jurisdiction(s)
 - `virginia/eva`: 1 primary statewide jurisdiction(s)
+- `webprocure/proactis`: 2 primary statewide jurisdiction(s)

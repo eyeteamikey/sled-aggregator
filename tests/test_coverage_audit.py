@@ -139,12 +139,13 @@ class CoverageAuditTests(unittest.TestCase):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
         records = {row["code"]: row for row in report["jurisdiction_records"]}
         self.assertEqual(report["summary"]["jurisdiction_count"], 56)
-        self.assertEqual(report["summary"]["baseline_operational_count"], 15)
+        self.assertEqual(report["summary"]["baseline_operational_count"], 17)
         for code in ("AL", "MI", "OH"):
             self.assertTrue(records[code]["local_evidence_only"])
             self.assertFalse(records[code]["baseline_operational"])
             self.assertEqual(records[code]["coverage_tier"], 0)
-        self.assertFalse(records["RI"]["baseline_operational"])
+        self.assertTrue(records["RI"]["baseline_operational"])
+        self.assertEqual(records["RI"]["primary_source_id"], "ri-ocean-state-procures")
         self.assertEqual(records["RI"]["supplemental_source_ids"], ["ri-rivip-external"])
         self.assertTrue(
             all(
@@ -204,6 +205,29 @@ class CoverageAuditTests(unittest.TestCase):
             self.assertEqual(source["verification_status"], "fixture_verified")
             self.assertIsNone(source["last_verified_date"])
             self.assertEqual(source["document_pipeline_classification"], "manifest_only")
+            self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
+            self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
+            self.assertFalse(any("live" in x["capabilities"] for x in evidence))
+
+    def test_webprocure_statewide_profiles_are_discovery_only_and_not_live_verified(self):
+        report = build_report(jdata=self.jdata, sdata=self.sdata)
+        records = {row["code"]: row for row in report["jurisdiction_records"]}
+        expected = {
+            "CT": ("ct-ctsource", "connecticut/ctsource"),
+            "RI": ("ri-ocean-state-procures", "rhode-island/ocean-state-procures"),
+        }
+        for code, (source_id, profile) in expected.items():
+            source = next(x for x in self.sdata["sources"] if x["source_id"] == source_id)
+            evidence = [x for x in self.sdata["evidence"] if x["source_id"] == source_id]
+            self.assertEqual(records[code]["primary_source_id"], source_id)
+            self.assertTrue(records[code]["baseline_operational"])
+            self.assertTrue(records[code]["discovery_capable"])
+            self.assertFalse(records[code]["detail_capable"])
+            self.assertFalse(records[code]["attachment_capable"])
+            self.assertEqual(source["portal_profile_key"], profile)
+            self.assertEqual(source["verification_status"], "fixture_verified")
+            self.assertIsNone(source["last_verified_date"])
+            self.assertEqual(source["document_pipeline_classification"], "unknown")
             self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
             self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
             self.assertFalse(any("live" in x["capabilities"] for x in evidence))
@@ -300,7 +324,8 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(render_json(report), render_json(report))
         self.assertEqual(json.loads(render_json(report))["summary"]["jurisdiction_count"], 56)
         rows = list(csv.DictReader(io.StringIO(render_csv(report))))
-        self.assertEqual(len(rows), 56)
+        # Rhode Island has a primary source and a separately retained supplemental source.
+        self.assertEqual(len(rows), 57)
         self.assertEqual(len({x["jurisdiction_code"] for x in rows}), 56)
         markdown = render_markdown(report)
         self.assertEqual(markdown, render_markdown(report))

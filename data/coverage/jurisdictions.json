@@ -241,22 +241,23 @@
       "jurisdiction_type": "state",
       "postal_code": "CT",
       "fips_code": "09",
-      "primary_source_id": null,
+      "primary_source_id": "ct-ctsource",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "metadata_only",
       "attachment_status": "unknown",
       "document_pipeline_status": "not_established",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed",
+        "public_detail_and_attachment_retrieval_not_established"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous discovery validation and research public detail and attachment contracts.",
+      "notes": "Fixture verification establishes the configured WebProcure public discovery contract; it is not live verification."
     },
     {
       "code": "DC",
@@ -1396,24 +1397,25 @@
       "jurisdiction_type": "state",
       "postal_code": "RI",
       "fips_code": "44",
-      "primary_source_id": null,
+      "primary_source_id": "ri-ocean-state-procures",
       "supplemental_source_ids": [
         "ri-rivip-external"
       ],
-      "coverage_tier": 0,
-      "coverage_status": "evidence_pending",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "metadata_only",
       "attachment_status": "unknown",
       "document_pipeline_status": "not_established",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed",
+        "public_detail_and_attachment_retrieval_not_established"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous discovery validation and research public detail and attachment contracts.",
+      "notes": "Fixture verification establishes the configured WebProcure public discovery contract; it is not live verification."
     },
     {
       "code": "SC",
