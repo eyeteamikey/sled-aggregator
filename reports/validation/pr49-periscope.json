@@ -1,0 +1,143 @@
+[
+  {
+    "capabilities": {
+      "addenda": "not_observed",
+      "attachment_metadata": "not_observed",
+      "authentication": "not_observed",
+      "captcha": "captcha_blocked",
+      "content_type": "captcha_blocked",
+      "detail_access": "not_observed",
+      "document_handoff": "not_observed",
+      "document_retrieval": "not_observed",
+      "empty_results": "not_observed",
+      "idempotency": "not_observed",
+      "landing_access": "captcha_blocked",
+      "normalization": "not_observed",
+      "pagination": "not_observed",
+      "rate_limiting": "not_observed",
+      "redirects": "not_observed",
+      "response_shape": "captcha_blocked",
+      "retries": "not_observed",
+      "search_access": "captcha_blocked",
+      "search_contract": "not_observed",
+      "source_identity": "fixture_verified"
+    },
+    "dry_run": false,
+    "environment": "codex-cloud",
+    "jurisdiction_id": "NV",
+    "limitations": [
+      "Response did not establish promotion eligibility."
+    ],
+    "observations": [
+      {
+        "classification": "captcha_blocked",
+        "content_type": "text/html",
+        "error": null,
+        "redirects": [],
+        "request_url": "https://nevadaepro.com/bso/view/search/external/advancedSearchBid.xhtml",
+        "response_shape": "87f378d59abdcc0d",
+        "status_code": 200
+      }
+    ],
+    "observed_at": "2026-08-03T20:14:02.505204+00:00",
+    "platform_family": "periscope/buyspeed",
+    "promotion_eligible": false,
+    "request_budget": 1,
+    "requests_used": 1,
+    "source_id": "nv-nevadaepro"
+  },
+  {
+    "capabilities": {
+      "addenda": "not_observed",
+      "attachment_metadata": "not_observed",
+      "authentication": "not_observed",
+      "captcha": "captcha_blocked",
+      "content_type": "captcha_blocked",
+      "detail_access": "not_observed",
+      "document_handoff": "not_observed",
+      "document_retrieval": "not_observed",
+      "empty_results": "not_observed",
+      "idempotency": "not_observed",
+      "landing_access": "captcha_blocked",
+      "normalization": "not_observed",
+      "pagination": "not_observed",
+      "rate_limiting": "not_observed",
+      "redirects": "not_observed",
+      "response_shape": "captcha_blocked",
+      "retries": "not_observed",
+      "search_access": "captcha_blocked",
+      "search_contract": "not_observed",
+      "source_identity": "fixture_verified"
+    },
+    "dry_run": false,
+    "environment": "codex-cloud",
+    "jurisdiction_id": "OR",
+    "limitations": [
+      "Response did not establish promotion eligibility."
+    ],
+    "observations": [
+      {
+        "classification": "captcha_blocked",
+        "content_type": "text/html",
+        "error": null,
+        "redirects": [],
+        "request_url": "https://oregonbuys.gov/bso/view/search/external/advancedSearchBid.xhtml",
+        "response_shape": "87f378d59abdcc0d",
+        "status_code": 200
+      }
+    ],
+    "observed_at": "2026-08-03T20:14:03.370662+00:00",
+    "platform_family": "periscope/buyspeed",
+    "promotion_eligible": false,
+    "request_budget": 1,
+    "requests_used": 1,
+    "source_id": "or-oregonbuys"
+  },
+  {
+    "capabilities": {
+      "addenda": "not_observed",
+      "attachment_metadata": "not_observed",
+      "authentication": "not_observed",
+      "captcha": "not_observed",
+      "content_type": "not_observed",
+      "detail_access": "not_observed",
+      "document_handoff": "not_observed",
+      "document_retrieval": "not_observed",
+      "empty_results": "not_observed",
+      "idempotency": "not_observed",
+      "landing_access": "network_blocked",
+      "normalization": "not_observed",
+      "pagination": "not_observed",
+      "rate_limiting": "not_observed",
+      "redirects": "not_observed",
+      "response_shape": "not_observed",
+      "retries": "not_observed",
+      "search_access": "network_blocked",
+      "search_contract": "not_observed",
+      "source_identity": "fixture_verified"
+    },
+    "dry_run": false,
+    "environment": "codex-cloud",
+    "jurisdiction_id": "VI",
+    "limitations": [
+      "Response did not establish promotion eligibility."
+    ],
+    "observations": [
+      {
+        "classification": "network_blocked",
+        "content_type": null,
+        "error": "ProxyError",
+        "redirects": [],
+        "request_url": "https://gvibuy.com/bso/view/search/external/advancedSearchBid.xhtml",
+        "response_shape": null,
+        "status_code": null
+      }
+    ],
+    "observed_at": "2026-08-03T20:14:03.500548+00:00",
+    "platform_family": "periscope/buyspeed",
+    "promotion_eligible": false,
+    "request_budget": 1,
+    "requests_used": 1,
+    "source_id": "vi-gvibuy"
+  }
+]
