@@ -245,6 +245,7 @@
       ],
       "evidence_type": "sanitized_fixture_and_automated_test",
       "evidence_location": [
+        "https://www.emarketplace.state.pa.us/",
         "tests/fixtures/pennsylvania_emarketplace_search.html"
       ],
       "fixture_location": [
@@ -255,10 +256,12 @@
       ],
       "last_verified_date": null,
       "known_limitations": [
+        "Live access could not be established from the Codex Cloud shell because its outbound CONNECT proxy returned 403 before reaching the Pennsylvania host.",
         "statewide"
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Repeat a bounded anonymous GET validation from an environment permitted to reach Pennsylvania government hosts.",
+      "evidence_url": "https://www.emarketplace.state.pa.us/"
     },
     {
       "key": "ri-rivip-external",
@@ -874,6 +877,20 @@
       "verified_at": "2026-08-03",
       "sanitization_status": "not_applicable",
       "notes": "The Maryland Office of State Procurement identifies eMaryland Marketplace Advantage (eMMA) as Maryland’s online procurement platform and links its public portal.",
+      "limitations": "This source-identity evidence does not establish current anonymous search, detail, or document operability."
+    },
+    {
+      "evidence_id": "pa-emarketplace-official-portal-1",
+      "source_id": "pa-emarketplace",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope"
+      ],
+      "evidence_type": "official_public_portal",
+      "location": "https://www.emarketplace.state.pa.us/",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "The official state.pa.us eMarketplace portal identifies Pennsylvania's public procurement source and provides the configured statewide solicitation entry point.",
       "limitations": "This source-identity evidence does not establish current anonymous search, detail, or document operability."
     }
   ]
