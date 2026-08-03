@@ -197,6 +197,32 @@
     "task_type": "live_validation"
   },
   {
+    "connector_family": "cgi/advantage-vss",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/cgi_vss_advantage4_landing.html",
+      "tests/fixtures/cgi_vss_search.html",
+      "tests/fixtures/cgi_vss_detail.html"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "MI"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Michigan anonymous statewide collection",
+    "recommended_order": 9,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "mi-sigma-vss"
+    ],
+    "task_type": "live_validation"
+  },
+  {
     "connector_family": "periscope/buyspeed",
     "dependencies": [],
     "evidence_available": [
@@ -213,7 +239,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate New Jersey anonymous statewide collection",
-    "recommended_order": 9,
+    "recommended_order": 10,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -238,7 +264,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Nevada anonymous statewide collection",
-    "recommended_order": 10,
+    "recommended_order": 11,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -263,7 +289,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Oregon anonymous statewide collection",
-    "recommended_order": 11,
+    "recommended_order": 12,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -287,7 +313,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Pennsylvania anonymous statewide collection",
-    "recommended_order": 12,
+    "recommended_order": 13,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -311,7 +337,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Rhode Island anonymous statewide collection",
-    "recommended_order": 13,
+    "recommended_order": 14,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -335,7 +361,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Texas anonymous statewide collection",
-    "recommended_order": 14,
+    "recommended_order": 15,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -360,7 +386,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Utah anonymous statewide collection",
-    "recommended_order": 15,
+    "recommended_order": 16,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -384,7 +410,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Virginia anonymous statewide collection",
-    "recommended_order": 16,
+    "recommended_order": 17,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -409,7 +435,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate U.S. Virgin Islands anonymous statewide collection",
-    "recommended_order": 17,
+    "recommended_order": 18,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -434,37 +460,11 @@
     ],
     "priority_band": "P2",
     "proposed_title": "Research authoritative statewide coverage for Alabama",
-    "recommended_order": 18,
-    "risk_level": "high",
-    "score": 20,
-    "source_ids": [
-      "al-opelika-tyler-munis-vss"
-    ],
-    "task_type": "coverage_correction"
-  },
-  {
-    "connector_family": null,
-    "dependencies": [],
-    "evidence_available": [
-      "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
-      "tests/fixtures/oracle_fusion_rest_attachments.json",
-      "tests/fixtures/oracle_fusion_rest_amendments.json"
-    ],
-    "evidence_required": [
-      "official primary statewide source evidence"
-    ],
-    "expected_baseline_coverage_increase": 0,
-    "expected_document_pipeline_increase": 0,
-    "jurisdiction_ids": [
-      "MI"
-    ],
-    "priority_band": "P2",
-    "proposed_title": "Research authoritative statewide coverage for Michigan",
     "recommended_order": 19,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
-      "mi-detroit-oracle-fusion"
+      "al-opelika-tyler-munis-vss"
     ],
     "task_type": "coverage_correction"
   },

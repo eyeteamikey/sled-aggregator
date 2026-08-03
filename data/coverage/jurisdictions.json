@@ -787,22 +787,25 @@
       "jurisdiction_type": "state",
       "postal_code": "MI",
       "fips_code": "26",
-      "primary_source_id": null,
-      "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "evidence_pending",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "primary_source_id": "mi-sigma-vss",
+      "supplemental_source_ids": [
+        "mi-detroit-oracle-fusion"
+      ],
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "fixture_verified_public",
+      "detail_status": "fixture_verified_public",
+      "attachment_status": "fixture_verified_public",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "bounded_anonymous_live_validation_pending",
+        "attachment_retrieval_not_established"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation and separately establish safe document retrieval eligibility.",
+      "notes": "Michigan DTMB identifies SIGMA Vendor Self Service as the statewide vendor and solicitation portal. Sanitized Advantage4 fixtures establish the configured parser contract; fixture verification is not live verification."
     },
     {
       "code": "MN",

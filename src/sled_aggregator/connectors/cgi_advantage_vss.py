@@ -148,7 +148,14 @@ MICHIGAN_SIGMA_VSS = CGIAdvantageVSSPortal(
     detail_template="Advantage4?solicitation_number={solicitation_number}",
     variant=CGIAdvantageVSSVariant.ADVANTAGE4,
     timezone="America/Detroit",
-    validation_level="configured_unverified",
+    public_search_verified=True,
+    public_detail_verified=True,
+    public_attachments_verified=True,
+    public_awards_verified=True,
+    public_contracts_verified=True,
+    validation_level="fixture_verified",
+    known_restrictions=("Current anonymous production behavior has not been validated",),
+    enabled=True,
 )
 COLORADO_VSS = CGIAdvantageVSSPortal(
     key="colorado/vss",
