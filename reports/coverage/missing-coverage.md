@@ -16,7 +16,6 @@
 - Kansas (KS): Research and register an authoritative statewide source with evidence.
 - Kentucky (KY): Research and register an authoritative statewide source with evidence.
 - Louisiana (LA): Research and register an authoritative statewide source with evidence.
-- Michigan (MI): Research and register an authoritative statewide source with evidence.
 - Minnesota (MN): Research and register an authoritative statewide source with evidence.
 - Missouri (MO): Research and register an authoritative statewide source with evidence.
 - Commonwealth of the Northern Mariana Islands (MP): Research and register an authoritative statewide source with evidence.

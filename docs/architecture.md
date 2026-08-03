@@ -454,9 +454,10 @@ Advantage4, AltSelfService, or link-only variant and all tenant facts: routes,
 response strategy, IANA timezone, guest/session requirements, independently
 verified search/detail/attachment/award/contract capabilities, validation state,
 restrictions, allowed attachment hosts, availability policy, and enabled state.
-The initial catalog contains Maine, Michigan SIGMA, and ColoradoVSS. Unverified
-presets fail closed before transport; a future deployment can be added without a
-new connector class, but CGI branding is not verification.
+The catalog contains fixture-verified Maine and Michigan SIGMA presets plus a
+configured-unverified ColoradoVSS preset. Unverified profiles fail closed before
+transport; a future deployment can be added without a new connector class, but
+CGI branding is not verification.
 
 The collection pipeline is:
 

@@ -580,6 +580,80 @@
       "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
+      "key": "mi-sigma-vss",
+      "jurisdiction_code": "MI",
+      "name": "Michigan SIGMA Vendor Self Service",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4",
+      "platform_family": "cgi/advantage-vss",
+      "connector_name": "cgi/advantage-vss",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "public",
+      "award_access": "public",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/cgi_vss_advantage4_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "primary statewide procurement opportunities published in Michigan SIGMA VSS",
+      "source_id": "mi-sigma-vss",
+      "jurisdiction_id": "MI",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Michigan Department of Technology, Management & Budget",
+      "official_landing_page": "https://www.michigan.gov/budget/budget-offices/sigma",
+      "public_bid_board_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4",
+      "public_search_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4/SolicitationSearch",
+      "public_detail_url_pattern": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4?solicitation_number={solicitation_number}",
+      "connector_key": "cgi/advantage-vss",
+      "connector_alias": "michigan/sigma-vss",
+      "portal_profile_key": "michigan/sigma-vss",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "public",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://www.michigan.gov/budget/budget-offices/sigma",
+        "https://www.michigan.gov/dtmb/procurement/contractconnect",
+        "tests/fixtures/cgi_vss_advantage4_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/cgi_vss_advantage4_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "test_location": [
+        "tests/test_cgi_advantage_vss_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish current production operation.",
+        "Attachment fixtures establish manifest metadata only; retrieval and document parsing are not established.",
+        "Some Michigan procurement notices may remain on Contract Connect or agency-specific systems."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform a bounded anonymous GET validation of SIGMA discovery, one detail, and at most one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://www.michigan.gov/budget/budget-offices/sigma"
+    },
+    {
       "key": "mi-detroit-oracle-fusion",
       "jurisdiction_code": "MI",
       "name": "City of Detroit Oracle Fusion Public Negotiations",
@@ -2018,6 +2092,39 @@
       "sanitization_status": "synthetic_public_contract",
       "notes": "The sanitized WebProcure fixture exercises deterministic GET construction, parsing, deduplication, normalization, and raw provenance without credentials or vendor data.",
       "limitations": "Fixture behavior is not live verification; detail and document retrieval are not established."
+    },
+    {
+      "evidence_id": "mi-sigma-vss-official-guidance-1",
+      "source_id": "mi-sigma-vss",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://www.michigan.gov/budget/budget-offices/sigma",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Michigan budget and DTMB guidance identifies SIGMA and its Vendor Self Service portal for statewide procurement and vendor activity.",
+      "limitations": "Official guidance establishes identity and statewide role, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "mi-sigma-vss-sanitized-fixtures-1",
+      "source_id": "mi-sigma-vss",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_award_metadata",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/cgi_vss_advantage4_landing.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized SIGMA-branded Advantage4 landing, results, and detail fixtures exercise the fixed Michigan tenant routes and shared parser without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; attachment retrieval and document parsing are not established."
     }
   ]
 }

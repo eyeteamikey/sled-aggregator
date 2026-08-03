@@ -134,6 +134,27 @@ class CGIAdvantageVSSConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(params["commodity_description"], "router")
         self.assertEqual(params["page_size"], "50")
 
+    async def test_michigan_statewide_profile_uses_advantage4_fixture_contract(self):
+        connector, fake, items = await self.collect(
+            [
+                response(MICHIGAN_SIGMA_VSS.search_url, SEARCH),
+                response(
+                    "https://sigma.michigan.gov/PRDVSS1X1/Advantage4"
+                    "?solicitation_number=RFQ-HVS-260000000404-1",
+                    DETAIL,
+                ),
+                response(MICHIGAN_SIGMA_VSS.search_url, DETAIL),
+            ],
+            CGIAdvantageVSSQuery(max_pages=1),
+            MICHIGAN_SIGMA_VSS,
+        )
+        self.assertEqual(len(items), 2)
+        self.assertEqual(items[0].source.jurisdiction, "Michigan")
+        self.assertEqual(items[0].source.source_id, "michigan/sigma-vss:id:CGI-1001")
+        self.assertEqual(fake.calls[0][1], MICHIGAN_SIGMA_VSS.search_url)
+        self.assertTrue(str(items[0].source.opportunity_url).startswith(MICHIGAN_SIGMA_VSS.base_url))
+        self.assertEqual(len(items[0].raw_payload["attachments"]), 3)
+
     async def test_repeated_page_and_duplicate_records_terminate(self):
         portal = replace(VERIFIED, guest_bootstrap_required=False, anonymous_session_required=False)
         _, fake, items = await self.collect(
@@ -160,7 +181,7 @@ class CGIAdvantageVSSConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(empty, [])
 
     async def test_configured_unverified_and_landing_only_fail_closed(self):
-        for portal in (MICHIGAN_SIGMA_VSS, COLORADO_VSS):
+        for portal in (COLORADO_VSS,):
             connector = CGIAdvantageVSSConnector(portal, transport=FakeTransport([]))
             with self.assertRaises(CGIAdvantageVSSAccessError) as caught:
                 [item async for item in connector.discover(CGIAdvantageVSSQuery())]
@@ -338,8 +359,13 @@ class CGIAdvantageVSSConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(MAINE_VSS.public_attachments_verified)
         self.assertEqual(MAINE_VSS.validation_level, "fixture_verified")
         self.assertEqual(MICHIGAN_SIGMA_VSS.timezone, "America/Detroit")
+        self.assertTrue(MICHIGAN_SIGMA_VSS.enabled)
+        self.assertTrue(MICHIGAN_SIGMA_VSS.public_search_verified)
+        self.assertTrue(MICHIGAN_SIGMA_VSS.public_detail_verified)
+        self.assertTrue(MICHIGAN_SIGMA_VSS.public_attachments_verified)
+        self.assertEqual(MICHIGAN_SIGMA_VSS.validation_level, "fixture_verified")
         self.assertEqual(COLORADO_VSS.timezone, "America/Denver")
-        self.assertFalse(MICHIGAN_SIGMA_VSS.enabled)
+        self.assertFalse(COLORADO_VSS.enabled)
         keys = (
             "cgi/advantage-vss",
             "cgi/vss",

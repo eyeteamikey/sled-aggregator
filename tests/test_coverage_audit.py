@@ -139,8 +139,8 @@ class CoverageAuditTests(unittest.TestCase):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
         records = {row["code"]: row for row in report["jurisdiction_records"]}
         self.assertEqual(report["summary"]["jurisdiction_count"], 56)
-        self.assertEqual(report["summary"]["baseline_operational_count"], 17)
-        for code in ("AL", "MI", "OH"):
+        self.assertEqual(report["summary"]["baseline_operational_count"], 18)
+        for code in ("AL", "OH"):
             self.assertTrue(records[code]["local_evidence_only"])
             self.assertFalse(records[code]["baseline_operational"])
             self.assertEqual(records[code]["coverage_tier"], 0)
@@ -161,6 +161,13 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertTrue(maine["baseline_operational"])
         self.assertTrue(maine["attachment_capable"])
         self.assertFalse(maine["document_pipeline_capable"])
+
+        michigan = records["MI"]
+        self.assertEqual(michigan["primary_source_id"], "mi-sigma-vss")
+        self.assertEqual(michigan["supplemental_source_ids"], ["mi-detroit-oracle-fusion"])
+        self.assertTrue(michigan["baseline_operational"])
+        self.assertTrue(michigan["attachment_capable"])
+        self.assertFalse(michigan["document_pipeline_capable"])
 
     def test_jaggaer_statewide_profiles_are_fixture_not_live_verified(self):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
@@ -235,6 +242,17 @@ class CoverageAuditTests(unittest.TestCase):
     def test_maine_fixture_evidence_is_not_live_verification(self):
         source = next(x for x in self.sdata["sources"] if x["source_id"] == "me-vss")
         evidence = [x for x in self.sdata["evidence"] if x["source_id"] == "me-vss"]
+        self.assertEqual(source["verification_status"], "fixture_verified")
+        self.assertIsNone(source["last_verified_date"])
+        self.assertEqual(source["document_pipeline_classification"], "manifest_only")
+        self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
+        self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
+        self.assertFalse(any("live" in x["capabilities"] for x in evidence))
+
+    def test_michigan_sigma_fixture_evidence_is_not_live_verification(self):
+        source = next(x for x in self.sdata["sources"] if x["source_id"] == "mi-sigma-vss")
+        evidence = [x for x in self.sdata["evidence"] if x["source_id"] == "mi-sigma-vss"]
+        self.assertEqual(source["portal_profile_key"], "michigan/sigma-vss")
         self.assertEqual(source["verification_status"], "fixture_verified")
         self.assertIsNone(source["last_verified_date"])
         self.assertEqual(source["document_pipeline_classification"], "manifest_only")
@@ -324,8 +342,8 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(render_json(report), render_json(report))
         self.assertEqual(json.loads(render_json(report))["summary"]["jurisdiction_count"], 56)
         rows = list(csv.DictReader(io.StringIO(render_csv(report))))
-        # Rhode Island has a primary source and a separately retained supplemental source.
-        self.assertEqual(len(rows), 57)
+        # Rhode Island and Michigan retain separate supplemental sources.
+        self.assertEqual(len(rows), 58)
         self.assertEqual(len({x["jurisdiction_code"] for x in rows}), 56)
         markdown = render_markdown(report)
         self.assertEqual(markdown, render_markdown(report))

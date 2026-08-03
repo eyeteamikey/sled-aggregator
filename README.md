@@ -607,11 +607,11 @@ registered.
 The portal model keeps Advantage4 and legacy AltSelfService routes, timezone,
 guest bootstrap, anonymous-session requirements, verified capabilities,
 validation level/date, restrictions, attachment hosts, and availability schedule
-separate for every tenant. Maine is an enabled public-guest preset with
-fixture-verified parsing; because live access was blocked by the execution
-network, public collection remains capability-gated. Michigan SIGMA and
-ColoradoVSS are configured-unverified and disabled until search, detail,
-attachment, award, and contract behavior are independently live-validated.
+separate for every tenant. Maine is an enabled public-guest preset and Michigan
+SIGMA is an enabled Advantage4 preset, both with fixture-verified parsing;
+current anonymous production operation remains unvalidated. ColoradoVSS is
+configured-unverified and disabled until its tenant-specific search, detail,
+attachment, award, and contract behavior is independently evidenced.
 Branding alone never enables another CGI tenant.
 
 Discovery is bounded by page, page-size, and record limits. It supports

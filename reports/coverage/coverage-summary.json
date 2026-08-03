@@ -45,7 +45,7 @@
       "document_link_capability": true,
       "document_pipeline_compatible": false,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
-      "fixture_count": 3,
+      "fixture_count": 4,
       "implementation_module": "sled_aggregator.connectors.cgi_advantage_vss",
       "implementation_status": "implemented",
       "jurisdictions": [
@@ -53,12 +53,13 @@
         "Michigan",
         "Colorado"
       ],
-      "profile_count": 1,
+      "profile_count": 2,
       "public_read_only": true,
       "registry_presence": true,
       "request_method_policy": "bounded public read-only",
       "supported_jurisdictions": [
-        "ME"
+        "ME",
+        "MI"
       ],
       "test_references": [
         "tests/test_cgi_advantage_vss_connector.py"
@@ -920,7 +921,19 @@
       "jurisdiction_code": "ME"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "MI"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "MI"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "MI"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "MI"
     },
     {
@@ -2497,53 +2510,62 @@
     {
       "abbreviation": "MI",
       "active": true,
-      "attachment_capable": false,
-      "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "attachment_capable": true,
+      "attachment_status": "fixture_verified_public",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "MI",
-      "connector": null,
-      "coverage_status": "evidence_pending",
-      "coverage_tier": 0,
-      "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "connector": "cgi/advantage-vss",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "fixture_verified_public",
+      "discovery_capable": true,
+      "discovery_status": "fixture_verified_public",
       "document_pipeline_capable": false,
-      "document_pipeline_status": "not_established",
+      "document_pipeline_status": "manifest_only",
       "fips": "26",
       "fips_code": "26",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "MI",
       "jurisdiction_name": "Michigan",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "bounded_anonymous_live_validation_pending",
+        "attachment_retrieval_not_established"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
-      "local_evidence_only": true,
+      "local_evidence_only": false,
       "name": "Michigan",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous live validation and separately establish safe document retrieval eligibility.",
+      "notes": "Michigan DTMB identifies SIGMA Vendor Self Service as the statewide vendor and solicitation portal. Sanitized Advantage4 fixtures establish the configured parser contract; fixture verification is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "cgi/advantage-vss",
       "postal_code": "MI",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
+      "primary_source_id": "mi-sigma-vss",
+      "primary_source_name": "Michigan SIGMA Vendor Self Service",
       "source_keys": [
+        "mi-sigma-vss",
         "mi-detroit-oracle-fusion"
       ],
-      "statewide_source_keys": [],
-      "supplemental_source_ids": [],
+      "statewide_source_keys": [
+        "mi-sigma-vss"
+      ],
+      "supplemental_source_ids": [
+        "mi-detroit-oracle-fusion"
+      ],
       "timezones": [],
       "type": "state"
     },
@@ -4255,7 +4277,12 @@
       "source_key": "me-vss"
     },
     {
-      "coverage_tier": 0,
+      "coverage_tier": 2,
+      "jurisdiction_code": "MI",
+      "source_key": "mi-sigma-vss"
+    },
+    {
+      "coverage_tier": 2,
       "jurisdiction_code": "MI",
       "source_key": "mi-detroit-oracle-fusion"
     },
@@ -4514,6 +4541,32 @@
       "task_type": "live_validation"
     },
     {
+      "connector_family": "cgi/advantage-vss",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/cgi_vss_advantage4_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "MI"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Michigan anonymous statewide collection",
+      "recommended_order": 9,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "mi-sigma-vss"
+      ],
+      "task_type": "live_validation"
+    },
+    {
       "connector_family": "periscope/buyspeed",
       "dependencies": [],
       "evidence_available": [
@@ -4530,7 +4583,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate New Jersey anonymous statewide collection",
-      "recommended_order": 9,
+      "recommended_order": 10,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4555,7 +4608,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Nevada anonymous statewide collection",
-      "recommended_order": 10,
+      "recommended_order": 11,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4580,7 +4633,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Oregon anonymous statewide collection",
-      "recommended_order": 11,
+      "recommended_order": 12,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4604,7 +4657,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Pennsylvania anonymous statewide collection",
-      "recommended_order": 12,
+      "recommended_order": 13,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4628,7 +4681,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Rhode Island anonymous statewide collection",
-      "recommended_order": 13,
+      "recommended_order": 14,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4652,7 +4705,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Texas anonymous statewide collection",
-      "recommended_order": 14,
+      "recommended_order": 15,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4677,7 +4730,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Utah anonymous statewide collection",
-      "recommended_order": 15,
+      "recommended_order": 16,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4701,7 +4754,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Virginia anonymous statewide collection",
-      "recommended_order": 16,
+      "recommended_order": 17,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4726,7 +4779,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate U.S. Virgin Islands anonymous statewide collection",
-      "recommended_order": 17,
+      "recommended_order": 18,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4751,37 +4804,11 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Alabama",
-      "recommended_order": 18,
-      "risk_level": "high",
-      "score": 20,
-      "source_ids": [
-        "al-opelika-tyler-munis-vss"
-      ],
-      "task_type": "coverage_correction"
-    },
-    {
-      "connector_family": null,
-      "dependencies": [],
-      "evidence_available": [
-        "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
-        "tests/fixtures/oracle_fusion_rest_attachments.json",
-        "tests/fixtures/oracle_fusion_rest_amendments.json"
-      ],
-      "evidence_required": [
-        "official primary statewide source evidence"
-      ],
-      "expected_baseline_coverage_increase": 0,
-      "expected_document_pipeline_increase": 0,
-      "jurisdiction_ids": [
-        "MI"
-      ],
-      "priority_band": "P2",
-      "proposed_title": "Research authoritative statewide coverage for Michigan",
       "recommended_order": 19,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
-        "mi-detroit-oracle-fusion"
+        "al-opelika-tyler-munis-vss"
       ],
       "task_type": "coverage_correction"
     },
@@ -5418,6 +5445,80 @@
       "recommended_next_action": "Perform a bounded anonymous GET validation of guest discovery, detail, and one explicitly public attachment from a permitted network.",
       "robots_access_notes": "not_live_validated",
       "source_id": "me-vss",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_cgi_advantage_vss_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "public",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "public",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": "michigan/sigma-vss",
+      "connector_key": "cgi/advantage-vss",
+      "connector_name": "cgi/advantage-vss",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "public",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "https://www.michigan.gov/budget/budget-offices/sigma",
+        "https://www.michigan.gov/dtmb/procurement/contractconnect",
+        "tests/fixtures/cgi_vss_advantage4_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://www.michigan.gov/budget/budget-offices/sigma",
+      "expected_coverage_impact": "primary statewide procurement opportunities published in Michigan SIGMA VSS",
+      "fixture_location": [
+        "tests/fixtures/cgi_vss_advantage4_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/cgi_vss_advantage4_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "jurisdiction_code": "MI",
+      "jurisdiction_id": "MI",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "mi-sigma-vss",
+      "known_limitations": [
+        "Fixture verification does not establish current production operation.",
+        "Attachment fixtures establish manifest metadata only; retrieval and document parsing are not established.",
+        "Some Michigan procurement notices may remain on Contract Connect or agency-specific systems."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "Michigan SIGMA Vendor Self Service",
+      "official_landing_page": "https://www.michigan.gov/budget/budget-offices/sigma",
+      "official_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4",
+      "owning_public_entity": "Michigan Department of Technology, Management & Budget",
+      "platform_family": "cgi/advantage-vss",
+      "portal_profile_key": "michigan/sigma-vss",
+      "priority": 1,
+      "public_bid_board_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4",
+      "public_detail_url_pattern": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4?solicitation_number={solicitation_number}",
+      "public_search_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4/SolicitationSearch",
+      "recommended_next_action": "Perform a bounded anonymous GET validation of SIGMA discovery, one detail, and at most one explicitly public attachment from a permitted network.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "mi-sigma-vss",
       "source_level": "statewide",
       "source_role": "primary",
       "source_status": "active",
@@ -6237,15 +6338,15 @@
     }
   ],
   "summary": {
-    "attachment_capable_jurisdiction_count": 15,
+    "attachment_capable_jurisdiction_count": 16,
     "authentication_blocked_jurisdiction_count": 0,
     "automated_access_block_count": 0,
-    "baseline_operational_count": 17,
+    "baseline_operational_count": 18,
     "captcha_affected_jurisdiction_count": 0,
     "captcha_count": 0,
     "changed_markup_count": 0,
     "connector_family_counts": {
-      "cgi/advantage-vss": 1,
+      "cgi/advantage-vss": 2,
       "georgia/gpr": 1,
       "jaggaer/sciquest": 2,
       "maryland/emma": 1,
@@ -6257,39 +6358,39 @@
       "webprocure/proactis": 2
     },
     "coverage_tier_distribution": {
-      "0": 39,
+      "0": 38,
       "1": 0,
-      "2": 17,
+      "2": 18,
       "3": 0,
       "4": 0,
       "5": 0,
       "6": 0
     },
-    "detail_capable_jurisdiction_count": 15,
-    "discovery_capable_jurisdiction_count": 17,
+    "detail_capable_jurisdiction_count": 16,
+    "discovery_capable_jurisdiction_count": 18,
     "document_pipeline_capable_jurisdiction_count": 6,
     "implemented_connector_count": 21,
     "jurisdiction_count": 56,
-    "lacking_primary_source_count": 39,
+    "lacking_primary_source_count": 38,
     "live_validated_jurisdiction_count": 0,
-    "local_evidence_only_count": 3,
+    "local_evidence_only_count": 2,
     "login_required_count": 0,
     "metadata_only_count": 2,
     "migrated_source_count": 0,
     "missing_source_count": 36,
     "operational_status_distribution": {
-      "baseline_operational": 17,
-      "not_operational": 39
+      "baseline_operational": 18,
+      "not_operational": 38
     },
     "payment_required_count": 0,
-    "public_detail_count": 19,
-    "public_discovery_count": 21,
+    "public_detail_count": 20,
+    "public_discovery_count": 22,
     "public_document_pipeline_count": 10,
     "registration_required_count": 0,
     "robots_policy_count": 0,
-    "source_count": 21,
+    "source_count": 22,
     "subscription_required_count": 0,
-    "unverified_source_count": 21
+    "unverified_source_count": 22
   },
   "validation_warnings": []
 }
