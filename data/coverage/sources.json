@@ -115,6 +115,7 @@
       ],
       "evidence_type": "sanitized_fixture_and_automated_test",
       "evidence_location": [
+        "https://doas.ga.gov/state-purchasing/georgia-procurement-registry-for-local-governments",
         "tests/fixtures/georgia_gpr_listing.html"
       ],
       "fixture_location": [
@@ -125,10 +126,12 @@
       ],
       "last_verified_date": null,
       "known_limitations": [
+        "Live access could not be established from the Codex Cloud shell because its outbound CONNECT proxy returned 403 before reaching the Georgia host.",
         "statewide"
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Repeat a bounded anonymous GET validation from an environment permitted to reach Georgia government hosts.",
+      "evidence_url": "https://doas.ga.gov/state-purchasing/georgia-procurement-registry-for-local-governments"
     },
     {
       "key": "md-emma",
@@ -840,6 +843,20 @@
       "verified_at": "2026-08-03",
       "sanitization_status": "not_applicable",
       "notes": "California Department of General Services identifies Cal eProcure as the state procurement source and links its public portal.",
+      "limitations": "This source-identity evidence does not establish current anonymous search, detail, or document operability."
+    },
+    {
+      "evidence_id": "ga-gpr-official-landing-1",
+      "source_id": "ga-gpr",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://doas.ga.gov/state-purchasing/georgia-procurement-registry-for-local-governments",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Georgia Department of Administrative Services identifies the Georgia Procurement Registry as the state procurement notice source and links its public portal.",
       "limitations": "This source-identity evidence does not establish current anonymous search, detail, or document operability."
     }
   ]
