@@ -373,8 +373,15 @@ class CoverageAuditTests(unittest.TestCase):
                 "live-validation-tasks.json",
                 "breadth-closeout.json",
                 "manual-capture-instructions.md",
+                "pr50-milestone.json",
+                "pr50-milestone.md",
             },
         )
+        milestone = json.loads(first["pr50-milestone.json"])
+        self.assertEqual(milestone["coverage_totals"]["total_jurisdictions"], 56)
+        self.assertEqual(len(milestone["capability_matrix"]), 56)
+        self.assertFalse(milestone["definition_of_done"]["all_live_verified"])
+        self.assertEqual(first["pr50-milestone.md"], first["pr50-milestone.md"])
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory)
             for name, content in first.items():

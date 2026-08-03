@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import io
 import json
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -1259,6 +1260,121 @@ def render_capability_matrix(report: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def milestone_report(report: dict) -> dict:
+    """Build the PR #50 checkpoint exclusively from committed repository evidence."""
+    records = report["jurisdiction_records"]
+    primary = [
+        source
+        for source in report["source_records"]
+        if source.get("authoritative") and source.get("source_level") in STATEWIDE_SCOPES
+    ]
+    validations: dict[str, dict] = {}
+    for path in sorted((ROOT / "reports/validation").glob("*.json")):
+        try:
+            rows = json.loads(path.read_text())
+        except (OSError, ValueError):
+            continue
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            source_id = row.get("source_id")
+            if source_id and (
+                source_id not in validations
+                or row.get("observed_at", "") > validations[source_id].get("observed_at", "")
+            ):
+                validations[source_id] = {**row, "evidence_report": str(path.relative_to(ROOT))}
+    attempted = sorted(validations)
+    blocked = {kind: [] for kind in ("authentication_required", "captcha_blocked", "network_blocked")}
+    for source_id, result in validations.items():
+        classifications = {
+            observation.get("classification") for observation in result.get("observations", [])
+        }
+        for kind in blocked:
+            if kind in classifications:
+                blocked[kind].append(source_id)
+    for rows in blocked.values():
+        rows.sort()
+
+    counts = {
+        "total_jurisdictions": len(records),
+        "primary_statewide_sources_identified": sum(bool(row.get("primary_source_id")) for row in records),
+        "platform_families_identified": sum(bool(row.get("platform_family")) for row in records),
+        "registered_statewide_profiles": sum(bool(row.get("connector")) for row in records),
+        "fixture_verified_jurisdictions": sum(row["fixture_verified"] for row in records),
+        "discovery_capable_jurisdictions": sum(row["discovery_capable"] for row in records),
+        "detail_capable_jurisdictions": sum(row["detail_capable"] for row in records),
+        "attachment_capable_jurisdictions": sum(row["attachment_capable"] for row in records),
+        "document_pipeline_compatible_jurisdictions": sum(row["document_pipeline_capable"] for row in records),
+        "live_verified_jurisdictions": sum(row["live_verified"] for row in records),
+        "production_monitored_jurisdictions": sum(row.get("operational_status") == "production_monitored" for row in records),
+        "network_blocked_validation_sources": len(blocked["network_blocked"]),
+        "authentication_required_validation_sources": len(blocked["authentication_required"]),
+        "captcha_blocked_validation_sources": len(blocked["captcha_blocked"]),
+        "tier_0_jurisdictions": sum(row["coverage_tier"] == 0 for row in records),
+        "jurisdictions_lacking_primary_source": sum(not row.get("primary_source_id") for row in records),
+    }
+    queue = closeout_plan(report)
+    unattempted = [task for task in queue["validation_tasks"] if task["source_id"] not in attempted]
+    connector_work = [task for task in report["prioritized_recommendations"] if task["task_type"] != "live_validation"]
+    matrix = [
+        {
+            "jurisdiction_id": row["code"], "primary_source_id": row.get("primary_source_id"),
+            "discovery": row["discovery_capable"], "detail": row["detail_capable"],
+            "attachments": row["attachment_capable"], "document_pipeline": row["document_pipeline_capable"],
+        }
+        for row in records
+    ]
+    return {
+        "schema_version": "1.0", "as_of": report["as_of"],
+        "executive_summary": "Fixture breadth is closed; bounded first-pass production validation remains in progress.",
+        "coverage_totals": counts,
+        "jurisdictions_by_tier": {
+            str(tier_number): [row["code"] for row in records if row["coverage_tier"] == tier_number]
+            for tier_number in range(7)
+        },
+        "primary_statewide_source_inventory": [source["key"] for source in primary],
+        "connector_family_inventory": report["summary"]["connector_family_counts"],
+        "platform_reuse_by_jurisdiction": {row["code"]: row["platform_family"] for row in records if row["platform_family"]},
+        "fixture_verified_sources": [row["primary_source_id"] for row in records if row["fixture_verified"]],
+        "live_verified_sources": [row["primary_source_id"] for row in records if row["live_verified"]],
+        "production_monitored_sources": [row["primary_source_id"] for row in records if row.get("operational_status") == "production_monitored"],
+        "capability_matrix": matrix,
+        "validation_blockers": blocked,
+        "manual_evidence_capture_sources": [task["source_ids"][0] for task in connector_work],
+        "remaining_tier_0_jurisdictions": [row["code"] for row in records if row["coverage_tier"] == 0],
+        "remaining_connector_profile_work": connector_work,
+        "remaining_document_adapter_work": [row["code"] for row in records if row["attachment_capable"] and not row["document_pipeline_capable"]],
+        "ordered_live_validation_queue": unattempted,
+        "validation_attempt_evidence": [validations[key] for key in sorted(validations)],
+        "estimated_prs_remaining_fixture_breadth": 0 if queue["breadth_complete"] else math.ceil(len(connector_work) / 2),
+        "estimated_prs_remaining_first_pass_validation": math.ceil(len(unattempted) / 3),
+        "definition_of_done": {
+            "all_primary_sources_identified": counts["primary_statewide_sources_identified"] == counts["total_jurisdictions"],
+            "all_platforms_classified": counts["platform_families_identified"] == counts["total_jurisdictions"],
+            "all_connector_profiles_registered": counts["registered_statewide_profiles"] == counts["total_jurisdictions"],
+            "all_fixture_verified_discovery": counts["discovery_capable_jurisdictions"] == counts["total_jurisdictions"],
+            "all_detail_capable": counts["detail_capable_jurisdictions"] == counts["total_jurisdictions"],
+            "all_attachment_capable": counts["attachment_capable_jurisdictions"] == counts["total_jurisdictions"],
+            "all_document_pipeline_compatible": counts["document_pipeline_compatible_jurisdictions"] == counts["total_jurisdictions"],
+            "all_live_verified": counts["live_verified_jurisdictions"] == counts["total_jurisdictions"],
+            "any_production_monitored": counts["production_monitored_jurisdictions"] > 0,
+        },
+    }
+
+
+def render_milestone_markdown(milestone: dict) -> str:
+    counts = milestone["coverage_totals"]
+    lines = ["# PR #50 authoritative 56-jurisdiction milestone", "", milestone["executive_summary"], "", "## Coverage totals", ""]
+    lines.extend(f"- **{key.replace('_', ' ')}:** {value}" for key, value in counts.items())
+    lines.extend(["", "## Definition of done", ""])
+    lines.extend(f"- **{key.replace('_', ' ')}:** {'yes' if value else 'no'}" for key, value in milestone["definition_of_done"].items())
+    lines.extend(["", "## Validation blockers observed in committed evidence", ""])
+    for kind, source_ids in milestone["validation_blockers"].items():
+        lines.append(f"- **{kind.replace('_', ' ')}:** {', '.join(f'`{value}`' for value in source_ids) or 'None'}")
+    lines.extend(["", "## Remaining work", "", f"- Fixture-breadth PRs: {milestone['estimated_prs_remaining_fixture_breadth']}", f"- First-pass validation PRs (three sources per PR): {milestone['estimated_prs_remaining_first_pass_validation']}"])
+    return "\n".join(lines) + "\n"
+
+
 def generated_reports(report: dict) -> dict[str, str]:
     missing = [j for j in report["jurisdiction_records"] if not j.get("primary_source_id")]
     blocked = [s for s in report["source_records"] if s.get("blocker_reason")]
@@ -1270,6 +1386,7 @@ def generated_reports(report: dict) -> dict[str, str]:
     def md_list(title: str, rows: list[str]) -> str:
         return "# " + title + "\n\n" + ("\n".join(rows) if rows else "None.") + "\n"
 
+    milestone = milestone_report(report)
     return {
         "coverage-summary.json": render_json(report),
         "capability-matrix.md": render_capability_matrix(report),
@@ -1305,6 +1422,8 @@ def generated_reports(report: dict) -> dict[str, str]:
                 "Promote to live verification only when the dated anonymous response matches the registered contract; require separate recurring evidence for production monitoring.",
             ],
         ),
+        "pr50-milestone.json": json.dumps(milestone, indent=2, sort_keys=True) + "\n",
+        "pr50-milestone.md": render_milestone_markdown(milestone),
     }
 
 
