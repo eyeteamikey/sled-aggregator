@@ -139,7 +139,7 @@ class CoverageAuditTests(unittest.TestCase):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
         records = {row["code"]: row for row in report["jurisdiction_records"]}
         self.assertEqual(report["summary"]["jurisdiction_count"], 56)
-        self.assertEqual(report["summary"]["baseline_operational_count"], 6)
+        self.assertEqual(report["summary"]["baseline_operational_count"], 7)
         for code in ("AL", "MI", "OH"):
             self.assertTrue(records[code]["local_evidence_only"])
             self.assertFalse(records[code]["baseline_operational"])
@@ -152,6 +152,24 @@ class CoverageAuditTests(unittest.TestCase):
                 for row in report["jurisdiction_records"]
             )
         )
+
+        maine = records["ME"]
+        self.assertEqual(maine["primary_source_id"], "me-vss")
+        self.assertEqual(maine["platform_family"], "cgi/advantage-vss")
+        self.assertTrue(maine["fixture_verified"])
+        self.assertTrue(maine["baseline_operational"])
+        self.assertTrue(maine["attachment_capable"])
+        self.assertFalse(maine["document_pipeline_capable"])
+
+    def test_maine_fixture_evidence_is_not_live_verification(self):
+        source = next(x for x in self.sdata["sources"] if x["source_id"] == "me-vss")
+        evidence = [x for x in self.sdata["evidence"] if x["source_id"] == "me-vss"]
+        self.assertEqual(source["verification_status"], "fixture_verified")
+        self.assertIsNone(source["last_verified_date"])
+        self.assertEqual(source["document_pipeline_classification"], "manifest_only")
+        self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
+        self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
+        self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
     def test_affirmative_claims_require_evidence_and_valid_pipeline_adapter(self):
         data = deepcopy(self.sdata)

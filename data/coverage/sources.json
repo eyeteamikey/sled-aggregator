@@ -646,6 +646,79 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Perform bounded lawful anonymous live validation."
+    },
+    {
+      "key": "me-vss",
+      "jurisdiction_code": "ME",
+      "name": "Maine Vendor Self Service",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService",
+      "platform_family": "cgi/advantage-vss",
+      "connector_name": "cgi/advantage-vss",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "public",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/cgi_vss_maine_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "primary statewide procurement opportunities published in VSS on or after October 1, 2025",
+      "source_id": "me-vss",
+      "jurisdiction_id": "ME",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Maine Division of Procurement Services",
+      "official_landing_page": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
+      "public_bid_board_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService",
+      "public_search_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService/SolicitationSearch",
+      "public_detail_url_pattern": null,
+      "connector_key": "cgi/advantage-vss",
+      "connector_alias": "maine/vss",
+      "portal_profile_key": "maine/vss",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
+        "tests/fixtures/cgi_vss_maine_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/cgi_vss_maine_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "test_location": [
+        "tests/test_cgi_advantage_vss_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "Maine guidance places RFPs published on or after October 1, 2025 in VSS; earlier RFPs remain in separate archives.",
+        "Attachment fixtures establish manifest metadata only; document retrieval and pipeline compatibility are not established."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform a bounded anonymous GET validation of guest discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system"
     }
   ],
   "evidence": [
@@ -876,7 +949,7 @@
       "location": "https://procurement.maryland.gov/emma-2/",
       "verified_at": "2026-08-03",
       "sanitization_status": "not_applicable",
-      "notes": "The Maryland Office of State Procurement identifies eMaryland Marketplace Advantage (eMMA) as Maryland’s online procurement platform and links its public portal.",
+      "notes": "The Maryland Office of State Procurement identifies eMaryland Marketplace Advantage (eMMA) as Maryland\u2019s online procurement platform and links its public portal.",
       "limitations": "This source-identity evidence does not establish current anonymous search, detail, or document operability."
     },
     {
@@ -892,6 +965,39 @@
       "sanitization_status": "not_applicable",
       "notes": "The official state.pa.us eMarketplace portal identifies Pennsylvania's public procurement source and provides the configured statewide solicitation entry point.",
       "limitations": "This source-identity evidence does not establish current anonymous search, detail, or document operability."
+    },
+    {
+      "evidence_id": "me-vss-official-guidance-1",
+      "source_id": "me-vss",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Maine Division of Procurement Services identifies Vendor Self Service as the current public procurement location and links the Maine VSS tenant.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "me-vss-sanitized-fixtures-1",
+      "source_id": "me-vss",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_award_metadata",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/cgi_vss_search.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized Maine landing, shared results, and detail fixtures exercise the configured public guest request and parser contract without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; attachment retrieval and document parsing are not established."
     }
   ]
 }

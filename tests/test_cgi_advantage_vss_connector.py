@@ -332,6 +332,11 @@ class CGIAdvantageVSSConnectorTests(unittest.IsolatedAsyncioTestCase):
             set(CGI_ADVANTAGE_VSS_PORTALS), {"maine/vss", "michigan/sigma-vss", "colorado/vss"}
         )
         self.assertEqual(MAINE_VSS.variant, CGIAdvantageVSSVariant.ALT_SELF_SERVICE)
+        self.assertTrue(MAINE_VSS.enabled)
+        self.assertTrue(MAINE_VSS.public_search_verified)
+        self.assertTrue(MAINE_VSS.public_detail_verified)
+        self.assertTrue(MAINE_VSS.public_attachments_verified)
+        self.assertEqual(MAINE_VSS.validation_level, "fixture_verified")
         self.assertEqual(MICHIGAN_SIGMA_VSS.timezone, "America/Detroit")
         self.assertEqual(COLORADO_VSS.timezone, "America/Denver")
         self.assertFalse(MICHIGAN_SIGMA_VSS.enabled)

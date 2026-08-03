@@ -753,22 +753,23 @@
       "jurisdiction_type": "state",
       "postal_code": "ME",
       "fips_code": "23",
-      "primary_source_id": null,
+      "primary_source_id": "me-vss",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "fixture_verified_public",
+      "detail_status": "fixture_verified_public",
+      "attachment_status": "fixture_verified_mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "bounded_anonymous_live_validation_pending",
+        "pre_2025_10_01_rfps_require_archive_coverage"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation and retain archive coverage for RFPs published before October 1, 2025.",
+      "notes": "The official Maine VSS guidance and sanitized CGI Advantage VSS fixtures establish the primary statewide source and public parser contract. Fixture verification is not live verification."
     },
     {
       "code": "MI",
