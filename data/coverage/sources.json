@@ -719,6 +719,148 @@
       "blocker_reason": null,
       "recommended_next_action": "Perform a bounded anonymous GET validation of guest discovery, detail, and one explicitly public attachment from a permitted network.",
       "evidence_url": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system"
+    },
+    {
+      "key": "ia-impacs",
+      "jurisdiction_code": "IA",
+      "name": "Iowa IMPACS",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
+      "platform_family": "jaggaer/sciquest",
+      "connector_name": "jaggaer/sciquest",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/jaggaer_iowa_listing.html",
+        "tests/fixtures/jaggaer_detail.html"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "ia-impacs",
+      "jurisdiction_id": "IA",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Iowa IMPACS",
+      "official_landing_page": "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities",
+      "public_bid_board_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
+      "public_search_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
+      "public_detail_url_pattern": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa&eventNumExact={event_number}",
+      "connector_key": "jaggaer/sciquest",
+      "connector_alias": null,
+      "portal_profile_key": "iowa/impacs",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities",
+        "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
+        "tests/fixtures/jaggaer_iowa_listing.html",
+        "tests/fixtures/jaggaer_detail.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/jaggaer_iowa_listing.html",
+        "tests/fixtures/jaggaer_detail.html"
+      ],
+      "test_location": [
+        "tests/test_jaggaer_sciquest_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared detail fixture demonstrates the family contract; tenant-specific document availability can vary.",
+        "Attachment metadata may include login-required documents and retrieval is capability-gated."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities"
+    },
+    {
+      "key": "ut-u3p",
+      "jurisdiction_code": "UT",
+      "name": "Utah Public Procurement Place (U3P)",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
+      "platform_family": "jaggaer/sciquest",
+      "connector_name": "jaggaer/sciquest",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/jaggaer_listing.html",
+        "tests/fixtures/jaggaer_detail.html"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "ut-u3p",
+      "jurisdiction_id": "UT",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Utah Public Procurement Place (U3P)",
+      "official_landing_page": "https://purchasing.utah.gov/currentbids/",
+      "public_bid_board_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
+      "public_search_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
+      "public_detail_url_pattern": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah&eventNumExact={event_number}",
+      "connector_key": "jaggaer/sciquest",
+      "connector_alias": null,
+      "portal_profile_key": "utah/u3p",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://purchasing.utah.gov/currentbids/",
+        "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
+        "tests/fixtures/jaggaer_listing.html",
+        "tests/fixtures/jaggaer_detail.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/jaggaer_listing.html",
+        "tests/fixtures/jaggaer_detail.html"
+      ],
+      "test_location": [
+        "tests/test_jaggaer_sciquest_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared detail fixture demonstrates the family contract; tenant-specific document availability can vary.",
+        "Attachment metadata may include login-required documents and retrieval is capability-gated."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://purchasing.utah.gov/currentbids/"
     }
   ],
   "evidence": [
@@ -998,6 +1140,70 @@
       "sanitization_status": "synthetic_public_contract",
       "notes": "Sanitized Maine landing, shared results, and detail fixtures exercise the configured public guest request and parser contract without credentials or vendor data.",
       "limitations": "Fixture behavior is not live verification; attachment retrieval and document parsing are not established."
+    },
+    {
+      "evidence_id": "ia-impacs-official-guidance-1",
+      "source_id": "ia-impacs",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official IA procurement guidance identifies and links the configured public bid board.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "ia-impacs-sanitized-fixtures-1",
+      "source_id": "ia-impacs",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/jaggaer_iowa_listing.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized JAGGAER public-event fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+    },
+    {
+      "evidence_id": "ut-u3p-official-guidance-1",
+      "source_id": "ut-u3p",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://purchasing.utah.gov/currentbids/",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official UT procurement guidance identifies and links the configured public bid board.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "ut-u3p-sanitized-fixtures-1",
+      "source_id": "ut-u3p",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/jaggaer_listing.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized JAGGAER public-event fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
     }
   ]
 }
