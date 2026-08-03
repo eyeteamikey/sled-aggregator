@@ -1,0 +1,96 @@
+[
+  {
+    "capabilities": {
+      "addenda": "not_observed",
+      "attachment_metadata": "not_observed",
+      "authentication": "not_observed",
+      "captcha": "not_observed",
+      "content_type": "unknown",
+      "detail_access": "not_observed",
+      "document_handoff": "not_observed",
+      "document_retrieval": "not_observed",
+      "empty_results": "not_observed",
+      "idempotency": "not_observed",
+      "landing_access": "unknown",
+      "normalization": "not_observed",
+      "pagination": "not_observed",
+      "rate_limiting": "not_observed",
+      "redirects": "not_observed",
+      "response_shape": "unknown",
+      "retries": "not_observed",
+      "search_access": "unknown",
+      "search_contract": "not_observed",
+      "source_identity": "fixture_verified"
+    },
+    "dry_run": false,
+    "environment": "codex-cloud",
+    "jurisdiction_id": "CT",
+    "limitations": [
+      "Response did not establish promotion eligibility."
+    ],
+    "observations": [
+      {
+        "classification": "unknown",
+        "content_type": "text/plain",
+        "error": null,
+        "redirects": [],
+        "request_url": "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols",
+        "response_shape": "4f53cda18c2baa0c",
+        "status_code": 503
+      }
+    ],
+    "observed_at": "2026-08-03T20:19:14.187248+00:00",
+    "platform_family": "webprocure/proactis",
+    "promotion_eligible": false,
+    "request_budget": 1,
+    "requests_used": 1,
+    "source_id": "ct-ctsource"
+  },
+  {
+    "capabilities": {
+      "addenda": "not_observed",
+      "attachment_metadata": "not_observed",
+      "authentication": "not_observed",
+      "captcha": "not_observed",
+      "content_type": "unknown",
+      "detail_access": "not_observed",
+      "document_handoff": "not_observed",
+      "document_retrieval": "not_observed",
+      "empty_results": "not_observed",
+      "idempotency": "not_observed",
+      "landing_access": "unknown",
+      "normalization": "not_observed",
+      "pagination": "not_observed",
+      "rate_limiting": "not_observed",
+      "redirects": "not_observed",
+      "response_shape": "unknown",
+      "retries": "not_observed",
+      "search_access": "unknown",
+      "search_contract": "not_observed",
+      "source_identity": "fixture_verified"
+    },
+    "dry_run": false,
+    "environment": "codex-cloud",
+    "jurisdiction_id": "RI",
+    "limitations": [
+      "Response did not establish promotion eligibility."
+    ],
+    "observations": [
+      {
+        "classification": "unknown",
+        "content_type": "text/plain",
+        "error": null,
+        "redirects": [],
+        "request_url": "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols",
+        "response_shape": "4f53cda18c2baa0c",
+        "status_code": 503
+      }
+    ],
+    "observed_at": "2026-08-03T20:19:14.370703+00:00",
+    "platform_family": "webprocure/proactis",
+    "promotion_eligible": false,
+    "request_budget": 1,
+    "requests_used": 1,
+    "source_id": "ri-ocean-state-procures"
+  }
+]
