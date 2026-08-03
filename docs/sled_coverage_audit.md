@@ -1,6 +1,6 @@
 # Nationwide SLED Coverage Audit
 
-**Data as of:** 2026-07-31
+**Data as of:** 2026-08-03
 **Schema version:** 1.0
 **Generation:** deterministic and offline (no network requests)
 
@@ -13,7 +13,7 @@
 | Implemented connectors | 21 |
 | Public discovery | 10 |
 | Public detail | 10 |
-| Public document pipeline | 4 |
+| Public document pipeline | 7 |
 | Metadata only | 0 |
 | Registration required | 0 |
 | Login required | 0 |

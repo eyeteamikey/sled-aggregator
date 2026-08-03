@@ -18,10 +18,11 @@ from typing import Any, Protocol
 from urllib.parse import parse_qs, urlencode, urljoin, urlparse
 
 import httpx
+from pydantic import ValidationError
 
 from sled_aggregator.connectors.base import BaseConnector, ConnectorQuery
-from sled_aggregator.domain.enums import OpportunityStatus
-from sled_aggregator.domain.models import RawOpportunity, SourceRef
+from sled_aggregator.domain.enums import AccessState, OpportunityStatus
+from sled_aggregator.domain.models import DocumentCandidate, RawOpportunity, SourceRef
 
 
 class EVAAccessState(StrEnum):
@@ -219,6 +220,7 @@ class _EVAParser(HTMLParser):
 class EVAConnector(BaseConnector):
     platform_family = "virginia/eva"
     jurisdictions = ("Virginia",)
+    document_pipeline_compatible = True
     _transient = frozenset({429, 502, 503, 504})
 
     def __init__(
@@ -577,6 +579,89 @@ class EVAConnector(BaseConnector):
                 }
             )
         return result
+
+    def document_candidates(self, opportunity: RawOpportunity) -> list[DocumentCandidate]:
+        """Adapt fixture-backed eVA attachment metadata without retrieving bodies."""
+        result: list[DocumentCandidate] = []
+        seen: set[tuple[str, int]] = set()
+        for row in opportunity.raw_payload.get("document_links", []):
+            if not isinstance(row, Mapping):
+                continue
+            source_url = str(row.get("source_url") or "")
+            parsed = urlparse(source_url)
+            if parsed.scheme != "https" or parsed.hostname != urlparse(self.portal.base_url).hostname:
+                continue
+            source_id = str(row.get("attachment_identifier") or "").strip()
+            try:
+                round_number = int(row.get("round") or 0)
+            except (TypeError, ValueError):
+                continue
+            if not source_id:
+                # eVA fixtures prove lot, round and attachment path as the minimum
+                # stable fallback; query material is deliberately excluded.
+                stable_path = parsed.path.rstrip("/").casefold()
+                source_id = f"{row.get('lot_id')}:{round_number}:{stable_path}"
+            key = (source_id, round_number)
+            if key in seen:
+                continue
+            seen.add(key)
+            access = str(row.get("access_state") or "unknown")
+            state = (
+                AccessState.PUBLIC
+                if access in {"public_no_login", "public_session_required"}
+                else AccessState.REGISTRATION_REQUIRED
+                if access == "free_account_required"
+                else AccessState.LOGIN_REQUIRED
+                if access == "login_required"
+                else AccessState.UNKNOWN
+            )
+            category = str(row.get("document_category") or "other")
+            label = str(row.get("title") or "Document")
+            number = self._relationship_number(label)
+            try:
+                result.append(
+                    DocumentCandidate(
+                        opportunity_id=opportunity.source.source_id,
+                        source_document_id=source_id,
+                        source_document_url=source_url,
+                        source_opportunity_url=opportunity.source.opportunity_url,
+                        source_detail_url=opportunity.source.opportunity_url,
+                        filename=str(row.get("file_name") or "document"),
+                        label=label,
+                        mime_type=self._mime_type(row.get("apparent_file_type")),
+                        category=category,
+                        access_state=state,
+                        publicly_retrievable=state is AccessState.PUBLIC,
+                        version_label=f"round {round_number}",
+                        version_number=round_number,
+                        addendum_number=number if "addend" in label.casefold() else None,
+                        amendment_number=number if "amend" in label.casefold() else None,
+                        posted_at=self._date(row.get("posted_or_modified_date")),
+                        raw_metadata={
+                            "lot_id": row.get("lot_id"),
+                            "round": round_number,
+                            "authoritative_source": bool(row.get("authoritative_source")),
+                            "session_required": bool(row.get("session_required")),
+                            "stable_attachment_path": parsed.path,
+                        },
+                    )
+                )
+            except (TypeError, ValueError, ValidationError):
+                continue
+        return result
+
+    @staticmethod
+    def _relationship_number(label: str) -> str | None:
+        match = re.search(r"(?:addendum|amendment)\s*#?\s*([A-Za-z0-9.-]+)", label, re.I)
+        return match.group(1) if match else None
+
+    @staticmethod
+    def _mime_type(extension: object) -> str | None:
+        return {
+            "pdf": "application/pdf",
+            "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }.get(str(extension or "").casefold())
 
     @staticmethod
     def _identity(record: dict[str, Any]) -> str | None:

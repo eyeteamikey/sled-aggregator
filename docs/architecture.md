@@ -532,6 +532,23 @@ logging material. Pipeline counts are available through the bounded queue-statis
 
 ## Public document retrieval
 
+### Statewide document adapters
+
+`georgia/gpr`, `maryland/emma`, and `virginia/eva` adapt their sanitized detail
+contracts directly into canonical `DocumentCandidate` values after opportunity
+persistence. Georgia permits its official GPR hosts, Maryland permits eMMA and its
+explicit approved document hosts, and Virginia permits the public eVA attachment host.
+Only explicitly public links are queue eligible. Login, registration, supplier-profile,
+unavailable, malformed, and unsafe links retain useful metadata without becoming failed
+downloads. Addenda and amendments remain distinct operational documents, while numeric
+versions participate in the shared manifest's newest-version reconciliation.
+
+Source attachment identifiers are preferred. The eVA fallback identity combines lot,
+round, and normalized attachment path; temporary query parameters remain retrieval
+material and are excluded from identity and sanitized metadata. All three contracts are
+proved offline by injected-transport fixtures. Live portal behavior, cross-host changes,
+and reacquisition of expired public links remain operational validation concerns.
+
 `documents.policy`, `fetcher`, `validation`, `storage`, and `worker` separate URL policy, HTTP redirects/streaming, MIME/access-page classification, atomic storage, and lease-aware persistence. Append-oriented `document_artifacts` retains each distinct manifest hash; `document_download_attempts` holds bounded audits. Safe read metadata excludes storage keys and lease credentials.
 
 Workers claim PR #12 jobs using `FOR UPDATE SKIP LOCKED`, commit before I/O, then recheck owner, token and expiration before persistence. Lease loss prevents acknowledgement. Transient failures reschedule with bounded backoff; permanent access/policy/validation outcomes are terminal. Since storage and PostgreSQL cannot be atomic together, deterministic keys, verification and artifact lookup enable idempotent reconciliation.

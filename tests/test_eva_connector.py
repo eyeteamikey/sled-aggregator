@@ -15,6 +15,7 @@ from sled_aggregator.connectors.eva import (
     EVAQuery,
 )
 from sled_aggregator.connectors.registry import connector_registry
+from sled_aggregator.domain.enums import AccessState
 
 FIXTURES = Path(__file__).parent / "fixtures"
 BOARD = (FIXTURES / "eva_board.html").read_text()
@@ -77,6 +78,13 @@ class EVAConnectorTests(unittest.IsolatedAsyncioTestCase):
             ["solicitation", "amendment", "solicitation"],
         )
         self.assertEqual(docs[2]["access_state"], "free_account_required")
+        candidates = connector.document_candidates(item)
+        self.assertTrue(connector.document_pipeline_compatible)
+        self.assertEqual(len(candidates), 3)
+        self.assertEqual(candidates[1].source_document_id, "D2")
+        self.assertEqual(candidates[1].addendum_number, "1")
+        self.assertEqual(candidates[2].access_state, AccessState.REGISTRATION_REQUIRED)
+        self.assertFalse(candidates[2].publicly_retrievable)
         self.assertEqual(transport.calls[0]["params"]["agencyname"], "County of Roanoke")
         self.assertEqual(connector.health.active_detail_variant, "IVDetailsV2.jsp")
 

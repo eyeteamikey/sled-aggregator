@@ -682,6 +682,15 @@ fixture-backed tests; CI does not depend on live OpenGov access.
 
 ## Solicitation document manifest and retrieval queue
 
+Georgia GPR, Maryland eMMA, and Virginia eVA now use narrow, fixture-backed
+`DocumentCandidate` adapters. Their public attachments enter the same orchestration,
+manifest, and bounded retrieval queue used by the existing Oracle, Pennsylvania, and
+Tyler integrations; login- or supplier-registration-required rows remain metadata-only.
+Stable identity uses a source attachment identifier where present. Virginia's fallback
+uses lot, round, and attachment path while excluding transient query parameters. These
+integrations are fixture verified rather than live verified and never perform login,
+registration, or bid-response actions.
+
 The document pipeline is a public, read-only coordination layer:
 
 ```text
