@@ -1,7 +1,6 @@
 # Missing primary statewide coverage
 
 - Alaska (AK): Research and register an authoritative statewide source with evidence.
-- Alabama (AL): Research and register an authoritative statewide source with evidence.
 - Arkansas (AR): Research and register an authoritative statewide source with evidence.
 - American Samoa (AS): Research and register an authoritative statewide source with evidence.
 - Arizona (AZ): Research and register an authoritative statewide source with evidence.
@@ -27,7 +26,6 @@
 - New Hampshire (NH): Research and register an authoritative statewide source with evidence.
 - New Mexico (NM): Research and register an authoritative statewide source with evidence.
 - New York (NY): Research and register an authoritative statewide source with evidence.
-- Ohio (OH): Research and register an authoritative statewide source with evidence.
 - Oklahoma (OK): Research and register an authoritative statewide source with evidence.
 - Puerto Rico (PR): Research and register an authoritative statewide source with evidence.
 - South Carolina (SC): Research and register an authoritative statewide source with evidence.

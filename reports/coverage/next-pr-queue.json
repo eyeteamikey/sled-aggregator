@@ -447,50 +447,50 @@
     "connector_family": null,
     "dependencies": [],
     "evidence_available": [
-      "tests/fixtures/tyler_vss_opelika_results.html",
-      "tests/fixtures/tyler_vss_detail.html"
+      "https://alabamabuys.gov/"
     ],
     "evidence_required": [
-      "official primary statewide source evidence"
+      "platform and tenant evidence",
+      "sanitized anonymous public request and response contract"
     ],
-    "expected_baseline_coverage_increase": 0,
+    "expected_baseline_coverage_increase": 1,
     "expected_document_pipeline_increase": 0,
     "jurisdiction_ids": [
       "AL"
     ],
     "priority_band": "P2",
-    "proposed_title": "Research authoritative statewide coverage for Alabama",
+    "proposed_title": "Capture Alabama public procurement contract",
     "recommended_order": 19,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
-      "al-opelika-tyler-munis-vss"
+      "al-alabamabuys"
     ],
-    "task_type": "coverage_correction"
+    "task_type": "public_contract_capture"
   },
   {
     "connector_family": null,
     "dependencies": [],
     "evidence_available": [
-      "tests/fixtures/tyler_vss_results_1.html",
-      "tests/fixtures/tyler_vss_detail.html"
+      "https://ohiobuys.ohio.gov/"
     ],
     "evidence_required": [
-      "official primary statewide source evidence"
+      "platform and tenant evidence",
+      "sanitized anonymous public request and response contract"
     ],
-    "expected_baseline_coverage_increase": 0,
+    "expected_baseline_coverage_increase": 1,
     "expected_document_pipeline_increase": 0,
     "jurisdiction_ids": [
       "OH"
     ],
     "priority_band": "P2",
-    "proposed_title": "Research authoritative statewide coverage for Ohio",
+    "proposed_title": "Capture Ohio public procurement contract",
     "recommended_order": 20,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
-      "oh-summit-county-tyler-munis-vss"
+      "oh-ohiobuys"
     ],
-    "task_type": "coverage_correction"
+    "task_type": "public_contract_capture"
   }
 ]
