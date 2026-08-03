@@ -14,11 +14,12 @@ from sled_aggregator.coverage.core import (
     build_report,
     connector_inventory,
     gaps_for,
+    generated_reports,
     load,
-    recommendations,
     render_csv,
     render_json,
     render_markdown,
+    report_drift,
     tier,
     validate,
 )
@@ -127,17 +128,63 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertIn("incomplete_local_coverage", gaps)
 
     def test_recommendations_are_deterministic_and_transparent(self):
-        first = recommendations(self.sdata["family_hypotheses"])
-        self.assertEqual(first, recommendations(self.sdata["family_hypotheses"]))
-        self.assertTrue(all(x["factors"] and isinstance(x["score"], int) for x in first))
-        self.assertEqual(first, sorted(first, key=lambda x: (-x["score"], x["family"])))
-        statuses = {x["family"]: x["evidence_status"] for x in first}
-        self.assertEqual(statuses["Oracle Cloud Procurement"], "implemented_family")
-        self.assertEqual(statuses["Tyler Munis/VSS public bid search"], "implemented_family")
+        first = build_report(jdata=self.jdata, sdata=self.sdata)["prioritized_recommendations"]
         self.assertEqual(
-            statuses["public CSV, RSS, XML, and JSON feeds"], "unsupported_candidate"
+            first, build_report(jdata=self.jdata, sdata=self.sdata)["prioritized_recommendations"]
         )
-        self.assertEqual(statuses["Vendor Registry"], "unsupported_candidate")
+        self.assertTrue(all(x["source_ids"] and x["jurisdiction_ids"] for x in first))
+        self.assertFalse(any("hypothetical" in str(x).lower() for x in first))
+
+    def test_authoritative_control_plane_and_local_regressions(self):
+        report = build_report(jdata=self.jdata, sdata=self.sdata)
+        records = {row["code"]: row for row in report["jurisdiction_records"]}
+        self.assertEqual(report["summary"]["jurisdiction_count"], 56)
+        self.assertEqual(report["summary"]["baseline_operational_count"], 6)
+        for code in ("AL", "MI", "OH"):
+            self.assertTrue(records[code]["local_evidence_only"])
+            self.assertFalse(records[code]["baseline_operational"])
+            self.assertEqual(records[code]["coverage_tier"], 0)
+        self.assertFalse(records["RI"]["baseline_operational"])
+        self.assertEqual(records["RI"]["supplemental_source_ids"], ["ri-rivip-external"])
+        self.assertTrue(
+            all(
+                "jurisdiction_id" in row and "primary_source_id" in row
+                for row in report["jurisdiction_records"]
+            )
+        )
+
+    def test_affirmative_claims_require_evidence_and_valid_pipeline_adapter(self):
+        data = deepcopy(self.sdata)
+        data["evidence"] = [e for e in data["evidence"] if e["source_id"] != "ca-cal-eprocure"]
+        self.assertTrue(any(x.field == "evidence" for x in validate(self.jdata, data)))
+        data = deepcopy(self.sdata)
+        data["sources"][0]["connector_name"] = "webprocure/proactis"
+        self.assertTrue(
+            any(x.field == "document_pipeline_classification" for x in validate(self.jdata, data))
+        )
+
+    def test_generated_report_set_is_deterministic_and_consistent(self):
+        report = build_report(jdata=self.jdata, sdata=self.sdata)
+        first = generated_reports(report)
+        self.assertEqual(first, generated_reports(report))
+        self.assertEqual(
+            set(first),
+            {
+                "coverage-summary.json",
+                "capability-matrix.md",
+                "connector-family-reuse.md",
+                "missing-coverage.md",
+                "blocked-sources.md",
+                "document-pipeline-readiness.md",
+                "next-pr-queue.json",
+            },
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            for name, content in first.items():
+                (path / name).write_text(content)
+            with patch("sled_aggregator.coverage.core.build_report", return_value=report):
+                self.assertEqual(report_drift(path), [])
 
     def test_reports_are_deterministic_and_parseable(self):
         report = build_report("2026-07-30", self.jdata, self.sdata)
@@ -153,7 +200,16 @@ class CoverageAuditTests(unittest.TestCase):
 
     def test_cli_commands_and_output(self):
         self.assertEqual(main(["validate"]), 0)
-        for command in ("gaps", "recommend"):
+        for command in (
+            "gaps",
+            "recommend",
+            "status",
+            "matrix",
+            "missing",
+            "blocked",
+            "documents",
+            "queue",
+        ):
             self.assertEqual(main([command]), 0)
         with tempfile.TemporaryDirectory() as directory:
             for fmt in ("json", "csv", "markdown"):

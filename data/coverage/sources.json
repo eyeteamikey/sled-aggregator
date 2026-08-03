@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0",
-  "as_of": "2026-07-31",
+  "schema_version": "2.0",
+  "as_of": "2026-08-03",
   "sources": [
     {
       "key": "ca-cal-eprocure",
@@ -25,7 +25,44 @@
         "tests/fixtures/peoplesoft_results.html"
       ],
       "priority": 2,
-      "expected_coverage_impact": "statewide"
+      "expected_coverage_impact": "statewide",
+      "source_id": "ca-cal-eprocure",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Cal eProcure",
+      "official_landing_page": "https://caleprocure.ca.gov/",
+      "public_bid_board_url": "https://caleprocure.ca.gov/",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "oracle/peoplesoft-sourcing",
+      "connector_alias": null,
+      "portal_profile_key": "ca-cal-eprocure",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/peoplesoft_results.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/peoplesoft_results.html"
+      ],
+      "test_location": [
+        "tests/test_peoplesoft_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "statewide"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "ga-gpr",
@@ -50,7 +87,44 @@
         "tests/fixtures/georgia_gpr_listing.html"
       ],
       "priority": 1,
-      "expected_coverage_impact": "statewide"
+      "expected_coverage_impact": "statewide",
+      "source_id": "ga-gpr",
+      "jurisdiction_id": "GA",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Georgia Procurement Registry",
+      "official_landing_page": "https://ssl.doas.state.ga.us/gpr/",
+      "public_bid_board_url": "https://ssl.doas.state.ga.us/gpr/",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "georgia/gpr",
+      "connector_alias": null,
+      "portal_profile_key": "ga-gpr",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/georgia_gpr_listing.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/georgia_gpr_listing.html"
+      ],
+      "test_location": [
+        "tests/test_georgia_gpr_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "statewide"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "md-emma",
@@ -75,7 +149,44 @@
         "tests/fixtures/maryland_emma_listing.html"
       ],
       "priority": 1,
-      "expected_coverage_impact": "statewide"
+      "expected_coverage_impact": "statewide",
+      "source_id": "md-emma",
+      "jurisdiction_id": "MD",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "eMaryland Marketplace Advantage",
+      "official_landing_page": "https://emma.maryland.gov/",
+      "public_bid_board_url": "https://emma.maryland.gov/",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "maryland/emma",
+      "connector_alias": null,
+      "portal_profile_key": "md-emma",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/maryland_emma_listing.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/maryland_emma_listing.html"
+      ],
+      "test_location": [
+        "tests/test_maryland_emma_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "statewide"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "pa-emarketplace",
@@ -100,7 +211,44 @@
         "tests/fixtures/pennsylvania_emarketplace_search.html"
       ],
       "priority": 1,
-      "expected_coverage_impact": "statewide"
+      "expected_coverage_impact": "statewide",
+      "source_id": "pa-emarketplace",
+      "jurisdiction_id": "PA",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "PA eMarketplace",
+      "official_landing_page": "https://www.emarketplace.state.pa.us/",
+      "public_bid_board_url": "https://www.emarketplace.state.pa.us/",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "pennsylvania/emarketplace",
+      "connector_alias": null,
+      "portal_profile_key": "pa-emarketplace",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "public",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/pennsylvania_emarketplace_search.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/pennsylvania_emarketplace_search.html"
+      ],
+      "test_location": [
+        "tests/test_pennsylvania_emarketplace_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "statewide"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "ri-rivip-external",
@@ -125,7 +273,44 @@
         "tests/fixtures/rivip_external_results.html"
       ],
       "priority": 2,
-      "expected_coverage_impact": "local and education external notices"
+      "expected_coverage_impact": "local and education external notices",
+      "source_id": "ri-rivip-external",
+      "jurisdiction_id": "RI",
+      "jurisdiction_scope": "supplemental_statewide",
+      "owning_public_entity": "RIVIP External Solicitations",
+      "official_landing_page": "https://www.purchasing.ri.gov/RIVIP/ExternalBids.aspx",
+      "public_bid_board_url": "https://www.purchasing.ri.gov/RIVIP/ExternalBids.aspx",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "rhode-island/rivip-external",
+      "connector_alias": null,
+      "portal_profile_key": "ri-rivip-external",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/rivip_external_results.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/rivip_external_results.html"
+      ],
+      "test_location": [
+        "tests/test_rhode_island_rivip_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "local and education external notices"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "tx-esbd",
@@ -150,7 +335,44 @@
         "tests/fixtures/texas_esbd_results.html"
       ],
       "priority": 1,
-      "expected_coverage_impact": "statewide"
+      "expected_coverage_impact": "statewide",
+      "source_id": "tx-esbd",
+      "jurisdiction_id": "TX",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Electronic State Business Daily",
+      "official_landing_page": "https://www.txsmartbuy.gov/esbd",
+      "public_bid_board_url": "https://www.txsmartbuy.gov/esbd",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "texas/esbd",
+      "connector_alias": null,
+      "portal_profile_key": "tx-esbd",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/texas_esbd_results.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/texas_esbd_results.html"
+      ],
+      "test_location": [
+        "tests/test_texas_esbd_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "statewide"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "va-eva",
@@ -175,7 +397,44 @@
         "tests/fixtures/eva_board.html"
       ],
       "priority": 1,
-      "expected_coverage_impact": "statewide"
+      "expected_coverage_impact": "statewide",
+      "source_id": "va-eva",
+      "jurisdiction_id": "VA",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Virginia eVA",
+      "official_landing_page": "https://eva.virginia.gov/",
+      "public_bid_board_url": "https://eva.virginia.gov/",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "virginia/eva",
+      "connector_alias": null,
+      "portal_profile_key": "va-eva",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/eva_board.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/eva_board.html"
+      ],
+      "test_location": [
+        "tests/test_eva_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "statewide"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "oh-summit-county-tyler-munis-vss",
@@ -201,7 +460,46 @@
         "tests/fixtures/tyler_vss_detail.html"
       ],
       "priority": 2,
-      "expected_coverage_impact": "Summit County procurement only"
+      "expected_coverage_impact": "Summit County procurement only",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "jurisdiction_id": "OH",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "Summit County Tyler Munis Vendor Self Service",
+      "official_landing_page": "https://summitcountyoh.munisselfservice.com/vss/",
+      "public_bid_board_url": "https://summitcountyoh.munisselfservice.com/vss/",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "tyler/munis-vss",
+      "connector_alias": null,
+      "portal_profile_key": "oh-summit-county-tyler-munis-vss",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "public",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/tyler_vss_results_1.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/tyler_vss_results_1.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "test_location": [
+        "tests/test_tyler_munis_vss_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Summit County procurement only"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "al-opelika-tyler-munis-vss",
@@ -227,7 +525,46 @@
         "tests/fixtures/tyler_vss_detail.html"
       ],
       "priority": 2,
-      "expected_coverage_impact": "City of Opelika procurement only"
+      "expected_coverage_impact": "City of Opelika procurement only",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "jurisdiction_id": "AL",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "City of Opelika Tyler Munis Vendor Self Service",
+      "official_landing_page": "https://ss.opelika-al.gov/vss/",
+      "public_bid_board_url": "https://ss.opelika-al.gov/vss/",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "tyler/munis-vss",
+      "connector_alias": null,
+      "portal_profile_key": "al-opelika-tyler-munis-vss",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "public",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/tyler_vss_opelika_results.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/tyler_vss_opelika_results.html",
+        "tests/fixtures/tyler_vss_detail.html"
+      ],
+      "test_location": [
+        "tests/test_tyler_munis_vss_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "City of Opelika procurement only"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     },
     {
       "key": "mi-detroit-oracle-fusion",
@@ -254,79 +591,238 @@
         "tests/fixtures/oracle_fusion_rest_amendments.json"
       ],
       "priority": 2,
-      "expected_coverage_impact": "City of Detroit procurement"
+      "expected_coverage_impact": "City of Detroit procurement",
+      "source_id": "mi-detroit-oracle-fusion",
+      "jurisdiction_id": "MI",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "City of Detroit Oracle Fusion Public Negotiations",
+      "official_landing_page": "https://ebkk.fa.us8.oraclecloud.com/fscmUI/faces/NegotiationAbstracts?prcBuId=300000007775375",
+      "public_bid_board_url": "https://ebkk.fa.us8.oraclecloud.com/fscmUI/faces/NegotiationAbstracts?prcBuId=300000007775375",
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": "oracle/fusion-rest",
+      "connector_alias": null,
+      "portal_profile_key": "mi-detroit-oracle-fusion",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "public",
+      "document_pipeline_classification": "compatible",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_location": [
+        "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+        "tests/fixtures/oracle_fusion_rest_attachments.json",
+        "tests/fixtures/oracle_fusion_rest_amendments.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+        "tests/fixtures/oracle_fusion_rest_attachments.json",
+        "tests/fixtures/oracle_fusion_rest_amendments.json"
+      ],
+      "test_location": [
+        "tests/test_oracle_fusion_rest_connector.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "City of Detroit procurement"
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded lawful anonymous live validation."
     }
   ],
-  "family_hypotheses": [
+  "evidence": [
     {
-      "family": "Oracle Cloud Procurement",
-      "jurisdictions_unlocked": 4,
-      "statewide_impact": 2,
-      "public_access": 2,
-      "documents": 1,
-      "reuse": 3,
-      "complexity": 2,
-      "maintenance_risk": 2,
-      "blocked_penalty": 0,
-      "territory_impact": 0,
-      "recommendation": "Implemented as oracle/fusion-rest; expand only with evidence-confirmed anonymous REST tenants.",
-      "evidence_status": "implemented_family"
+      "evidence_id": "ca-cal-eprocure-fixture-1",
+      "source_id": "ca-cal-eprocure",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/peoplesoft_results.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
     },
     {
-      "family": "Tyler Munis/VSS public bid search",
-      "jurisdictions_unlocked": 5,
-      "statewide_impact": 1,
-      "public_access": 2,
-      "documents": 2,
-      "reuse": 3,
-      "complexity": 2,
-      "maintenance_risk": 1,
-      "blocked_penalty": 0,
-      "territory_impact": 0,
-      "recommendation": "Implemented as tyler/munis-vss; expand only with evidence-confirmed anonymous VSS tenants.",
-      "evidence_status": "implemented_family"
+      "evidence_id": "ga-gpr-fixture-1",
+      "source_id": "ga-gpr",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/georgia_gpr_listing.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
     },
     {
-      "family": "Vendor Registry",
-      "jurisdictions_unlocked": 4,
-      "statewide_impact": 1,
-      "public_access": 2,
-      "documents": 1,
-      "reuse": 3,
-      "complexity": 2,
-      "maintenance_risk": 1,
-      "blocked_penalty": 1,
-      "territory_impact": 0,
-      "recommendation": "Anonymous agency discovery was not reproducible in the 2026-08-01 evidence review; obtain sanitized listing and detail captures for two independently operated agencies before implementation.",
-      "evidence_status": "unsupported_candidate"
+      "evidence_id": "md-emma-fixture-1",
+      "source_id": "md-emma",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/maryland_emma_listing.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
     },
     {
-      "family": "territory-specific legacy portals",
-      "jurisdictions_unlocked": 3,
-      "statewide_impact": 2,
-      "public_access": 1,
-      "documents": 1,
-      "reuse": 1,
-      "complexity": 3,
-      "maintenance_risk": 3,
-      "blocked_penalty": 1,
-      "territory_impact": 3,
-      "recommendation": "Research authoritative territory sources without bypassing access controls; no reusable response contract is established.",
-      "evidence_status": "blocked_family"
+      "evidence_id": "pa-emarketplace-fixture-1",
+      "source_id": "pa-emarketplace",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/pennsylvania_emarketplace_search.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
     },
     {
-      "family": "public CSV, RSS, XML, and JSON feeds",
-      "jurisdictions_unlocked": 3,
-      "statewide_impact": 1,
-      "public_access": 3,
-      "documents": 1,
-      "reuse": 3,
-      "complexity": 1,
-      "maintenance_risk": 1,
-      "blocked_penalty": 0,
-      "territory_impact": 1,
-      "recommendation": "Evidence review found no qualifying contract reproducible in this task; obtain official machine-readable contract evidence for two independent feeds, or one substantial statewide or territory-wide feed, before implementation.",
-      "evidence_status": "unsupported_candidate"
+      "evidence_id": "ri-rivip-external-fixture-1",
+      "source_id": "ri-rivip-external",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/rivip_external_results.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "tx-esbd-fixture-1",
+      "source_id": "tx-esbd",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/texas_esbd_results.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "va-eva-fixture-1",
+      "source_id": "va-eva",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/eva_board.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "oh-summit-county-tyler-munis-vss-fixture-1",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/tyler_vss_results_1.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "oh-summit-county-tyler-munis-vss-fixture-2",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "capabilities": [
+        "discovery",
+        "detail",
+        "attachments"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/tyler_vss_detail.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "al-opelika-tyler-munis-vss-fixture-1",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/tyler_vss_opelika_results.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "al-opelika-tyler-munis-vss-fixture-2",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "capabilities": [
+        "discovery",
+        "detail",
+        "attachments"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/tyler_vss_detail.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "mi-detroit-oracle-fusion-fixture-1",
+      "source_id": "mi-detroit-oracle-fusion",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/oracle_fusion_rest_listing_page_1.json",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "mi-detroit-oracle-fusion-fixture-2",
+      "source_id": "mi-detroit-oracle-fusion",
+      "capabilities": [
+        "discovery",
+        "detail",
+        "attachments"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/oracle_fusion_rest_attachments.json",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
+    },
+    {
+      "evidence_id": "mi-detroit-oracle-fusion-fixture-3",
+      "source_id": "mi-detroit-oracle-fusion",
+      "capabilities": [
+        "discovery"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/oracle_fusion_rest_amendments.json",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "sanitized",
+      "notes": "Committed fixture exercised by automated connector tests.",
+      "limitations": "Fixture evidence is not live validation."
     }
   ]
 }
