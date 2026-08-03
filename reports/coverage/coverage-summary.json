@@ -681,11 +681,14 @@
         "Missouri",
         "Rhode Island"
       ],
-      "profile_count": 0,
+      "profile_count": 2,
       "public_read_only": true,
       "registry_presence": true,
       "request_method_policy": "bounded public read-only",
-      "supported_jurisdictions": [],
+      "supported_jurisdictions": [
+        "CT",
+        "RI"
+      ],
       "test_references": [
         "tests/test_webprocure_connector.py"
       ]
@@ -741,7 +744,23 @@
       "jurisdiction_code": "CO"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "CT"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "CT"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "CT"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "CT"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "CT"
     },
     {
@@ -1049,7 +1068,23 @@
       "jurisdiction_code": "PR"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "RI"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "RI"
     },
     {
@@ -1540,48 +1575,57 @@
       "active": true,
       "attachment_capable": false,
       "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "CT",
-      "connector": null,
-      "coverage_status": "unresearched",
-      "coverage_tier": 0,
+      "connector": "webprocure/proactis",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
       "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "detail_status": "metadata_only",
+      "discovery_capable": true,
+      "discovery_status": "public",
       "document_pipeline_capable": false,
       "document_pipeline_status": "not_established",
       "fips": "09",
       "fips_code": "09",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "CT",
       "jurisdiction_name": "Connecticut",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed",
+        "public_detail_and_attachment_retrieval_not_established"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
       "local_evidence_only": false,
       "name": "Connecticut",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous discovery validation and research public detail and attachment contracts.",
+      "notes": "Fixture verification establishes the configured WebProcure public discovery contract; it is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "webprocure/proactis",
       "postal_code": "CT",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
-      "source_keys": [],
-      "statewide_source_keys": [],
+      "primary_source_id": "ct-ctsource",
+      "primary_source_name": "CTsource",
+      "source_keys": [
+        "ct-ctsource"
+      ],
+      "statewide_source_keys": [
+        "ct-ctsource"
+      ],
       "supplemental_source_ids": [],
       "timezones": [],
       "type": "state"
@@ -3464,50 +3508,58 @@
       "active": true,
       "attachment_capable": false,
       "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "RI",
-      "connector": null,
-      "coverage_status": "evidence_pending",
-      "coverage_tier": 0,
+      "connector": "webprocure/proactis",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
       "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "detail_status": "metadata_only",
+      "discovery_capable": true,
+      "discovery_status": "public",
       "document_pipeline_capable": false,
       "document_pipeline_status": "not_established",
       "fips": "44",
       "fips_code": "44",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "RI",
       "jurisdiction_name": "Rhode Island",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed",
+        "public_detail_and_attachment_retrieval_not_established"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
-      "local_evidence_only": true,
+      "local_evidence_only": false,
       "name": "Rhode Island",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous discovery validation and research public detail and attachment contracts.",
+      "notes": "Fixture verification establishes the configured WebProcure public discovery contract; it is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "webprocure/proactis",
       "postal_code": "RI",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
+      "primary_source_id": "ri-ocean-state-procures",
+      "primary_source_name": "Ocean State Procures",
       "source_keys": [
+        "ri-ocean-state-procures",
         "ri-rivip-external"
       ],
-      "statewide_source_keys": [],
+      "statewide_source_keys": [
+        "ri-ocean-state-procures"
+      ],
       "supplemental_source_ids": [
         "ri-rivip-external"
       ],
@@ -4169,6 +4221,11 @@
     },
     {
       "coverage_tier": 2,
+      "jurisdiction_code": "CT",
+      "source_key": "ct-ctsource"
+    },
+    {
+      "coverage_tier": 2,
       "jurisdiction_code": "GA",
       "source_key": "ga-gpr"
     },
@@ -4228,7 +4285,12 @@
       "source_key": "pa-emarketplace"
     },
     {
-      "coverage_tier": 0,
+      "coverage_tier": 2,
+      "jurisdiction_code": "RI",
+      "source_key": "ri-ocean-state-procures"
+    },
+    {
+      "coverage_tier": 2,
       "jurisdiction_code": "RI",
       "source_key": "ri-rivip-external"
     },
@@ -4279,6 +4341,30 @@
       "task_type": "live_validation"
     },
     {
+      "connector_family": "webprocure/proactis",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "CT"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Connecticut anonymous statewide collection",
+      "recommended_order": 2,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "ct-ctsource"
+      ],
+      "task_type": "live_validation"
+    },
+    {
       "connector_family": "georgia/gpr",
       "dependencies": [],
       "evidence_available": [
@@ -4294,7 +4380,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Georgia anonymous statewide collection",
-      "recommended_order": 2,
+      "recommended_order": 3,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4319,7 +4405,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Iowa anonymous statewide collection",
-      "recommended_order": 3,
+      "recommended_order": 4,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4344,7 +4430,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Illinois anonymous statewide collection",
-      "recommended_order": 4,
+      "recommended_order": 5,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4369,7 +4455,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Massachusetts anonymous statewide collection",
-      "recommended_order": 5,
+      "recommended_order": 6,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4393,7 +4479,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Maryland anonymous statewide collection",
-      "recommended_order": 6,
+      "recommended_order": 7,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4419,7 +4505,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Maine anonymous statewide collection",
-      "recommended_order": 7,
+      "recommended_order": 8,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4444,7 +4530,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate New Jersey anonymous statewide collection",
-      "recommended_order": 8,
+      "recommended_order": 9,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4469,7 +4555,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Nevada anonymous statewide collection",
-      "recommended_order": 9,
+      "recommended_order": 10,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4494,7 +4580,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Oregon anonymous statewide collection",
-      "recommended_order": 10,
+      "recommended_order": 11,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4518,11 +4604,35 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Pennsylvania anonymous statewide collection",
-      "recommended_order": 11,
+      "recommended_order": 12,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
         "pa-emarketplace"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "webprocure/proactis",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "RI"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Rhode Island anonymous statewide collection",
+      "recommended_order": 13,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "ri-ocean-state-procures"
       ],
       "task_type": "live_validation"
     },
@@ -4542,7 +4652,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Texas anonymous statewide collection",
-      "recommended_order": 12,
+      "recommended_order": 14,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4567,7 +4677,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Utah anonymous statewide collection",
-      "recommended_order": 13,
+      "recommended_order": 15,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4591,7 +4701,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Virginia anonymous statewide collection",
-      "recommended_order": 14,
+      "recommended_order": 16,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4616,7 +4726,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate U.S. Virgin Islands anonymous statewide collection",
-      "recommended_order": 15,
+      "recommended_order": 17,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4641,7 +4751,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Alabama",
-      "recommended_order": 16,
+      "recommended_order": 18,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4667,7 +4777,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Michigan",
-      "recommended_order": 17,
+      "recommended_order": 19,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4692,35 +4802,11 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Ohio",
-      "recommended_order": 18,
+      "recommended_order": 20,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
         "oh-summit-county-tyler-munis-vss"
-      ],
-      "task_type": "coverage_correction"
-    },
-    {
-      "connector_family": null,
-      "dependencies": [],
-      "evidence_available": [
-        "tests/fixtures/rivip_external_results.html"
-      ],
-      "evidence_required": [
-        "official primary statewide source evidence"
-      ],
-      "expected_baseline_coverage_increase": 0,
-      "expected_document_pipeline_increase": 0,
-      "jurisdiction_ids": [
-        "RI"
-      ],
-      "priority_band": "P2",
-      "proposed_title": "Research authoritative statewide coverage for Rhode Island",
-      "recommended_order": 19,
-      "risk_level": "high",
-      "score": 20,
-      "source_ids": [
-        "ri-rivip-external"
       ],
       "task_type": "coverage_correction"
     }
@@ -4855,6 +4941,74 @@
       "supplemental": false,
       "test_location": [
         "tests/test_peoplesoft_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "metadata_only",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "unknown",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "webprocure/proactis",
+      "connector_name": "webprocure/proactis",
+      "connector_status": "fixture_only",
+      "detail_access": "metadata_only",
+      "discovery_access": "public",
+      "document_access": "unknown",
+      "document_pipeline_classification": "unknown",
+      "evidence_location": [
+        "https://portal.ct.gov/das/ctsource/ctsource",
+        "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://portal.ct.gov/das/ctsource/ctsource",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "jurisdiction_code": "CT",
+      "jurisdiction_id": "CT",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "ct-ctsource",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixture establishes bounded discovery and record normalization only; separate public detail and attachment retrieval are not established.",
+        "The production full-text endpoint was unreachable from the Codex Cloud network, so current tenant availability and access walls remain unknown."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "CTsource",
+      "official_landing_page": "https://portal.ct.gov/das/ctsource/ctsource",
+      "official_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
+      "owning_public_entity": "Connecticut Department of Administrative Services",
+      "platform_family": "webprocure/proactis",
+      "portal_profile_key": "connecticut/ctsource",
+      "priority": 1,
+      "public_bid_board_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
+      "public_detail_url_pattern": null,
+      "public_search_url": "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols",
+      "recommended_next_action": "Perform bounded anonymous GET validation of one discovery page from a permitted network before classifying any live capability.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "ct-ctsource",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_webprocure_connector.py",
+        "tests/test_coverage_audit.py"
       ],
       "verification_status": "fixture_verified"
     },
@@ -5689,6 +5843,74 @@
       "allowed_http_methods": [
         "GET"
       ],
+      "anonymous_detail_classification": "metadata_only",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "unknown",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "webprocure/proactis",
+      "connector_name": "webprocure/proactis",
+      "connector_status": "fixture_only",
+      "detail_access": "metadata_only",
+      "discovery_access": "public",
+      "document_access": "unknown",
+      "document_pipeline_classification": "unknown",
+      "evidence_location": [
+        "https://www.purchasing.ri.gov/",
+        "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://www.purchasing.ri.gov/",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/webprocure_results.json"
+      ],
+      "jurisdiction_code": "RI",
+      "jurisdiction_id": "RI",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "ri-ocean-state-procures",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixture establishes bounded discovery and record normalization only; separate public detail and attachment retrieval are not established.",
+        "The production full-text endpoint was unreachable from the Codex Cloud network, so current tenant availability and access walls remain unknown."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "Ocean State Procures",
+      "official_landing_page": "https://www.purchasing.ri.gov/",
+      "official_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
+      "owning_public_entity": "Rhode Island Division of Purchases",
+      "platform_family": "webprocure/proactis",
+      "portal_profile_key": "rhode-island/ocean-state-procures",
+      "priority": 1,
+      "public_bid_board_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
+      "public_detail_url_pattern": null,
+      "public_search_url": "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols",
+      "recommended_next_action": "Perform bounded anonymous GET validation of one discovery page from a permitted network before classifying any live capability.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "ri-ocean-state-procures",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_webprocure_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
       "anonymous_detail_classification": "public",
       "anonymous_discovery_classification": "public",
       "attachment_classification": "mixed",
@@ -6018,7 +6240,7 @@
     "attachment_capable_jurisdiction_count": 15,
     "authentication_blocked_jurisdiction_count": 0,
     "automated_access_block_count": 0,
-    "baseline_operational_count": 15,
+    "baseline_operational_count": 17,
     "captcha_affected_jurisdiction_count": 0,
     "captcha_count": 0,
     "changed_markup_count": 0,
@@ -6031,42 +6253,43 @@
       "pennsylvania/emarketplace": 1,
       "periscope/buyspeed": 6,
       "texas/esbd": 1,
-      "virginia/eva": 1
+      "virginia/eva": 1,
+      "webprocure/proactis": 2
     },
     "coverage_tier_distribution": {
-      "0": 41,
+      "0": 39,
       "1": 0,
-      "2": 15,
+      "2": 17,
       "3": 0,
       "4": 0,
       "5": 0,
       "6": 0
     },
     "detail_capable_jurisdiction_count": 15,
-    "discovery_capable_jurisdiction_count": 15,
+    "discovery_capable_jurisdiction_count": 17,
     "document_pipeline_capable_jurisdiction_count": 6,
     "implemented_connector_count": 21,
     "jurisdiction_count": 56,
-    "lacking_primary_source_count": 41,
+    "lacking_primary_source_count": 39,
     "live_validated_jurisdiction_count": 0,
-    "local_evidence_only_count": 4,
+    "local_evidence_only_count": 3,
     "login_required_count": 0,
-    "metadata_only_count": 0,
+    "metadata_only_count": 2,
     "migrated_source_count": 0,
-    "missing_source_count": 37,
+    "missing_source_count": 36,
     "operational_status_distribution": {
-      "baseline_operational": 15,
-      "not_operational": 41
+      "baseline_operational": 17,
+      "not_operational": 39
     },
     "payment_required_count": 0,
     "public_detail_count": 19,
-    "public_discovery_count": 19,
+    "public_discovery_count": 21,
     "public_document_pipeline_count": 10,
     "registration_required_count": 0,
     "robots_policy_count": 0,
-    "source_count": 19,
+    "source_count": 21,
     "subscription_required_count": 0,
-    "unverified_source_count": 19
+    "unverified_source_count": 21
   },
   "validation_warnings": []
 }

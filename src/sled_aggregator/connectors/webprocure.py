@@ -5,6 +5,7 @@ from collections.abc import AsyncIterator, Awaitable, Callable, Mapping
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from typing import Any, Protocol
+from urllib.parse import urlsplit
 
 import httpx
 
@@ -13,14 +14,21 @@ from sled_aggregator.domain.enums import OpportunityStatus
 from sled_aggregator.domain.models import RawOpportunity, SourceRef
 
 SEARCH_URL = "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols"
+PUBLIC_HOST = "webprocure.proactiscloud.com"
 
 
 @dataclass(frozen=True, slots=True)
 class WebProcurePortal:
+    profile_key: str
     jurisdiction: str
+    jurisdiction_code: str
     name: str
     customer_id: int
     owner_oid: int = -1
+
+    def __post_init__(self) -> None:
+        if not self.profile_key or len(self.jurisdiction_code) != 2 or self.customer_id < 1:
+            raise ValueError("WebProcure profiles require a key, jurisdiction code, and customer ID")
 
     @property
     def bid_board_url(self) -> str:
@@ -30,9 +38,13 @@ class WebProcurePortal:
         )
 
 
-CONNECTICUT = WebProcurePortal("Connecticut", "CTsource", 51)
-MISSOURI = WebProcurePortal("Missouri", "Missouri WebProcure legacy bid board", 38)
-RHODE_ISLAND = WebProcurePortal("Rhode Island", "Ocean State Procures", 46, 120002)
+CONNECTICUT = WebProcurePortal("connecticut/ctsource", "Connecticut", "CT", "CTsource", 51)
+MISSOURI = WebProcurePortal(
+    "missouri/legacy-webprocure", "Missouri", "MO", "Missouri WebProcure legacy bid board", 38
+)
+RHODE_ISLAND = WebProcurePortal(
+    "rhode-island/ocean-state-procures", "Rhode Island", "RI", "Ocean State Procures", 46, 120002
+)
 PORTALS = (CONNECTICUT, MISSOURI, RHODE_ISLAND)
 
 
@@ -132,7 +144,8 @@ class WebProcureConnector(BaseConnector):
             return
         if (
             query.jurisdiction
-            and query.jurisdiction.casefold() != self.portal.jurisdiction.casefold()
+            and query.jurisdiction.casefold()
+            not in {self.portal.jurisdiction.casefold(), self.portal.jurisdiction_code.casefold()}
         ):
             return
         if self._circuit_is_open():
@@ -245,14 +258,15 @@ class WebProcureConnector(BaseConnector):
             raise WebProcureError("WebProcure record requires source ID and title")
         agency = self._first(source, "agency", "organizationName", "department", "buyerName")
         direct_url = self._first(source, "url", "detailUrl", "solicitationUrl", "publicUrl")
+        opportunity_url = self.portal.bid_board_url
+        if direct_url and self._safe_public_url(str(direct_url)):
+            opportunity_url = str(direct_url).strip()
         return RawOpportunity(
             source=SourceRef(
                 platform_family=self.platform_family,
                 jurisdiction=self.portal.jurisdiction,
                 source_id=str(source_id).strip(),
-                opportunity_url=str(direct_url).strip()
-                if direct_url
-                else self.portal.bid_board_url,
+                opportunity_url=opportunity_url,
             ),
             title=str(title),
             agency=str(agency or self.portal.name),
@@ -265,6 +279,16 @@ class WebProcureConnector(BaseConnector):
             due_at=self._date(source, "dueDate", "closeDate", "responseDeadline"),
             categories=self._categories(source),
             raw_payload=record,
+        )
+
+    @staticmethod
+    def _safe_public_url(url: str) -> bool:
+        parsed = urlsplit(url.strip())
+        return bool(
+            parsed.scheme == "https"
+            and parsed.hostname == PUBLIC_HOST
+            and not parsed.username
+            and not parsed.password
         )
 
     @staticmethod

@@ -49,6 +49,13 @@ public bid-board URL. It never follows that fallback into login walls or
 restricted-document retrieval and does not support submission, registration,
 CAPTCHA bypass, credential storage, or any other portal mutation.
 
+Statewide registry routing uses stable `connecticut/ctsource` and
+`rhode-island/ocean-state-procures` profile keys. A source-provided direct link
+is retained only when it is an HTTPS URL on the allowlisted WebProcure public
+host; all other links fail closed to the reviewed tenant bid board. Fixture
+coverage for these profiles establishes discovery and metadata normalization,
+not separate detail or attachment retrieval.
+
 The public full-text endpoint is known to experience production 502 and 503
 outages. Connection failures and transient 429, 502, 503, and 504 responses use
 bounded retries, exponential backoff, jitter, and numeric or HTTP-date

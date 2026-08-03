@@ -292,6 +292,14 @@ The production full-text endpoint has recently returned 502 and 503 responses.
 Automated tests therefore use fixtures and test transports rather than requiring
 live portal availability.
 
+Connecticut and Rhode Island use explicit `connecticut/ctsource` and
+`rhode-island/ocean-state-procures` statewide profile keys. Jurisdiction routing
+accepts the full name or postal code, and result backlinks fail closed to the
+configured bid board unless they are HTTPS URLs on the fixed WebProcure public
+host. Their fixture-verified capability is discovery only: public detail,
+attachments, document retrieval, and live production operation remain
+unestablished.
+
 ### Virginia eVA
 
 The `virginia/eva` connector (aliases `eva`, `virginia-business-opportunities`,

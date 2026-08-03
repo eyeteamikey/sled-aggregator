@@ -24,6 +24,30 @@
     "task_type": "live_validation"
   },
   {
+    "connector_family": "webprocure/proactis",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/webprocure_results.json"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "CT"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Connecticut anonymous statewide collection",
+    "recommended_order": 2,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "ct-ctsource"
+    ],
+    "task_type": "live_validation"
+  },
+  {
     "connector_family": "georgia/gpr",
     "dependencies": [],
     "evidence_available": [
@@ -39,7 +63,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Georgia anonymous statewide collection",
-    "recommended_order": 2,
+    "recommended_order": 3,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -64,7 +88,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Iowa anonymous statewide collection",
-    "recommended_order": 3,
+    "recommended_order": 4,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -89,7 +113,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Illinois anonymous statewide collection",
-    "recommended_order": 4,
+    "recommended_order": 5,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -114,7 +138,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Massachusetts anonymous statewide collection",
-    "recommended_order": 5,
+    "recommended_order": 6,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -138,7 +162,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Maryland anonymous statewide collection",
-    "recommended_order": 6,
+    "recommended_order": 7,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -164,7 +188,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Maine anonymous statewide collection",
-    "recommended_order": 7,
+    "recommended_order": 8,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -189,7 +213,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate New Jersey anonymous statewide collection",
-    "recommended_order": 8,
+    "recommended_order": 9,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -214,7 +238,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Nevada anonymous statewide collection",
-    "recommended_order": 9,
+    "recommended_order": 10,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -239,7 +263,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Oregon anonymous statewide collection",
-    "recommended_order": 10,
+    "recommended_order": 11,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -263,11 +287,35 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Pennsylvania anonymous statewide collection",
-    "recommended_order": 11,
+    "recommended_order": 12,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
       "pa-emarketplace"
+    ],
+    "task_type": "live_validation"
+  },
+  {
+    "connector_family": "webprocure/proactis",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/webprocure_results.json"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "RI"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Rhode Island anonymous statewide collection",
+    "recommended_order": 13,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "ri-ocean-state-procures"
     ],
     "task_type": "live_validation"
   },
@@ -287,7 +335,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Texas anonymous statewide collection",
-    "recommended_order": 12,
+    "recommended_order": 14,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -312,7 +360,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Utah anonymous statewide collection",
-    "recommended_order": 13,
+    "recommended_order": 15,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -336,7 +384,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Virginia anonymous statewide collection",
-    "recommended_order": 14,
+    "recommended_order": 16,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -361,7 +409,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate U.S. Virgin Islands anonymous statewide collection",
-    "recommended_order": 15,
+    "recommended_order": 17,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -386,7 +434,7 @@
     ],
     "priority_band": "P2",
     "proposed_title": "Research authoritative statewide coverage for Alabama",
-    "recommended_order": 16,
+    "recommended_order": 18,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
@@ -412,7 +460,7 @@
     ],
     "priority_band": "P2",
     "proposed_title": "Research authoritative statewide coverage for Michigan",
-    "recommended_order": 17,
+    "recommended_order": 19,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
@@ -437,35 +485,11 @@
     ],
     "priority_band": "P2",
     "proposed_title": "Research authoritative statewide coverage for Ohio",
-    "recommended_order": 18,
+    "recommended_order": 20,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
       "oh-summit-county-tyler-munis-vss"
-    ],
-    "task_type": "coverage_correction"
-  },
-  {
-    "connector_family": null,
-    "dependencies": [],
-    "evidence_available": [
-      "tests/fixtures/rivip_external_results.html"
-    ],
-    "evidence_required": [
-      "official primary statewide source evidence"
-    ],
-    "expected_baseline_coverage_increase": 0,
-    "expected_document_pipeline_increase": 0,
-    "jurisdiction_ids": [
-      "RI"
-    ],
-    "priority_band": "P2",
-    "proposed_title": "Research authoritative statewide coverage for Rhode Island",
-    "recommended_order": 19,
-    "risk_level": "high",
-    "score": 20,
-    "source_ids": [
-      "ri-rivip-external"
     ],
     "task_type": "coverage_correction"
   }
