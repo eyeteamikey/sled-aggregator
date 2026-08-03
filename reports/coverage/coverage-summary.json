@@ -455,9 +455,9 @@
     {
       "aliases": [],
       "canonical_name": "periscope/buyspeed",
-      "detail_capability": false,
+      "detail_capability": true,
       "discovery_capability": true,
-      "document_link_capability": false,
+      "document_link_capability": true,
       "document_pipeline_compatible": false,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
       "fixture_count": 2,
@@ -471,11 +471,18 @@
         "Oregon",
         "U.S. Virgin Islands"
       ],
-      "profile_count": 0,
+      "profile_count": 6,
       "public_read_only": true,
       "registry_presence": true,
       "request_method_policy": "bounded public read-only",
-      "supported_jurisdictions": [],
+      "supported_jurisdictions": [
+        "IL",
+        "MA",
+        "NJ",
+        "NV",
+        "OR",
+        "VI"
+      ],
       "test_references": [
         "tests/test_periscope_connector.py"
       ]
@@ -802,7 +809,23 @@
       "jurisdiction_code": "ID"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "IL"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "IL"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "IL"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "IL"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "IL"
     },
     {
@@ -822,7 +845,23 @@
       "jurisdiction_code": "LA"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "MA"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "MA"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "MA"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "MA"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "MA"
     },
     {
@@ -906,7 +945,23 @@
       "jurisdiction_code": "NH"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "NJ"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "NJ"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "NJ"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "NJ"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "NJ"
     },
     {
@@ -914,7 +969,23 @@
       "jurisdiction_code": "NM"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "NV"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "NV"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "NV"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "NV"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "NV"
     },
     {
@@ -930,7 +1001,23 @@
       "jurisdiction_code": "OK"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
+      "jurisdiction_code": "OR"
+    },
+    {
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "OR"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "OR"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "OR"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "OR"
     },
     {
@@ -1034,11 +1121,23 @@
       "jurisdiction_code": "VA"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_award_coverage",
       "jurisdiction_code": "VI"
     },
     {
-      "gap_type": "territory_gap",
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "VI"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "VI"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "VI"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "VI"
     },
     {
@@ -1916,50 +2015,58 @@
     {
       "abbreviation": "IL",
       "active": true,
-      "attachment_capable": false,
-      "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "attachment_capable": true,
+      "attachment_status": "mixed",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "IL",
-      "connector": null,
-      "coverage_status": "unresearched",
-      "coverage_tier": 0,
-      "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "connector": "periscope/buyspeed",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "public",
+      "discovery_capable": true,
+      "discovery_status": "public",
       "document_pipeline_capable": false,
-      "document_pipeline_status": "not_established",
+      "document_pipeline_status": "manifest_only",
       "fips": "17",
       "fips_code": "17",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "IL",
       "jurisdiction_name": "Illinois",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
       "local_evidence_only": false,
       "name": "Illinois",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "periscope/buyspeed",
       "postal_code": "IL",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
-      "source_keys": [],
-      "statewide_source_keys": [],
+      "primary_source_id": "il-bidbuy",
+      "primary_source_name": "BidBuy",
+      "source_keys": [
+        "il-bidbuy"
+      ],
+      "statewide_source_keys": [
+        "il-bidbuy"
+      ],
       "supplemental_source_ids": [],
       "timezones": [],
       "type": "state"
@@ -2171,50 +2278,58 @@
     {
       "abbreviation": "MA",
       "active": true,
-      "attachment_capable": false,
-      "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "attachment_capable": true,
+      "attachment_status": "mixed",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "MA",
-      "connector": null,
-      "coverage_status": "unresearched",
-      "coverage_tier": 0,
-      "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "connector": "periscope/buyspeed",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "public",
+      "discovery_capable": true,
+      "discovery_status": "public",
       "document_pipeline_capable": false,
-      "document_pipeline_status": "not_established",
+      "document_pipeline_status": "manifest_only",
       "fips": "25",
       "fips_code": "25",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "MA",
       "jurisdiction_name": "Massachusetts",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
       "local_evidence_only": false,
       "name": "Massachusetts",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "periscope/buyspeed",
       "postal_code": "MA",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
-      "source_keys": [],
-      "statewide_source_keys": [],
+      "primary_source_id": "ma-commbuys",
+      "primary_source_name": "COMMBUYS",
+      "source_keys": [
+        "ma-commbuys"
+      ],
+      "statewide_source_keys": [
+        "ma-commbuys"
+      ],
       "supplemental_source_ids": [],
       "timezones": [],
       "type": "state"
@@ -2853,50 +2968,58 @@
     {
       "abbreviation": "NJ",
       "active": true,
-      "attachment_capable": false,
-      "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "attachment_capable": true,
+      "attachment_status": "mixed",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "NJ",
-      "connector": null,
-      "coverage_status": "unresearched",
-      "coverage_tier": 0,
-      "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "connector": "periscope/buyspeed",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "public",
+      "discovery_capable": true,
+      "discovery_status": "public",
       "document_pipeline_capable": false,
-      "document_pipeline_status": "not_established",
+      "document_pipeline_status": "manifest_only",
       "fips": "34",
       "fips_code": "34",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "NJ",
       "jurisdiction_name": "New Jersey",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
       "local_evidence_only": false,
       "name": "New Jersey",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "periscope/buyspeed",
       "postal_code": "NJ",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
-      "source_keys": [],
-      "statewide_source_keys": [],
+      "primary_source_id": "nj-njstart",
+      "primary_source_name": "NJSTART",
+      "source_keys": [
+        "nj-njstart"
+      ],
+      "statewide_source_keys": [
+        "nj-njstart"
+      ],
       "supplemental_source_ids": [],
       "timezones": [],
       "type": "state"
@@ -2955,50 +3078,58 @@
     {
       "abbreviation": "NV",
       "active": true,
-      "attachment_capable": false,
-      "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "attachment_capable": true,
+      "attachment_status": "mixed",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "NV",
-      "connector": null,
-      "coverage_status": "unresearched",
-      "coverage_tier": 0,
-      "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "connector": "periscope/buyspeed",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "public",
+      "discovery_capable": true,
+      "discovery_status": "public",
       "document_pipeline_capable": false,
-      "document_pipeline_status": "not_established",
+      "document_pipeline_status": "manifest_only",
       "fips": "32",
       "fips_code": "32",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "NV",
       "jurisdiction_name": "Nevada",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
       "local_evidence_only": false,
       "name": "Nevada",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "periscope/buyspeed",
       "postal_code": "NV",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
-      "source_keys": [],
-      "statewide_source_keys": [],
+      "primary_source_id": "nv-nevadaepro",
+      "primary_source_name": "NevadaEPro",
+      "source_keys": [
+        "nv-nevadaepro"
+      ],
+      "statewide_source_keys": [
+        "nv-nevadaepro"
+      ],
       "supplemental_source_ids": [],
       "timezones": [],
       "type": "state"
@@ -3161,50 +3292,58 @@
     {
       "abbreviation": "OR",
       "active": true,
-      "attachment_capable": false,
-      "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "attachment_capable": true,
+      "attachment_status": "mixed",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "OR",
-      "connector": null,
-      "coverage_status": "unresearched",
-      "coverage_tier": 0,
-      "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "connector": "periscope/buyspeed",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "public",
+      "discovery_capable": true,
+      "discovery_status": "public",
       "document_pipeline_capable": false,
-      "document_pipeline_status": "not_established",
+      "document_pipeline_status": "manifest_only",
       "fips": "41",
       "fips_code": "41",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "OR",
       "jurisdiction_name": "Oregon",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
       "local_evidence_only": false,
       "name": "Oregon",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "periscope/buyspeed",
       "postal_code": "OR",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
-      "source_keys": [],
-      "statewide_source_keys": [],
+      "primary_source_id": "or-oregonbuys",
+      "primary_source_name": "OregonBuys",
+      "source_keys": [
+        "or-oregonbuys"
+      ],
+      "statewide_source_keys": [
+        "or-oregonbuys"
+      ],
       "supplemental_source_ids": [],
       "timezones": [],
       "type": "state"
@@ -3703,51 +3842,58 @@
     {
       "abbreviation": "VI",
       "active": true,
-      "attachment_capable": false,
-      "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "attachment_capable": true,
+      "attachment_status": "mixed",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "VI",
-      "connector": null,
-      "coverage_status": "unresearched",
-      "coverage_tier": 0,
-      "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "connector": "periscope/buyspeed",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "public",
+      "discovery_capable": true,
+      "discovery_status": "public",
       "document_pipeline_capable": false,
-      "document_pipeline_status": "not_established",
+      "document_pipeline_status": "manifest_only",
       "fips": "78",
       "fips_code": "78",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified",
-        "territory_gap"
+        "incomplete_award_coverage",
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": true,
       "jurisdiction_id": "VI",
       "jurisdiction_name": "U.S. Virgin Islands",
       "jurisdiction_type": "territory",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
       "local_evidence_only": false,
       "name": "U.S. Virgin Islands",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "periscope/buyspeed",
       "postal_code": "VI",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
-      "source_keys": [],
-      "statewide_source_keys": [],
+      "primary_source_id": "vi-gvibuy",
+      "primary_source_name": "GVIBUY",
+      "source_keys": [
+        "vi-gvibuy"
+      ],
+      "statewide_source_keys": [
+        "vi-gvibuy"
+      ],
       "supplemental_source_ids": [],
       "timezones": [
         "America/St_Thomas"
@@ -4033,6 +4179,16 @@
     },
     {
       "coverage_tier": 2,
+      "jurisdiction_code": "IL",
+      "source_key": "il-bidbuy"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "MA",
+      "source_key": "ma-commbuys"
+    },
+    {
+      "coverage_tier": 2,
       "jurisdiction_code": "MD",
       "source_key": "md-emma"
     },
@@ -4047,9 +4203,24 @@
       "source_key": "mi-detroit-oracle-fusion"
     },
     {
+      "coverage_tier": 2,
+      "jurisdiction_code": "NJ",
+      "source_key": "nj-njstart"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "NV",
+      "source_key": "nv-nevadaepro"
+    },
+    {
       "coverage_tier": 0,
       "jurisdiction_code": "OH",
       "source_key": "oh-summit-county-tyler-munis-vss"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "OR",
+      "source_key": "or-oregonbuys"
     },
     {
       "coverage_tier": 2,
@@ -4075,6 +4246,11 @@
       "coverage_tier": 2,
       "jurisdiction_code": "VA",
       "source_key": "va-eva"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "VI",
+      "source_key": "vi-gvibuy"
     }
   ],
   "prioritized_recommendations": [
@@ -4152,6 +4328,56 @@
       "task_type": "live_validation"
     },
     {
+      "connector_family": "periscope/buyspeed",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "IL"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Illinois anonymous statewide collection",
+      "recommended_order": 4,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "il-bidbuy"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "periscope/buyspeed",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "MA"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Massachusetts anonymous statewide collection",
+      "recommended_order": 5,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "ma-commbuys"
+      ],
+      "task_type": "live_validation"
+    },
+    {
       "connector_family": "maryland/emma",
       "dependencies": [],
       "evidence_available": [
@@ -4167,7 +4393,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Maryland anonymous statewide collection",
-      "recommended_order": 4,
+      "recommended_order": 6,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4193,11 +4419,86 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Maine anonymous statewide collection",
-      "recommended_order": 5,
+      "recommended_order": 7,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
         "me-vss"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "periscope/buyspeed",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "NJ"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate New Jersey anonymous statewide collection",
+      "recommended_order": 8,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "nj-njstart"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "periscope/buyspeed",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "NV"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Nevada anonymous statewide collection",
+      "recommended_order": 9,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "nv-nevadaepro"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "periscope/buyspeed",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "OR"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Oregon anonymous statewide collection",
+      "recommended_order": 10,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "or-oregonbuys"
       ],
       "task_type": "live_validation"
     },
@@ -4217,7 +4518,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Pennsylvania anonymous statewide collection",
-      "recommended_order": 6,
+      "recommended_order": 11,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4241,7 +4542,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Texas anonymous statewide collection",
-      "recommended_order": 7,
+      "recommended_order": 12,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4266,7 +4567,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Utah anonymous statewide collection",
-      "recommended_order": 8,
+      "recommended_order": 13,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4290,11 +4591,36 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Virginia anonymous statewide collection",
-      "recommended_order": 9,
+      "recommended_order": 14,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
         "va-eva"
+      ],
+      "task_type": "live_validation"
+    },
+    {
+      "connector_family": "periscope/buyspeed",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "VI"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate U.S. Virgin Islands anonymous statewide collection",
+      "recommended_order": 15,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "vi-gvibuy"
       ],
       "task_type": "live_validation"
     },
@@ -4315,7 +4641,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Alabama",
-      "recommended_order": 10,
+      "recommended_order": 16,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4341,7 +4667,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Michigan",
-      "recommended_order": 11,
+      "recommended_order": 17,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4366,7 +4692,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Ohio",
-      "recommended_order": 12,
+      "recommended_order": 18,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4390,7 +4716,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Rhode Island",
-      "recommended_order": 13,
+      "recommended_order": 19,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4681,6 +5007,148 @@
       "blocker_reason": null,
       "captcha_classification": "none_observed_in_fixture",
       "connector_alias": null,
+      "connector_key": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "https://cpo-general.illinois.gov/bidbuy.html",
+        "https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://cpo-general.illinois.gov/bidbuy.html",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "jurisdiction_code": "IL",
+      "jurisdiction_id": "IL",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "il-bidbuy",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "BidBuy",
+      "official_landing_page": "https://cpo-general.illinois.gov/bidbuy.html",
+      "official_url": "https://www.bidbuy.illinois.gov/",
+      "owning_public_entity": "Illinois BidBuy",
+      "platform_family": "periscope/buyspeed",
+      "portal_profile_key": "illinois/bidbuy",
+      "priority": 1,
+      "public_bid_board_url": "https://www.bidbuy.illinois.gov/",
+      "public_detail_url_pattern": "https://www.bidbuy.illinois.gov/bso/external/bidDetail.sda?docId={bid_id}",
+      "public_search_url": "https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml",
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "il-bidbuy",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "https://www.mass.gov/commbuys",
+        "https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://www.mass.gov/commbuys",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "jurisdiction_code": "MA",
+      "jurisdiction_id": "MA",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "ma-commbuys",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "COMMBUYS",
+      "official_landing_page": "https://www.mass.gov/commbuys",
+      "official_url": "https://www.commbuys.com/",
+      "owning_public_entity": "Massachusetts COMMBUYS",
+      "platform_family": "periscope/buyspeed",
+      "portal_profile_key": "massachusetts/commbuys",
+      "priority": 1,
+      "public_bid_board_url": "https://www.commbuys.com/",
+      "public_detail_url_pattern": "https://www.commbuys.com/bso/external/bidDetail.sda?docId={bid_id}",
+      "public_search_url": "https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml",
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "ma-commbuys",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
       "connector_key": "maryland/emma",
       "connector_name": "maryland/emma",
       "connector_status": "fixture_only",
@@ -4880,6 +5348,148 @@
       ],
       "anonymous_detail_classification": "public",
       "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "https://www.nj.gov/treasury/purchase/njstart.shtml",
+        "https://www.njstart.gov/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://www.nj.gov/treasury/purchase/njstart.shtml",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "jurisdiction_code": "NJ",
+      "jurisdiction_id": "NJ",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "nj-njstart",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "NJSTART",
+      "official_landing_page": "https://www.nj.gov/treasury/purchase/njstart.shtml",
+      "official_url": "https://www.njstart.gov/",
+      "owning_public_entity": "New Jersey NJSTART",
+      "platform_family": "periscope/buyspeed",
+      "portal_profile_key": "new-jersey/njstart",
+      "priority": 1,
+      "public_bid_board_url": "https://www.njstart.gov/",
+      "public_detail_url_pattern": "https://www.njstart.gov/bso/external/bidDetail.sda?docId={bid_id}",
+      "public_search_url": "https://www.njstart.gov/bso/view/search/external/advancedSearchBid.xhtml",
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "nj-njstart",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/",
+        "https://nevadaepro.com/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "jurisdiction_code": "NV",
+      "jurisdiction_id": "NV",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "nv-nevadaepro",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "NevadaEPro",
+      "official_landing_page": "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/",
+      "official_url": "https://nevadaepro.com/",
+      "owning_public_entity": "NevadaEPro",
+      "platform_family": "periscope/buyspeed",
+      "portal_profile_key": "nevada/nevadaepro",
+      "priority": 1,
+      "public_bid_board_url": "https://nevadaepro.com/",
+      "public_detail_url_pattern": "https://nevadaepro.com/bso/external/bidDetail.sda?docId={bid_id}",
+      "public_search_url": "https://nevadaepro.com/bso/view/search/external/advancedSearchBid.xhtml",
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "nv-nevadaepro",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
       "attachment_classification": "public",
       "authentication_requirement": "none",
       "authoritative": true,
@@ -4936,6 +5546,77 @@
       "supplemental": false,
       "test_location": [
         "tests/test_tyler_munis_vss_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx",
+        "https://oregonbuys.gov/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "jurisdiction_code": "OR",
+      "jurisdiction_id": "OR",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "or-oregonbuys",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "OregonBuys",
+      "official_landing_page": "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx",
+      "official_url": "https://oregonbuys.gov/",
+      "owning_public_entity": "OregonBuys",
+      "platform_family": "periscope/buyspeed",
+      "portal_profile_key": "oregon/oregonbuys",
+      "priority": 1,
+      "public_bid_board_url": "https://oregonbuys.gov/",
+      "public_detail_url_pattern": "https://oregonbuys.gov/bso/external/bidDetail.sda?docId={bid_id}",
+      "public_search_url": "https://oregonbuys.gov/bso/view/search/external/advancedSearchBid.xhtml",
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "or-oregonbuys",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
       ],
       "verification_status": "fixture_verified"
     },
@@ -5260,13 +5941,84 @@
         "tests/test_eva_connector.py"
       ],
       "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": null,
+      "connector_key": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "https://dpp.vi.gov/gvibuy",
+        "https://gvibuy.com/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://dpp.vi.gov/gvibuy",
+      "expected_coverage_impact": "statewide",
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "jurisdiction_code": "VI",
+      "jurisdiction_id": "VI",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "vi-gvibuy",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "GVIBUY",
+      "official_landing_page": "https://dpp.vi.gov/gvibuy",
+      "official_url": "https://gvibuy.com/",
+      "owning_public_entity": "GVIBUY",
+      "platform_family": "periscope/buyspeed",
+      "portal_profile_key": "us-virgin-islands/gvibuy",
+      "priority": 1,
+      "public_bid_board_url": "https://gvibuy.com/",
+      "public_detail_url_pattern": "https://gvibuy.com/bso/external/bidDetail.sda?docId={bid_id}",
+      "public_search_url": "https://gvibuy.com/bso/view/search/external/advancedSearchBid.xhtml",
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "vi-gvibuy",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "verification_status": "fixture_verified"
     }
   ],
   "summary": {
-    "attachment_capable_jurisdiction_count": 9,
+    "attachment_capable_jurisdiction_count": 15,
     "authentication_blocked_jurisdiction_count": 0,
     "automated_access_block_count": 0,
-    "baseline_operational_count": 9,
+    "baseline_operational_count": 15,
     "captcha_affected_jurisdiction_count": 0,
     "captcha_count": 0,
     "changed_markup_count": 0,
@@ -5277,43 +6029,44 @@
       "maryland/emma": 1,
       "oracle/peoplesoft-sourcing": 1,
       "pennsylvania/emarketplace": 1,
+      "periscope/buyspeed": 6,
       "texas/esbd": 1,
       "virginia/eva": 1
     },
     "coverage_tier_distribution": {
-      "0": 47,
+      "0": 41,
       "1": 0,
-      "2": 9,
+      "2": 15,
       "3": 0,
       "4": 0,
       "5": 0,
       "6": 0
     },
-    "detail_capable_jurisdiction_count": 9,
-    "discovery_capable_jurisdiction_count": 9,
+    "detail_capable_jurisdiction_count": 15,
+    "discovery_capable_jurisdiction_count": 15,
     "document_pipeline_capable_jurisdiction_count": 6,
     "implemented_connector_count": 21,
     "jurisdiction_count": 56,
-    "lacking_primary_source_count": 47,
+    "lacking_primary_source_count": 41,
     "live_validated_jurisdiction_count": 0,
     "local_evidence_only_count": 4,
     "login_required_count": 0,
     "metadata_only_count": 0,
     "migrated_source_count": 0,
-    "missing_source_count": 43,
+    "missing_source_count": 37,
     "operational_status_distribution": {
-      "baseline_operational": 9,
-      "not_operational": 47
+      "baseline_operational": 15,
+      "not_operational": 41
     },
     "payment_required_count": 0,
-    "public_detail_count": 13,
-    "public_discovery_count": 13,
+    "public_detail_count": 19,
+    "public_discovery_count": 19,
     "public_document_pipeline_count": 10,
     "registration_required_count": 0,
     "robots_policy_count": 0,
-    "source_count": 13,
+    "source_count": 19,
     "subscription_required_count": 0,
-    "unverified_source_count": 13
+    "unverified_source_count": 19
   },
   "validation_warnings": []
 }

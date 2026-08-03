@@ -43,6 +43,7 @@ class PeriscopePortal:
     session_init_url: str | None = None
     document_session_required: bool = False
     production_verified: bool = False
+    profile_key: str | None = None
 
     @property
     def bid_board_url(self) -> str:
@@ -59,6 +60,7 @@ ILLINOIS = PeriscopePortal(
     "https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml",
     "BuySpeed Online",
     response_strategy="html",
+    profile_key="illinois/bidbuy",
 )
 MASSACHUSETTS = PeriscopePortal(
     "Massachusetts",
@@ -68,6 +70,7 @@ MASSACHUSETTS = PeriscopePortal(
     "https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml",
     "BuySpeed Online",
     response_strategy="html",
+    profile_key="massachusetts/commbuys",
 )
 NEVADA = PeriscopePortal(
     "Nevada",
@@ -77,6 +80,7 @@ NEVADA = PeriscopePortal(
     "https://nevadaepro.com/bso/view/search/external/advancedSearchBid.xhtml",
     "BuySpeed Online",
     response_strategy="html",
+    profile_key="nevada/nevadaepro",
 )
 NEW_JERSEY = PeriscopePortal(
     "New Jersey",
@@ -86,6 +90,7 @@ NEW_JERSEY = PeriscopePortal(
     "https://www.njstart.gov/bso/view/search/external/advancedSearchBid.xhtml",
     "BuySpeed Online",
     response_strategy="html",
+    profile_key="new-jersey/njstart",
 )
 OREGON = PeriscopePortal(
     "Oregon",
@@ -95,6 +100,7 @@ OREGON = PeriscopePortal(
     "https://oregonbuys.gov/bso/view/search/external/advancedSearchBid.xhtml",
     "BuySpeed Online",
     response_strategy="html",
+    profile_key="oregon/oregonbuys",
 )
 US_VIRGIN_ISLANDS = PeriscopePortal(
     "U.S. Virgin Islands",
@@ -104,6 +110,7 @@ US_VIRGIN_ISLANDS = PeriscopePortal(
     "https://gvibuy.com/bso/view/search/external/advancedSearchBid.xhtml",
     "BuySpeed Online",
     response_strategy="html",
+    profile_key="us-virgin-islands/gvibuy",
 )
 PORTALS = (ILLINOIS, MASSACHUSETTS, NEVADA, NEW_JERSEY, OREGON, US_VIRGIN_ISLANDS)
 
