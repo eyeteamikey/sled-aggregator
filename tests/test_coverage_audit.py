@@ -187,6 +187,17 @@ class CoverageAuditTests(unittest.TestCase):
         )
         self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
+    def test_maryland_official_evidence_does_not_overstate_live_validation(self):
+        source = next(x for x in self.sdata["sources"] if x["source_id"] == "md-emma")
+        evidence = [x for x in self.sdata["evidence"] if x["source_id"] == "md-emma"]
+        self.assertEqual(source["verification_status"], "fixture_verified")
+        self.assertIsNone(source["last_verified_date"])
+        self.assertIn("procurement.maryland.gov", source["evidence_url"])
+        self.assertTrue(
+            any(x["evidence_type"] == "official_public_landing_page" for x in evidence)
+        )
+        self.assertFalse(any("live" in x["capabilities"] for x in evidence))
+
     def test_generated_report_set_is_deterministic_and_consistent(self):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
         first = generated_reports(report)
