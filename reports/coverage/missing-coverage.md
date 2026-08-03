@@ -20,7 +20,6 @@
 - Kentucky (KY): Research and register an authoritative statewide source with evidence.
 - Louisiana (LA): Research and register an authoritative statewide source with evidence.
 - Massachusetts (MA): Research and register an authoritative statewide source with evidence.
-- Maine (ME): Research and register an authoritative statewide source with evidence.
 - Michigan (MI): Research and register an authoritative statewide source with evidence.
 - Minnesota (MN): Research and register an authoritative statewide source with evidence.
 - Missouri (MO): Research and register an authoritative statewide source with evidence.

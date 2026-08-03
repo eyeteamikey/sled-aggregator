@@ -72,6 +72,32 @@
     "task_type": "live_validation"
   },
   {
+    "connector_family": "cgi/advantage-vss",
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/cgi_vss_maine_landing.html",
+      "tests/fixtures/cgi_vss_search.html",
+      "tests/fixtures/cgi_vss_detail.html"
+    ],
+    "evidence_required": [
+      "dated bounded anonymous live-validation result"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "ME"
+    ],
+    "priority_band": "P1",
+    "proposed_title": "Validate Maine anonymous statewide collection",
+    "recommended_order": 4,
+    "risk_level": "medium",
+    "score": 50,
+    "source_ids": [
+      "me-vss"
+    ],
+    "task_type": "live_validation"
+  },
+  {
     "connector_family": "pennsylvania/emarketplace",
     "dependencies": [],
     "evidence_available": [
@@ -87,7 +113,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Pennsylvania anonymous statewide collection",
-    "recommended_order": 4,
+    "recommended_order": 5,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -111,7 +137,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Texas anonymous statewide collection",
-    "recommended_order": 5,
+    "recommended_order": 6,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -135,7 +161,7 @@
     ],
     "priority_band": "P1",
     "proposed_title": "Validate Virginia anonymous statewide collection",
-    "recommended_order": 6,
+    "recommended_order": 7,
     "risk_level": "medium",
     "score": 50,
     "source_ids": [
@@ -160,7 +186,7 @@
     ],
     "priority_band": "P2",
     "proposed_title": "Research authoritative statewide coverage for Alabama",
-    "recommended_order": 7,
+    "recommended_order": 8,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
@@ -186,7 +212,7 @@
     ],
     "priority_band": "P2",
     "proposed_title": "Research authoritative statewide coverage for Michigan",
-    "recommended_order": 8,
+    "recommended_order": 9,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
@@ -211,7 +237,7 @@
     ],
     "priority_band": "P2",
     "proposed_title": "Research authoritative statewide coverage for Ohio",
-    "recommended_order": 9,
+    "recommended_order": 10,
     "risk_level": "high",
     "score": 20,
     "source_ids": [
@@ -235,7 +261,7 @@
     ],
     "priority_band": "P2",
     "proposed_title": "Research authoritative statewide coverage for Rhode Island",
-    "recommended_order": 10,
+    "recommended_order": 11,
     "risk_level": "high",
     "score": 20,
     "source_ids": [

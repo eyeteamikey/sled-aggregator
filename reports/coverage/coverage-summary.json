@@ -40,12 +40,12 @@
         "michigan/sigma-vss"
       ],
       "canonical_name": "cgi/advantage-vss",
-      "detail_capability": false,
+      "detail_capability": true,
       "discovery_capability": true,
-      "document_link_capability": false,
+      "document_link_capability": true,
       "document_pipeline_compatible": false,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
-      "fixture_count": 0,
+      "fixture_count": 3,
       "implementation_module": "sled_aggregator.connectors.cgi_advantage_vss",
       "implementation_status": "implemented",
       "jurisdictions": [
@@ -53,11 +53,13 @@
         "Michigan",
         "Colorado"
       ],
-      "profile_count": 0,
+      "profile_count": 1,
       "public_read_only": true,
       "registry_presence": true,
       "request_method_policy": "bounded public read-only",
-      "supported_jurisdictions": [],
+      "supported_jurisdictions": [
+        "ME"
+      ],
       "test_references": [
         "tests/test_cgi_advantage_vss_connector.py"
       ]
@@ -825,7 +827,19 @@
       "jurisdiction_code": "MD"
     },
     {
-      "gap_type": "no_source_identified",
+      "gap_type": "incomplete_education_coverage",
+      "jurisdiction_code": "ME"
+    },
+    {
+      "gap_type": "incomplete_local_coverage",
+      "jurisdiction_code": "ME"
+    },
+    {
+      "gap_type": "incomplete_transportation_coverage",
+      "jurisdiction_code": "ME"
+    },
+    {
+      "gap_type": "live_verification_missing",
       "jurisdiction_code": "ME"
     },
     {
@@ -2222,50 +2236,58 @@
     {
       "abbreviation": "ME",
       "active": true,
-      "attachment_capable": false,
-      "attachment_status": "unknown",
-      "authentication": "unknown",
-      "baseline_operational": false,
-      "blocker": "primary statewide source not evidence-backed",
-      "captcha": "unknown",
+      "attachment_capable": true,
+      "attachment_status": "fixture_verified_mixed",
+      "authentication": "none",
+      "baseline_operational": true,
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
       "code": "ME",
-      "connector": null,
-      "coverage_status": "unresearched",
-      "coverage_tier": 0,
-      "detail_capable": false,
-      "detail_status": "unknown",
-      "discovery_capable": false,
-      "discovery_status": "unknown",
+      "connector": "cgi/advantage-vss",
+      "coverage_status": "fixture_verified",
+      "coverage_tier": 2,
+      "detail_capable": true,
+      "detail_status": "fixture_verified_public",
+      "discovery_capable": true,
+      "discovery_status": "fixture_verified_public",
       "document_pipeline_capable": false,
-      "document_pipeline_status": "not_established",
+      "document_pipeline_status": "manifest_only",
       "fips": "23",
       "fips_code": "23",
-      "fixture_verified": false,
+      "fixture_verified": true,
       "gaps": [
-        "no_source_identified"
+        "incomplete_education_coverage",
+        "incomplete_local_coverage",
+        "incomplete_transportation_coverage",
+        "live_verification_missing"
       ],
       "inhabited_territory": false,
       "jurisdiction_id": "ME",
       "jurisdiction_name": "Maine",
       "jurisdiction_type": "state",
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "bounded_anonymous_live_validation_pending",
+        "pre_2025_10_01_rfps_require_archive_coverage"
       ],
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
       "local_evidence_only": false,
       "name": "Maine",
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
-      "operational_status": "not_operational",
-      "platform_family": null,
+      "next_action": "Perform bounded anonymous live validation and retain archive coverage for RFPs published before October 1, 2025.",
+      "notes": "The official Maine VSS guidance and sanitized CGI Advantage VSS fixtures establish the primary statewide source and public parser contract. Fixture verification is not live verification.",
+      "operational_status": "baseline_operational",
+      "platform_family": "cgi/advantage-vss",
       "postal_code": "ME",
       "primary": true,
-      "primary_source_id": null,
-      "primary_source_name": null,
-      "source_keys": [],
-      "statewide_source_keys": [],
+      "primary_source_id": "me-vss",
+      "primary_source_name": "Maine Vendor Self Service",
+      "source_keys": [
+        "me-vss"
+      ],
+      "statewide_source_keys": [
+        "me-vss"
+      ],
       "supplemental_source_ids": [],
       "timezones": [],
       "type": "state"
@@ -3959,6 +3981,11 @@
       "source_key": "md-emma"
     },
     {
+      "coverage_tier": 2,
+      "jurisdiction_code": "ME",
+      "source_key": "me-vss"
+    },
+    {
       "coverage_tier": 0,
       "jurisdiction_code": "MI",
       "source_key": "mi-detroit-oracle-fusion"
@@ -4063,6 +4090,32 @@
       "task_type": "live_validation"
     },
     {
+      "connector_family": "cgi/advantage-vss",
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/cgi_vss_maine_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "evidence_required": [
+        "dated bounded anonymous live-validation result"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "ME"
+      ],
+      "priority_band": "P1",
+      "proposed_title": "Validate Maine anonymous statewide collection",
+      "recommended_order": 4,
+      "risk_level": "medium",
+      "score": 50,
+      "source_ids": [
+        "me-vss"
+      ],
+      "task_type": "live_validation"
+    },
+    {
       "connector_family": "pennsylvania/emarketplace",
       "dependencies": [],
       "evidence_available": [
@@ -4078,7 +4131,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Pennsylvania anonymous statewide collection",
-      "recommended_order": 4,
+      "recommended_order": 5,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4102,7 +4155,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Texas anonymous statewide collection",
-      "recommended_order": 5,
+      "recommended_order": 6,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4126,7 +4179,7 @@
       ],
       "priority_band": "P1",
       "proposed_title": "Validate Virginia anonymous statewide collection",
-      "recommended_order": 6,
+      "recommended_order": 7,
       "risk_level": "medium",
       "score": 50,
       "source_ids": [
@@ -4151,7 +4204,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Alabama",
-      "recommended_order": 7,
+      "recommended_order": 8,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4177,7 +4230,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Michigan",
-      "recommended_order": 8,
+      "recommended_order": 9,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4202,7 +4255,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Ohio",
-      "recommended_order": 9,
+      "recommended_order": 10,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4226,7 +4279,7 @@
       ],
       "priority_band": "P2",
       "proposed_title": "Research authoritative statewide coverage for Rhode Island",
-      "recommended_order": 10,
+      "recommended_order": 11,
       "risk_level": "high",
       "score": 20,
       "source_ids": [
@@ -4495,6 +4548,79 @@
       "supplemental": false,
       "test_location": [
         "tests/test_maryland_emma_connector.py"
+      ],
+      "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "mixed",
+      "authentication_requirement": "none",
+      "authoritative": true,
+      "award_access": "public",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed_in_fixture",
+      "connector_alias": "maine/vss",
+      "connector_key": "cgi/advantage-vss",
+      "connector_name": "cgi/advantage-vss",
+      "connector_status": "fixture_only",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
+        "tests/fixtures/cgi_vss_maine_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_url": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
+      "expected_coverage_impact": "primary statewide procurement opportunities published in VSS on or after October 1, 2025",
+      "fixture_location": [
+        "tests/fixtures/cgi_vss_maine_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "fixture_references": [
+        "tests/fixtures/cgi_vss_maine_landing.html",
+        "tests/fixtures/cgi_vss_search.html",
+        "tests/fixtures/cgi_vss_detail.html"
+      ],
+      "jurisdiction_code": "ME",
+      "jurisdiction_id": "ME",
+      "jurisdiction_scope": "primary_statewide",
+      "key": "me-vss",
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "Maine guidance places RFPs published on or after October 1, 2025 in VSS; earlier RFPs remain in separate archives.",
+        "Attachment fixtures establish manifest metadata only; document retrieval and pipeline compatibility are not established."
+      ],
+      "last_verified_date": null,
+      "migration_status": "current",
+      "name": "Maine Vendor Self Service",
+      "official_landing_page": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
+      "official_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService",
+      "owning_public_entity": "Maine Division of Procurement Services",
+      "platform_family": "cgi/advantage-vss",
+      "portal_profile_key": "maine/vss",
+      "priority": 1,
+      "public_bid_board_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService",
+      "public_detail_url_pattern": null,
+      "public_search_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService/SolicitationSearch",
+      "recommended_next_action": "Perform a bounded anonymous GET validation of guest discovery, detail, and one explicitly public attachment from a permitted network.",
+      "robots_access_notes": "not_live_validated",
+      "source_id": "me-vss",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_cgi_advantage_vss_connector.py",
+        "tests/test_coverage_audit.py"
       ],
       "verification_status": "fixture_verified"
     },
@@ -4884,14 +5010,15 @@
     }
   ],
   "summary": {
-    "attachment_capable_jurisdiction_count": 6,
+    "attachment_capable_jurisdiction_count": 7,
     "authentication_blocked_jurisdiction_count": 0,
     "automated_access_block_count": 0,
-    "baseline_operational_count": 6,
+    "baseline_operational_count": 7,
     "captcha_affected_jurisdiction_count": 0,
     "captcha_count": 0,
     "changed_markup_count": 0,
     "connector_family_counts": {
+      "cgi/advantage-vss": 1,
       "georgia/gpr": 1,
       "maryland/emma": 1,
       "oracle/peoplesoft-sourcing": 1,
@@ -4900,39 +5027,39 @@
       "virginia/eva": 1
     },
     "coverage_tier_distribution": {
-      "0": 50,
+      "0": 49,
       "1": 0,
-      "2": 6,
+      "2": 7,
       "3": 0,
       "4": 0,
       "5": 0,
       "6": 0
     },
-    "detail_capable_jurisdiction_count": 6,
-    "discovery_capable_jurisdiction_count": 6,
+    "detail_capable_jurisdiction_count": 7,
+    "discovery_capable_jurisdiction_count": 7,
     "document_pipeline_capable_jurisdiction_count": 6,
     "implemented_connector_count": 21,
     "jurisdiction_count": 56,
-    "lacking_primary_source_count": 50,
+    "lacking_primary_source_count": 49,
     "live_validated_jurisdiction_count": 0,
     "local_evidence_only_count": 4,
     "login_required_count": 0,
     "metadata_only_count": 0,
     "migrated_source_count": 0,
-    "missing_source_count": 46,
+    "missing_source_count": 45,
     "operational_status_distribution": {
-      "baseline_operational": 6,
-      "not_operational": 50
+      "baseline_operational": 7,
+      "not_operational": 49
     },
     "payment_required_count": 0,
-    "public_detail_count": 10,
-    "public_discovery_count": 10,
+    "public_detail_count": 11,
+    "public_discovery_count": 11,
     "public_document_pipeline_count": 10,
     "registration_required_count": 0,
     "robots_policy_count": 0,
-    "source_count": 10,
+    "source_count": 11,
     "subscription_required_count": 0,
-    "unverified_source_count": 10
+    "unverified_source_count": 11
   },
   "validation_warnings": []
 }

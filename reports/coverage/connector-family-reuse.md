@@ -1,5 +1,6 @@
 # Connector-family reuse
 
+- `cgi/advantage-vss`: 1 primary statewide jurisdiction(s)
 - `georgia/gpr`: 1 primary statewide jurisdiction(s)
 - `maryland/emma`: 1 primary statewide jurisdiction(s)
 - `oracle/peoplesoft-sourcing`: 1 primary statewide jurisdiction(s)
