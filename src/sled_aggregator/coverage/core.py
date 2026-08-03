@@ -748,7 +748,11 @@ def recommendation_queue(records: list[dict], sources: list[dict]) -> list[dict]
     order = 1
     for record in records:
         primary = next((s for s in sources if s["key"] == record.get("primary_source_id")), None)
-        if primary and not record["live_verified"]:
+        if (
+            primary
+            and primary.get("verification_status") in {"fixture_verified", "live_public_verified"}
+            and not record["live_verified"]
+        ):
             rows.append(
                 {
                     "recommended_order": order,
@@ -768,6 +772,35 @@ def recommendation_queue(records: list[dict], sources: list[dict]) -> list[dict]
                 }
             )
             order += 1
+    for record in records:
+        primary = next((s for s in sources if s["key"] == record.get("primary_source_id")), None)
+        if not primary or primary.get("verification_status") in {
+            "fixture_verified",
+            "live_public_verified",
+        }:
+            continue
+        rows.append(
+            {
+                "recommended_order": order,
+                "proposed_title": f"Capture {record['name']} public procurement contract",
+                "task_type": "public_contract_capture",
+                "jurisdiction_ids": [record["code"]],
+                "source_ids": [primary["key"]],
+                "connector_family": primary.get("platform_family"),
+                "evidence_available": primary.get("evidence_location", []),
+                "evidence_required": [
+                    "platform and tenant evidence",
+                    "sanitized anonymous public request and response contract",
+                ],
+                "expected_baseline_coverage_increase": 1,
+                "expected_document_pipeline_increase": 0,
+                "risk_level": "high",
+                "dependencies": [],
+                "score": 20,
+                "priority_band": "P2",
+            }
+        )
+        order += 1
     for record in records:
         if not record["local_evidence_only"] and record.get("primary_source_id"):
             continue

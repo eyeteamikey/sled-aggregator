@@ -1,84 +1,50 @@
 ## Motivation
 
-Continue the breadth-first 56-jurisdiction baseline without inventing a connector after the fixture-verifiable implementation queue is exhausted. This PR records the exact evidence prerequisites for every remaining Tier 0 jurisdiction and selects the highest-ranked coherent correction tranche: Alabama and Ohio, whose existing Tyler Munis VSS evidence is local-only.
+Execute PR #45's highest-value evidence-capture tranche without speculative connector code by registering AlabamaBuys and OhioBuys as the authoritative statewide source identities and explicitly recording the contract evidence still required.
 
-## PR #44 merge verification
+## PR #45 merge verification
 
-PR #44 is present as merge commit `afc2852` and substantive commit `9e08e47`. Its Michigan SIGMA VSS profile, Advantage4 fixture routing, tests, registry changes, generated reports, selection report, and revised queue are present. Michigan is baseline-operational and absent from the missing-primary-source report; this PR does not recreate that work.
+PR #45 is present as merge `890c09d` and substantive commit `8ae815d`. Its audit, capture checklist, reports, and queue are present; this PR does not recreate them.
 
-## Selection rationale
+## Selection rationale and evidence
 
-- Generated recommendation ranks/scores: Alabama rank 19, score 20; Ohio rank 20, score 20.
-- Evidence-capture rank: 1 after excluding 18 live-validation-only recommendations.
-- Platform family: unknown for either statewide source. `tyler/munis-vss` applies only to the existing local profiles.
-- Jurisdictions/source IDs: Alabama (`al-opelika-tyler-munis-vss`) and Ohio (`oh-summit-county-tyler-munis-vss`). These IDs are authoritative local evidence anchors, not statewide source IDs.
-- Statewide role: not yet established. Official statewide source identity and scope are the first required capture.
+After 18 fixture-operational live-validation tasks are excluded, Alabama and Ohio are generated ranks 19 and 20 (score 20) and breadth evidence rank 1. Source IDs are `al-alabamabuys` and `oh-ohiobuys`; both are primary statewide sources. Official state-controlled landing pages establish identity and scope. Platform family, tenant, and public request contract remain unknown: Codex Cloud's outbound CONNECT proxy returned 403 before reaching either host. No JAGGAER or other profile is inferred.
 
-No remaining statewide connector/profile candidate has enough committed evidence for deterministic fixture-backed implementation. Promoting either local profile would incorrectly count municipal or county procurement as statewide coverage.
+## Implementation and behavior
 
-## Evidence and implementation summary
+- Adds source-identified statewide registry records and official identity evidence.
+- Keeps discovery, detail, attachments, amendments, document retrieval, authentication, and CAPTCHA `unknown`; document compatibility is not claimed.
+- Changes queue generation so only fixture/live-verified sources receive live-validation tasks; identified-but-unverified sources receive deterministic `public_contract_capture` tasks.
+- Adds regression coverage and regenerates the complete report set.
 
-The new PR #45 selection report:
-
-- records source-identity and request-contract evidence currently available for the local profiles;
-- enumerates the exact identity, platform, tenant, request, response, access, and fixture evidence required before statewide implementation;
-- audits all 38 remaining Tier 0 jurisdictions;
-- groups them into local-evidence correction, state/district identity, and territory-authority capture tranches; and
-- preserves every affected source below statewide `fixture_verified` status.
-
-Discovery, detail, attachment, and document-pipeline behavior are not implemented or claimed. Their expected increases are all zero. Attachment retrieval remains `unknown` for any future statewide source until independently evidenced.
-
-## Fixture and live-validation status
-
-The existing local Tyler profiles remain fixture-verified for their local scopes. No new fixture contract or live production validation was performed. **Fixture verification is not live verification, and local fixture verification is not proof of statewide scope.** Live-verified and production-monitored counts remain unchanged at zero.
-
-Authentication and CAPTCHA were not observed in the existing sanitized local fixtures; behavior for the unidentified statewide sources remains unknown. The capture checklist requires bounded observation of authentication, registration, CAPTCHA, redirects, throttling, and automation guidance before implementation.
+No fixture or production validation occurred. **Fixture verification is not live verification.** Live-verified and production-monitored counts remain zero.
 
 ## Security boundaries
 
-Evidence capture remains anonymous, bounded, public, read-only, and fail-closed. This work does not automate login or vendor registration, submit bids, retain/replay credentials or cookies, circumvent CAPTCHA or access controls, disable SSRF protections, permit arbitrary hosts, follow unvalidated redirects, perform unbounded collection, download documents during discovery, or count local sources as statewide.
+No login, vendor registration, bid submission, credential/cookie handling, CAPTCHA circumvention, access-control bypass, unvalidated redirect, arbitrary host, unbounded collection, or discovery-time document download is introduced. Unknown contracts fail closed.
 
-## Coverage before and after
+## Coverage before / after
 
 | Metric | Before | After |
 |---|---:|---:|
-| Primary statewide sources identified | 18 | 18 |
+| Primary statewide sources identified | 18 | 20 |
 | Platform families identified | 10 | 10 |
-| Fixture-verified jurisdictions | 18 | 18 |
-| Baseline-operational jurisdictions | 18 | 18 |
-| Discovery-capable jurisdictions | 18 | 18 |
-| Detail-capable jurisdictions | 16 | 16 |
-| Attachment-capable jurisdictions | 16 | 16 |
-| Document-pipeline-compatible jurisdictions | 6 | 6 |
-| Live-verified jurisdictions | 0 | 0 |
-| Production-monitored jurisdictions | 0 | 0 |
-| Tier 0 jurisdictions | 38 | 38 |
-| Jurisdictions lacking primary statewide sources | 38 | 38 |
+| Fixture-verified / baseline / discovery | 18 | 18 |
+| Detail / attachment | 16 | 16 |
+| Document-pipeline compatible | 6 | 6 |
+| Live-verified / production-monitored | 0 | 0 |
+| Tier 0 | 38 | 36 |
+| Tier 1 | 0 | 2 |
+| Missing primary statewide source | 38 | 36 |
 
-## Reports regenerated and files changed
+## Reports and files
 
-All authoritative coverage reports were regenerated and checked for deterministic consistency; no generated report changed because registry evidence and derived counts are intentionally unchanged.
+Regenerated status, missing sources, capability matrix, connector reuse, blocked sources, document readiness, next-PR queue, and consistency outputs. Changed the two coverage registries, queue generator, audit tests, generated reports, this PR body, and `docs/pr46_alabama_ohio_capture_selection.md`.
 
-- `docs/pr45_remaining_statewide_capture_selection.md`
-- `PR_BODY.md`
+## Validation
 
-Commit: `COMMIT_HASH` (replaced with the focused commit hash in the published PR metadata).
+Exact final results are recorded after the focused commit. Commit: `COMMIT_HASH`.
 
-## Exact validation results
+## Limitations and next work
 
-- `PYTHONPATH=src python -m unittest discover -s tests -v` — passed, 286 tests.
-- `PYTHONPATH=src python -m compileall src tests` — passed.
-- `ruff check .` — passed.
-- `git diff --check` — passed.
-- `PYTHONPATH=src python -m sled_aggregator.coverage validate` — passed: 56 jurisdictions, 0 warnings, 0 errors.
-- `PYTHONPATH=src python -m sled_aggregator.coverage recommend` — passed; Alabama and Ohio remain ranks 19 and 20 after 18 live-validation tasks.
-- All coverage status, matrix, missing, blocked, documents, queue, report, and gaps commands — passed.
-- `PYTHONPATH=src python -m sled_aggregator.coverage regenerate` — passed.
-- `PYTHONPATH=src python -m sled_aggregator.coverage check-reports` — passed: 0 files drifted.
-- `python -m build` — not run successfully because the environment lacks the optional `build` module; `python -m pip wheel --no-deps --no-build-isolation --wheel-dir /tmp/pr45-wheel .` was also unavailable because the environment lacks the Hatchling build backend. The repository defines no separate type-check command.
-
-## Known limitations and deferred work
-
-This PR establishes no statewide source URL, platform family, tenant, endpoint, request parameter, response field, anonymous access behavior, or operational coverage for Alabama or Ohio. Those facts must be captured from official public evidence rather than inferred from local Tyler deployments.
-
-The next breadth-first recommendation is bounded evidence capture for Alabama and Ohio. If they resolve to different platform families, their implementation must be split by family. If neither yields a deterministic public contract, proceed to the state/district identity tranche in jurisdiction-code order, followed by the territory-authority tranche. Live validation remains deferred until a lawful, anonymous, bounded production check is possible.
+No public bid-board URL, platform, tenant, route, parameter, response schema, anonymous access behavior, attachment contract, authentication, or CAPTCHA behavior has been established. Next perform bounded sanitized AlabamaBuys contract capture, then OhioBuys; split implementation by platform family if evidence differs. The remaining 36 Tier 0 jurisdictions require official statewide source identity evidence. Live validation remains deferred.

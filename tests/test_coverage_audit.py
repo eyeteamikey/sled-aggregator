@@ -87,7 +87,9 @@ class CoverageAuditTests(unittest.TestCase):
 
     def test_tier_rules(self):
         inventory = {x["canonical_name"]: x for x in connector_inventory(self.sdata["sources"])}
-        source = deepcopy(self.sdata["sources"][0])
+        source = deepcopy(
+            next(x for x in self.sdata["sources"] if x["source_id"] == "ca-cal-eprocure")
+        )
         self.assertEqual(tier([], inventory), 0)
         missing = {**source, "connector_status": "missing"}
         self.assertEqual(tier([missing], inventory), 1)
@@ -134,16 +136,22 @@ class CoverageAuditTests(unittest.TestCase):
         )
         self.assertTrue(all(x["source_ids"] and x["jurisdiction_ids"] for x in first))
         self.assertFalse(any("hypothetical" in str(x).lower() for x in first))
+        capture = [x for x in first if x["task_type"] == "public_contract_capture"]
+        self.assertEqual(
+            [x["source_ids"] for x in capture], [["al-alabamabuys"], ["oh-ohiobuys"]]
+        )
+        self.assertTrue(all(x["score"] == 20 for x in capture))
 
     def test_authoritative_control_plane_and_local_regressions(self):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
         records = {row["code"]: row for row in report["jurisdiction_records"]}
         self.assertEqual(report["summary"]["jurisdiction_count"], 56)
         self.assertEqual(report["summary"]["baseline_operational_count"], 18)
-        for code in ("AL", "OH"):
-            self.assertTrue(records[code]["local_evidence_only"])
+        for code, source_id in (("AL", "al-alabamabuys"), ("OH", "oh-ohiobuys")):
+            self.assertFalse(records[code]["local_evidence_only"])
+            self.assertEqual(records[code]["primary_source_id"], source_id)
             self.assertFalse(records[code]["baseline_operational"])
-            self.assertEqual(records[code]["coverage_tier"], 0)
+            self.assertEqual(records[code]["coverage_tier"], 1)
         self.assertTrue(records["RI"]["baseline_operational"])
         self.assertEqual(records["RI"]["primary_source_id"], "ri-ocean-state-procures")
         self.assertEqual(records["RI"]["supplemental_source_ids"], ["ri-rivip-external"])
@@ -265,7 +273,8 @@ class CoverageAuditTests(unittest.TestCase):
         data["evidence"] = [e for e in data["evidence"] if e["source_id"] != "ca-cal-eprocure"]
         self.assertTrue(any(x.field == "evidence" for x in validate(self.jdata, data)))
         data = deepcopy(self.sdata)
-        data["sources"][0]["connector_name"] = "webprocure/proactis"
+        source = next(x for x in data["sources"] if x["source_id"] == "ca-cal-eprocure")
+        source["connector_name"] = "webprocure/proactis"
         self.assertTrue(
             any(x.field == "document_pipeline_classification" for x in validate(self.jdata, data))
         )
@@ -343,7 +352,7 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(json.loads(render_json(report))["summary"]["jurisdiction_count"], 56)
         rows = list(csv.DictReader(io.StringIO(render_csv(report))))
         # Rhode Island and Michigan retain separate supplemental sources.
-        self.assertEqual(len(rows), 58)
+        self.assertEqual(len(rows), 60)
         self.assertEqual(len({x["jurisdiction_code"] for x in rows}), 56)
         markdown = render_markdown(report)
         self.assertEqual(markdown, render_markdown(report))

@@ -3,6 +3,124 @@
   "as_of": "2026-08-03",
   "sources": [
     {
+      "key": "al-alabamabuys",
+      "jurisdiction_code": "AL",
+      "name": "AlabamaBuys",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://alabamabuys.gov/",
+      "platform_family": null,
+      "connector_name": null,
+      "connector_status": "missing",
+      "verification_status": "unknown",
+      "discovery_access": "unknown",
+      "detail_access": "unknown",
+      "document_access": "unknown",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "al-alabamabuys",
+      "jurisdiction_id": "AL",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "State of Alabama Division of Purchasing",
+      "official_landing_page": "https://alabamabuys.gov/",
+      "public_bid_board_url": null,
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": null,
+      "connector_alias": null,
+      "portal_profile_key": null,
+      "anonymous_discovery_classification": "unknown",
+      "anonymous_detail_classification": "unknown",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "unknown",
+      "authentication_requirement": "unknown",
+      "captcha_classification": "unknown",
+      "robots_access_notes": "not_observed",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "evidence_location": [
+        "https://alabamabuys.gov/"
+      ],
+      "fixture_location": [],
+      "test_location": [
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Official identity and statewide role are recorded; the public request contract and platform family remain unverified.",
+        "Codex Cloud outbound CONNECT returned 403 before reaching the official host, so no live access claim is made."
+      ],
+      "blocker_reason": "Tenant, public routes, request parameters, response fields, access behavior, and attachment contract require sanitized capture.",
+      "recommended_next_action": "Capture a bounded anonymous AlabamaBuys public bid-board contract and sanitize representative fixtures before selecting a connector profile."
+    },
+    {
+      "key": "oh-ohiobuys",
+      "jurisdiction_code": "OH",
+      "name": "OhioBuys",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://ohiobuys.ohio.gov/",
+      "platform_family": null,
+      "connector_name": null,
+      "connector_status": "missing",
+      "verification_status": "unknown",
+      "discovery_access": "unknown",
+      "detail_access": "unknown",
+      "document_access": "unknown",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "oh-ohiobuys",
+      "jurisdiction_id": "OH",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "State of Ohio Office of Procurement Services",
+      "official_landing_page": "https://ohiobuys.ohio.gov/",
+      "public_bid_board_url": null,
+      "public_search_url": null,
+      "public_detail_url_pattern": null,
+      "connector_key": null,
+      "connector_alias": null,
+      "portal_profile_key": null,
+      "anonymous_discovery_classification": "unknown",
+      "anonymous_detail_classification": "unknown",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "unknown",
+      "authentication_requirement": "unknown",
+      "captcha_classification": "unknown",
+      "robots_access_notes": "not_observed",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "evidence_location": [
+        "https://ohiobuys.ohio.gov/"
+      ],
+      "fixture_location": [],
+      "test_location": [
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Official identity and statewide role are recorded; the public request contract and platform family remain unverified.",
+        "Codex Cloud outbound CONNECT returned 403 before reaching the official host, so no live access claim is made."
+      ],
+      "blocker_reason": "Tenant, public routes, request parameters, response fields, access behavior, and attachment contract require sanitized capture.",
+      "recommended_next_action": "Capture a bounded anonymous OhioBuys public bid-board contract and sanitize representative fixtures before selecting a connector profile."
+    },
+    {
       "key": "ca-cal-eprocure",
       "jurisdiction_code": "CA",
       "name": "Cal eProcure",
@@ -2125,6 +2243,34 @@
       "sanitization_status": "synthetic_public_contract",
       "notes": "Sanitized SIGMA-branded Advantage4 landing, results, and detail fixtures exercise the fixed Michigan tenant routes and shared parser without credentials or vendor data.",
       "limitations": "Fixture behavior is not live verification; attachment retrieval and document parsing are not established."
+    },
+    {
+      "evidence_id": "al-alabamabuys-official-identity-1",
+      "source_id": "al-alabamabuys",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://alabamabuys.gov/",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "The official state-controlled AlabamaBuys landing page establishes source identity and statewide procurement scope.",
+      "limitations": "Identity and scope evidence does not establish a platform family, tenant, anonymous public request contract, fixture behavior, or live operability."
+    },
+    {
+      "evidence_id": "oh-ohiobuys-official-identity-1",
+      "source_id": "oh-ohiobuys",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://ohiobuys.ohio.gov/",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "The official state-controlled OhioBuys landing page establishes source identity and statewide procurement scope.",
+      "limitations": "Identity and scope evidence does not establish a platform family, tenant, anonymous public request contract, fixture behavior, or live operability."
     }
   ]
 }
