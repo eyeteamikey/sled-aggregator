@@ -139,7 +139,7 @@ class CoverageAuditTests(unittest.TestCase):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
         records = {row["code"]: row for row in report["jurisdiction_records"]}
         self.assertEqual(report["summary"]["jurisdiction_count"], 56)
-        self.assertEqual(report["summary"]["baseline_operational_count"], 7)
+        self.assertEqual(report["summary"]["baseline_operational_count"], 9)
         for code in ("AL", "MI", "OH"):
             self.assertTrue(records[code]["local_evidence_only"])
             self.assertFalse(records[code]["baseline_operational"])
@@ -160,6 +160,27 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertTrue(maine["baseline_operational"])
         self.assertTrue(maine["attachment_capable"])
         self.assertFalse(maine["document_pipeline_capable"])
+
+    def test_jaggaer_statewide_profiles_are_fixture_not_live_verified(self):
+        report = build_report(jdata=self.jdata, sdata=self.sdata)
+        records = {row["code"]: row for row in report["jurisdiction_records"]}
+        for code, source_id, profile in (
+            ("IA", "ia-impacs", "iowa/impacs"),
+            ("UT", "ut-u3p", "utah/u3p"),
+        ):
+            source = next(x for x in self.sdata["sources"] if x["source_id"] == source_id)
+            evidence = [x for x in self.sdata["evidence"] if x["source_id"] == source_id]
+            self.assertEqual(records[code]["primary_source_id"], source_id)
+            self.assertTrue(records[code]["baseline_operational"])
+            self.assertTrue(records[code]["attachment_capable"])
+            self.assertFalse(records[code]["document_pipeline_capable"])
+            self.assertEqual(source["portal_profile_key"], profile)
+            self.assertEqual(source["verification_status"], "fixture_verified")
+            self.assertIsNone(source["last_verified_date"])
+            self.assertEqual(source["document_pipeline_classification"], "manifest_only")
+            self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
+            self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
+            self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
     def test_maine_fixture_evidence_is_not_live_verification(self):
         source = next(x for x in self.sdata["sources"] if x["source_id"] == "me-vss")

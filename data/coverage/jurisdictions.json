@@ -467,22 +467,22 @@
       "jurisdiction_type": "state",
       "postal_code": "IA",
       "fips_code": "19",
-      "primary_source_id": null,
+      "primary_source_id": "ia-impacs",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "public",
+      "attachment_status": "mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured JAGGAER public-event contract; it is not live verification."
     },
     {
       "code": "ID",
@@ -1556,22 +1556,22 @@
       "jurisdiction_type": "state",
       "postal_code": "UT",
       "fips_code": "49",
-      "primary_source_id": null,
+      "primary_source_id": "ut-u3p",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "public",
+      "attachment_status": "mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured JAGGAER public-event contract; it is not live verification."
     },
     {
       "code": "VA",

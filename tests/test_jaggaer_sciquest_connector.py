@@ -23,6 +23,7 @@ from sled_aggregator.domain.enums import OpportunityStatus
 FIXTURES = Path(__file__).parent / "fixtures"
 LISTING = (FIXTURES / "jaggaer_listing.html").read_text()
 DETAIL = (FIXTURES / "jaggaer_detail.html").read_text()
+IOWA_LISTING = (FIXTURES / "jaggaer_iowa_listing.html").read_text()
 
 
 def response(url, text, status=200, content_type="text/html", headers=None):
@@ -84,6 +85,19 @@ class JaggaerTests(unittest.IsolatedAsyncioTestCase):
         url = connector._event_url({}, "GA-100")
         self.assertIn("eventNumExact=GA-100", url)
         self.assertIn("PHX_NAV_SourcingAllOpps", url)
+
+    async def test_iowa_profile_routes_and_normalizes_shared_contract(self):
+        connector, fake, items = await self.collect(
+            [response(IOWA_IMPACS.search_url, IOWA_LISTING)],
+            JaggaerQuery(include_details=False),
+            IOWA_IMPACS,
+        )
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].source.jurisdiction, "Iowa")
+        self.assertEqual(items[0].source.source_id, "iowa/impacs:id:IA-2001")
+        self.assertEqual(items[0].agency, "Iowa Department of Administrative Services")
+        self.assertEqual(fake.calls[0][2]["CustomerOrg"], "DASIowa")
+        self.assertTrue(all(call[0] == "GET" for call in fake.calls))
 
     async def test_fixture_only_tenant_and_json_strategy(self):
         portal = replace(

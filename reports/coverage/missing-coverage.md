@@ -12,7 +12,6 @@
 - Florida (FL): Research and register an authoritative statewide source with evidence.
 - Guam (GU): Research and register an authoritative statewide source with evidence.
 - Hawaii (HI): Research and register an authoritative statewide source with evidence.
-- Iowa (IA): Research and register an authoritative statewide source with evidence.
 - Idaho (ID): Research and register an authoritative statewide source with evidence.
 - Illinois (IL): Research and register an authoritative statewide source with evidence.
 - Indiana (IN): Research and register an authoritative statewide source with evidence.
@@ -42,7 +41,6 @@
 - South Carolina (SC): Research and register an authoritative statewide source with evidence.
 - South Dakota (SD): Research and register an authoritative statewide source with evidence.
 - Tennessee (TN): Research and register an authoritative statewide source with evidence.
-- Utah (UT): Research and register an authoritative statewide source with evidence.
 - U.S. Virgin Islands (VI): Research and register an authoritative statewide source with evidence.
 - Vermont (VT): Research and register an authoritative statewide source with evidence.
 - Washington (WA): Research and register an authoritative statewide source with evidence.
