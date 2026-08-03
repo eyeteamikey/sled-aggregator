@@ -100,6 +100,13 @@ class PeopleSoftConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(docs[0]["attachment_identifier"], "A2")
         self.assertEqual(docs[0]["access_state"], "anonymous-session-required")
         self.assertEqual(docs[1]["access_state"], "restricted")
+        candidates = connector.document_candidates(item)
+        self.assertTrue(connector.document_pipeline_compatible)
+        self.assertEqual(candidates[0].source_document_id, "A2")
+        self.assertEqual(candidates[1].source_document_id, "path:/private/addendum.pdf")
+        self.assertTrue(candidates[0].publicly_retrievable)
+        self.assertFalse(candidates[1].publicly_retrievable)
+        self.assertNotIn("source_url", candidates[0].raw_metadata)
         self.assertEqual(connector.health.session_state, PeopleSoftSessionState.FORM_READY)
 
     async def test_partial_page_fallback_url_missing_fields_empty_and_duplicates(self) -> None:

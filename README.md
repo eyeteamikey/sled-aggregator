@@ -682,7 +682,8 @@ fixture-backed tests; CI does not depend on live OpenGov access.
 
 ## Solicitation document manifest and retrieval queue
 
-Georgia GPR, Maryland eMMA, and Virginia eVA now use narrow, fixture-backed
+Georgia GPR, Maryland eMMA, Virginia eVA, California Cal eProcure, Texas ESBD,
+and Rhode Island RIVIP now use narrow, fixture-backed
 `DocumentCandidate` adapters. Their public attachments enter the same orchestration,
 manifest, and bounded retrieval queue used by the existing Oracle, Pennsylvania, and
 Tyler integrations; login- or supplier-registration-required rows remain metadata-only.

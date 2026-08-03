@@ -44,7 +44,7 @@ class CoverageAuditTests(unittest.TestCase):
 
     def test_pipeline_count_is_derived_from_connector_capabilities(self):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
-        self.assertEqual(report["summary"]["public_document_pipeline_count"], 7)
+        self.assertEqual(report["summary"]["public_document_pipeline_count"], 10)
 
     def test_strict_schema_and_relationship_validation(self):
         cases = [

@@ -1,76 +1,25 @@
 ## Motivation
 
-Connect Georgia GPR, Maryland eMMA, and Virginia eVA's existing document-link
-contracts to the shared document orchestration path without introducing retrieval in
-connector discovery.
+Connect California Cal eProcure, Texas ESBD, and Rhode Island RIVIP's existing fixture-backed document metadata to the shared document pipeline.
 
-## Prerequisite verification
+## Implementation
 
-The Codex Cloud workspace started at merge commit `fc262b6`, “Merge pull request #32
-from eyeteamikey/codex/prepare-codex-cloud-pr-for-document-pipeline”. Master content
-includes `DocumentOrchestrationService`, canonical `DocumentCandidate`, connector
-capability reporting, opportunity-first handoff, manifest reconciliation, and queueing.
+- Adds canonical `DocumentCandidate` adapters for PeopleSoft/Cal eProcure and Texas ESBD.
+- Enables the existing RIVIP adapter and removes document URLs from its sanitized raw metadata.
+- Preserves stable source attachment identities, versions, addenda, access states, and authoritative parent provenance.
+- Adds all three connector families to the orchestration compatibility set.
+- Refreshes the generated coverage reports; the derived public document pipeline count increases from 7 to 10.
 
-## Evidence gate and description
+## Access and security boundaries
 
-All three connectors pass the independent gate using sanitized detail fixtures and
-injected transports. Each emits canonical candidates with parent provenance, stable
-attachment identity, explicit access state, and deduplication. Public documents are
-eligible for the existing manifest/queue. Gated documents remain metadata-only.
+Discovery remains anonymous and read-only. Public PeopleSoft session reacquisition does not cross a login boundary. ESBD external account-required files and RIVIP public bid response links remain metadata-only. The adapters do not download files, log in, register vendors, solve CAPTCHA, acknowledge addenda, or enter response workflows.
 
-### Georgia GPR
+## Evidence
 
-Enables the fixture-backed adapter for public solicitation files and addenda. It uses
-the profile's explicit official/approved host allowlists and preserves login-required
-GA@WORK attachment metadata without queueing it.
-
-### Maryland eMMA
-
-Enables the fixture-backed adapter for multiple attachments, addenda, Q&A, bid tabs,
-and awards. Supplier-profile/login rows remain restricted and duplicate URLs are
-suppressed.
-
-### Virginia eVA
-
-Adds a canonical adapter over `document_links`. Explicit attachment IDs are preferred;
-the fallback combines lot, round, and attachment path. Transient query material is not
-included in identity or raw metadata. Free-account and login transitions are never
-automated.
-
-## Pipeline integration and versions
-
-The three families are added to the orchestration compatibility set. Numeric source
-versions and eVA rounds feed shared manifest reconciliation; addendum/amendment numbers
-remain distinct and queryable. No connector-specific queue, downloader, parser, OCR, or
-extraction code is introduced.
-
-## Security controls
-
-Adapters require HTTPS and explicit connector host approval, reject unsafe/malformed
-links, do not forward credentials, and never perform login, registration, CAPTCHA, or
-bid submission. Retrieval redirects remain subject to the existing safe downloader.
+Sanitized deterministic fixtures and injected transports cover all three adapters. This is fixture verification, not a claim of current live portal availability. Explicit source IDs are preferred; path or official media identifiers provide stable fallbacks without using session tokens, retrieval time, or row position.
 
 ## Testing
 
-Fixture tests cover normalization, capability reporting, public/restricted states,
-deduplication, version/addendum metadata, and eVA canonical adaptation. The full unit,
-lint, compile, coverage validation/recommendation, and repository checks are run before
-publication.
-
-## Live validation
-
-Not performed. This change relies on sanitized fixture evidence and does not interpret
-network availability as an access classification.
-
-## Coverage changes
-
-The derived `public_document_pipeline_count` increases from 4 to 7. Generated JSON and
-Markdown coverage reports are refreshed; the count is computed from registry
-capabilities rather than hardcoded.
-
-## Known limitations and exclusions
-
-No requested connector is excluded. Verification remains fixture-only. eVA temporary
-public links may require reacquisition through its public detail workflow. Future host
-or markup changes fail closed until allowlists and fixtures are updated. Rows without a
-safe source URL are skipped because the canonical model requires one.
+- `python -m unittest discover -s tests -v`
+- `python -m compileall src tests`
+- `ruff check .`

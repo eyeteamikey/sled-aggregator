@@ -278,6 +278,7 @@ def _dt(value: str | None) -> datetime | None:
 class RIVIPExternalConnector(BaseConnector):
     platform_family = CANONICAL_FAMILY
     jurisdictions = ("Rhode Island",)
+    document_pipeline_compatible = True
     public_read_only = True
 
     def __init__(
@@ -447,7 +448,7 @@ class RIVIPExternalConnector(BaseConnector):
                     version_label=item.get("version"),
                     posted_at=_dt(item.get("posted-date")),
                     raw_metadata={
-                        **item,
+                        **{key: value for key, value in item.items() if key != "href"},
                         "authoritative_detail_url": str(opportunity.source.opportunity_url),
                     },
                 )
