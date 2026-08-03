@@ -831,6 +831,106 @@ def recommendation_queue(records: list[dict], sources: list[dict]) -> list[dict]
     return rows
 
 
+def closeout_plan(report: dict) -> dict:
+    """Build an offline, executable plan for closing breadth and validating fixtures."""
+    records = report["jurisdiction_records"]
+    sources = report["source_records"]
+    primary_by_id = {s["key"]: s for s in sources}
+    unidentified = [j for j in records if not j.get("primary_source_id")]
+    unclassified = [
+        primary_by_id[j["primary_source_id"]]
+        for j in records
+        if j.get("primary_source_id")
+        and not primary_by_id[j["primary_source_id"]].get("platform_family")
+    ]
+    connector_missing = [
+        primary_by_id[j["primary_source_id"]]
+        for j in records
+        if j.get("primary_source_id")
+        and primary_by_id[j["primary_source_id"]].get("platform_family")
+        and not primary_by_id[j["primary_source_id"]].get("connector_name")
+    ]
+    awaiting_live = [j for j in records if j["fixture_verified"] and not j["live_verified"]]
+    blockers = [
+        {
+            "source_id": s["key"],
+            "jurisdiction_id": s["jurisdiction_code"],
+            "authentication": s.get("authentication_requirement", "unknown"),
+            "captcha": s.get("captcha_classification", "unknown"),
+            "robots": s.get("robots_access_notes", "unknown"),
+            "blocker": s.get("blocker_reason"),
+        }
+        for s in sources
+        if s.get("blocker_reason")
+        or s.get("authentication_requirement") not in {None, "none", "unknown"}
+        or s.get("captcha_classification")
+        not in {None, "none", "none_observed_in_fixture", "unknown"}
+        or s.get("robots_access_notes") not in {None, "not_live_validated", "unknown"}
+    ]
+    validation_tasks = []
+    for order, jurisdiction in enumerate(awaiting_live, 1):
+        source = primary_by_id[jurisdiction["primary_source_id"]]
+        validation_tasks.append(
+            {
+                "order": order,
+                "task_type": "bounded_anonymous_live_validation",
+                "jurisdiction_id": jurisdiction["code"],
+                "source_id": source["key"],
+                "platform_family": source["platform_family"],
+                "method_policy": source.get("allowed_http_methods", ["GET"]),
+                "entry_url": source.get("public_bid_board_url") or source["official_url"],
+                "capture": [
+                    "timestamp and final allowlisted URL",
+                    "status, content type, and redirect chain",
+                    "bounded discovery result and stable identifier",
+                    "detail response when publicly linked",
+                    "attachment metadata only; do not download during discovery",
+                    "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations",
+                ],
+                "promotion_requirements": [
+                    "successful bounded anonymous production request",
+                    "response matches the registered fixture contract",
+                    "dated sanitized evidence contains no credentials, cookies, or personal data",
+                    "registry last_verified fields and generated reports are updated",
+                ],
+            }
+        )
+    summary = report["summary"]
+    return {
+        "schema_version": "1.0",
+        "as_of": report["as_of"],
+        "breadth_complete": not connector_missing,
+        "breadth_totals": {
+            "target_jurisdictions": len(records),
+            "primary_sources_identified": sum(bool(j.get("primary_source_id")) for j in records),
+            "platform_families_identified": sum(bool(j["platform_family"]) for j in records),
+            "registered_connector_profiles": sum(
+                bool(j["connector"] and primary_by_id[j["primary_source_id"]].get("portal_profile_key"))
+                for j in records
+                if j.get("primary_source_id")
+            ),
+            "fixture_verified": sum(j["fixture_verified"] for j in records),
+            "discovery_capable": summary["discovery_capable_jurisdiction_count"],
+            "detail_capable": summary["detail_capable_jurisdiction_count"],
+            "attachment_capable": summary["attachment_capable_jurisdiction_count"],
+            "document_pipeline_compatible": summary[
+                "document_pipeline_capable_jurisdiction_count"
+            ],
+            "live_verified": summary["live_validated_jurisdiction_count"],
+            "production_monitored": 0,
+            "tier_0_remaining": summary["coverage_tier_distribution"]["0"],
+            "blocked_jurisdictions": len({x["jurisdiction_id"] for x in blockers}),
+        },
+        "unidentified_primary_sources": [j["code"] for j in unidentified],
+        "unclassified_primary_sources": [s["key"] for s in unclassified],
+        "platform_identified_connector_missing": [s["key"] for s in connector_missing],
+        "fixture_verified_awaiting_live": [j["primary_source_id"] for j in awaiting_live],
+        "access_blockers": blockers,
+        "validation_tasks": validation_tasks,
+        "promotion_rule": "Fixture evidence may be promoted only after a dated, bounded, anonymous production request succeeds and its sanitized response matches the registered contract; production monitoring requires a separate recurring health signal.",
+    }
+
+
 def build_report(
     as_of: str | None = None, jdata: dict | None = None, sdata: dict | None = None
 ) -> dict:
@@ -1165,6 +1265,7 @@ def generated_reports(report: dict) -> dict[str, str]:
     pipeline = [j for j in report["jurisdiction_records"] if j["document_pipeline_capable"]]
     families = report["summary"]["connector_family_counts"]
     queue = report["prioritized_recommendations"]
+    closeout = closeout_plan(report)
 
     def md_list(title: str, rows: list[str]) -> str:
         return "# " + title + "\n\n" + ("\n".join(rows) if rows else "None.") + "\n"
@@ -1188,6 +1289,22 @@ def generated_reports(report: dict) -> dict[str, str]:
             [f"- {j['name']} ({j['code']}): `{j['primary_source_id']}`" for j in pipeline],
         ),
         "next-pr-queue.json": json.dumps(queue, indent=2, sort_keys=True) + "\n",
+        "live-validation-tasks.json": json.dumps(
+            closeout["validation_tasks"], indent=2, sort_keys=True
+        )
+        + "\n",
+        "breadth-closeout.json": json.dumps(closeout, indent=2, sort_keys=True) + "\n",
+        "manual-capture-instructions.md": md_list(
+            "Manual capture instructions",
+            [
+                "Fixture verification is not live verification. Never log in, register, solve CAPTCHA, submit a bid, or retain credentials/cookies.",
+                "For each task in `live-validation-tasks.json`, open only the registered entry URL, use the allowed method policy, and stop at any access control.",
+                "Record UTC time, final URL and redirects, status/content type, a bounded result, stable ID, public detail response, and attachment metadata without downloading during discovery.",
+                "Sanitize personal data, tokens, cookies, authorization headers, and vendor data before committing evidence.",
+                "Record login, CAPTCHA, rate-limit/Retry-After, robots, proxy, and network blockers exactly; never infer success through a blocker.",
+                "Promote to live verification only when the dated anonymous response matches the registered contract; require separate recurring evidence for production monitoring.",
+            ],
+        ),
     }
 
 

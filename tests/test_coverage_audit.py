@@ -12,6 +12,7 @@ from sled_aggregator.coverage.core import (
     JURISDICTIONS_PATH,
     SOURCES_PATH,
     build_report,
+    closeout_plan,
     connector_inventory,
     gaps_for,
     generated_reports,
@@ -141,6 +142,38 @@ class CoverageAuditTests(unittest.TestCase):
             [x["source_ids"] for x in capture], [["al-alabamabuys"], ["oh-ohiobuys"]]
         )
         self.assertTrue(all(x["score"] == 20 for x in capture))
+
+    def test_breadth_closeout_is_complete_and_machine_executable(self):
+        plan = closeout_plan(build_report(jdata=self.jdata, sdata=self.sdata))
+        self.assertTrue(plan["breadth_complete"])
+        self.assertEqual(
+            plan["breadth_totals"],
+            {
+                "target_jurisdictions": 56,
+                "primary_sources_identified": 20,
+                "platform_families_identified": 18,
+                "registered_connector_profiles": 18,
+                "fixture_verified": 18,
+                "discovery_capable": 18,
+                "detail_capable": 16,
+                "attachment_capable": 16,
+                "document_pipeline_compatible": 6,
+                "live_verified": 0,
+                "production_monitored": 0,
+                "tier_0_remaining": 36,
+                "blocked_jurisdictions": 2,
+            },
+        )
+        self.assertEqual(len(plan["unidentified_primary_sources"]), 36)
+        self.assertEqual(
+            plan["unclassified_primary_sources"], ["al-alabamabuys", "oh-ohiobuys"]
+        )
+        self.assertEqual(plan["platform_identified_connector_missing"], [])
+        self.assertEqual(len(plan["validation_tasks"]), 18)
+        self.assertEqual(
+            [task["order"] for task in plan["validation_tasks"]], list(range(1, 19))
+        )
+        self.assertTrue(all(task["method_policy"] == ["GET"] for task in plan["validation_tasks"]))
 
     def test_authoritative_control_plane_and_local_regressions(self):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
@@ -337,6 +370,9 @@ class CoverageAuditTests(unittest.TestCase):
                 "blocked-sources.md",
                 "document-pipeline-readiness.md",
                 "next-pr-queue.json",
+                "live-validation-tasks.json",
+                "breadth-closeout.json",
+                "manual-capture-instructions.md",
             },
         )
         with tempfile.TemporaryDirectory() as directory:
@@ -370,6 +406,8 @@ class CoverageAuditTests(unittest.TestCase):
             "blocked",
             "documents",
             "queue",
+            "closeout",
+            "validation-tasks",
         ):
             self.assertEqual(main([command]), 0)
         with tempfile.TemporaryDirectory() as directory:

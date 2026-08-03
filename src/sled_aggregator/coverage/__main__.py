@@ -4,6 +4,7 @@ from pathlib import Path
 
 from .core import (
     build_report,
+    closeout_plan,
     generated_reports,
     render,
     report_drift,
@@ -22,7 +23,16 @@ def main(argv=None) -> int:
     report.add_argument("--as-of")
     sub.add_parser("gaps")
     sub.add_parser("recommend")
-    for name in ("status", "matrix", "missing", "blocked", "documents", "queue"):
+    for name in (
+        "status",
+        "matrix",
+        "missing",
+        "blocked",
+        "documents",
+        "queue",
+        "closeout",
+        "validation-tasks",
+    ):
         sub.add_parser(name)
     regenerate = sub.add_parser("regenerate")
     regenerate.add_argument("--output", type=Path)
@@ -65,6 +75,12 @@ def main(argv=None) -> int:
         content = generated_reports(result)["document-pipeline-readiness.md"]
     elif args.command == "status":
         content = json.dumps(result["summary"], indent=2, sort_keys=True) + "\n"
+    elif args.command == "closeout":
+        content = json.dumps(closeout_plan(result), indent=2, sort_keys=True) + "\n"
+    elif args.command == "validation-tasks":
+        content = json.dumps(
+            closeout_plan(result)["validation_tasks"], indent=2, sort_keys=True
+        ) + "\n"
     else:
         content = render(result, args.format)
     output = getattr(args, "output", None)

@@ -1,0 +1,554 @@
+{
+  "access_blockers": [
+    {
+      "authentication": "unknown",
+      "blocker": "Tenant, public routes, request parameters, response fields, access behavior, and attachment contract require sanitized capture.",
+      "captcha": "unknown",
+      "jurisdiction_id": "AL",
+      "robots": "not_observed",
+      "source_id": "al-alabamabuys"
+    },
+    {
+      "authentication": "unknown",
+      "blocker": "Tenant, public routes, request parameters, response fields, access behavior, and attachment contract require sanitized capture.",
+      "captcha": "unknown",
+      "jurisdiction_id": "OH",
+      "robots": "not_observed",
+      "source_id": "oh-ohiobuys"
+    }
+  ],
+  "as_of": "2026-08-03",
+  "breadth_complete": true,
+  "breadth_totals": {
+    "attachment_capable": 16,
+    "blocked_jurisdictions": 2,
+    "detail_capable": 16,
+    "discovery_capable": 18,
+    "document_pipeline_compatible": 6,
+    "fixture_verified": 18,
+    "live_verified": 0,
+    "platform_families_identified": 18,
+    "primary_sources_identified": 20,
+    "production_monitored": 0,
+    "registered_connector_profiles": 18,
+    "target_jurisdictions": 56,
+    "tier_0_remaining": 36
+  },
+  "fixture_verified_awaiting_live": [
+    "ca-cal-eprocure",
+    "ct-ctsource",
+    "ga-gpr",
+    "ia-impacs",
+    "il-bidbuy",
+    "ma-commbuys",
+    "md-emma",
+    "me-vss",
+    "mi-sigma-vss",
+    "nj-njstart",
+    "nv-nevadaepro",
+    "or-oregonbuys",
+    "pa-emarketplace",
+    "ri-ocean-state-procures",
+    "tx-esbd",
+    "ut-u3p",
+    "va-eva",
+    "vi-gvibuy"
+  ],
+  "platform_identified_connector_missing": [],
+  "promotion_rule": "Fixture evidence may be promoted only after a dated, bounded, anonymous production request succeeds and its sanitized response matches the registered contract; production monitoring requires a separate recurring health signal.",
+  "schema_version": "1.0",
+  "unclassified_primary_sources": [
+    "al-alabamabuys",
+    "oh-ohiobuys"
+  ],
+  "unidentified_primary_sources": [
+    "AK",
+    "AR",
+    "AS",
+    "AZ",
+    "CO",
+    "DC",
+    "DE",
+    "FL",
+    "GU",
+    "HI",
+    "ID",
+    "IN",
+    "KS",
+    "KY",
+    "LA",
+    "MN",
+    "MO",
+    "MP",
+    "MS",
+    "MT",
+    "NC",
+    "ND",
+    "NE",
+    "NH",
+    "NM",
+    "NY",
+    "OK",
+    "PR",
+    "SC",
+    "SD",
+    "TN",
+    "VT",
+    "WA",
+    "WI",
+    "WV",
+    "WY"
+  ],
+  "validation_tasks": [
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://caleprocure.ca.gov/",
+      "jurisdiction_id": "CA",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 1,
+      "platform_family": "oracle/peoplesoft-sourcing",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "ca-cal-eprocure",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
+      "jurisdiction_id": "CT",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 2,
+      "platform_family": "webprocure/proactis",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "ct-ctsource",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://ssl.doas.state.ga.us/gpr/",
+      "jurisdiction_id": "GA",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 3,
+      "platform_family": "georgia/gpr",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "ga-gpr",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
+      "jurisdiction_id": "IA",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 4,
+      "platform_family": "jaggaer/sciquest",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "ia-impacs",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://www.bidbuy.illinois.gov/",
+      "jurisdiction_id": "IL",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 5,
+      "platform_family": "periscope/buyspeed",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "il-bidbuy",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://www.commbuys.com/",
+      "jurisdiction_id": "MA",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 6,
+      "platform_family": "periscope/buyspeed",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "ma-commbuys",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://emma.maryland.gov/",
+      "jurisdiction_id": "MD",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 7,
+      "platform_family": "maryland/emma",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "md-emma",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService",
+      "jurisdiction_id": "ME",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 8,
+      "platform_family": "cgi/advantage-vss",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "me-vss",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4",
+      "jurisdiction_id": "MI",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 9,
+      "platform_family": "cgi/advantage-vss",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "mi-sigma-vss",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://www.njstart.gov/",
+      "jurisdiction_id": "NJ",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 10,
+      "platform_family": "periscope/buyspeed",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "nj-njstart",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://nevadaepro.com/",
+      "jurisdiction_id": "NV",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 11,
+      "platform_family": "periscope/buyspeed",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "nv-nevadaepro",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://oregonbuys.gov/",
+      "jurisdiction_id": "OR",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 12,
+      "platform_family": "periscope/buyspeed",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "or-oregonbuys",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://www.emarketplace.state.pa.us/",
+      "jurisdiction_id": "PA",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 13,
+      "platform_family": "pennsylvania/emarketplace",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "pa-emarketplace",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
+      "jurisdiction_id": "RI",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 14,
+      "platform_family": "webprocure/proactis",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "ri-ocean-state-procures",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://www.txsmartbuy.gov/esbd",
+      "jurisdiction_id": "TX",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 15,
+      "platform_family": "texas/esbd",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "tx-esbd",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
+      "jurisdiction_id": "UT",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 16,
+      "platform_family": "jaggaer/sciquest",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "ut-u3p",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://eva.virginia.gov/",
+      "jurisdiction_id": "VA",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 17,
+      "platform_family": "virginia/eva",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "va-eva",
+      "task_type": "bounded_anonymous_live_validation"
+    },
+    {
+      "capture": [
+        "timestamp and final allowlisted URL",
+        "status, content type, and redirect chain",
+        "bounded discovery result and stable identifier",
+        "detail response when publicly linked",
+        "attachment metadata only; do not download during discovery",
+        "authentication, CAPTCHA, robots, rate-limit, proxy, and network observations"
+      ],
+      "entry_url": "https://gvibuy.com/",
+      "jurisdiction_id": "VI",
+      "method_policy": [
+        "GET"
+      ],
+      "order": 18,
+      "platform_family": "periscope/buyspeed",
+      "promotion_requirements": [
+        "successful bounded anonymous production request",
+        "response matches the registered fixture contract",
+        "dated sanitized evidence contains no credentials, cookies, or personal data",
+        "registry last_verified fields and generated reports are updated"
+      ],
+      "source_id": "vi-gvibuy",
+      "task_type": "bounded_anonymous_live_validation"
+    }
+  ]
+}
