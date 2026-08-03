@@ -531,22 +531,22 @@
       "jurisdiction_type": "state",
       "postal_code": "IL",
       "fips_code": "17",
-      "primary_source_id": null,
+      "primary_source_id": "il-bidbuy",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "public",
+      "attachment_status": "mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification."
     },
     {
       "code": "IN",
@@ -691,22 +691,22 @@
       "jurisdiction_type": "state",
       "postal_code": "MA",
       "fips_code": "25",
-      "primary_source_id": null,
+      "primary_source_id": "ma-commbuys",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "public",
+      "attachment_status": "mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification."
     },
     {
       "code": "MD",
@@ -1108,22 +1108,22 @@
       "jurisdiction_type": "state",
       "postal_code": "NJ",
       "fips_code": "34",
-      "primary_source_id": null,
+      "primary_source_id": "nj-njstart",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "public",
+      "attachment_status": "mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification."
     },
     {
       "code": "NM",
@@ -1172,22 +1172,22 @@
       "jurisdiction_type": "state",
       "postal_code": "NV",
       "fips_code": "32",
-      "primary_source_id": null,
+      "primary_source_id": "nv-nevadaepro",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "public",
+      "attachment_status": "mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification."
     },
     {
       "code": "NY",
@@ -1300,22 +1300,22 @@
       "jurisdiction_type": "state",
       "postal_code": "OR",
       "fips_code": "41",
-      "primary_source_id": null,
+      "primary_source_id": "or-oregonbuys",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "public",
+      "attachment_status": "mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification."
     },
     {
       "code": "PA",
@@ -1620,22 +1620,22 @@
       "jurisdiction_type": "territory",
       "postal_code": "VI",
       "fips_code": "78",
-      "primary_source_id": null,
+      "primary_source_id": "vi-gvibuy",
       "supplemental_source_ids": [],
-      "coverage_tier": 0,
-      "coverage_status": "unresearched",
-      "operational_status": "not_operational",
-      "discovery_status": "unknown",
-      "detail_status": "unknown",
-      "attachment_status": "unknown",
-      "document_pipeline_status": "not_established",
+      "coverage_tier": 2,
+      "coverage_status": "fixture_verified",
+      "operational_status": "baseline_operational",
+      "discovery_status": "public",
+      "detail_status": "public",
+      "attachment_status": "mixed",
+      "document_pipeline_status": "manifest_only",
       "live_validation_status": "not_validated",
       "last_verified_at": null,
       "known_gaps": [
-        "authoritative_primary_statewide_source_not_evidence_backed"
+        "live_validation_not_performed"
       ],
-      "next_action": "Research and register an authoritative statewide source with evidence.",
-      "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage."
+      "next_action": "Perform bounded anonymous live validation from a permitted network.",
+      "notes": "Fixture verification establishes the configured Periscope BuySpeed public bid-board contract; it is not live verification."
     },
     {
       "code": "VT",

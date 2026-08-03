@@ -87,7 +87,23 @@ class PeriscopeConnectorTests(unittest.IsolatedAsyncioTestCase):
             {item.jurisdiction_code for item in PORTALS}, {"IL", "MA", "NV", "NJ", "OR", "VI"}
         )
         self.assertTrue(all(item.search_url.startswith("https://") for item in PORTALS))
+        self.assertEqual(len({item.profile_key for item in PORTALS}), len(PORTALS))
+        self.assertTrue(all(item.profile_key for item in PORTALS))
         self.assertTrue(all(not item.production_verified for item in PORTALS))
+
+    async def test_statewide_profiles_normalize_the_shared_fixture_contract(self) -> None:
+        for configured_portal in PORTALS:
+            with self.subTest(profile=configured_portal.profile_key):
+                transport = FakeTransport([response(HTML_RESULTS, content_type="text/html")])
+                items = await collect(
+                    PeriscopeBuySpeedConnector(
+                        configured_portal, transport=transport, fetch_details=False
+                    )
+                )
+                self.assertEqual(len(items), 1)
+                self.assertEqual(items[0].source.jurisdiction, configured_portal.jurisdiction)
+                self.assertEqual(transport.calls[0]["url"], configured_portal.search_url)
+                self.assertEqual(len(items[0].raw_payload["document_links"]), 1)
 
     async def test_json_keyword_normalization_provenance_and_document_links(self) -> None:
         transport = FakeTransport([response(JSON_RESULTS)])

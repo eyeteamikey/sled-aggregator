@@ -861,6 +861,432 @@
       "blocker_reason": null,
       "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
       "evidence_url": "https://purchasing.utah.gov/currentbids/"
+    },
+    {
+      "key": "il-bidbuy",
+      "jurisdiction_code": "IL",
+      "name": "BidBuy",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://www.bidbuy.illinois.gov/",
+      "platform_family": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "il-bidbuy",
+      "jurisdiction_id": "IL",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Illinois BidBuy",
+      "official_landing_page": "https://cpo-general.illinois.gov/bidbuy.html",
+      "public_bid_board_url": "https://www.bidbuy.illinois.gov/",
+      "public_search_url": "https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml",
+      "public_detail_url_pattern": "https://www.bidbuy.illinois.gov/bso/external/bidDetail.sda?docId={bid_id}",
+      "connector_key": "periscope/buyspeed",
+      "connector_alias": null,
+      "portal_profile_key": "illinois/bidbuy",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://cpo-general.illinois.gov/bidbuy.html",
+        "https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://cpo-general.illinois.gov/bidbuy.html"
+    },
+    {
+      "key": "ma-commbuys",
+      "jurisdiction_code": "MA",
+      "name": "COMMBUYS",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://www.commbuys.com/",
+      "platform_family": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "ma-commbuys",
+      "jurisdiction_id": "MA",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "Massachusetts COMMBUYS",
+      "official_landing_page": "https://www.mass.gov/commbuys",
+      "public_bid_board_url": "https://www.commbuys.com/",
+      "public_search_url": "https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml",
+      "public_detail_url_pattern": "https://www.commbuys.com/bso/external/bidDetail.sda?docId={bid_id}",
+      "connector_key": "periscope/buyspeed",
+      "connector_alias": null,
+      "portal_profile_key": "massachusetts/commbuys",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://www.mass.gov/commbuys",
+        "https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://www.mass.gov/commbuys"
+    },
+    {
+      "key": "nv-nevadaepro",
+      "jurisdiction_code": "NV",
+      "name": "NevadaEPro",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://nevadaepro.com/",
+      "platform_family": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "nv-nevadaepro",
+      "jurisdiction_id": "NV",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "NevadaEPro",
+      "official_landing_page": "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/",
+      "public_bid_board_url": "https://nevadaepro.com/",
+      "public_search_url": "https://nevadaepro.com/bso/view/search/external/advancedSearchBid.xhtml",
+      "public_detail_url_pattern": "https://nevadaepro.com/bso/external/bidDetail.sda?docId={bid_id}",
+      "connector_key": "periscope/buyspeed",
+      "connector_alias": null,
+      "portal_profile_key": "nevada/nevadaepro",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/",
+        "https://nevadaepro.com/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/"
+    },
+    {
+      "key": "nj-njstart",
+      "jurisdiction_code": "NJ",
+      "name": "NJSTART",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://www.njstart.gov/",
+      "platform_family": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "nj-njstart",
+      "jurisdiction_id": "NJ",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "New Jersey NJSTART",
+      "official_landing_page": "https://www.nj.gov/treasury/purchase/njstart.shtml",
+      "public_bid_board_url": "https://www.njstart.gov/",
+      "public_search_url": "https://www.njstart.gov/bso/view/search/external/advancedSearchBid.xhtml",
+      "public_detail_url_pattern": "https://www.njstart.gov/bso/external/bidDetail.sda?docId={bid_id}",
+      "connector_key": "periscope/buyspeed",
+      "connector_alias": null,
+      "portal_profile_key": "new-jersey/njstart",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://www.nj.gov/treasury/purchase/njstart.shtml",
+        "https://www.njstart.gov/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://www.nj.gov/treasury/purchase/njstart.shtml"
+    },
+    {
+      "key": "or-oregonbuys",
+      "jurisdiction_code": "OR",
+      "name": "OregonBuys",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://oregonbuys.gov/",
+      "platform_family": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "or-oregonbuys",
+      "jurisdiction_id": "OR",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "OregonBuys",
+      "official_landing_page": "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx",
+      "public_bid_board_url": "https://oregonbuys.gov/",
+      "public_search_url": "https://oregonbuys.gov/bso/view/search/external/advancedSearchBid.xhtml",
+      "public_detail_url_pattern": "https://oregonbuys.gov/bso/external/bidDetail.sda?docId={bid_id}",
+      "connector_key": "periscope/buyspeed",
+      "connector_alias": null,
+      "portal_profile_key": "oregon/oregonbuys",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx",
+        "https://oregonbuys.gov/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx"
+    },
+    {
+      "key": "vi-gvibuy",
+      "jurisdiction_code": "VI",
+      "name": "GVIBUY",
+      "source_level": "statewide",
+      "source_role": "primary",
+      "official_url": "https://gvibuy.com/",
+      "platform_family": "periscope/buyspeed",
+      "connector_name": "periscope/buyspeed",
+      "connector_status": "fixture_only",
+      "verification_status": "fixture_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "priority": 1,
+      "expected_coverage_impact": "statewide",
+      "source_id": "vi-gvibuy",
+      "jurisdiction_id": "VI",
+      "jurisdiction_scope": "primary_statewide",
+      "owning_public_entity": "GVIBUY",
+      "official_landing_page": "https://dpp.vi.gov/gvibuy",
+      "public_bid_board_url": "https://gvibuy.com/",
+      "public_search_url": "https://gvibuy.com/bso/view/search/external/advancedSearchBid.xhtml",
+      "public_detail_url_pattern": "https://gvibuy.com/bso/external/bidDetail.sda?docId={bid_id}",
+      "connector_key": "periscope/buyspeed",
+      "connector_alias": null,
+      "portal_profile_key": "us-virgin-islands/gvibuy",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "none",
+      "captcha_classification": "none_observed_in_fixture",
+      "robots_access_notes": "not_live_validated",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_location": [
+        "https://dpp.vi.gov/gvibuy",
+        "https://gvibuy.com/bso/view/search/external/advancedSearchBid.xhtml",
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/periscope_board.html",
+        "tests/fixtures/periscope_results.json"
+      ],
+      "test_location": [
+        "tests/test_periscope_connector.py",
+        "tests/test_coverage_audit.py"
+      ],
+      "last_verified_date": null,
+      "known_limitations": [
+        "Fixture verification does not establish live production operation.",
+        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
+        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "evidence_url": "https://dpp.vi.gov/gvibuy"
     }
   ],
   "evidence": [
@@ -1203,6 +1629,198 @@
       "verified_at": "2026-08-03",
       "sanitization_status": "synthetic_public_contract",
       "notes": "Sanitized JAGGAER public-event fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+    },
+    {
+      "evidence_id": "il-bidbuy-official-guidance-1",
+      "source_id": "il-bidbuy",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://cpo-general.illinois.gov/bidbuy.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official IL procurement guidance identifies and links the configured public BuySpeed bid board.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "il-bidbuy-sanitized-fixtures-1",
+      "source_id": "il-bidbuy",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/periscope_board.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized BuySpeed fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+    },
+    {
+      "evidence_id": "ma-commbuys-official-guidance-1",
+      "source_id": "ma-commbuys",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://www.mass.gov/commbuys",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official MA procurement guidance identifies and links the configured public BuySpeed bid board.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "ma-commbuys-sanitized-fixtures-1",
+      "source_id": "ma-commbuys",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/periscope_board.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized BuySpeed fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+    },
+    {
+      "evidence_id": "nv-nevadaepro-official-guidance-1",
+      "source_id": "nv-nevadaepro",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official NV procurement guidance identifies and links the configured public BuySpeed bid board.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "nv-nevadaepro-sanitized-fixtures-1",
+      "source_id": "nv-nevadaepro",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/periscope_board.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized BuySpeed fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+    },
+    {
+      "evidence_id": "nj-njstart-official-guidance-1",
+      "source_id": "nj-njstart",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://www.nj.gov/treasury/purchase/njstart.shtml",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official NJ procurement guidance identifies and links the configured public BuySpeed bid board.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "nj-njstart-sanitized-fixtures-1",
+      "source_id": "nj-njstart",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/periscope_board.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized BuySpeed fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+    },
+    {
+      "evidence_id": "or-oregonbuys-official-guidance-1",
+      "source_id": "or-oregonbuys",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official OR procurement guidance identifies and links the configured public BuySpeed bid board.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "or-oregonbuys-sanitized-fixtures-1",
+      "source_id": "or-oregonbuys",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/periscope_board.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized BuySpeed fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
+      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+    },
+    {
+      "evidence_id": "vi-gvibuy-official-guidance-1",
+      "source_id": "vi-gvibuy",
+      "capabilities": [
+        "source_identity",
+        "statewide_scope",
+        "platform_identity"
+      ],
+      "evidence_type": "official_public_landing_page",
+      "location": "https://dpp.vi.gov/gvibuy",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "not_applicable",
+      "notes": "Official VI procurement guidance identifies and links the configured public BuySpeed bid board.",
+      "limitations": "Official guidance establishes identity and scope, not current anonymous production operability."
+    },
+    {
+      "evidence_id": "vi-gvibuy-sanitized-fixtures-1",
+      "source_id": "vi-gvibuy",
+      "capabilities": [
+        "fixture_discovery",
+        "fixture_pagination",
+        "fixture_detail",
+        "fixture_attachment_manifest",
+        "fixture_normalization"
+      ],
+      "evidence_type": "sanitized_fixture",
+      "location": "tests/fixtures/periscope_board.html",
+      "verified_at": "2026-08-03",
+      "sanitization_status": "synthetic_public_contract",
+      "notes": "Sanitized BuySpeed fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
       "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
     }
   ]
