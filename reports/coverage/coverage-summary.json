@@ -4652,9 +4652,11 @@
       "document_access": "public",
       "document_pipeline_classification": "compatible",
       "evidence_location": [
+        "https://www.emarketplace.state.pa.us/",
         "tests/fixtures/pennsylvania_emarketplace_search.html"
       ],
       "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_url": "https://www.emarketplace.state.pa.us/",
       "expected_coverage_impact": "statewide",
       "fixture_location": [
         "tests/fixtures/pennsylvania_emarketplace_search.html"
@@ -4667,6 +4669,7 @@
       "jurisdiction_scope": "primary_statewide",
       "key": "pa-emarketplace",
       "known_limitations": [
+        "Live access could not be established from the Codex Cloud shell because its outbound CONNECT proxy returned 403 before reaching the Pennsylvania host.",
         "statewide"
       ],
       "last_verified_date": null,
@@ -4681,7 +4684,7 @@
       "public_bid_board_url": "https://www.emarketplace.state.pa.us/",
       "public_detail_url_pattern": null,
       "public_search_url": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "recommended_next_action": "Repeat a bounded anonymous GET validation from an environment permitted to reach Pennsylvania government hosts.",
       "robots_access_notes": "not_live_validated",
       "source_id": "pa-emarketplace",
       "source_level": "statewide",
