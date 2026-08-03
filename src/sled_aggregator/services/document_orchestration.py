@@ -21,8 +21,9 @@ from sled_aggregator.services.document_manifest import DocumentManifestService
 
 PIPELINE_CONNECTORS = frozenset(
     {
-        "georgia/gpr", "maryland/emma", "oracle/fusion-rest",
+        "georgia/gpr", "maryland/emma", "oracle/fusion-rest", "oracle/peoplesoft-sourcing",
         "pennsylvania/emarketplace", "tyler/munis-vss", "virginia/eva",
+        "texas/esbd", "rhode-island/rivip-external",
     }
 )
 

@@ -88,12 +88,14 @@ class RIVIPTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(current.solicitation_number, "PVD-26-01")
         self.assertEqual(current.raw_payload["entity_type"], "city")
         docs = connector.document_candidates(current)
+        self.assertTrue(connector.document_pipeline_compatible)
         self.assertEqual(
             [d.category for d in docs], ["solicitation", "addendum", "public_bid_response"]
         )
         self.assertTrue(docs[0].publicly_retrievable)
         self.assertEqual(docs[1].addendum_number, "1")
         self.assertFalse(docs[2].publicly_retrievable)
+        self.assertNotIn("href", docs[0].raw_metadata)
         self.assertEqual(items[1].raw_payload["source_state"], "migrated")
         self.assertEqual(items[1].raw_payload["replacement_platform"], "RhodyBuy/JAGGAER")
         self.assertEqual(len(transport.post_calls), 1)

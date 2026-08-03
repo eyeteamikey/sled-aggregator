@@ -88,8 +88,15 @@ class TexasESBDConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("h=ExactHash", docs[0]["source_url"])
         self.assertTrue(docs[0]["internal_esbd_media"])
         self.assertEqual(docs[1]["document_category"], "addendum")
+        candidates = connector.document_candidates(posted)
+        self.assertTrue(connector.document_pipeline_compatible)
+        self.assertEqual(len(candidates), 2)
+        self.assertTrue(all(candidate.publicly_retrievable for candidate in candidates))
+        self.assertEqual(candidates[1].addendum_number, "1")
+        self.assertNotIn("source_url", candidates[0].raw_metadata)
         award_doc = by_id["RFP-OLD"].raw_payload["document_links"][0]
         self.assertEqual(award_doc["access_state"], "external_account_required")
+        self.assertFalse(connector.document_candidates(by_id["RFP-OLD"])[0].publicly_retrievable)
 
     async def test_search_parameters_and_nigp_normalization(self):
         transport = FakeTransport([response(EMPTY)])

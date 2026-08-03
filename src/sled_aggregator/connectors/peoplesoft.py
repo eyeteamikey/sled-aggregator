@@ -18,13 +18,13 @@ from datetime import UTC, datetime, timedelta
 from enum import StrEnum
 from html.parser import HTMLParser
 from typing import Any, Literal, Protocol
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import httpx
 
 from sled_aggregator.connectors.base import BaseConnector, ConnectorQuery
-from sled_aggregator.domain.enums import OpportunityStatus
-from sled_aggregator.domain.models import RawOpportunity, SourceRef
+from sled_aggregator.domain.enums import AccessState, OpportunityStatus
+from sled_aggregator.domain.models import DocumentCandidate, RawOpportunity, SourceRef
 
 PeopleSoftResponseStrategy = Literal["html", "json", "xml", "csv", "auto"]
 
@@ -234,6 +234,7 @@ class _PeopleSoftHTMLParser(HTMLParser):
 class PeopleSoftSourcingConnector(BaseConnector):
     platform_family = "oracle/peoplesoft-sourcing"
     jurisdictions = ("California",)
+    document_pipeline_compatible = True
     _transient = frozenset({429, 502, 503, 504})
 
     def __init__(
@@ -630,6 +631,52 @@ class PeopleSoftSourcingConnector(BaseConnector):
                     "access_state": state,
                     "anonymous_session_required": self.portal.anonymous_session_required,
                 }
+            )
+        return result
+
+    def document_candidates(self, opportunity: RawOpportunity) -> list[DocumentCandidate]:
+        """Translate fixture-verified event attachments without retrieving them."""
+        result: list[DocumentCandidate] = []
+        seen: set[tuple[str, str]] = set()
+        for item in opportunity.raw_payload.get("document_links", []):
+            if not isinstance(item, dict) or not item.get("source_url"):
+                continue
+            url = str(item["source_url"])
+            attachment_id = str(item.get("attachment_identifier") or "")
+            if not attachment_id:
+                attachment_id = f"path:{urlparse(url).path}"
+            identity = (attachment_id, url)
+            if identity in seen:
+                continue
+            seen.add(identity)
+            source_state = str(item.get("access_state") or "unknown")
+            public = source_state in {"public", "anonymous-session-required"}
+            filename = urlparse(url).path.rsplit("/", 1)[-1] or "document"
+            version = item.get("event_round_or_version")
+            match = re.search(r"\d+", str(version or ""))
+            result.append(
+                DocumentCandidate(
+                    opportunity_id=opportunity.source.source_id,
+                    source_document_url=url,
+                    source_opportunity_url=opportunity.source.opportunity_url,
+                    source_detail_url=opportunity.source.opportunity_url,
+                    filename=re.sub(r'[^A-Za-z0-9._ -]', "_", filename),
+                    label=item.get("title"),
+                    source_document_id=attachment_id,
+                    category="attachment",
+                    access_state=AccessState.PUBLIC if public else AccessState.RESTRICTED,
+                    publicly_retrievable=public,
+                    version_label=str(version) if version not in (None, "") else None,
+                    version_number=int(match.group()) if match else None,
+                    modified_at=self._date(item.get("last_modified")),
+                    raw_metadata={
+                        "source_access_state": source_state,
+                        "anonymous_session_required": bool(
+                            item.get("anonymous_session_required")
+                        ),
+                        "authoritative_event_url": str(opportunity.source.opportunity_url),
+                    },
+                )
             )
         return result
 

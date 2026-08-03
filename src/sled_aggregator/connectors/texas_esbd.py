@@ -23,8 +23,8 @@ from zoneinfo import ZoneInfo
 import httpx
 
 from sled_aggregator.connectors.base import BaseConnector, ConnectorQuery
-from sled_aggregator.domain.enums import OpportunityStatus
-from sled_aggregator.domain.models import RawOpportunity, SourceRef
+from sled_aggregator.domain.enums import AccessState, OpportunityStatus
+from sled_aggregator.domain.models import DocumentCandidate, RawOpportunity, SourceRef
 
 CENTRAL = ZoneInfo("America/Chicago")
 
@@ -217,6 +217,7 @@ class _ESBDParser(HTMLParser):
 class TexasESBDConnector(BaseConnector):
     platform_family = "texas/esbd"
     jurisdictions = ("Texas",)
+    document_pipeline_compatible = True
     _transient = frozenset({429, 502, 503, 504})
 
     def __init__(
@@ -518,6 +519,58 @@ class TexasESBDConnector(BaseConnector):
                     and parsed.path.casefold().endswith("/core/media/media.nl"),
                     "external": not internal,
                 }
+            )
+        return result
+
+    def document_candidates(self, opportunity: RawOpportunity) -> list[DocumentCandidate]:
+        """Adapt public ESBD media and preserve gated external links as metadata."""
+        result: list[DocumentCandidate] = []
+        seen: set[str] = set()
+        for item in opportunity.raw_payload.get("document_links", []):
+            if not isinstance(item, dict) or not item.get("source_url"):
+                continue
+            url = str(item["source_url"])
+            if url in seen:
+                continue
+            seen.add(url)
+            source_state = str(item.get("access_state") or "unknown")
+            public = source_state in {
+                ESBDAccessState.PUBLIC.value,
+                ESBDAccessState.EXTERNAL_PUBLIC.value,
+            }
+            label = str(item.get("title") or item.get("file_name") or "document")
+            version = item.get("addendum_or_version")
+            match = re.search(r"\d+", str(version or ""))
+            addendum = match.group() if item.get("document_category") == "addendum" and match else None
+            parsed = urlparse(url)
+            source_id = next(
+                (parse_qs(parsed.query)[key][0] for key in ("id", "file", "h") if parse_qs(parsed.query).get(key)),
+                None,
+            )
+            result.append(
+                DocumentCandidate(
+                    opportunity_id=opportunity.source.source_id,
+                    source_document_url=url,
+                    source_opportunity_url=opportunity.source.opportunity_url,
+                    source_detail_url=opportunity.source.opportunity_url,
+                    filename=re.sub(
+                        r'[^A-Za-z0-9._ -]', "_", str(item.get("file_name") or label)
+                    ),
+                    label=label,
+                    source_document_id=source_id,
+                    category=item.get("document_category"),
+                    access_state=AccessState.PUBLIC if public else AccessState.REGISTRATION_REQUIRED,
+                    publicly_retrievable=public,
+                    version_label=str(version) if version not in (None, "") else None,
+                    version_number=int(match.group()) if match else None,
+                    addendum_number=addendum,
+                    posted_at=self._date(item.get("posted_or_modified_date")),
+                    raw_metadata={
+                        "source_access_state": source_state,
+                        "internal_esbd_media": bool(item.get("internal_esbd_media")),
+                        "authoritative_detail_url": str(opportunity.source.opportunity_url),
+                    },
+                )
             )
         return result
 

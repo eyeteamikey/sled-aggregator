@@ -1,9 +1,14 @@
-# Georgia, Maryland, and Virginia document adapters
+# Statewide document adapters
 
 The statewide Georgia GPR, Maryland eMMA, and Virginia eVA connectors translate
 their existing fixture-backed detail metadata into the canonical document pipeline.
 They do not download files during discovery and do not implement a second queue,
 downloader, parser, OCR system, or extraction engine.
+
+California Cal eProcure, Texas ESBD, and Rhode Island RIVIP now follow the same
+adapter contract. Cal eProcure reacquires only its anonymous public session, ESBD
+retains account-gated external links as metadata, and RIVIP excludes public bid
+response links from retrieval eligibility.
 
 ## Evidence and access boundaries
 
@@ -18,6 +23,12 @@ register, solve CAPTCHA, or enter bid-response workflows.
 * Virginia accepts HTTPS attachments on the public eVA host. An anonymous public
   session may be reacquired by ordinary public detail discovery, but authentication is
   never attempted.
+* California uses fixture-verified PeopleSoft event attachments and never persists
+  session state in document metadata.
+* Texas distinguishes direct public ESBD media and public external files from
+  account-required external documents.
+* Rhode Island accepts only configured purchasing hosts and never retrieves public
+  bid response links.
 
 ## Identity and versions
 
