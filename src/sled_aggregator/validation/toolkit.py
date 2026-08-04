@@ -7,6 +7,7 @@ import ipaddress
 import json
 import math
 import re
+import shutil
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -16,7 +17,8 @@ SANITIZER_VERSION = "1.0"
 REDACTED = "[REDACTED]"
 SENSITIVE_NAMES = re.compile(
     r"authorization|cookie|api[-_]?key|token|secret|password|passwd|session|csrf|xsrf|"
-    r"oauth|saml|code|_afrloop|_adf\.ctrl-state|oracle.*(?:state|session)|traceparent|x-request-id",
+    r"oauth|saml|code|viewstate|javax\.faces|jsessionid|_afrloop|_adf\.ctrl-state|"
+    r"oracle.*(?:state|session)|traceparent|x-request-id|username|supplier|phone|email",
     re.I,
 )
 STATIC_MIMES = ("image/", "font/", "text/css", "javascript")
@@ -34,6 +36,147 @@ CAPABILITIES = (
     "normalization",
     "document_pipeline_handoff",
 )
+
+TELEMETRY_HOST_PATTERNS = ("google-analytics", "googletagmanager", "hotjar", "doubleclick")
+MUTATION_PATTERN = re.compile(
+    r"login|sign[-_]?in|register|create.?account|password|upload|bid|quote|proposal|"
+    r"supplier|profile|cart|response.?line|save|update|delete|publish|award|checkout|"
+    r"payment|acknowledge|accept.?terms|submit",
+    re.I,
+)
+
+
+@dataclass(frozen=True)
+class ValidationRequestRule:
+    methods: tuple[str, ...]
+    hosts: tuple[str, ...]
+    path_pattern: str
+    purpose: str
+    allowed_content_types: tuple[str, ...] = (
+        "application/x-www-form-urlencoded",
+        "multipart/form-data",
+        "text/plain",
+    )
+    prohibited_field_name_patterns: tuple[str, ...] = (
+        "password",
+        "username",
+        "upload",
+        "file",
+        "bid",
+        "quote",
+        "proposal",
+        "payment",
+        "save",
+        "update",
+        "delete",
+        "submit",
+        "acknowledge",
+        "acceptTerms",
+    )
+    maximum_request_body_size: int = 256_000
+    requires_anonymous: bool = True
+    read_only: bool = True
+
+
+@dataclass(frozen=True)
+class RequestDecision:
+    allowed: bool
+    rule: str
+    classification: str
+    reason: str
+    essential: bool
+
+
+def classify_request(
+    config: CaptureConfig,
+    method: str,
+    url: str,
+    *,
+    headers: dict[str, str] | None = None,
+    field_names: tuple[str, ...] = (),
+    body_size: int = 0,
+    resource_type: str = "",
+) -> RequestDecision:
+    """Classify from contract shape only; request values are never retained or logged."""
+    method, headers = method.upper(), {k.lower(): v for k, v in (headers or {}).items()}
+    parts = urlsplit(url)
+    host, path = (parts.hostname or "").lower(), parts.path or "/"
+    first_party = host in config.allowed_hosts
+    essential = first_party and resource_type in {"document", "xhr", "fetch", "navigation"}
+    if any(p in host for p in TELEMETRY_HOST_PATTERNS):
+        return RequestDecision(
+            False,
+            "telemetry-default-deny",
+            "nonessential_third_party",
+            "analytics/telemetry omitted",
+            False,
+        )
+    if method in {"PUT", "PATCH", "DELETE", "CONNECT", "TRACE"}:
+        return RequestDecision(
+            False, "unsafe-method-deny", "mutation", f"{method} is always blocked", essential
+        )
+    if not first_party:
+        return RequestDecision(
+            False, "host-allowlist", "third_party", "host is not allowlisted", False
+        )
+    if method in {"GET", "HEAD", "OPTIONS"}:
+        return RequestDecision(
+            True, "safe-resource-method", "safe_resource", "safe resource method", essential
+        )
+    if method != "POST":
+        return RequestDecision(
+            False, "method-default-deny", "mutation", "method is not permitted", essential
+        )
+    content_type = headers.get("content-type", "").split(";", 1)[0].lower()
+    if "authorization" in headers or "proxy-authorization" in headers:
+        return RequestDecision(
+            False, "credentials-deny", "authentication", "credential header present", essential
+        )
+    if MUTATION_PATTERN.search(path):
+        # BidBuy's reviewed detail path contains 'bid' and is allowed only through an exact rule.
+        matching = [
+            r
+            for r in config.request_rules
+            if host in r.hosts and re.fullmatch(r.path_pattern, path)
+        ]
+        if not matching:
+            return RequestDecision(
+                False, "mutation-path-deny", "mutation", "prohibited action in path", essential
+            )
+    for rule in config.request_rules:
+        if (
+            method not in rule.methods
+            or host not in rule.hosts
+            or not re.fullmatch(rule.path_pattern, path)
+        ):
+            continue
+        prohibited = re.compile("|".join(rule.prohibited_field_name_patterns), re.I)
+        if any(prohibited.search(name) for name in field_names):
+            return RequestDecision(
+                False, rule.purpose, "mutation", "prohibited form-field name", essential
+            )
+        if body_size > rule.maximum_request_body_size:
+            return RequestDecision(
+                False, rule.purpose, "oversize", "request body exceeds rule limit", essential
+            )
+        if content_type and content_type not in rule.allowed_content_types:
+            return RequestDecision(
+                False, rule.purpose, "unsupported_content", "content type is not allowed", essential
+            )
+        return RequestDecision(
+            True,
+            rule.purpose,
+            "conditional_read_only_post",
+            "reviewed source-specific POST contract",
+            essential,
+        )
+    return RequestDecision(
+        False,
+        "post-default-deny",
+        "unclassified_post",
+        "POST destination is not registered",
+        essential,
+    )
 
 
 def utc_now() -> str:
@@ -124,7 +267,11 @@ def validate_workspace(path: Path, repo_root: Path) -> Path:
         and resolved.name != ".sled-validation"
         and ".sled-validation" not in resolved.parts
     ):
-        raise ValueError("repository-local captures must use .sled-validation")
+        raise ValueError(
+            "Repository-local captures must use .sled-validation.\nRetry:\n"
+            "python -m sled_aggregator.validation capture --source <source> --label <label> "
+            "--workspace .\\.sled-validation"
+        )
     return resolved
 
 
@@ -144,12 +291,16 @@ class CaptureConfig:
     max_total_capture_bytes: int = 25_000_000
     per_host_delay: float = 0.5
     navigation_timeout: int = 30
+    action_timeout: int = 30
+    browser: str = "chromium"
+    profile_directory: Path | None = None
     retain_response_bodies: bool = False
     mime_allowlist: tuple[str, ...] = ("application/json", "text/html", "text/plain")
     path_allowlist: tuple[str, ...] = ()
     path_denylist: tuple[str, ...] = ("/login", "/signin", "/account", "/submit")
     user_agent: str = "SLED-Aggregator-HAR-Validator/1.0 (+anonymous-read-only)"
     public_read_only: bool = True
+    request_rules: tuple[ValidationRequestRule, ...] = ()
 
     @classmethod
     def from_registry(cls, source: dict, label: str, output: Path = Path(".sled-validation"), **kw):
@@ -160,6 +311,10 @@ class CaptureConfig:
             or source.get("official_landing_page")
             or source["official_url"]
         )
+        rules = tuple(
+            ValidationRequestRule(**rule)
+            for rule in source.get("validation_request_policy", {}).get("browser_capture_rules", [])
+        )
         return cls(
             source["source_id"],
             source["jurisdiction_id"],
@@ -167,6 +322,7 @@ class CaptureConfig:
             tuple(sorted(hosts)),
             label,
             output,
+            request_rules=rules,
             **kw,
         )
 
@@ -191,6 +347,13 @@ class CaptureConfig:
             raise ValueError("capture budgets must be positive")
         if self.per_host_delay < 0:
             raise ValueError("per-host delay cannot be negative")
+        if self.browser not in {"chromium", "msedge", "chrome"}:
+            raise ValueError("browser must be one of: chromium, msedge, chrome")
+        if self.profile_directory:
+            profile = self.profile_directory.resolve()
+            workspace = self.output_directory.resolve()
+            if workspace not in profile.parents:
+                raise ValueError("persistent browser profiles must be inside .sled-validation")
         return self
 
 
@@ -345,6 +508,62 @@ def sanitize_har(
         json.dumps(report, indent=2, sort_keys=True) + "\n"
     )
     return report
+
+
+def raw_risk_inventory(path: Path) -> dict:
+    """Return safe category counts; never return matching values."""
+    text = path.read_text(encoding="utf-8", errors="replace")
+    checks = {
+        "cookies_present": r'"(?:Cookie|Set-Cookie|cookies)"',
+        "authorization_headers_present": r'"(?:Authorization|Proxy-Authorization)"',
+        "view_state_fields_present": r"javax\.faces\.ViewState|ViewState",
+        "email_candidates": PATTERNS["email"],
+        "tracking_identifiers_present": r"_ga|_gid|hotjar|google-analytics|traceparent",
+    }
+    result = {}
+    for name, pattern in checks.items():
+        count = (
+            len(re.findall(pattern, text, re.I))
+            if isinstance(pattern, str)
+            else len(pattern.findall(text))
+        )
+        result[name] = count if name == "email_candidates" else bool(count)
+    return result
+
+
+def import_har(input_path: Path, workspace: Path, source_id: str, repo_root: Path) -> dict:
+    """Copy an operator HAR into protected raw storage and immediately sanitize/scan it."""
+    validate_workspace(workspace, repo_root)
+    if not input_path.is_file():
+        raise ValueError("manual HAR input does not exist")
+    capture_id = f"{validate_label(source_id)}-{datetime.now(UTC).strftime('%Y%m%d%H%M%S')}"
+    raw = workspace / "raw" / f"{capture_id}.har"
+    sanitized = workspace / "sanitized" / f"{capture_id}.har"
+    if raw.exists():
+        raise ValueError("raw import destination already exists; choose a new capture")
+    raw.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(input_path, raw)
+    inventory = raw_risk_inventory(raw)
+    report = sanitize_har(raw, sanitized, source_id=source_id)
+    findings = scan_artifact(sanitized)
+    manifest = {
+        "capture_id": capture_id,
+        "source_id": source_id,
+        "capture_mode": "manual-browser",
+        "raw_path": str(raw),
+        "sanitized_path": str(sanitized),
+        "raw_risk_inventory": inventory,
+        "sanitized_hash": report["metadata"]["output_hash"],
+        "approval_eligible": not any(x.severity == "high" for x in findings),
+        "next_commands": [
+            f"python -m sled_aggregator.validation scan {sanitized}",
+            f"python -m sled_aggregator.validation analyze {sanitized}",
+        ],
+    }
+    manifest_path = workspace / "reports" / f"{capture_id}-manifest.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    return manifest
 
 
 @dataclass
@@ -625,39 +844,100 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
     try:
         from playwright.sync_api import sync_playwright
     except ImportError as exc:
-        raise RuntimeError("manual capture requires the optional 'validation' dependency") from exc
+        raise RuntimeError(
+            "Manual browser capture requires the validation extra.\nFrom the repository root run:\n"
+            'python -m pip install -e ".[dev,validation]"\npython -m playwright install chromium'
+        ) from exc
     raw = config.output_directory / "raw" / f"{validate_label(config.label)}.har"
     raw.parent.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(headless=False)
+        channel = None if config.browser == "chromium" else config.browser
+        browser = pw.chromium.launch(headless=False, channel=channel)
         context = browser.new_context(
             record_har_path=str(raw),
             record_har_content="embed" if config.retain_response_bodies else "omit",
             user_agent=config.user_agent,
         )
         request_count = 0
+        diagnostics = []
+        counts = {"allowed": {}, "blocked": {}}
 
         def route_handler(route):
             nonlocal request_count
             request_count += 1
-            try:
-                validate_public_url(route.request.url, set(config.allowed_hosts))
-            except ValueError:
-                route.abort()
-                return
-            if request_count > config.max_requests or route.request.method not in {"GET", "HEAD"}:
+            request = route.request
+            fields = tuple(
+                name for name, _ in parse_qsl(request.post_data or "", keep_blank_values=True)
+            )
+            decision = classify_request(
+                config,
+                request.method,
+                request.url,
+                headers=request.headers,
+                field_names=fields,
+                body_size=len((request.post_data or "").encode()),
+                resource_type=request.resource_type,
+            )
+            bucket = "allowed" if decision.allowed else "blocked"
+            counts[bucket][request.method] = counts[bucket].get(request.method, 0) + 1
+            if request_count > config.max_requests or not decision.allowed:
+                parts = urlsplit(request.url)
+                diagnostics.append(
+                    {
+                        "timestamp": utc_now(),
+                        "source_id": config.source_id,
+                        "method": request.method,
+                        "host": parts.hostname,
+                        "path": parts.path,
+                        "rule": decision.rule,
+                        "classification": decision.classification,
+                        "reason": "request budget exceeded"
+                        if request_count > config.max_requests
+                        else decision.reason,
+                        "likely_essential": decision.essential,
+                    }
+                )
                 route.abort()
                 return
             route.continue_()
 
         context.route("**/*", route_handler)
         page = context.new_page()
-        page.goto(config.starting_url, timeout=config.navigation_timeout * 1000)
+        page.set_default_timeout(config.action_timeout * 1000)
+        page.goto(
+            config.starting_url,
+            timeout=config.navigation_timeout * 1000,
+            wait_until="domcontentloaded",
+        )
         print(
             "Anonymous read-only capture started. Complete the guided checklist; press Enter to flush and close."
         )
         print("Do not log in, register, solve CAPTCHA, submit bids, or perform vendor actions.")
         input()
+        summary = {
+            "requests_allowed_by_method": counts["allowed"],
+            "requests_blocked_by_method": counts["blocked"],
+            "blocked_first_party_requests": sum(
+                d["host"] in config.allowed_hosts for d in diagnostics
+            ),
+            "blocked_third_party_requests": sum(
+                d["host"] not in config.allowed_hosts for d in diagnostics
+            ),
+            "essential_first_party_request_blocked": any(
+                d["likely_essential"] for d in diagnostics
+            ),
+            "suspected_spinner_reason": "blocked essential first-party request"
+            if any(d["likely_essential"] for d in diagnostics)
+            else None,
+        }
+        report = (
+            config.output_directory / "reports" / f"{validate_label(config.label)}-capture.json"
+        )
+        report.parent.mkdir(parents=True, exist_ok=True)
+        report.write_text(
+            json.dumps({"diagnostics": diagnostics, "summary": summary}, indent=2) + "\n"
+        )
+        print(json.dumps(summary, indent=2))
         context.close()
         browser.close()
     return raw
