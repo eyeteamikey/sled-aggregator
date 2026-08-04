@@ -12,7 +12,10 @@ workspace is ignored by Git. Raw HARs, cookies, production document bodies, brow
 `node_modules`, executables, external `.git` history, and unsanitized responses must never be
 committed. The CLI rejects repository roots and tracked fixture, coverage, documentation, and
 report paths as raw workspaces. It accepts only registered source hosts, public HTTP(S), fresh
-anonymous contexts, GET/HEAD traffic, and bounded request/runtime settings. Private, local,
+anonymous contexts, safe resource methods, and narrowly registered read-only POST contracts.
+Public read-only is not synonymous with GET-only: source-specific, host- and path-bound rules may
+permit anonymous search/detail POSTs after checking content type, field names, body size, and
+prohibited actions. Capture permission is not connector replay approval. Private, local,
 credential-bearing, special-purpose, and unregistered redirect URLs are rejected.
 
 The sanitizer removes cookie collections and sensitive request/response headers, redacts query
@@ -21,6 +24,11 @@ oversize, binary, and production-document bodies, and creates a fingerprint-only
 The post-sanitization scanner finds authentication material, JWTs, email/phone data, private IPs,
 and high-entropy strings without printing their values. Unresolved high-severity findings fail
 approval closed. Sanitization never overwrites the raw capture.
+
+JSF/PrimeFaces ViewState and session fields may pass only within a registered live browser rule;
+their values are ephemeral secrets, are never logged or replayed, and are redacted in evidence.
+Analytics, tag managers, Hotjar, fonts, and marketing/session-replay traffic remain nonessential
+third-party traffic and are blocked rather than added to a source allowlist.
 
 ## Installation (Windows PowerShell)
 
@@ -53,8 +61,15 @@ the context closes.
    terminal interruption can leave an incomplete raw file; preserve it, start a new label, and do
    not overwrite or destructively clean either capture.
 
-3. Importing an existing HAR means placing it in `.sled-validation/raw` after checking its source
-   and label; then sanitize to a different file:
+3. Import an existing browser HAR directly. The command copies rather than moves or overwrites the
+   original, emits a category/count-only raw risk inventory, creates a manual-browser manifest,
+   sanitizes separately, and scans immediately:
+
+   ```powershell
+   py -m sled_aggregator.validation import-har --source il-bidbuy --input C:\captures\bidbuy.har --workspace .\.sled-validation
+   ```
+
+   Continue the review workflow with the exact commands printed by import:
 
    ```powershell
    py -m sled_aggregator.validation sanitize .sled-validation\raw\al.har .sled-validation\sanitized\al.har --source al-alabamabuys
@@ -87,9 +102,31 @@ the context closes.
 ## Limits
 
 Manual capture requires a local terminal because completion uses Enter. Runtime termination is a
-human-visible bound; request and host enforcement are automatic. The standard-library sanitizer
-uses bounded body policies and canonical output, but currently parses the HAR JSON document as a
-whole; for exceptionally large captures, configure Playwright to omit bodies and split capture
+human-visible bound; request and host enforcement are automatic. Select `--browser chromium`,
+`--browser msedge`, or `--browser chrome`; the manifest reports the choice without stealth or
+automation evasion. The standard-library sanitizer uses bounded body policies, hashes omitted
+content, and canonical output, but currently parses the HAR JSON document as a whole; for
+exceptionally large captures, configure Playwright to omit bodies and split capture
 sessions by checklist phase before sanitizing. Batch capture is intentionally not exposed: broad
 crawling is outside the product boundary. Evidence reports infer endpoints from conservative URL
 patterns and require human review, especially for opaque RPC routes.
+
+## Illinois BidBuy local acceptance
+
+Run the dry-run first, then repeat without `--dry-run` (PowerShell line continuations shown):
+
+```powershell
+python -m sled_aggregator.validation capture `
+  --source il-bidbuy --label anonymous-public-validation `
+  --workspace .\.sled-validation --browser msedge --dry-run
+python -m sled_aggregator.validation capture `
+  --source il-bidbuy --label anonymous-public-validation `
+  --workspace .\.sled-validation --browser msedge
+```
+
+Search for `software`, page once, open two public opportunities, inspect public documents, and
+attempt at most one anonymous download. Stop at login, registration, CAPTCHA, terms acceptance,
+or response functionality. The registered JSF search and detail POSTs may proceed; all arbitrary
+POSTs and mutations remain denied. Telemetry is nonessential and must not prevent manual finish.
+The Illinois spinner cause is inferred from operator HAR evidence: the original GET-only router
+aborted essential same-origin JSF/Ajax POSTs, leaving the client waiting for their responses.

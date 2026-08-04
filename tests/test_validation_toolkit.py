@@ -1,4 +1,5 @@
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,7 +10,9 @@ from sled_aggregator.validation.toolkit import (
     Finding,
     analyze_har,
     approve_evidence,
+    classify_request,
     extract_fixture,
+    import_har,
     ingest_evidence,
     sanitize_har,
     scan_artifact,
@@ -73,6 +76,83 @@ def har():
 
 
 class ToolkitTests(unittest.TestCase):
+    def bidbuy_config(self):
+        import json
+
+        source = next(
+            x
+            for x in json.loads(Path("data/coverage/sources.json").read_text())["sources"]
+            if x["source_id"] == "il-bidbuy"
+        )
+        return CaptureConfig.from_registry(source, "safe")
+
+    def test_request_policy_safe_methods_and_default_denies(self):
+        config = self.bidbuy_config()
+        for method in ("GET", "HEAD", "OPTIONS"):
+            self.assertTrue(classify_request(config, method, config.starting_url).allowed)
+        for method in ("PUT", "PATCH", "DELETE", "CONNECT", "TRACE"):
+            self.assertFalse(classify_request(config, method, config.starting_url).allowed)
+        self.assertFalse(
+            classify_request(config, "POST", "https://www.bidbuy.illinois.gov/arbitrary").allowed
+        )
+
+    def test_bidbuy_posts_are_host_and_path_bound(self):
+        config = self.bidbuy_config()
+        headers = {"content-type": "application/x-www-form-urlencoded"}
+        for path in (
+            "/bso/view/search/external/advancedSearchBid.xhtml",
+            "/bso/external/bidDetail.sda",
+        ):
+            result = classify_request(
+                config,
+                "POST",
+                "https://www.bidbuy.illinois.gov" + path,
+                headers=headers,
+                field_names=("javax.faces.ViewState",),
+            )
+            self.assertTrue(result.allowed)
+            self.assertEqual(result.classification, "conditional_read_only_post")
+            self.assertFalse(
+                classify_request(
+                    config, "POST", "https://evil.example" + path, headers=headers
+                ).allowed
+            )
+        for path in ("/login", "/register", "/proposal/submit", "/upload"):
+            self.assertFalse(
+                classify_request(
+                    config, "POST", "https://www.bidbuy.illinois.gov" + path, headers=headers
+                ).allowed
+            )
+
+    def test_jsf_and_session_values_are_sanitized(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw, out = Path(tmp) / "raw.har", Path(tmp) / "clean.har"
+            value = har()
+            value["log"]["entries"][0]["request"]["postData"]["params"] += [
+                {"name": "javax.faces.ViewState", "value": "live-jsf-secret"},
+                {"name": "JSESSIONID", "value": "live-session-secret"},
+            ]
+            raw.write_text(json.dumps(value))
+            sanitize_har(raw, out, source_id="il-bidbuy")
+            clean = out.read_text()
+            self.assertNotIn("live-jsf-secret", clean)
+            self.assertNotIn("live-session-secret", clean)
+
+    def test_manual_import_preserves_original_and_inventories_risk(self):
+        with tempfile.TemporaryDirectory(dir=Path.cwd()) as tmp:
+            # Repository-local destinations other than .sled-validation are rejected.
+            source = Path(tmp) / "input.har"
+            source.write_text(json.dumps(har()))
+            original = source.read_bytes()
+            workspace = Path(".sled-validation") / Path(tmp).name
+            try:
+                result = import_har(source, workspace, "il-bidbuy", Path.cwd())
+                self.assertEqual(source.read_bytes(), original)
+                self.assertEqual(result["capture_mode"], "manual-browser")
+                self.assertTrue(result["raw_risk_inventory"]["cookies_present"])
+            finally:
+                shutil.rmtree(workspace, ignore_errors=True)
+
     def test_label_url_and_config_safety(self):
         for label in ("", "../raw", "a/b", "C:evil", "NUL"):
             with self.assertRaises(ValueError):

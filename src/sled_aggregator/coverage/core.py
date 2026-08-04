@@ -143,6 +143,7 @@ SOURCE_FIELDS = {
     "captcha_classification",
     "robots_access_notes",
     "allowed_http_methods",
+    "validation_request_policy",
     "evidence_type",
     "evidence_location",
     "fixture_location",

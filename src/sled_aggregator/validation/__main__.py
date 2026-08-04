@@ -15,6 +15,7 @@ from .toolkit import (
     capture_manual,
     evidence_records,
     extract_fixture,
+    import_har,
     ingest_evidence,
     load_source,
     sanitize_har,
@@ -40,6 +41,16 @@ def parser() -> argparse.ArgumentParser:
     capture.add_argument("--label", required=True)
     capture.add_argument("--workspace", type=Path, default=Path(".sled-validation"))
     capture.add_argument("--dry-run", action="store_true")
+    capture.add_argument("--browser", choices=("chromium", "msedge", "chrome"), default="chromium")
+    capture.add_argument("--page-load-timeout", type=int, default=30)
+    capture.add_argument("--action-timeout", type=int, default=30)
+    capture.add_argument("--max-capture-duration", type=int, default=900)
+    import_command = commands.add_parser(
+        "import-har", help="copy, inventory, sanitize, and scan a manual HAR"
+    )
+    import_command.add_argument("--source", required=True)
+    import_command.add_argument("--input", type=Path, required=True)
+    import_command.add_argument("--workspace", type=Path, default=Path(".sled-validation"))
     sanitize = commands.add_parser("sanitize", help="sanitize a raw HAR without overwriting it")
     sanitize.add_argument("input", type=Path)
     sanitize.add_argument("output", type=Path)
@@ -132,6 +143,7 @@ def main(argv=None) -> int:
             "extract-fixture",
             "approve",
             "ingest",
+            "import-har",
         )
     ):
         return _legacy_main(argv)
@@ -139,7 +151,15 @@ def main(argv=None) -> int:
     try:
         if args.command == "capture":
             source = load_source(args.registry, args.source)
-            config = CaptureConfig.from_registry(source, args.label, args.workspace)
+            config = CaptureConfig.from_registry(
+                source,
+                args.label,
+                args.workspace,
+                browser=args.browser,
+                navigation_timeout=args.page_load_timeout,
+                action_timeout=args.action_timeout,
+                max_duration=args.max_capture_duration,
+            )
             config.validate(Path.cwd())
             if args.dry_run:
                 _write(
@@ -149,10 +169,26 @@ def main(argv=None) -> int:
                         "source_id": source["source_id"],
                         "starting_url": config.starting_url,
                         "allowed_hosts": config.allowed_hosts,
+                        "browser": config.browser,
+                        "maximum_capture_duration": config.max_duration,
+                        "conditional_post_rules": [
+                            {
+                                "purpose": rule.purpose,
+                                "hosts": rule.hosts,
+                                "path_pattern": rule.path_pattern,
+                            }
+                            for rule in config.request_rules
+                        ],
+                        "prohibited_actions": "login, registration, upload, bid submission, mutation, CAPTCHA bypass",
+                        "raw_output": str(config.output_directory / "raw" / f"{config.label}.har"),
+                        "raw_har_warning": "Never commit raw HAR files.",
                     },
                 )
             else:
                 _write(None, {"raw_har": str(capture_manual(config, Path.cwd()))})
+        elif args.command == "import-har":
+            load_source(args.registry, args.source)
+            _write(None, import_har(args.input, args.workspace, args.source, Path.cwd()))
         elif args.command == "sanitize":
             _write(
                 None,

@@ -1122,8 +1122,34 @@
         "Attachment metadata is manifest-only until anonymous retrieval is separately established."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
-      "evidence_url": "https://cpo-general.illinois.gov/bidbuy.html"
+      "recommended_next_action": "Perform bounded anonymous validation of registered read-only GET and POST discovery/detail contracts.",
+      "evidence_url": "https://cpo-general.illinois.gov/bidbuy.html",
+      "validation_request_policy": {
+        "browser_capture_rules": [
+          {
+            "methods": [
+              "POST"
+            ],
+            "hosts": [
+              "www.bidbuy.illinois.gov"
+            ],
+            "path_pattern": "/bso/view/search/external/advancedSearchBid\\.xhtml",
+            "purpose": "anonymous search, filtering, sorting, and pagination"
+          },
+          {
+            "methods": [
+              "POST"
+            ],
+            "hosts": [
+              "www.bidbuy.illinois.gov"
+            ],
+            "path_pattern": "/bso/external/bidDetail\\.sda",
+            "purpose": "anonymous solicitation detail and document-metadata navigation"
+          }
+        ],
+        "connector_replay_approved": false,
+        "notes": "Browser capture permission records sanitized contract shape only; production replay requires explicit reviewer approval."
+      }
     },
     {
       "key": "ma-commbuys",
