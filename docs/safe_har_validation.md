@@ -103,13 +103,35 @@ the context closes.
 
 Manual capture requires a local terminal because completion uses Enter. Runtime termination is a
 human-visible bound; request and host enforcement are automatic. Select `--browser chromium`,
-`--browser msedge`, or `--browser chrome`; the manifest reports the choice without stealth or
-automation evasion. The standard-library sanitizer uses bounded body policies, hashes omitted
-content, and canonical output, but currently parses the HAR JSON document as a whole; for
-exceptionally large captures, configure Playwright to omit bodies and split capture
-sessions by checklist phase before sanitizing. Batch capture is intentionally not exposed: broad
-crawling is outside the product boundary. Evidence reports infer endpoints from conservative URL
-patterns and require human review, especially for opaque RPC routes.
+`--browser msedge`, or `--browser chrome`. Dry-run reports the requested/resolved channel,
+headless state, profile type, and request-policy mode; the capture report additionally records the
+exact launched browser version. Unsupported or unavailable channels fail with a retry using
+bundled Chromium. There are no stealth flags or automation-evasion features.
+
+Controlled diagnosis supports `--request-policy observe` (logging without interception),
+`first-party` (enforce the registered first-party contract while observing third parties), and
+`full` (the default validation policy). Compare those modes only in a clean anonymous session.
+The default context is ephemeral; `--persistent-profile` creates a clean profile beneath
+`.sled-validation/profiles/<source>/<label>`. Never point capture at a personal browser profile.
+Observe mode is diagnostic only and does not grant permission to perform any interaction that is
+forbidden elsewhere in this document.
+
+The raw-risk inventory scans large files in bounded chunks and the importer copies using streaming
+file operations. The canonical standard-library HAR sanitizer still parses the JSON document as a
+whole. For a roughly 201 MB HAR, ensure adequate local memory; if that is unavailable, export a
+smaller HAR containing evidence-critical HTML, XML, JSON, search, pagination, detail, and document
+contracts. Omit analytics and binary bodies at export. Sanitization removes/truncates images,
+fonts, binary bodies, oversized bodies, and other nonessential payloads, but the original raw HAR
+is always preserved. Batch capture is intentionally not exposed: broad crawling is outside the
+product boundary. Evidence reports infer endpoints from conservative URL patterns and require
+human review, especially for opaque RPC routes.
+
+Capture reports use these outcomes: `capture_succeeded`, `capture_partially_succeeded`,
+`initialization_failed`, `operator_aborted`, `safety_policy_blocked`, and
+`browser_incompatible`. A successful page-shell response alone is never BidBuy success. Failed
+initialization preserves the partial raw HAR, writes a sanitized-value diagnostic report, and
+prints browser-channel and manual-HAR fallback steps. It does not establish anonymous search,
+detail, or document capability.
 
 ## Illinois BidBuy local acceptance
 
@@ -124,9 +146,44 @@ python -m sled_aggregator.validation capture `
   --workspace .\.sled-validation --browser msedge
 ```
 
-Search for `software`, page once, open two public opportunities, inspect public documents, and
-attempt at most one anonymous download. Stop at login, registration, CAPTCHA, terms acceptance,
-or response functionality. The registered JSF search and detail POSTs may proceed; all arbitrary
-POSTs and mutations remain denied. Telemetry is nonessential and must not prevent manual finish.
-The Illinois spinner cause is inferred from operator HAR evidence: the original GET-only router
-aborted essential same-origin JSF/Ajax POSTs, leaving the client waiting for their responses.
+BidBuy has an explicit startup contract. Success requires: a successful first-party HTML shell;
+successful JSF/PrimeFaces scripts; observation of the initial anonymous JSF/Ajax POST to
+`/bso/view/search/external/advancedSearchBid.xhtml`; its successful response; a cleared loading
+overlay within the action timeout; and either rendered results or a legitimate empty-results
+state. Missing POST and persistent-overlay cases are `initialization_failed`, not successful HAR
+captures. The report assigns a non-null reason such as `expected_request_not_observed`,
+`response_not_received`, `response_received_spinner_remained`, `javascript_exception`,
+`request_failed`, `blocked_dependency`, or `unknown_after_diagnostics`.
+
+The presently supplied evidence establishes only that a successful separate manual browser made
+anonymous JSF POSTs while the failed automated capture made no POST at all. Therefore the exact
+browser-level root cause remains unresolved; the earlier conditional-POST policy did **not** fix
+initialization. Browser diagnostics are attached before navigation and safely record console
+category/message, page exceptions, request failures, first-party non-2xx responses, policy
+decisions, redirect paths, CSP/mixed-content indicators, channel/version, POST/response state, and
+overlay state. They never retain cookies, authorization, request bodies or values, ViewState,
+CSRF/session values, personal data, or complete query strings. Blocked analytics, tag managers,
+Hotjar, fonts, advertising, and session replay remain nonessential unless separately proven; they
+are not automatically allowlisted.
+
+After startup succeeds, search for `software`, page once, open two public opportunities, inspect
+public documents, and attempt at most one anonymous download. Stop at login, registration,
+CAPTCHA, terms acceptance, or response functionality. The registered JSF search and detail POSTs
+may proceed; all arbitrary POSTs and mutations remain denied. Fixture tests are not live Illinois
+validation. Live acceptance requires the POST, cleared spinner, public results, anonymous search
+and detail navigation, and continued blocking of mutating vendor actions.
+
+If startup remains unsuccessful, import a successful anonymous manual-browser HAR without moving
+or overwriting it:
+
+```powershell
+python -m sled_aggregator.validation import-har `
+  --source il-bidbuy --input <raw-har-path> --workspace .\.sled-validation
+```
+
+The importer creates a separate protected raw copy, `capture_mode: manual-browser` manifest,
+category/count-only risk inventory, sanitized HAR, and sensitive-data scan result. Run the exact
+printed `scan`, `analyze`, `report`, `approve`, and dry-run `ingest` commands in that order.
+Approval and ingestion refuse unresolved high-severity findings. Review medium findings and every
+sanitizer action manually before approval. Neither the supplied Illinois HAR nor any other raw
+artifact may be committed.

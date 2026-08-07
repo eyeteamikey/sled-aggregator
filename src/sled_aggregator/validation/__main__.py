@@ -42,6 +42,17 @@ def parser() -> argparse.ArgumentParser:
     capture.add_argument("--workspace", type=Path, default=Path(".sled-validation"))
     capture.add_argument("--dry-run", action="store_true")
     capture.add_argument("--browser", choices=("chromium", "msedge", "chrome"), default="chromium")
+    capture.add_argument(
+        "--request-policy",
+        choices=("observe", "first-party", "full"),
+        default="full",
+        help="controlled diagnosis: logging only, first-party enforcement, or full policy",
+    )
+    capture.add_argument(
+        "--persistent-profile",
+        action="store_true",
+        help="use a clean source/label profile below .sled-validation instead of an ephemeral context",
+    )
     capture.add_argument("--page-load-timeout", type=int, default=30)
     capture.add_argument("--action-timeout", type=int, default=30)
     capture.add_argument("--max-capture-duration", type=int, default=900)
@@ -156,6 +167,12 @@ def main(argv=None) -> int:
                 args.label,
                 args.workspace,
                 browser=args.browser,
+                request_policy_mode=args.request_policy,
+                profile_directory=(
+                    args.workspace / "profiles" / args.source / args.label
+                    if args.persistent_profile
+                    else None
+                ),
                 navigation_timeout=args.page_load_timeout,
                 action_timeout=args.action_timeout,
                 max_duration=args.max_capture_duration,
@@ -169,7 +186,18 @@ def main(argv=None) -> int:
                         "source_id": source["source_id"],
                         "starting_url": config.starting_url,
                         "allowed_hosts": config.allowed_hosts,
-                        "browser": config.browser,
+                        "browser": {
+                            "requested_channel": config.browser,
+                            "resolved_channel": (
+                                "bundled-chromium" if config.browser == "chromium" else config.browser
+                            ),
+                            "version": "not launched during dry-run",
+                            "headless": False,
+                            "profile_type": (
+                                "persistent" if config.profile_directory else "ephemeral"
+                            ),
+                            "request_policy_mode": config.request_policy_mode,
+                        },
                         "maximum_capture_duration": config.max_duration,
                         "conditional_post_rules": [
                             {

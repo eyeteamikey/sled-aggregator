@@ -11,9 +11,11 @@ from sled_aggregator.validation.toolkit import (
     analyze_har,
     approve_evidence,
     classify_request,
+    evaluate_bidbuy_startup,
     extract_fixture,
     import_har,
     ingest_evidence,
+    sanitize_diagnostic_message,
     sanitize_har,
     scan_artifact,
     validate_label,
@@ -267,6 +269,129 @@ class ToolkitTests(unittest.TestCase):
         self.assertEqual(
             main(["capture", "--source", "missing", "--label", "safe", "--dry-run"]), 2
         )
+
+    @staticmethod
+    def bidbuy_startup_diagnostics(*, post=True, response=True, script=True):
+        rows = [
+            {
+                "event": "response",
+                "status": 200,
+                "resource_type": "document",
+                "first_party": True,
+                "path": "/bso/view/search/external/advancedSearchBid.xhtml",
+            }
+        ]
+        if script:
+            rows.append(
+                {
+                    "event": "response",
+                    "status": 200,
+                    "resource_type": "script",
+                    "first_party": True,
+                    "path": "/bso/javax.faces.resource/primefaces.js",
+                }
+            )
+        if post:
+            rows.append(
+                {
+                    "event": "request",
+                    "method": "POST",
+                    "path": "/bso/view/search/external/advancedSearchBid.xhtml",
+                }
+            )
+        if response:
+            rows.append(
+                {
+                    "event": "response",
+                    "status": 200,
+                    "request_method": "POST",
+                    "path": "/bso/view/search/external/advancedSearchBid.xhtml",
+                }
+            )
+        return rows
+
+    def test_bidbuy_shell_without_initial_post_fails(self):
+        result = evaluate_bidbuy_startup(
+            self.bidbuy_startup_diagnostics(post=False, response=False),
+            overlay_visible=True,
+            results_state_visible=False,
+        )
+        self.assertEqual(result["capture_outcome"], "initialization_failed")
+        self.assertEqual(result["suspected_spinner_reason"], "expected_request_not_observed")
+        self.assertFalse(result["startup_succeeded"])
+
+    def test_bidbuy_response_with_spinner_fails(self):
+        result = evaluate_bidbuy_startup(
+            self.bidbuy_startup_diagnostics(),
+            overlay_visible=True,
+            results_state_visible=True,
+        )
+        self.assertEqual(
+            result["suspected_spinner_reason"], "response_received_spinner_remained"
+        )
+        self.assertIsNotNone(result["suspected_spinner_reason"])
+
+    def test_bidbuy_expected_post_and_cleared_spinner_succeeds(self):
+        result = evaluate_bidbuy_startup(
+            self.bidbuy_startup_diagnostics(),
+            overlay_visible=False,
+            results_state_visible=True,
+        )
+        self.assertEqual(result["capture_outcome"], "capture_succeeded")
+        self.assertTrue(result["startup_succeeded"])
+
+    def test_bidbuy_javascript_and_request_failures_are_distinguished(self):
+        diagnostics = self.bidbuy_startup_diagnostics(post=False, response=False)
+        diagnostics.append({"event": "pageerror", "message": "PrimeFaces is undefined"})
+        result = evaluate_bidbuy_startup(
+            diagnostics, overlay_visible=True, results_state_visible=False
+        )
+        self.assertEqual(result["suspected_spinner_reason"], "javascript_exception")
+        diagnostics[-1] = {"event": "requestfailed", "first_party": True}
+        result = evaluate_bidbuy_startup(
+            diagnostics, overlay_visible=True, results_state_visible=False
+        )
+        self.assertEqual(result["suspected_spinner_reason"], "request_failed")
+
+    def test_telemetry_failure_does_not_fail_successful_startup(self):
+        diagnostics = self.bidbuy_startup_diagnostics()
+        diagnostics.append(
+            {"event": "requestfailed", "first_party": False, "host": "google-analytics.com"}
+        )
+        result = evaluate_bidbuy_startup(
+            diagnostics, overlay_visible=False, results_state_visible=True
+        )
+        self.assertTrue(result["startup_succeeded"])
+
+    def test_evidence_supported_blocked_dependency_is_correlated(self):
+        diagnostics = self.bidbuy_startup_diagnostics(post=False, response=False)
+        diagnostics.append({"event": "policy", "likely_essential": True})
+        result = evaluate_bidbuy_startup(
+            diagnostics, overlay_visible=True, results_state_visible=False
+        )
+        self.assertEqual(result["suspected_spinner_reason"], "blocked_dependency")
+
+    def test_diagnostics_redact_values_and_sensitive_urls(self):
+        message = sanitize_diagnostic_message(
+            "Failed https://example.gov/a?token=abc&email=person@example.com "
+            "javax.faces.ViewState=secret Cookie:session-value"
+        )
+        for secret in ("abc", "person@example.com", "secret", "session-value"):
+            self.assertNotIn(secret, message)
+        self.assertIn("https://example.gov/a", message)
+
+    def test_browser_and_request_policy_options_validate(self):
+        for browser in ("chromium", "chrome", "msedge"):
+            config = self.bidbuy_config()
+            config = CaptureConfig(**{**vars(config), "browser": browser})
+            config.validate(Path.cwd())
+        config = self.bidbuy_config()
+        with self.assertRaisesRegex(ValueError, "unsupported browser channel"):
+            CaptureConfig(**{**vars(config), "browser": "firefox"}).validate(Path.cwd())
+        with self.assertRaisesRegex(ValueError, "request policy"):
+            CaptureConfig(**{**vars(config), "request_policy_mode": "unsafe"}).validate(
+                Path.cwd()
+            )
 
 
 if __name__ == "__main__":
