@@ -144,6 +144,7 @@ SOURCE_FIELDS = {
     "robots_access_notes",
     "allowed_http_methods",
     "validation_request_policy",
+    "validation_startup_contract",
     "evidence_type",
     "evidence_location",
     "fixture_location",

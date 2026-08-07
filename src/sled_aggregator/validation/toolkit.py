@@ -8,6 +8,7 @@ import json
 import math
 import re
 import shutil
+from contextlib import suppress
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -38,6 +39,27 @@ CAPABILITIES = (
 )
 
 TELEMETRY_HOST_PATTERNS = ("google-analytics", "googletagmanager", "hotjar", "doubleclick")
+CAPTURE_OUTCOMES = (
+    "capture_succeeded",
+    "capture_partially_succeeded",
+    "initialization_failed",
+    "operator_aborted",
+    "safety_policy_blocked",
+    "browser_incompatible",
+)
+SPINNER_REASONS = (
+    "blocked_dependency",
+    "javascript_exception",
+    "request_failed",
+    "expected_request_not_observed",
+    "response_not_received",
+    "response_received_spinner_remained",
+    "browser_channel_incompatibility",
+    "unknown_after_diagnostics",
+)
+SUPPORTED_BROWSERS = ("chromium", "chrome", "msedge")
+REQUEST_POLICY_MODES = ("observe", "first-party", "full")
+BIDBUY_SEARCH_PATH = "/bso/view/search/external/advancedSearchBid.xhtml"
 MUTATION_PATTERN = re.compile(
     r"login|sign[-_]?in|register|create.?account|password|upload|bid|quote|proposal|"
     r"supplier|profile|cart|response.?line|save|update|delete|publish|award|checkout|"
@@ -293,6 +315,7 @@ class CaptureConfig:
     navigation_timeout: int = 30
     action_timeout: int = 30
     browser: str = "chromium"
+    request_policy_mode: str = "full"
     profile_directory: Path | None = None
     retain_response_bodies: bool = False
     mime_allowlist: tuple[str, ...] = ("application/json", "text/html", "text/plain")
@@ -347,8 +370,13 @@ class CaptureConfig:
             raise ValueError("capture budgets must be positive")
         if self.per_host_delay < 0:
             raise ValueError("per-host delay cannot be negative")
-        if self.browser not in {"chromium", "msedge", "chrome"}:
-            raise ValueError("browser must be one of: chromium, msedge, chrome")
+        if self.browser not in SUPPORTED_BROWSERS:
+            raise ValueError(
+                "unsupported browser channel; use one of: chromium, chrome, msedge. "
+                "Install the selected channel or retry with --browser chromium"
+            )
+        if self.request_policy_mode not in REQUEST_POLICY_MODES:
+            raise ValueError("request policy must be one of: observe, first-party, full")
         if self.profile_directory:
             profile = self.profile_directory.resolve()
             workspace = self.output_directory.resolve()
@@ -512,7 +540,6 @@ def sanitize_har(
 
 def raw_risk_inventory(path: Path) -> dict:
     """Return safe category counts; never return matching values."""
-    text = path.read_text(encoding="utf-8", errors="replace")
     checks = {
         "cookies_present": r'"(?:Cookie|Set-Cookie|cookies)"',
         "authorization_headers_present": r'"(?:Authorization|Proxy-Authorization)"',
@@ -520,15 +547,16 @@ def raw_risk_inventory(path: Path) -> dict:
         "email_candidates": PATTERNS["email"],
         "tracking_identifiers_present": r"_ga|_gid|hotjar|google-analytics|traceparent",
     }
-    result = {}
-    for name, pattern in checks.items():
-        count = (
-            len(re.findall(pattern, text, re.I))
-            if isinstance(pattern, str)
-            else len(pattern.findall(text))
-        )
-        result[name] = count if name == "email_candidates" else bool(count)
-    return result
+    counts = dict.fromkeys(checks, 0)
+    overlap = ""
+    with path.open("r", encoding="utf-8", errors="replace") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), ""):
+            text = overlap + chunk
+            for name, pattern in checks.items():
+                compiled = re.compile(pattern, re.I) if isinstance(pattern, str) else pattern
+                counts[name] += sum(match.end() > len(overlap) for match in compiled.finditer(text))
+            overlap = text[-256:]
+    return counts
 
 
 def import_har(input_path: Path, workspace: Path, source_id: str, repo_root: Path) -> dict:
@@ -555,9 +583,25 @@ def import_har(input_path: Path, workspace: Path, source_id: str, repo_root: Pat
         "raw_risk_inventory": inventory,
         "sanitized_hash": report["metadata"]["output_hash"],
         "approval_eligible": not any(x.severity == "high" for x in findings),
+        "sensitive_findings": {
+            "high": sum(x.severity == "high" for x in findings),
+            "medium": sum(x.severity == "medium" for x in findings),
+        },
         "next_commands": [
-            f"python -m sled_aggregator.validation scan {sanitized}",
-            f"python -m sled_aggregator.validation analyze {sanitized}",
+            f"python -m sled_aggregator.validation scan {sanitized} --output "
+            f"{workspace / 'reports' / (capture_id + '-findings.json')}",
+            f"python -m sled_aggregator.validation analyze {sanitized} --output "
+            f"{workspace / 'reports' / (capture_id + '-analysis.json')}",
+            f"python -m sled_aggregator.validation report {sanitized} --analysis "
+            f"{workspace / 'reports' / (capture_id + '-analysis.json')} --source {source_id} "
+            f"--capture-id {capture_id} --output {workspace / 'evidence' / (capture_id + '.json')}",
+            f"python -m sled_aggregator.validation approve "
+            f"{workspace / 'evidence' / (capture_id + '.json')} "
+            f"{workspace / 'reports' / (capture_id + '-findings.json')} --reviewer <reviewer> "
+            f"--capability discovery --output "
+            f"{workspace / 'evidence' / (capture_id + '-approved.json')}",
+            f"python -m sled_aggregator.validation ingest "
+            f"{workspace / 'evidence' / (capture_id + '-approved.json')} --dry-run --confirm",
         ],
     }
     manifest_path = workspace / "reports" / f"{capture_id}-manifest.json"
@@ -838,6 +882,135 @@ GUIDED_CHECKLIST = (
 )
 
 
+def sanitize_diagnostic_message(message: object, limit: int = 500) -> str:
+    """Return useful browser text without URLs, values, or secret-bearing assignments."""
+    text = str(message).replace("\r", " ").replace("\n", " ")
+    text = re.sub(r"https?://[^\s'\"<>]+", lambda m: _safe_request_url(m.group()), text)
+    text = re.sub(
+        r"(?i)\b(cookie|authorization|token|secret|session|csrf|viewstate|javax\.faces[^= ]*)"
+        r"\s*[:=]\s*[^\s,;]+",
+        r"\1=[REDACTED]",
+        text,
+    )
+    text = PATTERNS["email"].sub(REDACTED, text)
+    return text[:limit]
+
+
+def _safe_request_url(url: str) -> str:
+    parts = urlsplit(url)
+    return urlunsplit((parts.scheme, parts.netloc, parts.path or "/", "", ""))
+
+
+def _request_diagnostic(request, **extra) -> dict:
+    parts = urlsplit(request.url)
+    redirected_from = getattr(request, "redirected_from", None)
+    return {
+        "method": request.method,
+        "host": parts.hostname,
+        "path": parts.path or "/",
+        "resource_type": request.resource_type,
+        "redirected_from": (
+            urlsplit(redirected_from.url).path if redirected_from is not None else None
+        ),
+        **extra,
+    }
+
+
+def evaluate_bidbuy_startup(
+    diagnostics: list[dict], *, overlay_visible: bool, results_state_visible: bool
+) -> dict:
+    """Evaluate BidBuy's startup contract from sanitized browser observations."""
+    expected = [
+        row
+        for row in diagnostics
+        if row.get("event") == "request"
+        and row.get("method") == "POST"
+        and row.get("path") == BIDBUY_SEARCH_PATH
+    ]
+    responses = [
+        row
+        for row in diagnostics
+        if row.get("event") == "response"
+        and row.get("request_method") == "POST"
+        and row.get("path") == BIDBUY_SEARCH_PATH
+        and 200 <= row.get("status", 0) < 400
+    ]
+    html_ok = any(
+        row.get("event") == "response"
+        and row.get("resource_type") == "document"
+        and row.get("first_party")
+        and 200 <= row.get("status", 0) < 400
+        for row in diagnostics
+    )
+    jsf_scripts_ok = any(
+        row.get("event") == "response"
+        and row.get("resource_type") == "script"
+        and row.get("first_party")
+        and ("javax.faces.resource" in row.get("path", "") or "primefaces" in row.get("path", "").lower())
+        and 200 <= row.get("status", 0) < 400
+        for row in diagnostics
+    )
+    blocked_essential = any(
+        row.get("event") == "policy" and row.get("likely_essential") for row in diagnostics
+    )
+    script_error = any(
+        row.get("event") == "pageerror"
+        or (row.get("event") == "console" and row.get("csp_violation"))
+        for row in diagnostics
+    )
+    failed_first_party = any(
+        row.get("event") == "requestfailed" and row.get("first_party") for row in diagnostics
+    )
+    success = bool(
+        html_ok
+        and jsf_scripts_ok
+        and expected
+        and responses
+        and not overlay_visible
+        and results_state_visible
+    )
+    reason = None
+    message = None
+    if not success:
+        if blocked_essential:
+            reason = "blocked_dependency"
+        elif script_error:
+            reason = "javascript_exception"
+        elif failed_first_party:
+            reason = "request_failed"
+        elif not expected:
+            reason = "expected_request_not_observed"
+            message = (
+                "BidBuy initialization failed: the expected anonymous JSF results request "
+                "was not observed."
+            )
+        elif not responses:
+            reason = "response_not_received"
+        elif overlay_visible:
+            reason = "response_received_spinner_remained"
+            message = (
+                "BidBuy initialization failed: the results loading overlay remained visible "
+                "after the configured timeout."
+            )
+        else:
+            reason = "unknown_after_diagnostics"
+    outcome = "capture_succeeded" if success else "initialization_failed"
+    if reason == "blocked_dependency":
+        outcome = "safety_policy_blocked"
+    return {
+        "capture_outcome": outcome,
+        "startup_succeeded": success,
+        "expected_initial_jsf_post_observed": bool(expected),
+        "results_response_received": bool(responses),
+        "expected_first_party_html_received": html_ok,
+        "required_jsf_primefaces_script_received": jsf_scripts_ok,
+        "loading_overlay_visible": overlay_visible,
+        "results_or_empty_state_visible": results_state_visible,
+        "suspected_spinner_reason": reason,
+        "message": message,
+    }
+
+
 def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
     """Launch optional Playwright in a fresh visible context; CI must never call this."""
     config.validate(repo_root)
@@ -852,15 +1025,88 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
     raw.parent.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as pw:
         channel = None if config.browser == "chromium" else config.browser
-        browser = pw.chromium.launch(headless=False, channel=channel)
-        context = browser.new_context(
-            record_har_path=str(raw),
-            record_har_content="embed" if config.retain_response_bodies else "omit",
-            user_agent=config.user_agent,
-        )
+        launch = {
+            "headless": False,
+            "channel": channel,
+        }
+        browser = None
+        try:
+            if config.profile_directory:
+                config.profile_directory.mkdir(parents=True, exist_ok=True)
+                context = pw.chromium.launch_persistent_context(
+                    str(config.profile_directory),
+                    **launch,
+                    record_har_path=str(raw),
+                    record_har_content="embed" if config.retain_response_bodies else "omit",
+                    user_agent=config.user_agent,
+                )
+            else:
+                browser = pw.chromium.launch(**launch)
+                context = browser.new_context(
+                    record_har_path=str(raw),
+                    record_har_content="embed" if config.retain_response_bodies else "omit",
+                    user_agent=config.user_agent,
+                )
+        except Exception as exc:
+            report = config.output_directory / "reports" / f"{validate_label(config.label)}-capture.json"
+            report.parent.mkdir(parents=True, exist_ok=True)
+            report.write_text(
+                json.dumps(
+                    {
+                        "diagnostics": [
+                            {
+                                "event": "browser_launch_failed",
+                                "message": sanitize_diagnostic_message(exc),
+                            }
+                        ],
+                        "summary": {
+                            "capture_outcome": "browser_incompatible",
+                            "suspected_spinner_reason": "browser_channel_incompatibility",
+                            "requested_channel": config.browser,
+                        },
+                    },
+                    indent=2,
+                )
+                + "\n"
+            )
+            raise RuntimeError(
+                f"browser channel {config.browser!r} could not be launched; "
+                "install that channel or retry with --browser chromium. "
+                f"Diagnostic report: {report}"
+            ) from None
         request_count = 0
         diagnostics = []
         counts = {"allowed": {}, "blocked": {}}
+
+        def record(event: str, **fields) -> None:
+            diagnostics.append({"timestamp": utc_now(), "event": event, **fields})
+
+        def on_request(request) -> None:
+            record("request", **_request_diagnostic(request))
+
+        def on_response(response) -> None:
+            request = response.request
+            parts = urlsplit(response.url)
+            first_party = (parts.hostname or "").lower() in config.allowed_hosts
+            record(
+                "response",
+                status=response.status,
+                host=parts.hostname,
+                path=parts.path or "/",
+                resource_type=request.resource_type,
+                request_method=request.method,
+                first_party=first_party,
+                redirect=response.status in {301, 302, 303, 307, 308},
+            )
+
+        def on_request_failed(request) -> None:
+            parts = urlsplit(request.url)
+            record(
+                "requestfailed",
+                **_request_diagnostic(request),
+                first_party=(parts.hostname or "").lower() in config.allowed_hosts,
+                failure_reason=sanitize_diagnostic_message(request.failure or "unknown"),
+            )
 
         def route_handler(route):
             nonlocal request_count
@@ -879,41 +1125,106 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
                 resource_type=request.resource_type,
             )
             bucket = "allowed" if decision.allowed else "blocked"
+            if config.request_policy_mode == "first-party" and not decision.essential:
+                route.continue_()
+                return
             counts[bucket][request.method] = counts[bucket].get(request.method, 0) + 1
             if request_count > config.max_requests or not decision.allowed:
                 parts = urlsplit(request.url)
-                diagnostics.append(
-                    {
-                        "timestamp": utc_now(),
-                        "source_id": config.source_id,
-                        "method": request.method,
-                        "host": parts.hostname,
-                        "path": parts.path,
-                        "rule": decision.rule,
-                        "classification": decision.classification,
-                        "reason": "request budget exceeded"
+                record(
+                    "policy",
+                    source_id=config.source_id,
+                    method=request.method,
+                    host=parts.hostname,
+                    path=parts.path,
+                    resource_type=request.resource_type,
+                    initiator_category="browser_page",
+                    rule=decision.rule,
+                    classification=decision.classification,
+                    reason=(
+                        "request budget exceeded"
                         if request_count > config.max_requests
-                        else decision.reason,
-                        "likely_essential": decision.essential,
-                    }
+                        else decision.reason
+                    ),
+                    likely_essential=decision.essential,
                 )
                 route.abort()
                 return
             route.continue_()
 
-        context.route("**/*", route_handler)
+        if config.request_policy_mode != "observe":
+            context.route("**/*", route_handler)
         page = context.new_page()
+        # Every page-level diagnostic listener is attached before the first navigation.
+        page.on("request", on_request)
+        page.on("response", on_response)
+        page.on("requestfailed", on_request_failed)
+        page.on(
+            "console",
+            lambda message: record(
+                "console",
+                category=message.type,
+                message=sanitize_diagnostic_message(message.text),
+                csp_violation="content security policy" in message.text.lower(),
+                mixed_content="mixed content" in message.text.lower(),
+            ),
+        )
+        page.on(
+            "pageerror",
+            lambda error: record("pageerror", message=sanitize_diagnostic_message(error)),
+        )
         page.set_default_timeout(config.action_timeout * 1000)
         page.goto(
             config.starting_url,
             timeout=config.navigation_timeout * 1000,
             wait_until="domcontentloaded",
         )
-        print(
-            "Anonymous read-only capture started. Complete the guided checklist; press Enter to flush and close."
-        )
-        print("Do not log in, register, solve CAPTCHA, submit bids, or perform vendor actions.")
-        input()
+        overlay_visible = False
+        results_state_visible = False
+        if config.source_id == "il-bidbuy":
+            with suppress(Exception):  # Playwright timeout/error is represented in diagnostics.
+                page.wait_for_function(
+                    """() => {
+                      const overlays = [...document.querySelectorAll('.ui-blockui, .ui-widget-overlay')];
+                      const visible = overlays.some(e => {
+                        const s = getComputedStyle(e); const r = e.getBoundingClientRect();
+                        return s.display !== 'none' && s.visibility !== 'hidden' && r.width && r.height;
+                      });
+                      const result = document.querySelector('.ui-datatable, #bidSearchResultsForm, [id*="bidSearchResults"]');
+                      const empty = /no (records|results|bids) found/i.test(document.body.innerText);
+                      return !visible && !!(result || empty);
+                    }""",
+                    timeout=config.action_timeout * 1000,
+                )
+            overlay_visible = page.locator(".ui-blockui:visible, .ui-widget-overlay:visible").count() > 0
+            results_state_visible = (
+                page.locator(
+                    '.ui-datatable, #bidSearchResultsForm, [id*="bidSearchResults"], '
+                    'text=/no (records|results|bids) found/i'
+                ).count()
+                > 0
+            )
+            startup = evaluate_bidbuy_startup(
+                diagnostics,
+                overlay_visible=overlay_visible,
+                results_state_visible=results_state_visible,
+            )
+        else:
+            startup = {
+                "capture_outcome": "capture_partially_succeeded",
+                "startup_succeeded": None,
+                "suspected_spinner_reason": None,
+            }
+        if startup.get("startup_succeeded"):
+            print(
+                "Anonymous read-only capture started. Complete the guided checklist; "
+                "press Enter to flush and close."
+            )
+            print("Do not log in, register, solve CAPTCHA, submit bids, or perform vendor actions.")
+            try:
+                input()
+            except (EOFError, KeyboardInterrupt):
+                startup["capture_outcome"] = "operator_aborted"
         summary = {
             "requests_allowed_by_method": counts["allowed"],
             "requests_blocked_by_method": counts["blocked"],
@@ -926,9 +1237,15 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
             "essential_first_party_request_blocked": any(
                 d["likely_essential"] for d in diagnostics
             ),
-            "suspected_spinner_reason": "blocked essential first-party request"
-            if any(d["likely_essential"] for d in diagnostics)
-            else None,
+            **startup,
+            "browser": {
+                "requested_channel": config.browser,
+                "resolved_channel": channel or "bundled-chromium",
+                "version": browser.version if browser is not None else context.browser.version,
+                "headless": False,
+                "profile_type": "persistent" if config.profile_directory else "ephemeral",
+                "request_policy_mode": config.request_policy_mode,
+            },
         }
         report = (
             config.output_directory / "reports" / f"{validate_label(config.label)}-capture.json"
@@ -939,5 +1256,15 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
         )
         print(json.dumps(summary, indent=2))
         context.close()
-        browser.close()
+        if browser is not None:
+            browser.close()
+        if config.source_id == "il-bidbuy" and not startup["startup_succeeded"]:
+            message = startup.get("message") or "BidBuy initialization failed after diagnostics."
+            raise RuntimeError(
+                f"{message}\nPartial raw HAR preserved at: {raw}\n"
+                f"Sanitized diagnostic report: {report}\n"
+                "Next step: retry with --browser chrome or --browser msedge and an alternate "
+                "--request-policy mode; if initialization still fails, use import-har with a "
+                "successful anonymous manual-browser HAR."
+            )
     return raw

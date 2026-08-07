@@ -1149,6 +1149,28 @@
         ],
         "connector_replay_approved": false,
         "notes": "Browser capture permission records sanitized contract shape only; production replay requires explicit reviewer approval."
+      },
+      "validation_startup_contract": {
+        "expected_document_path": "/bso/view/search/external/advancedSearchBid.xhtml",
+        "required_script_markers": [
+          "javax.faces.resource",
+          "primefaces"
+        ],
+        "expected_initial_request": {
+          "method": "POST",
+          "path": "/bso/view/search/external/advancedSearchBid.xhtml",
+          "anonymous": true
+        },
+        "loading_overlay_selectors": [
+          ".ui-blockui",
+          ".ui-widget-overlay"
+        ],
+        "success_state_selectors": [
+          ".ui-datatable",
+          "#bidSearchResultsForm",
+          "[id*=bidSearchResults]"
+        ],
+        "requires_empty_or_results_state": true
       }
     },
     {
