@@ -11,6 +11,7 @@ import shutil
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import TypedDict
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 SANITIZER_VERSION = "1.0"
@@ -45,7 +46,10 @@ CAPTURE_OUTCOMES = (
     "operator_aborted",
     "safety_policy_blocked",
     "browser_incompatible",
+    "browser_failed",
+    "diagnostic_summary_failed",
 )
+DIAGNOSTIC_SCHEMA_VERSION = 1
 SPINNER_REASONS = (
     "blocked_dependency",
     "javascript_exception",
@@ -111,6 +115,89 @@ class RequestDecision:
     classification: str
     reason: str
     essential: bool
+
+
+class DiagnosticEvent(TypedDict, total=False):
+    """Normalized, sanitized browser diagnostic; only type and timestamp are required."""
+
+    diagnostic_schema_version: int
+    event_type: str
+    timestamp: str
+    source_id: str
+    method: str
+    request_method: str
+    host: str
+    path: str
+    resource_type: str
+    classification: str
+    reason: str
+    status_code: int
+    first_party: bool
+    blocked: bool
+    essential: bool
+    sanitized_message: str
+
+
+DIAGNOSTIC_EVENT_ALIASES = {
+    "request": "request_observed",
+    "response": "response_received",
+    "requestfailed": "request_failed",
+    "policy": "request_blocked",
+    "console": "console_error",
+    "pageerror": "page_error",
+}
+
+
+def normalize_diagnostic(value: object) -> DiagnosticEvent:
+    """Normalize heterogeneous browser events without inventing optional request fields."""
+    if not isinstance(value, dict):
+        value = {"sanitized_message": sanitize_diagnostic_message(value)}
+    event_type = value.get("event_type") or value.get("event")
+    if not isinstance(event_type, str) or not event_type.strip():
+        return {
+            "diagnostic_schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+            "event_type": "diagnostic_schema_error",
+            "timestamp": str(value.get("timestamp") or utc_now()),
+            "classification": "malformed_diagnostic",
+            "sanitized_message": sanitize_diagnostic_message(
+                value.get("sanitized_message") or value.get("message") or "missing event_type"
+            ),
+        }
+    event_type = DIAGNOSTIC_EVENT_ALIASES.get(event_type, event_type)
+    normalized: DiagnosticEvent = {
+        "diagnostic_schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+        "event_type": event_type,
+        "timestamp": str(value.get("timestamp") or utc_now()),
+    }
+    aliases = {
+        "status": "status_code",
+        "likely_essential": "essential",
+        "message": "sanitized_message",
+    }
+    allowed = set(DiagnosticEvent.__annotations__) - {
+        "diagnostic_schema_version",
+        "event_type",
+        "timestamp",
+    }
+    for key, raw in value.items():
+        destination = aliases.get(key, key)
+        if destination not in allowed or raw is None:
+            continue
+        if destination in {"sanitized_message", "reason"}:
+            normalized[destination] = sanitize_diagnostic_message(raw)
+        else:
+            normalized[destination] = raw
+    if event_type == "request_blocked":
+        normalized["blocked"] = True
+    if value.get("csp_violation"):
+        normalized["classification"] = "csp_violation"
+    return normalized
+
+
+def normalize_diagnostics(values: object) -> list[DiagnosticEvent]:
+    if not isinstance(values, (list, tuple)):
+        return [normalize_diagnostic(values)]
+    return [normalize_diagnostic(value) for value in values]
 
 
 def classify_request(
@@ -929,46 +1016,52 @@ def evaluate_bidbuy_startup(
     result_state: str | None = None,
 ) -> dict:
     """Evaluate BidBuy's startup contract from sanitized browser observations."""
+    diagnostics = normalize_diagnostics(diagnostics)
     expected = [
         row
         for row in diagnostics
-        if row.get("event") == "request"
+        if row.get("event_type") == "request_observed"
         and row.get("method") == "POST"
         and row.get("path") == BIDBUY_SEARCH_PATH
     ]
     responses = [
         row
         for row in diagnostics
-        if row.get("event") == "response"
+        if row.get("event_type") == "response_received"
         and row.get("request_method") == "POST"
         and row.get("path") == BIDBUY_SEARCH_PATH
-        and 200 <= row.get("status", 0) < 400
+        and 200 <= row.get("status_code", 0) < 400
     ]
     html_ok = any(
-        row.get("event") == "response"
+        row.get("event_type") == "response_received"
         and row.get("resource_type") == "document"
         and row.get("first_party")
-        and 200 <= row.get("status", 0) < 400
+        and 200 <= row.get("status_code", 0) < 400
         for row in diagnostics
     )
     jsf_scripts_ok = any(
-        row.get("event") == "response"
+        row.get("event_type") == "response_received"
         and row.get("resource_type") == "script"
         and row.get("first_party")
         and ("javax.faces.resource" in row.get("path", "") or "primefaces" in row.get("path", "").lower())
-        and 200 <= row.get("status", 0) < 400
+        and 200 <= row.get("status_code", 0) < 400
         for row in diagnostics
     )
     blocked_essential = any(
-        row.get("event") == "policy" and row.get("likely_essential") for row in diagnostics
+        row.get("event_type") == "request_blocked" and row.get("essential")
+        for row in diagnostics
     )
     script_error = any(
-        row.get("event") == "pageerror"
-        or (row.get("event") == "console" and row.get("csp_violation"))
+        row.get("event_type") == "page_error"
+        or (
+            row.get("event_type") == "console_error"
+            and row.get("classification") == "csp_violation"
+        )
         for row in diagnostics
     )
     failed_first_party = any(
-        row.get("event") == "requestfailed" and row.get("first_party") for row in diagnostics
+        row.get("event_type") == "request_failed" and row.get("first_party")
+        for row in diagnostics
     )
     success = bool(
         html_ok
@@ -1042,11 +1135,13 @@ def inspect_bidbuy_result_state(page) -> dict:
     def failure(probe: str, error: object) -> None:
         state["diagnostic_probe_failed"] = True
         state["diagnostics"].append(
-            {
-                "event": "result_state_probe_failed",
-                "probe": probe,
-                "message": sanitize_diagnostic_message(error),
-            }
+            normalize_diagnostic(
+                {
+                    "event_type": "result_state_probe_failed",
+                    "classification": probe,
+                    "sanitized_message": sanitize_diagnostic_message(error),
+                }
+            )
         )
 
     try:
@@ -1084,6 +1179,129 @@ def inspect_bidbuy_result_state(page) -> dict:
         elif state["overlay_visible"]:
             state["result_state"] = "initialization_failed"
     return state
+
+
+def build_capture_summary(
+    config: CaptureConfig,
+    diagnostics: object,
+    counts: dict,
+    startup: dict,
+    browser_info: dict,
+) -> tuple[list[DiagnosticEvent], dict]:
+    """Build request counters only from schema-valid blocked-request diagnostics."""
+    normalized = normalize_diagnostics(diagnostics)
+    blocked = [row for row in normalized if row.get("event_type") == "request_blocked"]
+    summary = {
+        "diagnostic_schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+        "requests_allowed_by_method": counts.get("allowed", {}),
+        "requests_blocked_by_method": counts.get("blocked", {}),
+        "blocked_first_party_requests": sum(
+            1 for row in blocked if row.get("host") in config.allowed_hosts
+        ),
+        "blocked_third_party_requests": sum(
+            1
+            for row in blocked
+            if row.get("host") and row.get("host") not in config.allowed_hosts
+        ),
+        "essential_first_party_request_blocked": any(
+            row.get("host") in config.allowed_hosts and bool(row.get("essential"))
+            for row in blocked
+        ),
+        "diagnostic_schema_errors": sum(
+            row.get("event_type") == "diagnostic_schema_error" for row in normalized
+        ),
+        **startup,
+        "browser": browser_info,
+    }
+    summary.setdefault("capture_outcome", "capture_partially_succeeded")
+    summary.setdefault("startup_succeeded", False)
+    return normalized, summary
+
+
+def write_capture_reports(
+    *,
+    config: CaptureConfig,
+    raw: Path,
+    diagnostics: object,
+    counts: dict,
+    startup: dict,
+    browser_info: dict,
+    summary_builder=build_capture_summary,
+) -> dict:
+    """Write normal or fallback reporting after HAR finalization; never raise for aggregation."""
+    label = validate_label(config.label)
+    report = config.output_directory / "reports" / f"{label}-capture.json"
+    summary_path = config.output_directory / "reports" / f"{label}-summary.json"
+    manifest = config.output_directory / "reports" / f"{label}-capture-manifest.json"
+    report.parent.mkdir(parents=True, exist_ok=True)
+    reporting_failed = False
+    try:
+        normalized, summary = summary_builder(
+            config, diagnostics, counts, startup, browser_info
+        )
+    except Exception as exc:
+        reporting_failed = True
+        normalized = normalize_diagnostics(diagnostics)
+        normalized.append(
+            normalize_diagnostic(
+                {
+                    "event_type": "diagnostic_summary_failed",
+                    "classification": "reporting_failure",
+                    "sanitized_message": exc,
+                }
+            )
+        )
+        summary = {
+            "diagnostic_schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+            "capture_outcome": "diagnostic_summary_failed",
+            "startup_succeeded": False,
+            "diagnostic_schema_errors": sum(
+                row.get("event_type") == "diagnostic_schema_error" for row in normalized
+            ),
+            "sanitized_message": sanitize_diagnostic_message(exc),
+        }
+    payload = {
+        "diagnostic_schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+        "diagnostics": normalized,
+        "summary": summary,
+    }
+    report.write_text(json.dumps(payload, indent=2) + "\n")
+    summary_path.write_text(json.dumps(summary, indent=2) + "\n")
+    manifest_payload = {
+        "diagnostic_schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+        "capture_outcome": summary["capture_outcome"],
+        "raw_har": str(raw),
+        "diagnostic_report": str(report),
+        "capture_manifest": str(manifest),
+        "summary": str(summary_path),
+    }
+    manifest.write_text(json.dumps(manifest_payload, indent=2) + "\n")
+    return {**manifest_payload, "reporting_failed": reporting_failed}
+
+
+def capture_artifact_paths(config: CaptureConfig, raw: Path) -> dict[str, str]:
+    label = validate_label(config.label)
+    reports = config.output_directory / "reports"
+    candidates = {
+        "raw_har": raw,
+        "diagnostic_report": reports / f"{label}-capture.json",
+        "capture_manifest": reports / f"{label}-capture-manifest.json",
+        "summary": reports / f"{label}-summary.json",
+    }
+    return {name: str(path) for name, path in candidates.items() if path.exists()}
+
+
+def close_capture_resources(context, browser, record) -> None:
+    """Best-effort resource closure that records, rather than raises, close diagnostics."""
+    try:
+        context.close()
+    except Exception as exc:
+        record("context_close_failed", sanitized_message=exc)
+    if browser is not None:
+        try:
+            browser.close()
+        except Exception as exc:
+            record("browser_close_failed", sanitized_message=exc)
 
 
 def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
@@ -1130,12 +1348,15 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
                     {
                         "diagnostics": [
                             {
-                                "event": "browser_launch_failed",
-                                "message": sanitize_diagnostic_message(exc),
+                                "diagnostic_schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+                                "event_type": "browser_launch_failed",
+                                "timestamp": utc_now(),
+                                "sanitized_message": sanitize_diagnostic_message(exc),
                             }
                         ],
                         "summary": {
-                            "capture_outcome": "browser_incompatible",
+                            "diagnostic_schema_version": DIAGNOSTIC_SCHEMA_VERSION,
+                            "capture_outcome": "browser_failed",
                             "suspected_spinner_reason": "browser_channel_incompatibility",
                             "requested_channel": config.browser,
                         },
@@ -1153,19 +1374,23 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
         diagnostics = []
         counts = {"allowed": {}, "blocked": {}}
 
-        def record(event: str, **fields) -> None:
-            diagnostics.append({"timestamp": utc_now(), "event": event, **fields})
+        def record(event_type: str, **fields) -> None:
+            diagnostics.append(
+                normalize_diagnostic(
+                    {"timestamp": utc_now(), "event_type": event_type, **fields}
+                )
+            )
 
         def on_request(request) -> None:
-            record("request", **_request_diagnostic(request))
+            record("request_observed", **_request_diagnostic(request))
 
         def on_response(response) -> None:
             request = response.request
             parts = urlsplit(response.url)
             first_party = (parts.hostname or "").lower() in config.allowed_hosts
             record(
-                "response",
-                status=response.status,
+                "response_received",
+                status_code=response.status,
                 host=parts.hostname,
                 path=parts.path or "/",
                 resource_type=request.resource_type,
@@ -1177,10 +1402,10 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
         def on_request_failed(request) -> None:
             parts = urlsplit(request.url)
             record(
-                "requestfailed",
+                "request_failed",
                 **_request_diagnostic(request),
                 first_party=(parts.hostname or "").lower() in config.allowed_hosts,
-                failure_reason=sanitize_diagnostic_message(request.failure or "unknown"),
+                reason=sanitize_diagnostic_message(request.failure or "unknown"),
             )
 
         def route_handler(route):
@@ -1207,7 +1432,7 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
             if request_count > config.max_requests or not decision.allowed:
                 parts = urlsplit(request.url)
                 record(
-                    "policy",
+                    "request_blocked",
                     source_id=config.source_id,
                     method=request.method,
                     host=parts.hostname,
@@ -1221,7 +1446,7 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
                         if request_count > config.max_requests
                         else decision.reason
                     ),
-                    likely_essential=decision.essential,
+                    essential=decision.essential,
                 )
                 route.abort()
                 return
@@ -1237,16 +1462,20 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
         page.on(
             "console",
             lambda message: record(
-                "console",
-                category=message.type,
-                message=sanitize_diagnostic_message(message.text),
-                csp_violation="content security policy" in message.text.lower(),
-                mixed_content="mixed content" in message.text.lower(),
+                "console_error",
+                classification=(
+                    "csp_violation"
+                    if "content security policy" in message.text.lower()
+                    else "mixed_content"
+                    if "mixed content" in message.text.lower()
+                    else message.type
+                ),
+                sanitized_message=message.text,
             ),
         )
         page.on(
             "pageerror",
-            lambda error: record("pageerror", message=sanitize_diagnostic_message(error)),
+            lambda error: record("page_error", sanitized_message=error),
         )
         page.set_default_timeout(config.action_timeout * 1000)
         page.goto(
@@ -1274,14 +1503,14 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
             except Exception as exc:
                 record(
                     "startup_wait_incomplete",
-                    message=sanitize_diagnostic_message(exc),
+                    sanitized_message=exc,
                 )
             inspection = inspect_bidbuy_result_state(page)
             for diagnostic in inspection["diagnostics"]:
                 record(
-                    diagnostic["event"],
-                    probe=diagnostic["probe"],
-                    message=diagnostic["message"],
+                    diagnostic.get("event_type", "diagnostic_schema_error"),
+                    classification=diagnostic.get("classification"),
+                    sanitized_message=diagnostic.get("sanitized_message", "malformed probe"),
                 )
             overlay_visible = inspection["overlay_visible"]
             results_state_visible = bool(
@@ -1310,44 +1539,40 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
                 input()
             except (EOFError, KeyboardInterrupt):
                 startup["capture_outcome"] = "operator_aborted"
-        summary = {
-            "requests_allowed_by_method": counts["allowed"],
-            "requests_blocked_by_method": counts["blocked"],
-            "blocked_first_party_requests": sum(
-                d["host"] in config.allowed_hosts for d in diagnostics
-            ),
-            "blocked_third_party_requests": sum(
-                d["host"] not in config.allowed_hosts for d in diagnostics
-            ),
-            "essential_first_party_request_blocked": any(
-                d["likely_essential"] for d in diagnostics
-            ),
-            **startup,
-            "browser": {
-                "requested_channel": config.browser,
-                "resolved_channel": channel or "bundled-chromium",
-                "version": browser.version if browser is not None else context.browser.version,
-                "headless": False,
-                "profile_type": "persistent" if config.profile_directory else "ephemeral",
-                "request_policy_mode": config.request_policy_mode,
-            },
+        try:
+            browser_version = (
+                browser.version if browser is not None else context.browser.version
+            )
+        except Exception as exc:
+            browser_version = "unknown"
+            record("browser_state_unavailable", sanitized_message=exc)
+        browser_info = {
+            "requested_channel": config.browser,
+            "resolved_channel": channel or "bundled-chromium",
+            "version": browser_version,
+            "headless": False,
+            "profile_type": "persistent" if config.profile_directory else "ephemeral",
+            "request_policy_mode": config.request_policy_mode,
         }
-        report = (
-            config.output_directory / "reports" / f"{validate_label(config.label)}-capture.json"
+        # Closing the context flushes Playwright's HAR. Reporting happens only afterward.
+        close_capture_resources(context, browser, record)
+        artifacts = write_capture_reports(
+            config=config,
+            raw=raw,
+            diagnostics=diagnostics,
+            counts=counts,
+            startup=startup,
+            browser_info=browser_info,
         )
-        report.parent.mkdir(parents=True, exist_ok=True)
-        report.write_text(
-            json.dumps({"diagnostics": diagnostics, "summary": summary}, indent=2) + "\n"
-        )
-        print(json.dumps(summary, indent=2))
-        context.close()
-        if browser is not None:
-            browser.close()
+        summary = json.loads(Path(artifacts["summary"]).read_text())
+        print(json.dumps({**summary, **capture_artifact_paths(config, raw)}, indent=2))
+        if artifacts["reporting_failed"]:
+            return raw
         if config.source_id == "il-bidbuy" and not startup["startup_succeeded"]:
             message = startup.get("message") or "BidBuy initialization failed after diagnostics."
             raise RuntimeError(
                 f"{message}\nPartial raw HAR preserved at: {raw}\n"
-                f"Sanitized diagnostic report: {report}\n"
+                f"Sanitized diagnostic report: {artifacts['diagnostic_report']}\n"
                 "Next step: retry with --browser chrome or --browser msedge and an alternate "
                 "--request-policy mode; if initialization still fails, use import-har with a "
                 "successful anonymous manual-browser HAR."

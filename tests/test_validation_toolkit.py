@@ -13,17 +13,21 @@ from sled_aggregator.validation.toolkit import (
     Finding,
     analyze_har,
     approve_evidence,
+    build_capture_summary,
     classify_request,
+    close_capture_resources,
     evaluate_bidbuy_startup,
     extract_fixture,
     import_har,
     ingest_evidence,
     inspect_bidbuy_result_state,
+    normalize_diagnostic,
     sanitize_diagnostic_message,
     sanitize_har,
     scan_artifact,
     validate_label,
     validate_public_url,
+    write_capture_reports,
 )
 
 
@@ -421,7 +425,7 @@ class ToolkitTests(unittest.TestCase):
         )
         self.assertEqual(result["capture_outcome"], "capture_partially_succeeded")
         self.assertFalse(result["startup_succeeded"])
-        diagnostic = inspection["diagnostics"][0]["message"]
+        diagnostic = inspection["diagnostics"][0]["sanitized_message"]
         self.assertNotIn("secret", diagnostic)
         self.assertIn("https://example.gov/search", diagnostic)
 
@@ -433,6 +437,105 @@ class ToolkitTests(unittest.TestCase):
             self.assertTrue(inspection["diagnostic_probe_failed"])
             self.assertEqual(inspection["result_state"], "unknown")
             self.assertEqual(raw.read_bytes(), b"partial capture")
+
+    def test_mixed_diagnostic_schema_and_request_counters_are_safe(self):
+        diagnostics = [
+            {
+                "event_type": "request_blocked",
+                "host": "www.google-analytics.com",
+                "method": "GET",
+            },
+            {
+                "event_type": "request_blocked",
+                "host": "www.bidbuy.illinois.gov",
+                "method": "POST",
+                "essential": True,
+            },
+            {"event_type": "spinner_state", "classification": "spinner_visible"},
+            {"event_type": "console_error", "sanitized_message": "example"},
+            {"event_type": "page_error", "sanitized_message": "example"},
+            {"event_type": "startup_state", "classification": "unknown"},
+            {
+                "event_type": "request_failed",
+                "host": "www.bidbuy.illinois.gov",
+                "reason": "timeout",
+            },
+            {"sanitized_message": "missing type"},
+        ]
+        normalized, summary = build_capture_summary(
+            self.bidbuy_config(),
+            diagnostics,
+            {"allowed": {}, "blocked": {"GET": 1, "POST": 1}},
+            {"capture_outcome": "capture_partially_succeeded"},
+            {},
+        )
+        self.assertEqual(summary["blocked_first_party_requests"], 1)
+        self.assertEqual(summary["blocked_third_party_requests"], 1)
+        self.assertTrue(summary["essential_first_party_request_blocked"])
+        self.assertEqual(summary["diagnostic_schema_errors"], 1)
+        self.assertEqual(normalized[-1]["event_type"], "diagnostic_schema_error")
+        self.assertTrue(
+            all(row["diagnostic_schema_version"] == 1 for row in normalized)
+        )
+
+    def test_diagnostic_normalization_sanitizes_sensitive_values(self):
+        diagnostic = normalize_diagnostic(
+            {
+                "event_type": "console_error",
+                "sanitized_message": (
+                    "https://example.gov/path?token=hidden Cookie=session-secret"
+                ),
+            }
+        )
+        serialized = json.dumps(diagnostic)
+        self.assertNotIn("hidden", serialized)
+        self.assertNotIn("session-secret", serialized)
+
+    def test_reporting_failure_preserves_har_and_writes_fallback(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            config = CaptureConfig(
+                **{
+                    **vars(self.bidbuy_config()),
+                    "output_directory": Path(tmp),
+                }
+            )
+            raw = Path(tmp) / "raw" / "safe.har"
+            raw.parent.mkdir()
+            raw.write_bytes(b"partial capture")
+
+            def fail_summary(*args):
+                raise KeyError("host token=secret-value")
+
+            artifacts = write_capture_reports(
+                config=config,
+                raw=raw,
+                diagnostics=[{"event_type": "console_error"}],
+                counts={"allowed": {}, "blocked": {}},
+                startup={"capture_outcome": "capture_partially_succeeded"},
+                browser_info={},
+                summary_builder=fail_summary,
+            )
+            self.assertTrue(artifacts["reporting_failed"])
+            self.assertEqual(artifacts["raw_har"], str(raw))
+            self.assertEqual(raw.read_bytes(), b"partial capture")
+            summary = json.loads(Path(artifacts["summary"]).read_text())
+            self.assertEqual(summary["capture_outcome"], "diagnostic_summary_failed")
+            self.assertNotIn("secret-value", json.dumps(summary))
+            self.assertTrue(Path(artifacts["diagnostic_report"]).exists())
+            self.assertTrue(Path(artifacts["capture_manifest"]).exists())
+
+    def test_capture_resources_close_even_when_reporting_would_fail(self):
+        closed = []
+
+        class Resource:
+            def __init__(self, name):
+                self.name = name
+
+            def close(self):
+                closed.append(self.name)
+
+        close_capture_resources(Resource("context"), Resource("browser"), lambda *a, **k: None)
+        self.assertEqual(closed, ["context", "browser"])
 
     def test_bidbuy_javascript_and_request_failures_are_distinguished(self):
         diagnostics = self.bidbuy_startup_diagnostics(post=False, response=False)

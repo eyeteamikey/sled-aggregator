@@ -12,6 +12,7 @@ from .toolkit import (
     CaptureConfig,
     analyze_har,
     approve_evidence,
+    capture_artifact_paths,
     capture_manual,
     evidence_records,
     extract_fixture,
@@ -213,7 +214,8 @@ def main(argv=None) -> int:
                     },
                 )
             else:
-                _write(None, {"raw_har": str(capture_manual(config, Path.cwd()))})
+                raw_har = capture_manual(config, Path.cwd())
+                _write(None, capture_artifact_paths(config, raw_har))
         elif args.command == "import-har":
             load_source(args.registry, args.source)
             _write(None, import_har(args.input, args.workspace, args.source, Path.cwd()))
