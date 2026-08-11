@@ -8,7 +8,6 @@ import json
 import math
 import re
 import shutil
-from contextlib import suppress
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -60,6 +59,11 @@ SPINNER_REASONS = (
 SUPPORTED_BROWSERS = ("chromium", "chrome", "msedge")
 REQUEST_POLICY_MODES = ("observe", "first-party", "full")
 BIDBUY_SEARCH_PATH = "/bso/view/search/external/advancedSearchBid.xhtml"
+BIDBUY_RESULT_SELECTOR = '.ui-datatable, #bidSearchResultsForm, [id*="bidSearchResults"]'
+BIDBUY_EMPTY_RESULTS = re.compile(
+    r"no\s+(records|results|bids)\s+found", re.IGNORECASE
+)
+BIDBUY_SPINNER_SELECTOR = ".ui-blockui:visible, .ui-widget-overlay:visible"
 MUTATION_PATTERN = re.compile(
     r"login|sign[-_]?in|register|create.?account|password|upload|bid|quote|proposal|"
     r"supplier|profile|cart|response.?line|save|update|delete|publish|award|checkout|"
@@ -917,7 +921,12 @@ def _request_diagnostic(request, **extra) -> dict:
 
 
 def evaluate_bidbuy_startup(
-    diagnostics: list[dict], *, overlay_visible: bool, results_state_visible: bool
+    diagnostics: list[dict],
+    *,
+    overlay_visible: bool,
+    results_state_visible: bool,
+    diagnostic_probe_failed: bool = False,
+    result_state: str | None = None,
 ) -> dict:
     """Evaluate BidBuy's startup contract from sanitized browser observations."""
     expected = [
@@ -968,11 +977,15 @@ def evaluate_bidbuy_startup(
         and responses
         and not overlay_visible
         and results_state_visible
+        and not diagnostic_probe_failed
     )
     reason = None
     message = None
     if not success:
-        if blocked_essential:
+        if diagnostic_probe_failed:
+            reason = "unknown_after_diagnostics"
+            message = "BidBuy result-state inspection failed; capture classification is unknown."
+        elif blocked_essential:
             reason = "blocked_dependency"
         elif script_error:
             reason = "javascript_exception"
@@ -995,6 +1008,8 @@ def evaluate_bidbuy_startup(
         else:
             reason = "unknown_after_diagnostics"
     outcome = "capture_succeeded" if success else "initialization_failed"
+    if diagnostic_probe_failed:
+        outcome = "capture_partially_succeeded"
     if reason == "blocked_dependency":
         outcome = "safety_policy_blocked"
     return {
@@ -1006,9 +1021,69 @@ def evaluate_bidbuy_startup(
         "required_jsf_primefaces_script_received": jsf_scripts_ok,
         "loading_overlay_visible": overlay_visible,
         "results_or_empty_state_visible": results_state_visible,
+        "result_state": result_state or ("observed" if results_state_visible else "unknown"),
+        "diagnostic_probe_failed": diagnostic_probe_failed,
         "suspected_spinner_reason": reason,
         "message": message,
     }
+
+
+def inspect_bidbuy_result_state(page) -> dict:
+    """Inspect independent BidBuy UI states without allowing diagnostics to abort capture."""
+    state = {
+        "overlay_visible": False,
+        "results_found": False,
+        "empty_results_found": False,
+        "result_state": "unknown",
+        "diagnostic_probe_failed": False,
+        "diagnostics": [],
+    }
+
+    def failure(probe: str, error: object) -> None:
+        state["diagnostic_probe_failed"] = True
+        state["diagnostics"].append(
+            {
+                "event": "result_state_probe_failed",
+                "probe": probe,
+                "message": sanitize_diagnostic_message(error),
+            }
+        )
+
+    try:
+        if page.is_closed():
+            raise RuntimeError("page is closed")
+        # Accessing the owning context detects a context closed between navigation and probes.
+        _ = page.context.pages
+    except Exception as exc:
+        failure("page_state", exc)
+        return state
+
+    probes = (
+        ("spinner", lambda: page.locator(BIDBUY_SPINNER_SELECTOR).count() > 0),
+        ("results", lambda: page.locator(BIDBUY_RESULT_SELECTOR).count() > 0),
+        ("empty_results", lambda: page.get_by_text(BIDBUY_EMPTY_RESULTS).count() > 0),
+    )
+    for name, probe in probes:
+        try:
+            value = probe()
+        except Exception as exc:
+            failure(name, exc)
+            continue
+        if name == "spinner":
+            state["overlay_visible"] = value
+        elif name == "results":
+            state["results_found"] = value
+        else:
+            state["empty_results_found"] = value
+
+    if not state["diagnostic_probe_failed"]:
+        if state["results_found"]:
+            state["result_state"] = "results_observed"
+        elif state["empty_results_found"]:
+            state["result_state"] = "empty_results_observed"
+        elif state["overlay_visible"]:
+            state["result_state"] = "initialization_failed"
+    return state
 
 
 def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
@@ -1182,32 +1257,42 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
         overlay_visible = False
         results_state_visible = False
         if config.source_id == "il-bidbuy":
-            with suppress(Exception):  # Playwright timeout/error is represented in diagnostics.
+            try:
                 page.wait_for_function(
-                    """() => {
+                    r"""() => {
                       const overlays = [...document.querySelectorAll('.ui-blockui, .ui-widget-overlay')];
                       const visible = overlays.some(e => {
                         const s = getComputedStyle(e); const r = e.getBoundingClientRect();
                         return s.display !== 'none' && s.visibility !== 'hidden' && r.width && r.height;
                       });
                       const result = document.querySelector('.ui-datatable, #bidSearchResultsForm, [id*="bidSearchResults"]');
-                      const empty = /no (records|results|bids) found/i.test(document.body.innerText);
+                      const empty = /no\s+(records|results|bids)\s+found/i.test(document.body.innerText);
                       return !visible && !!(result || empty);
                     }""",
                     timeout=config.action_timeout * 1000,
                 )
-            overlay_visible = page.locator(".ui-blockui:visible, .ui-widget-overlay:visible").count() > 0
-            results_state_visible = (
-                page.locator(
-                    '.ui-datatable, #bidSearchResultsForm, [id*="bidSearchResults"], '
-                    'text=/no (records|results|bids) found/i'
-                ).count()
-                > 0
+            except Exception as exc:
+                record(
+                    "startup_wait_incomplete",
+                    message=sanitize_diagnostic_message(exc),
+                )
+            inspection = inspect_bidbuy_result_state(page)
+            for diagnostic in inspection["diagnostics"]:
+                record(
+                    diagnostic["event"],
+                    probe=diagnostic["probe"],
+                    message=diagnostic["message"],
+                )
+            overlay_visible = inspection["overlay_visible"]
+            results_state_visible = bool(
+                inspection["results_found"] or inspection["empty_results_found"]
             )
             startup = evaluate_bidbuy_startup(
                 diagnostics,
                 overlay_visible=overlay_visible,
                 results_state_visible=results_state_visible,
+                diagnostic_probe_failed=inspection["diagnostic_probe_failed"],
+                result_state=inspection["result_state"],
             )
         else:
             startup = {

@@ -6,6 +6,9 @@ from pathlib import Path
 
 from sled_aggregator.validation.__main__ import main
 from sled_aggregator.validation.toolkit import (
+    BIDBUY_EMPTY_RESULTS,
+    BIDBUY_RESULT_SELECTOR,
+    BIDBUY_SPINNER_SELECTOR,
     CaptureConfig,
     Finding,
     analyze_har,
@@ -15,6 +18,7 @@ from sled_aggregator.validation.toolkit import (
     extract_fixture,
     import_har,
     ingest_evidence,
+    inspect_bidbuy_result_state,
     sanitize_diagnostic_message,
     sanitize_har,
     scan_artifact,
@@ -78,6 +82,39 @@ def har():
 
 
 class ToolkitTests(unittest.TestCase):
+    class FakeLocator:
+        def __init__(self, value=0, error=None):
+            self.value = value
+            self.error = error
+
+        def count(self):
+            if self.error:
+                raise self.error
+            return self.value
+
+    class FakePage:
+        def __init__(self, *, css=None, text=0, closed=False, error=None):
+            self.css = css or {}
+            self.text = text
+            self.closed = closed
+            self.error = error
+            self.locator_calls = []
+            self.text_calls = []
+            self.context = type("Context", (), {"pages": []})()
+
+        def is_closed(self):
+            return self.closed
+
+        def locator(self, selector):
+            self.locator_calls.append(selector)
+            if self.error and selector == BIDBUY_RESULT_SELECTOR:
+                return ToolkitTests.FakeLocator(error=self.error)
+            return ToolkitTests.FakeLocator(self.css.get(selector, 0))
+
+        def get_by_text(self, pattern):
+            self.text_calls.append(pattern)
+            return ToolkitTests.FakeLocator(self.text)
+
     def bidbuy_config(self):
         import json
 
@@ -339,6 +376,63 @@ class ToolkitTests(unittest.TestCase):
         )
         self.assertEqual(result["capture_outcome"], "capture_succeeded")
         self.assertTrue(result["startup_succeeded"])
+
+    def test_bidbuy_result_and_empty_selectors_execute_independently(self):
+        page = self.FakePage(css={BIDBUY_RESULT_SELECTOR: 1})
+        inspection = inspect_bidbuy_result_state(page)
+        self.assertEqual(inspection["result_state"], "results_observed")
+        self.assertEqual(page.locator_calls, [BIDBUY_SPINNER_SELECTOR, BIDBUY_RESULT_SELECTOR])
+        self.assertEqual(page.text_calls, [BIDBUY_EMPTY_RESULTS])
+        self.assertNotIn("text=", BIDBUY_RESULT_SELECTOR)
+        self.assertNotIn("xpath=", BIDBUY_RESULT_SELECTOR)
+        self.assertIsInstance(BIDBUY_EMPTY_RESULTS, type(__import__("re").compile("")))
+
+        empty_page = self.FakePage(text=1)
+        empty = inspect_bidbuy_result_state(empty_page)
+        self.assertEqual(empty["result_state"], "empty_results_observed")
+        self.assertTrue(BIDBUY_EMPTY_RESULTS.search("No records found"))
+
+    def test_bidbuy_persistent_spinner_is_initialization_failed(self):
+        page = self.FakePage(css={BIDBUY_SPINNER_SELECTOR: 1})
+        inspection = inspect_bidbuy_result_state(page)
+        result = evaluate_bidbuy_startup(
+            self.bidbuy_startup_diagnostics(),
+            overlay_visible=inspection["overlay_visible"],
+            results_state_visible=False,
+            result_state=inspection["result_state"],
+        )
+        self.assertEqual(inspection["result_state"], "initialization_failed")
+        self.assertEqual(result["capture_outcome"], "initialization_failed")
+
+    def test_bidbuy_locator_failure_is_sanitized_partial_failure(self):
+        page = self.FakePage(
+            error=RuntimeError(
+                "detached frame at https://example.gov/search?token=secret "
+                "Cookie=session-secret"
+            )
+        )
+        inspection = inspect_bidbuy_result_state(page)
+        result = evaluate_bidbuy_startup(
+            self.bidbuy_startup_diagnostics(),
+            overlay_visible=inspection["overlay_visible"],
+            results_state_visible=False,
+            diagnostic_probe_failed=inspection["diagnostic_probe_failed"],
+            result_state=inspection["result_state"],
+        )
+        self.assertEqual(result["capture_outcome"], "capture_partially_succeeded")
+        self.assertFalse(result["startup_succeeded"])
+        diagnostic = inspection["diagnostics"][0]["message"]
+        self.assertNotIn("secret", diagnostic)
+        self.assertIn("https://example.gov/search", diagnostic)
+
+    def test_bidbuy_closed_page_is_safe_and_preserves_raw_har(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw = Path(tmp) / "partial.har"
+            raw.write_bytes(b"partial capture")
+            inspection = inspect_bidbuy_result_state(self.FakePage(closed=True))
+            self.assertTrue(inspection["diagnostic_probe_failed"])
+            self.assertEqual(inspection["result_state"], "unknown")
+            self.assertEqual(raw.read_bytes(), b"partial capture")
 
     def test_bidbuy_javascript_and_request_failures_are_distinguished(self):
         diagnostics = self.bidbuy_startup_diagnostics(post=False, response=False)
