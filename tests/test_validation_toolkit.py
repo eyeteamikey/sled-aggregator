@@ -1,3 +1,4 @@
+import io
 import json
 import shutil
 import tempfile
@@ -7,7 +8,9 @@ from pathlib import Path
 from sled_aggregator.validation.__main__ import main
 from sled_aggregator.validation.toolkit import (
     BIDBUY_EMPTY_RESULTS,
+    BIDBUY_POPULATED_ROW_SELECTOR,
     BIDBUY_RESULT_SELECTOR,
+    BIDBUY_SEARCH_FORM_SELECTOR,
     BIDBUY_SPINNER_SELECTOR,
     CaptureConfig,
     Finding,
@@ -22,6 +25,7 @@ from sled_aggregator.validation.toolkit import (
     ingest_evidence,
     inspect_bidbuy_result_state,
     normalize_diagnostic,
+    run_operator_phase,
     sanitize_diagnostic_message,
     sanitize_har,
     scan_artifact,
@@ -382,10 +386,10 @@ class ToolkitTests(unittest.TestCase):
         self.assertTrue(result["startup_succeeded"])
 
     def test_bidbuy_result_and_empty_selectors_execute_independently(self):
-        page = self.FakePage(css={BIDBUY_RESULT_SELECTOR: 1})
+        page = self.FakePage(css={BIDBUY_POPULATED_ROW_SELECTOR: 1})
         inspection = inspect_bidbuy_result_state(page)
-        self.assertEqual(inspection["result_state"], "results_observed")
-        self.assertEqual(page.locator_calls, [BIDBUY_SPINNER_SELECTOR, BIDBUY_RESULT_SELECTOR])
+        self.assertEqual(inspection["result_state"], "populated_results_observed")
+        self.assertIn(BIDBUY_POPULATED_ROW_SELECTOR, page.locator_calls)
         self.assertEqual(page.text_calls, [BIDBUY_EMPTY_RESULTS])
         self.assertNotIn("text=", BIDBUY_RESULT_SELECTOR)
         self.assertNotIn("xpath=", BIDBUY_RESULT_SELECTOR)
@@ -393,7 +397,7 @@ class ToolkitTests(unittest.TestCase):
 
         empty_page = self.FakePage(text=1)
         empty = inspect_bidbuy_result_state(empty_page)
-        self.assertEqual(empty["result_state"], "empty_results_observed")
+        self.assertEqual(empty["result_state"], "explicit_empty_results_observed")
         self.assertTrue(BIDBUY_EMPTY_RESULTS.search("No records found"))
 
     def test_bidbuy_persistent_spinner_is_initialization_failed(self):
@@ -405,7 +409,7 @@ class ToolkitTests(unittest.TestCase):
             results_state_visible=False,
             result_state=inspection["result_state"],
         )
-        self.assertEqual(inspection["result_state"], "initialization_failed")
+        self.assertEqual(inspection["result_state"], "spinner_visible")
         self.assertEqual(result["capture_outcome"], "initialization_failed")
 
     def test_bidbuy_locator_failure_is_sanitized_partial_failure(self):
@@ -435,8 +439,46 @@ class ToolkitTests(unittest.TestCase):
             raw.write_bytes(b"partial capture")
             inspection = inspect_bidbuy_result_state(self.FakePage(closed=True))
             self.assertTrue(inspection["diagnostic_probe_failed"])
-            self.assertEqual(inspection["result_state"], "unknown")
+            self.assertEqual(inspection["result_state"], "probe_failed")
             self.assertEqual(raw.read_bytes(), b"partial capture")
+
+    def test_bidbuy_shells_are_not_terminal_results(self):
+        search = inspect_bidbuy_result_state(
+            self.FakePage(css={BIDBUY_SEARCH_FORM_SELECTOR: 1})
+        )
+        container = inspect_bidbuy_result_state(
+            self.FakePage(css={BIDBUY_RESULT_SELECTOR: 1})
+        )
+        self.assertEqual(search["result_state"], "search_form_only")
+        self.assertFalse(search["results_found"])
+        self.assertEqual(container["result_state"], "results_container_empty")
+        self.assertFalse(container["results_found"])
+
+    def test_operator_phase_requires_explicit_commands(self):
+        output = []
+        result = run_operator_phase(
+            self.FakePage(css={BIDBUY_SEARCH_FORM_SELECTOR: 1}),
+            2,
+            input_stream=io.StringIO("\nSTATUS\nFINISH\n"),
+            output=output.append,
+        )
+        self.assertEqual(result, "finished")
+        self.assertEqual(len(output), 1)
+        self.assertIn("search_form_only", output[0])
+
+    def test_operator_phase_abort_timeout_and_browser_close(self):
+        self.assertEqual(
+            run_operator_phase(self.FakePage(), 2, input_stream=io.StringIO("ABORT\n")),
+            "operator_aborted",
+        )
+        self.assertEqual(
+            run_operator_phase(self.FakePage(), 0, input_stream=io.StringIO("")),
+            "capture_timed_out",
+        )
+        self.assertEqual(
+            run_operator_phase(self.FakePage(closed=True), 2, input_stream=io.StringIO("")),
+            "browser_closed",
+        )
 
     def test_mixed_diagnostic_schema_and_request_counters_are_safe(self):
         diagnostics = [
