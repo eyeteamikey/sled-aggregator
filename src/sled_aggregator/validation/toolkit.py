@@ -8,9 +8,13 @@ import json
 import math
 import re
 import shutil
+import sys
+import threading
+import time
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from queue import Empty, Queue
 from typing import TypedDict
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
@@ -44,6 +48,8 @@ CAPTURE_OUTCOMES = (
     "capture_partially_succeeded",
     "initialization_failed",
     "operator_aborted",
+    "capture_timed_out",
+    "browser_closed",
     "safety_policy_blocked",
     "browser_incompatible",
     "browser_failed",
@@ -63,7 +69,12 @@ SPINNER_REASONS = (
 SUPPORTED_BROWSERS = ("chromium", "chrome", "msedge")
 REQUEST_POLICY_MODES = ("observe", "first-party", "full")
 BIDBUY_SEARCH_PATH = "/bso/view/search/external/advancedSearchBid.xhtml"
-BIDBUY_RESULT_SELECTOR = '.ui-datatable, #bidSearchResultsForm, [id*="bidSearchResults"]'
+BIDBUY_SEARCH_FORM_SELECTOR = "#bidSearchResultsForm"
+BIDBUY_RESULT_SELECTOR = '.ui-datatable:visible, [id*="bidSearchResults"]:visible'
+BIDBUY_POPULATED_ROW_SELECTOR = (
+    '.ui-datatable:visible tbody tr:visible:not(.ui-datatable-empty-message):not(.ui-skeleton):has(td:not(:empty)), '
+    '[id*="bidSearchResults"]:visible tbody tr:visible:not(.ui-datatable-empty-message):not(.ui-skeleton):has(td:not(:empty))'
+)
 BIDBUY_EMPTY_RESULTS = re.compile(
     r"no\s+(records|results|bids)\s+found", re.IGNORECASE
 )
@@ -1125,6 +1136,8 @@ def inspect_bidbuy_result_state(page) -> dict:
     """Inspect independent BidBuy UI states without allowing diagnostics to abort capture."""
     state = {
         "overlay_visible": False,
+        "search_form_present": False,
+        "results_container_present": False,
         "results_found": False,
         "empty_results_found": False,
         "result_state": "unknown",
@@ -1151,11 +1164,14 @@ def inspect_bidbuy_result_state(page) -> dict:
         _ = page.context.pages
     except Exception as exc:
         failure("page_state", exc)
+        state["result_state"] = "probe_failed"
         return state
 
     probes = (
         ("spinner", lambda: page.locator(BIDBUY_SPINNER_SELECTOR).count() > 0),
-        ("results", lambda: page.locator(BIDBUY_RESULT_SELECTOR).count() > 0),
+        ("search_form", lambda: page.locator(BIDBUY_SEARCH_FORM_SELECTOR).count() > 0),
+        ("results_container", lambda: page.locator(BIDBUY_RESULT_SELECTOR).count() > 0),
+        ("results", lambda: page.locator(BIDBUY_POPULATED_ROW_SELECTOR).count() > 0),
         ("empty_results", lambda: page.get_by_text(BIDBUY_EMPTY_RESULTS).count() > 0),
     )
     for name, probe in probes:
@@ -1166,19 +1182,65 @@ def inspect_bidbuy_result_state(page) -> dict:
             continue
         if name == "spinner":
             state["overlay_visible"] = value
+        elif name == "search_form":
+            state["search_form_present"] = value
+        elif name == "results_container":
+            state["results_container_present"] = value
         elif name == "results":
             state["results_found"] = value
         else:
             state["empty_results_found"] = value
 
-    if not state["diagnostic_probe_failed"]:
-        if state["results_found"]:
-            state["result_state"] = "results_observed"
+    if state["diagnostic_probe_failed"]:
+        state["result_state"] = "probe_failed"
+    else:
+        if state["overlay_visible"]:
+            state["result_state"] = "spinner_visible"
+        elif state["results_found"]:
+            state["result_state"] = "populated_results_observed"
         elif state["empty_results_found"]:
-            state["result_state"] = "empty_results_observed"
-        elif state["overlay_visible"]:
-            state["result_state"] = "initialization_failed"
+            state["result_state"] = "explicit_empty_results_observed"
+        elif state["results_container_present"]:
+            state["result_state"] = "results_container_empty"
+        elif state["search_form_present"]:
+            state["result_state"] = "search_form_only"
     return state
+
+
+def run_operator_phase(page, max_duration: int, *, input_stream=None, output=print) -> str:
+    """Wait for an explicit operator command while independently enforcing the deadline."""
+    commands: Queue[str] = Queue()
+    stream = input_stream or sys.stdin
+
+    def read_commands() -> None:
+        while True:
+            line = stream.readline()
+            if line == "":
+                commands.put("EOF")
+                return
+            commands.put(line.strip().upper())
+
+    threading.Thread(target=read_commands, daemon=True).start()
+    deadline = time.monotonic() + max_duration
+    while True:
+        if page.is_closed():
+            return "browser_closed"
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return "capture_timed_out"
+        try:
+            command = commands.get(timeout=min(0.1, remaining))
+        except Empty:
+            continue
+        if command == "FINISH":
+            return "finished"
+        if command in {"ABORT", "EOF"}:
+            return "operator_aborted"
+        if command == "STATUS":
+            state = inspect_bidbuy_result_state(page)
+            output(json.dumps({"result_state": state["result_state"]}, sort_keys=True))
+        elif command:
+            output("Unknown command. Use STATUS, FINISH, or ABORT.")
 
 
 def build_capture_summary(
@@ -1371,15 +1433,20 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
                 f"Diagnostic report: {report}"
             ) from None
         request_count = 0
+        event_sequence = 0
         diagnostics = []
         counts = {"allowed": {}, "blocked": {}}
 
         def record(event_type: str, **fields) -> None:
+            nonlocal event_sequence
+            event_sequence += 1
             diagnostics.append(
                 normalize_diagnostic(
                     {"timestamp": utc_now(), "event_type": event_type, **fields}
                 )
             )
+            # Sequence is used only in-memory to separate initialization from operator work.
+            diagnostics[-1]["sequence"] = event_sequence
 
         def on_request(request) -> None:
             record("request_observed", **_request_diagnostic(request))
@@ -1494,9 +1561,10 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
                         const s = getComputedStyle(e); const r = e.getBoundingClientRect();
                         return s.display !== 'none' && s.visibility !== 'hidden' && r.width && r.height;
                       });
-                      const result = document.querySelector('.ui-datatable, #bidSearchResultsForm, [id*="bidSearchResults"]');
+                      const rows = [...document.querySelectorAll('.ui-datatable tbody tr, [id*="bidSearchResults"] tbody tr')]
+                        .filter(r => !r.matches('.ui-datatable-empty-message,.ui-skeleton') && r.offsetParent !== null && r.querySelector('td:not(:empty)'));
                       const empty = /no\s+(records|results|bids)\s+found/i.test(document.body.innerText);
-                      return !visible && !!(result || empty);
+                      return !visible && !!(rows.length || empty);
                     }""",
                     timeout=config.action_timeout * 1000,
                 )
@@ -1529,16 +1597,69 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
                 "startup_succeeded": None,
                 "suspected_spinner_reason": None,
             }
-        if startup.get("startup_succeeded"):
-            print(
-                "Anonymous read-only capture started. Complete the guided checklist; "
-                "press Enter to flush and close."
+        initial_sequence = event_sequence
+        if not startup.get("startup_succeeded"):
+            print("WARNING: Initial BidBuy results request has not completed.")
+        print(
+            "The browser will remain open for manual inspection. Do not log in, register, "
+            "upload files, solve CAPTCHA, or initiate vendor/bid actions. Type FINISH in the "
+            "terminal when the public walkthrough is complete. STATUS prints live state; "
+            "ABORT cancels the walkthrough."
+        )
+        try:
+            phase_result = run_operator_phase(page, config.max_duration)
+        except KeyboardInterrupt:
+            phase_result = "operator_aborted"
+
+        # Final evaluation deliberately follows all manual interaction.
+        final_inspection = inspect_bidbuy_result_state(page)
+        for diagnostic in final_inspection["diagnostics"]:
+            record(
+                diagnostic.get("event_type", "diagnostic_schema_error"),
+                classification=diagnostic.get("classification"),
+                sanitized_message=diagnostic.get("sanitized_message", "malformed probe"),
             )
-            print("Do not log in, register, solve CAPTCHA, submit bids, or perform vendor actions.")
-            try:
-                input()
-            except (EOFError, KeyboardInterrupt):
-                startup["capture_outcome"] = "operator_aborted"
+        operator_posts = [
+            row for row in diagnostics
+            if row.get("event_type") == "request_observed"
+            and row.get("method") == "POST"
+            and row.get("path") == BIDBUY_SEARCH_PATH
+            and row.get("sequence", 0) > initial_sequence
+        ]
+        operator_requests = [
+            row for row in diagnostics
+            if row.get("event_type") == "request_observed"
+            and row.get("sequence", 0) > initial_sequence
+        ]
+        operator_paths = [str(row.get("path", "")).lower() for row in operator_requests]
+        startup["initial_automatic_request_observed"] = startup.get(
+            "expected_initial_jsf_post_observed", False
+        )
+        startup["operator_initiated_search_observed"] = bool(operator_posts)
+        startup["capabilities"] = {
+            "initial_automatic_request": startup["initial_automatic_request_observed"],
+            "operator_initiated_search": bool(operator_posts),
+            "pagination": any("page" in path for path in operator_paths),
+            "detail_navigation": any("detail" in path or "viewbid" in path for path in operator_paths),
+            "attachment_metadata": any("attachment" in path for path in operator_paths),
+            "attachment_download": any(
+                row.get("method") == "GET"
+                and any(word in str(row.get("path", "")).lower() for word in ("download", "document"))
+                for row in operator_requests
+            ),
+        }
+        startup["final_visible_result_state"] = final_inspection["result_state"]
+        startup["final_evaluation_after_manual_phase"] = True
+        if phase_result != "finished":
+            startup["capture_outcome"] = phase_result
+        elif final_inspection["result_state"] in {
+            "populated_results_observed", "explicit_empty_results_observed"
+        } and operator_posts:
+            startup["capture_outcome"] = "capture_succeeded"
+        elif startup.get("startup_succeeded") or operator_posts:
+            startup["capture_outcome"] = "capture_partially_succeeded"
+        else:
+            startup["capture_outcome"] = "initialization_failed"
         try:
             browser_version = (
                 browser.version if browser is not None else context.browser.version
@@ -1568,7 +1689,7 @@ def capture_manual(config: CaptureConfig, repo_root: Path) -> Path:
         print(json.dumps({**summary, **capture_artifact_paths(config, raw)}, indent=2))
         if artifacts["reporting_failed"]:
             return raw
-        if config.source_id == "il-bidbuy" and not startup["startup_succeeded"]:
+        if config.source_id == "il-bidbuy" and startup["capture_outcome"] == "initialization_failed":
             message = startup.get("message") or "BidBuy initialization failed after diagnostics."
             raise RuntimeError(
                 f"{message}\nPartial raw HAR preserved at: {raw}\n"
