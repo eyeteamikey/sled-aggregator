@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<partial-response><changes>
+<update id="advSearchResults"><![CDATA[
+<table><thead><tr><th>Bid Solicitation #</th><th>Organization Name</th><th>Buyer</th><th>Description</th><th>Bid Opening Date</th><th>Awarded Vendor(s)</th><th>Status</th></tr></thead>
+<tbody><tr><td><a href="/bso/external/bidDetail.sda?docId=fixture-100&amp;external=true&amp;parentUrl=close">26-FIXTURE-100</a></td><td>Illinois Fixture Agency</td><td>Casey Example</td><td>Network services</td><td>08/30/2026 02:00 PM</td><td>Example Public Vendor LLC</td><td>Open</td></tr></tbody></table>
+]]></update><update id="j_id1:javax.faces.ViewState:0"><![CDATA[fixture-view-state-next]]></update>
+</changes></partial-response>

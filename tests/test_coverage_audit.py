@@ -173,7 +173,17 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(
             [task["order"] for task in plan["validation_tasks"]], list(range(1, 19))
         )
-        self.assertTrue(all(task["method_policy"] == ["GET"] for task in plan["validation_tasks"]))
+        method_policies = {
+            task["source_id"]: task["method_policy"] for task in plan["validation_tasks"]
+        }
+        self.assertEqual(method_policies["il-bidbuy"], ["GET", "POST"])
+        self.assertTrue(
+            all(
+                methods == ["GET"]
+                for source_id, methods in method_policies.items()
+                if source_id != "il-bidbuy"
+            )
+        )
 
     def test_authoritative_control_plane_and_local_regressions(self):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
@@ -251,7 +261,11 @@ class CoverageAuditTests(unittest.TestCase):
             self.assertFalse(records[code]["document_pipeline_capable"])
             self.assertEqual(source["portal_profile_key"], profile)
             self.assertEqual(source["verification_status"], "fixture_verified")
-            self.assertIsNone(source["last_verified_date"])
+            if source_id == "il-bidbuy":
+                self.assertEqual(source["last_verified_date"], "2026-08-12")
+                self.assertEqual(source["allowed_http_methods"], ["GET", "POST"])
+            else:
+                self.assertIsNone(source["last_verified_date"])
             self.assertEqual(source["document_pipeline_classification"], "manifest_only")
             self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
             self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))

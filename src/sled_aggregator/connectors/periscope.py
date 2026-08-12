@@ -2,15 +2,17 @@
 
 import asyncio
 import email.utils
+import html
 import json
 import random
 import re
+import xml.etree.ElementTree as ET
 from collections.abc import AsyncIterator, Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from html.parser import HTMLParser
 from typing import Any, Literal, Protocol
-from urllib.parse import urljoin
+from urllib.parse import parse_qs, urljoin, urlparse
 
 import httpx
 
@@ -120,6 +122,10 @@ class AsyncGetTransport(Protocol):
     async def aclose(self) -> None: ...
 
 
+class AsyncBidBuyTransport(AsyncGetTransport, Protocol):
+    async def post(self, url: str, *, data: Mapping[str, Any]) -> httpx.Response: ...
+
+
 class PeriscopeError(RuntimeError):
     """A response cannot safely be consumed."""
 
@@ -130,6 +136,215 @@ class PeriscopeAvailabilityError(PeriscopeError):
 
 class PeriscopeRestrictedError(PeriscopeError):
     """Anonymous access ended at an authentication or challenge boundary."""
+
+
+_INPUT_VALUE = re.compile(
+    r'<input\b[^>]*\bname=["\'](?P<name>[^"\']+)["\'][^>]*\bvalue=["\'](?P<value>[^"\']*)',
+    re.I,
+)
+_TAG = re.compile(r"<[^>]+>")
+
+
+def extract_bidbuy_tokens(page: str) -> tuple[str, str]:
+    """Extract ephemeral anonymous JSF tokens without persisting them."""
+    values = {match["name"]: html.unescape(match["value"]) for match in _INPUT_VALUE.finditer(page)}
+    csrf = values.get("_csrf")
+    view_state = values.get("javax.faces.ViewState")
+    if not csrf:
+        raise PeriscopeError("BidBuy anonymous page is missing CSRF state")
+    if not view_state:
+        raise PeriscopeError("BidBuy anonymous page is missing JSF ViewState")
+    return csrf, view_state
+
+
+def build_bidbuy_search_form(csrf: str, view_state: str, keywords: tuple[str, ...]) -> dict[str, str]:
+    if not csrf or not view_state:
+        raise PeriscopeError("BidBuy search requires dynamic session tokens")
+    return {
+        "bidSearchForm": "bidSearchForm",
+        "bidSearchForm:alternateId": "",
+        "bidSearchForm:bidNbr": "",
+        "bidSearchForm:buyer": "",
+        "bidSearchForm:categoryCode": "",
+        "bidSearchForm:classId": "",
+        "bidSearchForm:classItemId": "",
+        "bidSearchForm:departmentPrefix": "",
+        "bidSearchForm:desc": " ".join(keywords).strip(),
+        "bidSearchForm:itemDesc": "",
+        "bidSearchForm:openingDateFrom_input": "",
+        "bidSearchForm:openingDateTo_input": "",
+        "bidSearchForm:organization": "",
+        "bidSearchForm:status": "",
+        "bidSearchForm:typeCode": "",
+        "javax.faces.partial.ajax": "true",
+        "javax.faces.partial.execute": "@all",
+        "javax.faces.partial.render": "advSearchResults",
+        "javax.faces.source": "bidSearchForm",
+        "_csrf": csrf,
+        "javax.faces.ViewState": view_state,
+    }
+
+
+def build_bidbuy_pagination_form(
+    csrf: str, view_state: str, *, first: int, rows: int
+) -> dict[str, str]:
+    if first < 0 or rows < 1:
+        raise ValueError("BidBuy pagination bounds must be positive")
+    return {
+        "bidSearchResultsForm": "bidSearchResultsForm",
+        "bidSearchResultsForm:bidResultId": "bidSearchResultsForm:bidResultId",
+        "bidSearchResultsForm:bidResultId_first": str(first),
+        "bidSearchResultsForm:bidResultId_rows": str(rows),
+        "bidSearchResultsForm:bidResultId_pagination": "true",
+        "bidSearchResultsForm:bidResultId_encodeFeature": "true",
+        "bidSearchResultsForm:bidResultId_skipChildren": "true",
+        "bidSearchResultsForm:bidResultId_reflowDD": "0",
+        "javax.faces.partial.ajax": "true",
+        "javax.faces.partial.execute": "bidSearchResultsForm:bidResultId",
+        "javax.faces.partial.render": "bidSearchResultsForm:bidResultId",
+        "javax.faces.source": "bidSearchResultsForm:bidResultId",
+        "_csrf": csrf,
+        "javax.faces.ViewState": view_state,
+    }
+
+
+def parse_bidbuy_partial_response(payload: str) -> tuple[list[dict[str, Any]], str | None]:
+    try:
+        root = ET.fromstring(payload)
+    except ET.ParseError as exc:
+        raise PeriscopeError("BidBuy returned malformed JSF partial response") from exc
+    if root.tag.rsplit("}", 1)[-1] != "partial-response":
+        raise PeriscopeError("BidBuy response is not a JSF partial response")
+    updates = {
+        node.attrib.get("id", ""): node.text or ""
+        for node in root.iter()
+        if node.tag.rsplit("}", 1)[-1] == "update"
+    }
+    view_state = next((value for key, value in updates.items() if "ViewState" in key), None)
+    fragments = "\n".join(
+        value for key, value in updates.items() if key in {"advSearchResults", "advancedSearchMainPanelContainer"}
+    )
+    headers = [
+        _clean_html(value)
+        for value in re.findall(r"<th\b[^>]*>(.*?)</th>", fragments, re.I | re.S)
+    ]
+    records: list[dict[str, Any]] = []
+    for row in re.findall(r"<tr\b[^>]*>(.*?)</tr>", fragments, re.I | re.S):
+        cells = re.findall(r"<td\b[^>]*>(.*?)</td>", row, re.I | re.S)
+        if not cells:
+            continue
+        record = {
+            _result_key(headers[index] if index < len(headers) else f"column_{index}"): _clean_html(cell)
+            for index, cell in enumerate(cells)
+        }
+        link = re.search(r'href=["\']([^"\']*bidDetail\.sda[^"\']*)', row, re.I)
+        if link:
+            record["url"] = html.unescape(link.group(1))
+            query = parse_qs(urlparse(record["url"]).query)
+            record["id"] = (query.get("docId") or [record.get("number")])[0]
+        record.setdefault("title", record.get("description"))
+        if record.get("id") and record.get("title"):
+            records.append(record)
+    return records, view_state.strip() if view_state else None
+
+
+def parse_content_disposition_filename(value: str | None) -> str | None:
+    if not value:
+        return None
+    encoded = re.search(r"filename\*=UTF-8''([^;]+)", value, re.I)
+    plain = re.search(r'filename=["\']?([^;"\']+)', value, re.I)
+    candidate = encoded.group(1) if encoded else plain.group(1).strip() if plain else None
+    if not candidate:
+        return None
+    from urllib.parse import unquote
+
+    return unquote(candidate).replace("\\", "/").rsplit("/", 1)[-1]
+
+
+_ATTACHMENT_FIELDS = frozenset(
+    {"bidId", "currentPage", "destination", "docId", "downloadFileNbr", "fromQuote",
+     "itemNbr", "mode", "parentUrl", "querySql"}
+)
+
+
+def build_bidbuy_attachment_form(metadata: Mapping[str, Any]) -> dict[str, str]:
+    """Construct only the observed anonymous read-only attachment contract."""
+    form = {key: str(value) for key, value in metadata.items() if key in _ATTACHMENT_FIELDS}
+    if not form.get("docId") or not form.get("downloadFileNbr"):
+        raise PeriscopeError("BidBuy attachment requires document and file identifiers")
+    return form
+
+
+def parse_bidbuy_detail(payload: str, detail_url: str) -> dict[str, Any]:
+    pairs: dict[str, str] = {}
+    for label, value in re.findall(
+        r"<(?:th|label)\b[^>]*>(.*?)</(?:th|label)>\s*<td\b[^>]*>(.*?)</td>",
+        payload,
+        re.I | re.S,
+    ):
+        key, cleaned = _clean_html(label).casefold(), _clean_html(value)
+        if key and cleaned:
+            pairs[key] = cleaned
+    contacts = {
+        key: value for key, value in pairs.items()
+        if any(marker in key for marker in ("contact", "buyer", "email", "phone", "address"))
+    }
+    vendors = {
+        key: value for key, value in pairs.items()
+        if any(marker in key for marker in ("vendor", "bid holder", "plan holder"))
+    }
+    attachments: list[dict[str, Any]] = []
+    for form_match in re.finditer(r"<form\b[^>]*>(.*?)</form>", payload, re.I | re.S):
+        fields = {
+            match["name"]: html.unescape(match["value"])
+            for match in _INPUT_VALUE.finditer(form_match.group(1))
+            if match["name"] in _ATTACHMENT_FIELDS
+        }
+        if fields.get("docId") and fields.get("downloadFileNbr"):
+            label = _clean_html(form_match.group(1)) or "Attachment"
+            attachments.append(
+                {
+                    "id": fields["downloadFileNbr"],
+                    "label": label,
+                    "filename": label,
+                    "url": detail_url,
+                    "method": "POST",
+                    "request": build_bidbuy_attachment_form(fields),
+                    "access_state": "session-dependent",
+                }
+            )
+    result: dict[str, Any] = {
+        "detail_fields": pairs,
+        "public_contacts": contacts,
+        "public_vendors": vendors,
+        "documents": attachments,
+    }
+    for target, markers in {
+        "agency": ("department", "organization"),
+        "description": ("description",),
+        "status": ("status",),
+        "number": ("bid solicitation", "bid number"),
+    }.items():
+        value = next((v for k, v in pairs.items() if any(m in k for m in markers)), None)
+        if value:
+            result[target] = value
+    return result
+
+
+def _clean_html(value: str) -> str:
+    return " ".join(html.unescape(_TAG.sub(" ", value)).split())
+
+
+def _result_key(label: str) -> str:
+    text = label.casefold()
+    for key, marker in (
+        ("number", "solicitation"), ("agency", "organization"), ("buyer", "buyer"),
+        ("description", "description"), ("due", "opening date"), ("vendors", "awarded vendor"),
+        ("status", "status"), ("alternate_id", "alternate"), ("bid_holders", "holder"),
+    ):
+        if marker in text:
+            return key
+    return re.sub(r"\W+", "_", text).strip("_")
 
 
 @dataclass(frozen=True, slots=True)
@@ -293,6 +508,10 @@ class PeriscopeBuySpeedConnector(BaseConnector):
         limit, seen, fingerprints = min(query.limit, self.max_results), set(), set()
         yielded = 0
         try:
+            if self.portal.profile_key == "illinois/bidbuy":
+                async for item in self._discover_bidbuy(query, limit):
+                    yield item
+                return
             if self.portal.response_strategy == "fallback":
                 self._access_state = "unsupported"
                 return
@@ -331,6 +550,61 @@ class PeriscopeBuySpeedConnector(BaseConnector):
             self._last_failure_at = self._now()
             raise
 
+    async def _discover_bidbuy(
+        self, query: ConnectorQuery, limit: int
+    ) -> AsyncIterator[RawOpportunity]:
+        initial = await self._request(self.portal.search_url, {})
+        csrf, view_state = extract_bidbuy_tokens(initial.text)
+        response = await self._post(
+            self.portal.search_url, build_bidbuy_search_form(csrf, view_state, query.keywords)
+        )
+        seen: set[str] = set()
+        for page in range(self.max_pages):
+            records, updated_state = parse_bidbuy_partial_response(response.text)
+            if updated_state:
+                view_state = updated_state
+            new_records = 0
+            for record in records:
+                source_id = str(record.get("id", "")).strip()
+                if not source_id or source_id in seen:
+                    continue
+                seen.add(source_id)
+                new_records += 1
+                if self.fetch_details and record.get("url"):
+                    detail_url = urljoin(self.portal.base_url, str(record["url"]))
+                    detail = await self._request(detail_url, {})
+                    record = {**record, **parse_bidbuy_detail(detail.text, detail_url)}
+                yield await self._normalize(record)
+                if len(seen) >= limit:
+                    return
+            if not records or not new_records or len(records) < self.page_size:
+                return
+            response = await self._post(
+                self.portal.search_url,
+                build_bidbuy_pagination_form(
+                    csrf, view_state, first=(page + 1) * self.page_size, rows=self.page_size
+                ),
+            )
+
+    async def _post(self, url: str, data: Mapping[str, Any]) -> httpx.Response:
+        post = getattr(self._transport, "post", None)
+        if post is None:
+            raise PeriscopeError("BidBuy transport must support evidence-backed POST requests")
+        for attempt in range(self.max_retries + 1):
+            try:
+                response = await post(url, data=data)
+            except (httpx.TransportError, ConnectionError, OSError) as exc:
+                if attempt == self.max_retries:
+                    raise PeriscopeAvailabilityError("BidBuy connection failed") from exc
+                await self._sleep(self._backoff(attempt, None))
+                continue
+            if response.status_code in self._transient_statuses and attempt < self.max_retries:
+                await self._sleep(self._backoff(attempt, response.headers.get("Retry-After")))
+                continue
+            self._validate_response(response)
+            return response
+        raise PeriscopeAvailabilityError("BidBuy retry limit exhausted")
+
     async def _request(self, url: str, params: Mapping[str, Any]) -> httpx.Response:
         for attempt in range(self.max_retries + 1):
             try:
@@ -348,15 +622,21 @@ class PeriscopeBuySpeedConnector(BaseConnector):
                     )
                 await self._sleep(self._backoff(attempt, response.headers.get("Retry-After")))
                 continue
-            if response.status_code == 403:
-                self._access_state = "restricted"
-                raise PeriscopeRestrictedError("anonymous access forbidden")
-            try:
-                response.raise_for_status()
-            except httpx.HTTPStatusError as exc:
-                raise PeriscopeError(f"Periscope returned HTTP {response.status_code}") from exc
-            text = response.text.casefold()
-            if any(
+            self._validate_response(response)
+            return response
+        raise AssertionError("retry loop exhausted")
+
+    def _validate_response(self, response: httpx.Response) -> None:
+        self._last_status_code = response.status_code
+        if response.status_code == 403:
+            self._access_state = "restricted"
+            raise PeriscopeRestrictedError("anonymous access forbidden")
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            raise PeriscopeError(f"Periscope returned HTTP {response.status_code}") from exc
+        text = response.text.casefold()
+        if any(
                 marker in text
                 for marker in (
                     "captcha",
@@ -366,21 +646,19 @@ class PeriscopeBuySpeedConnector(BaseConnector):
                     "vendor login",
                     "session expired",
                 )
-            ):
-                self._access_state = "restricted"
-                raise PeriscopeRestrictedError("authentication or challenge page returned")
-            if any(
+        ):
+            self._access_state = "restricted"
+            raise PeriscopeRestrictedError("authentication or challenge page returned")
+        if any(
                 marker in str(response.url).casefold()
                 for marker in ("login", "signin", "authenticate")
-            ):
-                self._access_state = "restricted"
-                raise PeriscopeRestrictedError("redirected to authentication")
-            self._consecutive_failures = 0
-            self._last_failure_at = None
-            self._last_success_at = self._now()
-            self._access_state = "public"
-            return response
-        raise AssertionError("retry loop exhausted")
+        ):
+            self._access_state = "restricted"
+            raise PeriscopeRestrictedError("redirected to authentication")
+        self._consecutive_failures = 0
+        self._last_failure_at = None
+        self._last_success_at = self._now()
+        self._access_state = "public"
 
     def _records(self, response: httpx.Response) -> list[dict[str, Any]]:
         strategy = self.portal.response_strategy

@@ -21,11 +21,21 @@ from sled_aggregator.connectors.periscope import (
     PeriscopeError,
     PeriscopePortal,
     PeriscopeRestrictedError,
+    build_bidbuy_attachment_form,
+    build_bidbuy_pagination_form,
+    build_bidbuy_search_form,
+    extract_bidbuy_tokens,
+    parse_bidbuy_detail,
+    parse_bidbuy_partial_response,
+    parse_content_disposition_filename,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
 JSON_RESULTS = json.loads((FIXTURES / "periscope_results.json").read_text())
 HTML_RESULTS = (FIXTURES / "periscope_board.html").read_text()
+BIDBUY_INITIAL = (FIXTURES / "il_bidbuy_initial.html").read_text()
+BIDBUY_RESULTS = (FIXTURES / "il_bidbuy_results.xml").read_text()
+BIDBUY_DETAIL = (FIXTURES / "il_bidbuy_detail.html").read_text()
 
 
 class FakeTransport:
@@ -35,12 +45,19 @@ class FakeTransport:
         self.closed = False
 
     async def get(self, url: str, *, params: dict[str, Any]) -> httpx.Response:
-        self.calls.append({"url": url, "params": dict(params)})
+        self.calls.append({"method": "GET", "url": url, "params": dict(params)})
+        return self._response("GET", url)
+
+    async def post(self, url: str, *, data: dict[str, Any]) -> httpx.Response:
+        self.calls.append({"method": "POST", "url": url, "data": dict(data)})
+        return self._response("POST", url)
+
+    def _response(self, method: str, url: str) -> httpx.Response:
         item = self.responses.pop(0)
         if isinstance(item, Exception):
             raise item
         status, body, content_type, headers = item
-        request = httpx.Request("GET", url, params=params)
+        request = httpx.Request(method, url)
         if content_type == "application/json" and not isinstance(body, str):
             return httpx.Response(
                 status,
@@ -92,7 +109,7 @@ class PeriscopeConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(all(not item.production_verified for item in PORTALS))
 
     async def test_statewide_profiles_normalize_the_shared_fixture_contract(self) -> None:
-        for configured_portal in PORTALS:
+        for configured_portal in PORTALS[1:]:
             with self.subTest(profile=configured_portal.profile_key):
                 transport = FakeTransport([response(HTML_RESULTS, content_type="text/html")])
                 items = await collect(
@@ -104,6 +121,56 @@ class PeriscopeConnectorTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(items[0].source.jurisdiction, configured_portal.jurisdiction)
                 self.assertEqual(transport.calls[0]["url"], configured_portal.search_url)
                 self.assertEqual(len(items[0].raw_payload["document_links"]), 1)
+
+    def test_bidbuy_contract_helpers_fail_closed_and_preserve_public_data(self) -> None:
+        csrf, state = extract_bidbuy_tokens(BIDBUY_INITIAL)
+        search = build_bidbuy_search_form(csrf, state, ("network", "services"))
+        self.assertEqual(search["bidSearchForm:desc"], "network services")
+        self.assertEqual(search["_csrf"], "fixture-csrf-token")
+        pagination = build_bidbuy_pagination_form(csrf, state, first=25, rows=25)
+        self.assertEqual(pagination["bidSearchResultsForm:bidResultId_first"], "25")
+        records, next_state = parse_bidbuy_partial_response(BIDBUY_RESULTS)
+        self.assertEqual(records[0]["buyer"], "Casey Example")
+        self.assertEqual(records[0]["vendors"], "Example Public Vendor LLC")
+        self.assertEqual(next_state, "fixture-view-state-next")
+        detail = parse_bidbuy_detail(BIDBUY_DETAIL, "https://example.test/detail")
+        self.assertEqual(detail["public_contacts"]["contact email"], "casey@example.invalid")
+        self.assertEqual(detail["public_vendors"]["public vendor"], "Example Public Vendor LLC")
+        self.assertEqual(detail["documents"][0]["request"]["downloadFileNbr"], "7")
+        with self.assertRaises(PeriscopeError):
+            extract_bidbuy_tokens('<input name="_csrf" value="only">')
+        with self.assertRaises(PeriscopeError):
+            parse_bidbuy_partial_response("<broken")
+        with self.assertRaises(PeriscopeError):
+            build_bidbuy_attachment_form({"docId": "fixture"})
+
+    def test_content_disposition_filename_is_path_safe(self) -> None:
+        self.assertEqual(
+            parse_content_disposition_filename('attachment; filename="Example Addendum.pdf"'),
+            "Example Addendum.pdf",
+        )
+        self.assertEqual(
+            parse_content_disposition_filename("attachment; filename=../unsafe.pdf"), "unsafe.pdf"
+        )
+
+    async def test_illinois_uses_session_continuity_post_detail_and_closes(self) -> None:
+        transport = FakeTransport(
+            [
+                response(BIDBUY_INITIAL, content_type="text/html"),
+                response(BIDBUY_RESULTS, content_type="text/xml"),
+                response(BIDBUY_DETAIL, content_type="text/html"),
+            ]
+        )
+        connector = PeriscopeBuySpeedConnector(
+            ILLINOIS, transport=transport, page_size=25, fetch_details=True
+        )
+        items = await collect(connector, ConnectorQuery(keywords=("network",), limit=1))
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].agency, "Illinois Fixture Agency")
+        self.assertEqual(items[0].raw_payload["public_contacts"]["contact name"], "Casey Example")
+        self.assertEqual([call["method"] for call in transport.calls], ["GET", "POST", "GET"])
+        await connector.aclose()
+        self.assertFalse(transport.closed)
 
     async def test_json_keyword_normalization_provenance_and_document_links(self) -> None:
         transport = FakeTransport([response(JSON_RESULTS)])
