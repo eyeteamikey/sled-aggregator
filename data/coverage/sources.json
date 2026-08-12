@@ -1074,8 +1074,9 @@
       "source_status": "active",
       "migration_status": "current",
       "fixture_references": [
-        "tests/fixtures/periscope_board.html",
-        "tests/fixtures/periscope_results.json"
+        "tests/fixtures/il_bidbuy_initial.html",
+        "tests/fixtures/il_bidbuy_results.xml",
+        "tests/fixtures/il_bidbuy_detail.html"
       ],
       "priority": 1,
       "expected_coverage_impact": "statewide",
@@ -1098,28 +1099,31 @@
       "captcha_classification": "none_observed_in_fixture",
       "robots_access_notes": "not_live_validated",
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "evidence_type": "official_source_and_sanitized_fixture",
       "evidence_location": [
         "https://cpo-general.illinois.gov/bidbuy.html",
         "https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml",
-        "tests/fixtures/periscope_board.html",
-        "tests/fixtures/periscope_results.json"
+        "tests/fixtures/il_bidbuy_initial.html",
+        "tests/fixtures/il_bidbuy_results.xml",
+        "tests/fixtures/il_bidbuy_detail.html"
       ],
       "fixture_location": [
-        "tests/fixtures/periscope_board.html",
-        "tests/fixtures/periscope_results.json"
+        "tests/fixtures/il_bidbuy_initial.html",
+        "tests/fixtures/il_bidbuy_results.xml",
+        "tests/fixtures/il_bidbuy_detail.html"
       ],
       "test_location": [
         "tests/test_periscope_connector.py",
         "tests/test_coverage_audit.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-12",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
-        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+        "Request contracts are fixture-verified from a successful anonymous public capture; this does not claim continuous production availability.",
+        "Attachment downloads require continuity with the anonymous JSF session and remain bounded by connector limits.",
+        "No login, registration, CAPTCHA bypass, bid submission, or vendor mutation is supported."
       ],
       "blocker_reason": null,
       "recommended_next_action": "Perform bounded anonymous validation of registered read-only GET and POST discovery/detail contracts.",
@@ -1147,8 +1151,8 @@
             "purpose": "anonymous solicitation detail and document-metadata navigation"
           }
         ],
-        "connector_replay_approved": false,
-        "notes": "Browser capture permission records sanitized contract shape only; production replay requires explicit reviewer approval."
+        "connector_replay_approved": true,
+        "notes": "Only exact anonymous read-only search, pagination, detail, and attachment request contracts are approved. Public procurement contacts and disclosed vendors are retained; authentication/session values are dynamic and never persisted."
       },
       "validation_startup_contract": {
         "expected_document_path": "/bso/view/search/external/advancedSearchBid.xhtml",
@@ -2030,14 +2034,17 @@
         "fixture_pagination",
         "fixture_detail",
         "fixture_attachment_manifest",
-        "fixture_normalization"
+        "fixture_normalization",
+        "public_contact_normalization",
+        "public_vendor_normalization",
+        "fixture_attachment_request"
       ],
       "evidence_type": "sanitized_fixture",
-      "location": "tests/fixtures/periscope_board.html",
-      "verified_at": "2026-08-03",
-      "sanitization_status": "synthetic_public_contract",
-      "notes": "Sanitized BuySpeed fixtures exercise deterministic GET construction and parsing without credentials or vendor data.",
-      "limitations": "Fixture behavior is not live verification; tenant-specific production availability remains untested."
+      "location": "tests/fixtures/il_bidbuy_results.xml",
+      "verified_at": "2026-08-12",
+      "sanitization_status": "minimal_fictional_fixture_derived_from_sanitized_capture",
+      "notes": "Successful anonymous capture verifies dynamic JSF initialization, search/filter POSTs, pagination, solicitation detail, public contact and vendor fields, and session-continuous attachment POSTs. Public procurement contacts remain intentional aggregation data; session values are excluded.",
+      "limitations": "Fixture-verified request contracts do not establish continuous production availability. Bidder and awardee capabilities are not claimed beyond the publicly observed awarded-vendor column."
     },
     {
       "evidence_id": "ma-commbuys-official-guidance-1",
