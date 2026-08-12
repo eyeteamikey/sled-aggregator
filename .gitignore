@@ -19,3 +19,7 @@ build/
 .document-storage/
 document-storage/
 .sled-validation/
+
+# Repository-local HAR intake. Captures are temporary evidence and must never be committed.
+sled-har-evidence/*
+!sled-har-evidence/README.md
