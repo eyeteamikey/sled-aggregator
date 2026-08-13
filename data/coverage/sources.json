@@ -684,13 +684,15 @@
       "attachment_classification": "public",
       "document_pipeline_classification": "compatible",
       "authentication_requirement": "none",
-      "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "captcha_classification": "third_party_resources_observed_no_first_party_challenge",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
-      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "tests/fixtures/tyler_vss_opelika_results.html",
         "tests/fixtures/tyler_vss_detail.html"
       ],
@@ -701,12 +703,13 @@
       "test_location": [
         "tests/test_tyler_munis_vss_connector.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "known_limitations": [
-        "City of Opelika procurement only"
+        "City of Opelika procurement only",
+        "Capture proves observed anonymous contracts, not continuous availability."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift."
     },
     {
       "key": "mi-sigma-vss",
@@ -751,12 +754,13 @@
       "document_pipeline_classification": "manifest_only",
       "authentication_requirement": "none",
       "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "allowed_http_methods": [
         "GET"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://www.michigan.gov/budget/budget-offices/sigma",
         "https://www.michigan.gov/dtmb/procurement/contractconnect",
         "tests/fixtures/cgi_vss_advantage4_landing.html",
@@ -772,14 +776,13 @@
         "tests/test_cgi_advantage_vss_connector.py",
         "tests/test_coverage_audit.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "known_limitations": [
-        "Fixture verification does not establish current production operation.",
-        "Attachment fixtures establish manifest metadata only; retrieval and document parsing are not established.",
-        "Some Michigan procurement notices may remain on Contract Connect or agency-specific systems."
+        "The attempted Advantage4/SolicitationSearch route returned only HTTP 404 responses.",
+        "No live capability was established."
       ],
-      "blocker_reason": null,
-      "recommended_next_action": "Perform a bounded anonymous GET validation of SIGMA discovery, one detail, and at most one explicitly public attachment from a permitted network.",
+      "blocker_reason": "Observed solicitation-search route returned HTTP 404.",
+      "recommended_next_action": "Reconfirm the current official public route before another bounded capture.",
       "evidence_url": "https://www.michigan.gov/budget/budget-offices/sigma"
     },
     {
@@ -893,12 +896,13 @@
       "document_pipeline_classification": "manifest_only",
       "authentication_requirement": "none",
       "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "allowed_http_methods": [
         "GET"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
         "tests/fixtures/cgi_vss_maine_landing.html",
         "tests/fixtures/cgi_vss_search.html",
@@ -913,14 +917,13 @@
         "tests/test_cgi_advantage_vss_connector.py",
         "tests/test_coverage_audit.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "Maine guidance places RFPs published on or after October 1, 2025 in VSS; earlier RFPs remain in separate archives.",
-        "Attachment fixtures establish manifest metadata only; document retrieval and pipeline compatibility are not established."
+        "The attempted solicitation route produced 404, 403, and failed requests.",
+        "No usable anonymous solicitation workflow was established."
       ],
-      "blocker_reason": null,
-      "recommended_next_action": "Perform a bounded anonymous GET validation of guest discovery, detail, and one explicitly public attachment from a permitted network.",
+      "blocker_reason": "Observed AltSelfService route produced HTTP 404/403 and failed requests.",
+      "recommended_next_action": "Reconfirm the current official public route and access policy before another bounded capture.",
       "evidence_url": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system"
     },
     {
@@ -960,17 +963,19 @@
       "connector_alias": null,
       "portal_profile_key": "iowa/impacs",
       "anonymous_discovery_classification": "public",
-      "anonymous_detail_classification": "public",
+      "anonymous_detail_classification": "login_required",
       "attachment_classification": "mixed",
       "document_pipeline_classification": "manifest_only",
-      "authentication_requirement": "none",
+      "authentication_requirement": "detail_application_route",
       "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities",
         "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
         "tests/fixtures/jaggaer_iowa_listing.html",
@@ -984,14 +989,13 @@
         "tests/test_jaggaer_sciquest_connector.py",
         "tests/test_coverage_audit.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared detail fixture demonstrates the family contract; tenant-specific document availability can vary.",
-        "Attachment metadata may include login-required documents and retrieval is capability-gated."
+        "Public-event discovery and public PDFs were observed anonymously.",
+        "The sourcing-event application redirected to SupplierLogin; no login workflow is supported."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
       "evidence_url": "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities"
     },
     {
@@ -1031,17 +1035,19 @@
       "connector_alias": null,
       "portal_profile_key": "utah/u3p",
       "anonymous_discovery_classification": "public",
-      "anonymous_detail_classification": "public",
+      "anonymous_detail_classification": "login_required",
       "attachment_classification": "mixed",
       "document_pipeline_classification": "manifest_only",
-      "authentication_requirement": "none",
+      "authentication_requirement": "detail_application_route",
       "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://purchasing.utah.gov/currentbids/",
         "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
         "tests/fixtures/jaggaer_listing.html",
@@ -1055,14 +1061,13 @@
         "tests/test_jaggaer_sciquest_connector.py",
         "tests/test_coverage_audit.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared detail fixture demonstrates the family contract; tenant-specific document availability can vary.",
-        "Attachment metadata may include login-required documents and retrieval is capability-gated."
+        "Public-event discovery and public PDFs were observed anonymously.",
+        "The sourcing-event application redirected to SupplierLogin; no login workflow is supported."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
       "evidence_url": "https://purchasing.utah.gov/currentbids/"
     },
     {
@@ -1230,12 +1235,14 @@
       "document_pipeline_classification": "manifest_only",
       "authentication_requirement": "none",
       "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://www.mass.gov/commbuys",
         "https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml",
         "tests/fixtures/periscope_board.html",
@@ -1249,14 +1256,13 @@
         "tests/test_periscope_connector.py",
         "tests/test_coverage_audit.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
-        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+        "Capture proves observed anonymous contracts, not continuous availability.",
+        "One observed detail returned HTTP 401; record-level detail and document access remains mixed."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
       "evidence_url": "https://www.mass.gov/commbuys"
     },
     {
@@ -1583,13 +1589,14 @@
       "attachment_classification": "unknown",
       "document_pipeline_classification": "unknown",
       "authentication_requirement": "none",
-      "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "captcha_classification": "captcha_present",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "allowed_http_methods": [
         "GET"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://portal.ct.gov/das/ctsource/ctsource",
         "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
         "tests/fixtures/webprocure_results.json"
@@ -1601,14 +1608,13 @@
         "tests/test_webprocure_connector.py",
         "tests/test_coverage_audit.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared fixture establishes bounded discovery and record normalization only; separate public detail and attachment retrieval are not established.",
-        "The production full-text endpoint was unreachable from the Codex Cloud network, so current tenant availability and access walls remain unknown."
+        "Public JSON/detail/document traffic was observed, but reCAPTCHA prevents an unattended anonymous-validation claim.",
+        "No CAPTCHA bypass is supported."
       ],
-      "blocker_reason": null,
-      "recommended_next_action": "Perform bounded anonymous GET validation of one discovery page from a permitted network before classifying any live capability.",
+      "blocker_reason": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
+      "recommended_next_action": "Retain CAPTCHA-boundary evidence and do not promote unattended discovery without a future lawful challenge-free capture.",
       "evidence_url": "https://portal.ct.gov/das/ctsource/ctsource"
     },
     {
@@ -1651,13 +1657,14 @@
       "attachment_classification": "unknown",
       "document_pipeline_classification": "unknown",
       "authentication_requirement": "none",
-      "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "captcha_classification": "captcha_present",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "allowed_http_methods": [
         "GET"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://www.purchasing.ri.gov/",
         "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
         "tests/fixtures/webprocure_results.json"
@@ -1669,14 +1676,13 @@
         "tests/test_webprocure_connector.py",
         "tests/test_coverage_audit.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared fixture establishes bounded discovery and record normalization only; separate public detail and attachment retrieval are not established.",
-        "The production full-text endpoint was unreachable from the Codex Cloud network, so current tenant availability and access walls remain unknown."
+        "Public JSON/detail/document traffic was observed, but reCAPTCHA prevents an unattended anonymous-validation claim.",
+        "No CAPTCHA bypass is supported."
       ],
-      "blocker_reason": null,
-      "recommended_next_action": "Perform bounded anonymous GET validation of one discovery page from a permitted network before classifying any live capability.",
+      "blocker_reason": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
+      "recommended_next_action": "Retain CAPTCHA-boundary evidence and do not promote unattended discovery without a future lawful challenge-free capture.",
       "evidence_url": "https://www.purchasing.ri.gov/"
     }
   ],
@@ -2441,6 +2447,513 @@
       ],
       "verification_date": "2026-08-12",
       "notes": "HAR observation proves only the separately listed capability."
+    },
+    {
+      "evidence_id": "har-7f114d559e5ae758",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "attachments"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous public request contracts were observed; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-daf660ea5ff20ccb",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "details"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous public request contracts were observed; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-73aac51c8f5abe1d",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "discovery"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous public request contracts were observed; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-cb35dd2003582d62",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "document_pipeline_handoff"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous public request contracts were observed; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-b58b7068208812f5",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "document_retrieval"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous public request contracts were observed; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-27be9db5e58dd70d",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "filtering"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous public request contracts were observed; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-6a7cb9c4d373e6b4",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous public request contracts were observed; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-e577ba0428ff47ed",
+      "source_id": "al-opelika-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "pagination"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous public request contracts were observed; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-a78db8925f4890c2",
+      "source_id": "ma-commbuys",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "attachments"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous contracts were observed, with one HTTP 401 detail boundary; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-ea4671844762beb4",
+      "source_id": "ma-commbuys",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "details"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous contracts were observed, with one HTTP 401 detail boundary; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-08ad875345f6b36b",
+      "source_id": "ma-commbuys",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "discovery"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous contracts were observed, with one HTTP 401 detail boundary; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-c4c9e8ebe248f51c",
+      "source_id": "ma-commbuys",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "document_retrieval"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous contracts were observed, with one HTTP 401 detail boundary; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-9212b04e8173ac0a",
+      "source_id": "ma-commbuys",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "filtering"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous contracts were observed, with one HTTP 401 detail boundary; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-900fd919c8e13487",
+      "source_id": "ma-commbuys",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous contracts were observed, with one HTTP 401 detail boundary; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-d555ddc788e1453d",
+      "source_id": "ma-commbuys",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "pagination"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Anonymous contracts were observed, with one HTTP 401 detail boundary; availability is not continuous."
+    },
+    {
+      "evidence_id": "har-3a4e64a9b5b19dd8",
+      "source_id": "ia-impacs",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "attachments"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-2c5a713e2f14e373",
+      "source_id": "ia-impacs",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "discovery"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-d97188dd4610057a",
+      "source_id": "ia-impacs",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "document_retrieval"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-9820632605747cb6",
+      "source_id": "ia-impacs",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "filtering"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-bad732c9b32d73a2",
+      "source_id": "ia-impacs",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-fe9136241e20f36a",
+      "source_id": "ia-impacs",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "pagination"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-0d0af53822c668df",
+      "source_id": "ut-u3p",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "attachments"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-bbd805bc918fad8a",
+      "source_id": "ut-u3p",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "discovery"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-4b7b7192d678af02",
+      "source_id": "ut-u3p",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "document_retrieval"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-eef2a4c32dd75f47",
+      "source_id": "ut-u3p",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "filtering"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-5ac67ab005e8d3e7",
+      "source_id": "ut-u3p",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-837b5f208ae6ee19",
+      "source_id": "ut-u3p",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "pagination"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Public-event discovery/documents were observed; the sourcing-event application redirects to SupplierLogin."
+    },
+    {
+      "evidence_id": "har-6f0bc2f80fbe061c",
+      "source_id": "ct-ctsource",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "attachments"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-1508569f2cde2818",
+      "source_id": "ct-ctsource",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "details"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-79889e5c05274a8f",
+      "source_id": "ct-ctsource",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "discovery"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-2061a0951c0a8c07",
+      "source_id": "ct-ctsource",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "document_retrieval"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-b8aeb84c60d71c28",
+      "source_id": "ct-ctsource",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-73c61ff29eda2b15",
+      "source_id": "ri-ocean-state-procures",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "attachments"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-fb54d2f04961991e",
+      "source_id": "ri-ocean-state-procures",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "details"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-4f52dde5e9971ebc",
+      "source_id": "ri-ocean-state-procures",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "discovery"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-962a4420436ee404",
+      "source_id": "ri-ocean-state-procures",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "document_retrieval"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-e83cc36d13baabd0",
+      "source_id": "ri-ocean-state-procures",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Reviewed capture records a reCAPTCHA-bound public workflow; it is not promotion evidence and no bypass is supported."
+    },
+    {
+      "evidence_id": "har-233e6aa164d3c751",
+      "source_id": "me-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Observed attempted public route produced HTTP 404/403 and failed requests; no live capability was established."
+    },
+    {
+      "evidence_id": "har-5a0ce39df40c888a",
+      "source_id": "mi-sigma-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-13",
+      "notes": "Observed attempted public route returned HTTP 404; no live capability was established."
     }
   ]
 }

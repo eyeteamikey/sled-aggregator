@@ -74,7 +74,7 @@ Capture all browser traffic needed to reproduce those read-only contracts. Sanit
 ### Tyler Munis/VSS
 
 - [x] Summit County, Ohio — `https://summitcountyoh.munisselfservice.com/vss/`
-- [ ] City of Opelika, Alabama — `https://ss.opelika-al.gov/vss/`
+- [x] City of Opelika, Alabama — `https://ss.opelika-al.gov/vss/`
 
 Suggested filename:
 
@@ -83,7 +83,7 @@ Suggested filename:
 ### Periscope BuySpeed
 
 - [x] Illinois BidBuy — `https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml`
-- [ ] Massachusetts COMMBUYS — `https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml`
+- [x] Massachusetts COMMBUYS — `https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml`
 
 Suggested filename:
 
@@ -94,6 +94,9 @@ Suggested filename:
 - [ ] Michigan SIGMA — `https://sigma.michigan.gov/PRDVSS1X1/Advantage4/SolicitationSearch`
 - [ ] Maine VSS — `https://mevss.hostams.com/PRDVSS1X1/AltSelfService/SolicitationSearch`
 
+The 2026-08-13 attempts did not validate this family: Michigan returned HTTP 404, while Maine
+produced HTTP 404/403 and failed requests. See `batch1_har_evidence_2026-08-13.md`.
+
 Suggested filenames:
 
 - `mi-sigma-cgi-advantage-vss-anonymous-public-sanitized.har`
@@ -103,8 +106,8 @@ These deliberately cover the `Advantage4` and `AltSelfService` variants.
 
 ### JAGGAER/SciQuest
 
-- [ ] Iowa IMPACS — `https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa`
-- [ ] Utah U3P — `https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah`
+- [x] Iowa IMPACS — `https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa`
+- [x] Utah U3P — `https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah`
 
 Suggested filenames:
 
@@ -122,6 +125,9 @@ Suggested filenames:
 - `ri-ocean-state-procures-webprocure-proactis-anonymous-public-sanitized.har`
 
 Preserve 502/503 responses, redirects, login walls, registration requirements, and failed background calls as access-boundary evidence. Do not authenticate.
+
+Both 2026-08-13 WebProcure captures encountered reCAPTCHA. They remain unchecked because
+CAPTCHA-boundary evidence does not establish unattended anonymous family validation.
 
 ## Batch 2 — High-value county and municipal families
 

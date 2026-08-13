@@ -161,7 +161,7 @@ class CoverageAuditTests(unittest.TestCase):
                 "live_verified": 0,
                 "production_monitored": 0,
                 "tier_0_remaining": 36,
-                "blocked_jurisdictions": 2,
+                "blocked_jurisdictions": 9,
             },
         )
         self.assertEqual(len(plan["unidentified_primary_sources"]), 36)
@@ -177,11 +177,17 @@ class CoverageAuditTests(unittest.TestCase):
             task["source_id"]: task["method_policy"] for task in plan["validation_tasks"]
         }
         self.assertEqual(method_policies["il-bidbuy"], ["GET", "POST"])
+        post_sources = {
+            "al-opelika-tyler-munis-vss",
+            "ia-impacs",
+            "il-bidbuy",
+            "ma-commbuys",
+            "ut-u3p",
+        }
         self.assertTrue(
             all(
-                methods == ["GET"]
+                methods == (["GET", "POST"] if source_id in post_sources else ["GET"])
                 for source_id, methods in method_policies.items()
-                if source_id != "il-bidbuy"
             )
         )
 
@@ -220,7 +226,7 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertTrue(michigan["attachment_capable"])
         self.assertFalse(michigan["document_pipeline_capable"])
 
-    def test_jaggaer_statewide_profiles_are_fixture_not_live_verified(self):
+    def test_jaggaer_statewide_profiles_have_reviewed_contract_evidence(self):
         report = build_report(jdata=self.jdata, sdata=self.sdata)
         records = {row["code"]: row for row in report["jurisdiction_records"]}
         for code, source_id, profile in (
@@ -235,7 +241,7 @@ class CoverageAuditTests(unittest.TestCase):
             self.assertFalse(records[code]["document_pipeline_capable"])
             self.assertEqual(source["portal_profile_key"], profile)
             self.assertEqual(source["verification_status"], "fixture_verified")
-            self.assertIsNone(source["last_verified_date"])
+            self.assertEqual(source["last_verified_date"], "2026-08-13")
             self.assertEqual(source["document_pipeline_classification"], "manifest_only")
             self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
             self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
@@ -264,6 +270,9 @@ class CoverageAuditTests(unittest.TestCase):
             if source_id == "il-bidbuy":
                 self.assertEqual(source["last_verified_date"], "2026-08-12")
                 self.assertEqual(source["allowed_http_methods"], ["GET", "POST"])
+            elif source_id == "ma-commbuys":
+                self.assertEqual(source["last_verified_date"], "2026-08-13")
+                self.assertEqual(source["allowed_http_methods"], ["GET", "POST"])
             else:
                 self.assertIsNone(source["last_verified_date"])
             self.assertEqual(source["document_pipeline_classification"], "manifest_only")
@@ -288,7 +297,8 @@ class CoverageAuditTests(unittest.TestCase):
             self.assertFalse(records[code]["attachment_capable"])
             self.assertEqual(source["portal_profile_key"], profile)
             self.assertEqual(source["verification_status"], "fixture_verified")
-            self.assertIsNone(source["last_verified_date"])
+            self.assertEqual(source["last_verified_date"], "2026-08-13")
+            self.assertEqual(source["captcha_classification"], "captcha_present")
             self.assertEqual(source["document_pipeline_classification"], "unknown")
             self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
             self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
@@ -298,7 +308,8 @@ class CoverageAuditTests(unittest.TestCase):
         source = next(x for x in self.sdata["sources"] if x["source_id"] == "me-vss")
         evidence = [x for x in self.sdata["evidence"] if x["source_id"] == "me-vss"]
         self.assertEqual(source["verification_status"], "fixture_verified")
-        self.assertIsNone(source["last_verified_date"])
+        self.assertEqual(source["last_verified_date"], "2026-08-13")
+        self.assertIn("404/403", source["blocker_reason"])
         self.assertEqual(source["document_pipeline_classification"], "manifest_only")
         self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
         self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
@@ -309,7 +320,8 @@ class CoverageAuditTests(unittest.TestCase):
         evidence = [x for x in self.sdata["evidence"] if x["source_id"] == "mi-sigma-vss"]
         self.assertEqual(source["portal_profile_key"], "michigan/sigma-vss")
         self.assertEqual(source["verification_status"], "fixture_verified")
-        self.assertIsNone(source["last_verified_date"])
+        self.assertEqual(source["last_verified_date"], "2026-08-13")
+        self.assertIn("HTTP 404", source["blocker_reason"])
         self.assertEqual(source["document_pipeline_classification"], "manifest_only")
         self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
         self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
