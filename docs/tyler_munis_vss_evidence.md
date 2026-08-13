@@ -25,3 +25,19 @@ public `Vendors/VBids` workflow was captured. No Mobile preset or coverage claim
 The supported workflow never logs in, registers, enters a response, submits a bid,
 modifies a vendor record, solves CAPTCHA, or follows an identity-provider transition.
 See `docs/tyler_munis_vss.md` for security boundaries and tenant-onboarding procedure.
+
+## Summit County request-contract validation (2026-08-12)
+
+A second successful anonymous Summit County capture contained 1,493 requests, including
+ten successful search POSTs, ASP.NET GridView pagination and sorting postbacks, two bid-detail
+transitions, and twenty successful `DocumentViewer.ashx` responses. The capture proved the
+live controls `BidTypeDropBox`, `BidNumber`, `BidDescription`, and `OpenBidsOnly`; result columns
+for type, number, description, due date, opening date, and status; row-specific `ViewLink`
+postbacks; and `page:*` postback arguments used by the grid.
+
+The connector and fictional fixtures now cover those observed contracts. The full capture is
+not repository evidence: cookies, ASP.NET state, document tokens and hashes, and binary bodies
+were removed during local review, and the HAR is deleted from the intake directory only after
+the implementation PR is merged. Third-party reCAPTCHA resources appeared in browser traffic,
+but no first-party response presented a CAPTCHA and the public search, detail, and document
+flows completed anonymously. Awards and amendments were not separately established.

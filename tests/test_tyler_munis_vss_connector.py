@@ -88,6 +88,43 @@ class TylerMunisVssTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(TylerMunisVssError):
             form_state(missing_event, require_event_validation=True)
 
+    def test_live_control_names_grid_rows_and_page_events(self):
+        connector = TylerMunisVssConnector(transport=FakeTransport([]))
+        data = connector.search_form(
+            fixture("tyler_vss_live_search.html"),
+            TylerMunisVssQuery(keywords=("safety",), bid_type="All"),
+        )
+        self.assertEqual(
+            data[
+                "ctl00$ctl00$PrimaryPlaceHolder$ContentPlaceHolderMain$BidTypeDropBox"
+            ],
+            "All",
+        )
+        page = parse_page(fixture("tyler_vss_live_results.html"))
+        self.assertEqual(len(page.rows), 1)
+        self.assertEqual(page.rows[0]["bid_number"], "RFP-FIXTURE-100")
+        self.assertEqual(page.rows[0]["title"], "Fixture public safety equipment")
+        self.assertEqual(page.page_events[1][1], "page:11-20:1")
+
+    async def test_live_detail_contacts_vendor_and_document_contract(self):
+        results = fixture("tyler_vss_live_results.html")
+        results_url = SUMMIT.url(SUMMIT.results_path)
+        redirect = reply(
+            "", results_url, 302, {"location": SUMMIT.detail_path, "content-type": "text/html"}
+        )
+        detail_url = SUMMIT.url(SUMMIT.detail_path)
+        connector = TylerMunisVssConnector(
+            transport=FakeTransport(
+                [redirect, reply(fixture("tyler_vss_live_detail.html"), detail_url)]
+            )
+        )
+        fields, docs = await connector.detail(results, "RFP-FIXTURE-100")
+        self.assertIn("casey@example.invalid", fields["contacts"])
+        self.assertEqual(fields["vendor"], "Example Public Vendor LLC")
+        self.assertEqual(docs[0].filename, "Fixture Addendum.pdf")
+        self.assertEqual(docs[0].mime_type, "application/pdf")
+        self.assertIn("token=REDACTED", docs[0].raw_metadata["retrieval_url"])
+
     def test_result_and_detail_parsing(self):
         page = parse_page(fixture("tyler_vss_results_1.html"))
         self.assertEqual(page.next_event, ("grid", "Page$Next"))

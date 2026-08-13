@@ -588,7 +588,10 @@
       "migration_status": "current",
       "fixture_references": [
         "tests/fixtures/tyler_vss_results_1.html",
-        "tests/fixtures/tyler_vss_detail.html"
+        "tests/fixtures/tyler_vss_detail.html",
+        "tests/fixtures/tyler_vss_live_search.html",
+        "tests/fixtures/tyler_vss_live_results.html",
+        "tests/fixtures/tyler_vss_live_detail.html"
       ],
       "priority": 2,
       "expected_coverage_impact": "Summit County procurement only",
@@ -608,29 +611,37 @@
       "attachment_classification": "public",
       "document_pipeline_classification": "compatible",
       "authentication_requirement": "none",
-      "captcha_classification": "none_observed_in_fixture",
-      "robots_access_notes": "not_live_validated",
+      "captcha_classification": "third_party_resources_observed_no_first_party_challenge",
+      "robots_access_notes": "Successful anonymous browser capture observed; this is request-contract evidence, not a claim of continuous availability.",
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
-      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_location": [
-        "tests/fixtures/tyler_vss_results_1.html",
-        "tests/fixtures/tyler_vss_detail.html"
+        "docs/tyler_munis_vss_evidence.md",
+        "tests/fixtures/tyler_vss_live_search.html",
+        "tests/fixtures/tyler_vss_live_results.html",
+        "tests/fixtures/tyler_vss_live_detail.html"
       ],
       "fixture_location": [
         "tests/fixtures/tyler_vss_results_1.html",
-        "tests/fixtures/tyler_vss_detail.html"
+        "tests/fixtures/tyler_vss_detail.html",
+        "tests/fixtures/tyler_vss_live_search.html",
+        "tests/fixtures/tyler_vss_live_results.html",
+        "tests/fixtures/tyler_vss_live_detail.html"
       ],
       "test_location": [
         "tests/test_tyler_munis_vss_connector.py"
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-12",
       "known_limitations": [
-        "Summit County procurement only"
+        "Summit County procurement only",
+        "The capture proves the observed anonymous request contracts, not continuous production availability.",
+        "Awards and amendments were not separately established by this capture."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Run bounded connector validation periodically and fail closed on login, CAPTCHA, or contract drift."
     },
     {
       "key": "al-opelika-tyler-munis-vss",
@@ -2326,6 +2337,110 @@
       "sanitization_status": "not_applicable",
       "notes": "The official state-controlled OhioBuys landing page establishes source identity and statewide procurement scope.",
       "limitations": "Identity and scope evidence does not establish a platform family, tenant, anonymous public request contract, fixture behavior, or live operability."
+    },
+    {
+      "evidence_id": "har-c12820d1d99da8b1",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/tyler_munis_vss_evidence.md"
+      ],
+      "capabilities": [
+        "attachments"
+      ],
+      "verification_date": "2026-08-12",
+      "notes": "HAR observation proves only the separately listed capability."
+    },
+    {
+      "evidence_id": "har-ec2c2cb22c08832c",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/tyler_munis_vss_evidence.md"
+      ],
+      "capabilities": [
+        "details"
+      ],
+      "verification_date": "2026-08-12",
+      "notes": "HAR observation proves only the separately listed capability."
+    },
+    {
+      "evidence_id": "har-3918129ba1845b09",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/tyler_munis_vss_evidence.md"
+      ],
+      "capabilities": [
+        "discovery"
+      ],
+      "verification_date": "2026-08-12",
+      "notes": "HAR observation proves only the separately listed capability."
+    },
+    {
+      "evidence_id": "har-6ca90a5df21fb3f1",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/tyler_munis_vss_evidence.md"
+      ],
+      "capabilities": [
+        "document_pipeline_handoff"
+      ],
+      "verification_date": "2026-08-12",
+      "notes": "HAR observation proves only the separately listed capability."
+    },
+    {
+      "evidence_id": "har-71674e0e90db77aa",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/tyler_munis_vss_evidence.md"
+      ],
+      "capabilities": [
+        "document_retrieval"
+      ],
+      "verification_date": "2026-08-12",
+      "notes": "HAR observation proves only the separately listed capability."
+    },
+    {
+      "evidence_id": "har-bcd15bdaf2c19a6d",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/tyler_munis_vss_evidence.md"
+      ],
+      "capabilities": [
+        "filtering"
+      ],
+      "verification_date": "2026-08-12",
+      "notes": "HAR observation proves only the separately listed capability."
+    },
+    {
+      "evidence_id": "har-e3d824a16f0db7bb",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/tyler_munis_vss_evidence.md"
+      ],
+      "capabilities": [
+        "landing_page"
+      ],
+      "verification_date": "2026-08-12",
+      "notes": "HAR observation proves only the separately listed capability."
+    },
+    {
+      "evidence_id": "har-1ce66cadcb33d00b",
+      "source_id": "oh-summit-county-tyler-munis-vss",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": [
+        "docs/tyler_munis_vss_evidence.md"
+      ],
+      "capabilities": [
+        "pagination"
+      ],
+      "verification_date": "2026-08-12",
+      "notes": "HAR observation proves only the separately listed capability."
     }
   ]
 }
