@@ -154,42 +154,119 @@ class _Parser(HTMLParser):
         self.documents: list[dict[str, str]] = []
         self.fields: dict[str, str] = {}
         self.next_event: tuple[str, str] | None = None
+        self.page_events: dict[int, tuple[str, str]] = {}
         self._row: dict[str, str] | None = None
         self._text: list[str] = []
         self._field: str | None = None
+        self._tables: list[str] = []
+        self._live_cells: list[dict[str, Any]] | None = None
+        self._cell: dict[str, Any] | None = None
+        self._result_headers: list[str] = []
+        self._document: dict[str, str] | None = None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         a = {k.lower(): v or "" for k, v in attrs}
-        if tag == "input" and a.get("name"):
+        if tag == "table":
+            self._tables.append(a.get("id", ""))
+        if tag == "tr" and self._tables:
+            self._live_cells = []
+        if tag in {"td", "th"} and self._live_cells is not None:
+            self._cell = {"tag": tag, "text": [], "event": None}
+            self._live_cells.append(self._cell)
+        if tag in {"input", "select"} and a.get("name"):
             self.controls[a["name"]] = a.get("value", "")
             if a.get("type", "").lower() == "hidden":
                 self.hidden[a["name"]] = a.get("value", "")
         if tag == "tr" and "data-bid-number" in a:
             self._row = {k[5:].replace("-", "_"): v for k, v in a.items() if k.startswith("data-")}
         if tag == "a":
-            event = re.search(r"__doPostBack\('([^']+)','([^']*)'\)", a.get("href", ""))
+            event = re.search(
+                r"__doPostBack\('([^']+)','([^']*)'\)",
+                " ".join((a.get("href", ""), a.get("onclick", ""))),
+            )
+            if self._cell is not None and event:
+                self._cell["event"] = event.groups()
             if event and ("next" in a.get("class", "").lower() or a.get("rel") == "next"):
                 self.next_event = event.group(1), event.group(2)
+            if event:
+                page = re.fullmatch(r"page:(?:\d+-\d+):(\d+)", event.group(2), re.I)
+                if page:
+                    self.page_events[int(page.group(1))] = event.group(1), event.group(2)
             if self._row is not None and event:
                 self._row["detail_target"], self._row["detail_argument"] = event.groups()
             if "data-document-id" in a:
                 item = {k[5:].replace("-", "_"): v for k, v in a.items() if k.startswith("data-")}
                 item["url"] = a.get("href", "")
                 self.documents.append(item)
+            elif urlparse(a.get("href", "")).path.lower().endswith("documentviewer.ashx"):
+                query = dict(parse_qsl(urlparse(a["href"]).query, keep_blank_values=True))
+                self._document = {
+                    "url": a["href"],
+                    "document_id": query.get("documentId", query.get("id", "")),
+                }
         if "data-field" in a:
             self._field, self._text = a["data-field"], []
 
     def handle_data(self, data: str) -> None:
         if self._field:
             self._text.append(data)
+        if self._cell is not None:
+            self._cell["text"].append(data)
+        if self._document is not None:
+            self._document.setdefault("_text", "")
+            self._document["_text"] += data
 
     def handle_endtag(self, tag: str) -> None:
+        if tag == "a" and self._document is not None:
+            title = " ".join(self._document.pop("_text", "").split())
+            self._document["title"] = title or "Document"
+            self._document["filename"] = title or "document"
+            self.documents.append(self._document)
+            self._document = None
+        if tag in {"td", "th"}:
+            self._cell = None
+        if tag == "tr" and self._live_cells is not None:
+            self._consume_live_row(self._live_cells)
+            self._live_cells = None
+        if tag == "table" and self._tables:
+            self._tables.pop()
         if tag == "tr" and self._row is not None:
             self.rows.append(self._row)
             self._row = None
         if self._field:
             self.fields[self._field] = " ".join("".join(self._text).split())
             self._field = None
+
+    def _consume_live_row(self, cells: list[dict[str, Any]]) -> None:
+        values = [" ".join("".join(cell["text"]).split()) for cell in cells]
+        if not values:
+            return
+        if all(cell["tag"] == "th" for cell in cells):
+            self._result_headers = [value.casefold() for value in values]
+            return
+        if self._tables and self._tables[-1].endswith("MolGridView1") and self._result_headers:
+            record: dict[str, str] = {}
+            aliases = {
+                "type": "bid_type",
+                "number": "bid_number",
+                "description": "title",
+                "due by": "due_date",
+                "opening": "opening_date",
+                "status": "status",
+            }
+            for index, value in enumerate(values):
+                if index < len(self._result_headers):
+                    record[aliases.get(self._result_headers[index], self._result_headers[index])] = value
+                event = cells[index].get("event")
+                if event and event[0].lower().endswith("viewlink"):
+                    record["detail_target"], record["detail_argument"] = event
+            if record.get("bid_number") and record.get("title"):
+                self.rows.append(record)
+            return
+        if len(values) >= 2 and values[0] and values[1]:
+            key = re.sub(r"\W+", "_", values[0].casefold()).strip("_")
+            if key:
+                self.fields[key] = values[1]
 
 
 def parse_page(html: str) -> _Parser:
@@ -342,7 +419,18 @@ class TylerMunisVssConnector(BaseConnector):
         data = form_state(html)
         data[self._control(page.controls, "BidDescription")] = " ".join(query.keywords)
         data[self._control(page.controls, "BidNumber")] = query.bid_number or ""
-        data[self._control(page.controls, "BidType")] = (
+        bid_type_control = next(
+            (
+                name
+                for suffix in ("BidTypeDropBox", "BidType")
+                for name in page.controls
+                if name.lower().endswith(suffix.lower())
+            ),
+            None,
+        )
+        if not bid_type_control:
+            raise TylerMunisVssError("required bid type control is absent")
+        data[bid_type_control] = (
             query.bid_type or self.profile.default_bid_type
         )
         data[self._control(page.controls, "OpenBidsOnly")] = (
@@ -408,7 +496,7 @@ class TylerMunisVssConnector(BaseConnector):
         seen: set[str] = set()
         fingerprints: set[str] = set()
         count = 0
-        for _ in range(self.profile.maximum_pages):
+        for page_index in range(self.profile.maximum_pages):
             page = parse_page(response.text)
             fingerprint = hashlib.sha256(
                 "|".join(r.get("bid_number", "") for r in page.rows).encode()
@@ -425,10 +513,11 @@ class TylerMunisVssConnector(BaseConnector):
                 count += 1
                 if count >= min(query.limit, self.profile.maximum_results):
                     return
-            if not page.next_event:
+            next_event = page.page_events.get(page_index + 1) or page.next_event
+            if not next_event:
                 return
             state = form_state(response.text, require_event_validation=True)
-            state["__EVENTTARGET"], state["__EVENTARGUMENT"] = page.next_event
+            state["__EVENTTARGET"], state["__EVENTARGUMENT"] = next_event
             response = await self._request(
                 "post", self.profile.url(self.profile.results_path), data=state
             )
@@ -476,7 +565,7 @@ class TylerMunisVssConnector(BaseConnector):
                     source_opportunity_url=self.profile.url(self.profile.search_path),
                     filename=item.get("filename") or item.get("title", "document"),
                     label=item.get("title"),
-                    mime_type=item.get("media_type") or None,
+                    mime_type=item.get("media_type") or self._document_mime(item.get("filename")),
                     category=item.get("category", "attachment"),
                     source_document_id=stable,
                     access_state=AccessState.PUBLIC,
@@ -489,6 +578,17 @@ class TylerMunisVssConnector(BaseConnector):
                 )
             )
         return detail.fields, docs
+
+    @staticmethod
+    def _document_mime(filename: str | None) -> str | None:
+        suffix = (filename or "").rsplit(".", 1)[-1].casefold()
+        return {
+            "pdf": "application/pdf",
+            "doc": "application/msword",
+            "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "xls": "application/vnd.ms-excel",
+            "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }.get(suffix)
 
     async def reacquire_document_url(
         self, results_html: str, source_id: str, stable_id: str
