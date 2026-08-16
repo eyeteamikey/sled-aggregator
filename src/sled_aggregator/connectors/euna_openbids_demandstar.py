@@ -27,7 +27,9 @@ from sled_aggregator.domain.enums import AccessState, OpportunityStatus
 from sled_aggregator.domain.models import DocumentCandidate, RawOpportunity, SourceRef
 
 CANONICAL_FAMILY = "euna/openbids-demandstar"
-PLATFORM_HOSTS = frozenset({"demandstar.com", "www.demandstar.com", "network.demandstar.com"})
+PLATFORM_HOSTS = frozenset(
+    {"demandstar.com", "www.demandstar.com", "network.demandstar.com", "api.demandstar.com"}
+)
 
 
 class DemandStarAccessState(StrEnum):
@@ -64,6 +66,9 @@ class DemandStarProfile:
     agency_name: str
     agency_slug: str
     organization_id: str | None = None
+    api_base_url: str | None = None
+    public_planholders: bool = False
+    public_legal: bool = False
     procurement_landing_url: str | None = None
     agency_page_url: str = ""
     discovery_url: str = ""
@@ -125,7 +130,49 @@ FIXTURE_PROFILE = DemandStarProfile(
     approved_hosts=("www.demandstar.com",),
     approved_document_hosts=("docs.fixture.gov",),
 )
-DEMANDSTAR_PROFILES = {FIXTURE_PROFILE.profile_key: FIXTURE_PROFILE}
+BUTLER_COUNTY = DemandStarProfile(
+    profile_key="ks-butler-county",
+    jurisdiction="Butler County, Kansas",
+    state_code="KS",
+    government_level="county",
+    agency_name="Butler County",
+    agency_slug="butler-county",
+    organization_id="b3383e3f-b020-470a-9f48-9e2d4a270e56",
+    api_base_url="https://api.demandstar.com/contents/agency",
+    public_legal=True,
+    agency_page_url="https://www.demandstar.com/app/agencies/kansas/butler-county/procurement-opportunities/b3383e3f-b020-470a-9f48-9e2d4a270e56/",
+    discovery_url="https://www.demandstar.com/app/agencies/kansas/butler-county/procurement-opportunities/b3383e3f-b020-470a-9f48-9e2d4a270e56/",
+    detail_url_template="https://www.demandstar.com/app/limited/bids/{opportunity_id}/details",
+    official_procurement_url="https://www.bucoks.gov/139/Purchasing-Division",
+    profile_status="active",
+    verification_status="live_har_validated",
+    verification_timestamp=datetime(2026, 8, 16, tzinfo=UTC),
+    verification_notes="Anonymous agency search, summary, document metadata, commodities, and legal data observed.",
+    approved_hosts=("www.demandstar.com", "api.demandstar.com"),
+)
+LYNN_HAVEN = DemandStarProfile(
+    profile_key="fl-lynn-haven",
+    jurisdiction="Lynn Haven, Florida",
+    state_code="FL",
+    government_level="city",
+    agency_name="City of Lynn Haven",
+    agency_slug="city-of-lynn-haven",
+    organization_id="1d8acbbf-7cb5-44a9-962e-62cc58e39a7b",
+    api_base_url="https://api.demandstar.com/contents/agency",
+    public_planholders=True,
+    agency_page_url="https://www.demandstar.com/app/agencies/florida/city-of-lynn-haven/procurement-opportunities/1d8acbbf-7cb5-44a9-962e-62cc58e39a7b/",
+    discovery_url="https://www.demandstar.com/app/agencies/florida/city-of-lynn-haven/procurement-opportunities/1d8acbbf-7cb5-44a9-962e-62cc58e39a7b/",
+    detail_url_template="https://www.demandstar.com/app/limited/bids/{opportunity_id}/details",
+    official_procurement_url="https://www.cityoflynnhaven.gov/bids.aspx",
+    profile_status="active",
+    verification_status="live_har_validated",
+    verification_timestamp=datetime(2026, 8, 16, tzinfo=UTC),
+    verification_notes="Anonymous agency search, details, document metadata, commodities, and planholders observed.",
+    approved_hosts=("www.demandstar.com", "api.demandstar.com"),
+)
+DEMANDSTAR_PROFILES = {
+    profile.profile_key: profile for profile in (BUTLER_COUNTY, LYNN_HAVEN, FIXTURE_PROFILE)
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -155,6 +202,7 @@ class DemandStarHealth:
 
 class Transport(Protocol):
     async def get(self, url: str, *, params: Mapping[str, Any] | None = None) -> httpx.Response: ...
+    async def post(self, url: str, *, json: Mapping[str, Any]) -> httpx.Response: ...
     async def aclose(self) -> None: ...
 
 
@@ -302,6 +350,10 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
             )
         if not self._configuration_valid():
             raise DemandStarError("invalid or unsafe DemandStar profile")
+        if self.profile.api_base_url and self.profile.organization_id:
+            for item in await self._discover_api(q):
+                yield item
+            return
         pages = min(q.maximum_pages or self.profile.maximum_pages, self.profile.maximum_pages)
         maximum = min(q.maximum_results or q.limit, self.profile.maximum_results, q.limit)
         seen_pages = set()
@@ -369,6 +421,127 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
             maximum -= 1
             if maximum <= 0:
                 break
+
+    async def _discover_api(self, query: DemandStarQuery) -> list[RawOpportunity]:
+        """Replay only the anonymous agency-scoped API contracts observed in reviewed HARs."""
+        base = self.profile.api_base_url or ""
+        response = await self._get(
+            f"{base}/search", params={"id": self.profile.organization_id or ""}
+        )
+        payload = self._json_payload(response)
+        rows = payload.get("result", [])
+        if not isinstance(rows, list):
+            raise DemandStarAccessError(DemandStarAccessState.CHANGED_MARKUP)
+        maximum = min(
+            query.maximum_results or query.limit,
+            self.profile.maximum_results,
+            query.limit,
+        )
+        result: list[RawOpportunity] = []
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            bid_id = str(row.get("bidId") or "").strip()
+            title = str(row.get("bidName") or "").strip()
+            if not bid_id or not title:
+                continue
+            data: dict[str, Any] = {
+                "id": bid_id,
+                "title": title,
+                "agency": row.get("agency") or self.profile.agency_name,
+                "solicitationNumber": row.get("bidIdentifier"),
+                "status": row.get("status") or row.get("statusType"),
+                "postedDate": row.get("broadCastDate"),
+                "dueDate": row.get("dueDate"),
+                "documents": [],
+                "openbids_search": row,
+            }
+            if query.include_details:
+                summary = self._json_payload(
+                    await self._post(f"{base}/summary", {"bidId": int(bid_id)})
+                ).get("result", {})
+                documents = self._json_payload(
+                    await self._post(f"{base}/documents", {"bidId": int(bid_id)})
+                ).get("result", [])
+                commodities = self._json_payload(
+                    await self._post(
+                        f"{base}/commodityByType", {"bidId": int(bid_id), "type": "Bid"}
+                    )
+                ).get("result", [])
+                planholders: list[dict[str, Any]] = []
+                legal: dict[str, Any] = {}
+                if self.profile.public_planholders:
+                    value = self._json_payload(
+                        await self._post(f"{base}/planholders", {"bidId": int(bid_id)})
+                    ).get("result", [])
+                    if isinstance(value, list):
+                        planholders = [x for x in value if isinstance(x, dict)]
+                if self.profile.public_legal:
+                    value = self._json_payload(
+                        await self._post(f"{base}/legal", {"bidId": int(bid_id)})
+                    ).get("result", {})
+                    if isinstance(value, dict):
+                        legal = value
+                if isinstance(summary, dict):
+                    data.update(
+                        {
+                            "title": summary.get("bidName") or data["title"],
+                            "agency": summary.get("agencyName") or data["agency"],
+                            "solicitationNumber": summary.get("bidNumber")
+                            or summary.get("bidIdentifier")
+                            or data["solicitationNumber"],
+                            "description": summary.get("scopeOfWork"),
+                            "status": summary.get("bidStatusText") or data["status"],
+                            "postedDate": summary.get("broadcastDate") or data["postedDate"],
+                            "dueDate": summary.get("dueDate") or data["dueDate"],
+                            "openbids_summary": summary,
+                        }
+                    )
+                if isinstance(documents, list):
+                    data["documents"] = [self._api_document(x) for x in documents if isinstance(x, dict)]
+                if isinstance(commodities, list):
+                    data["categories"] = [
+                        str(x.get("commodityDescription") or x.get("commodityCategory") or "").strip()
+                        for x in commodities
+                        if isinstance(x, dict)
+                        and (x.get("commodityDescription") or x.get("commodityCategory"))
+                    ]
+                data["public_planholders"] = planholders
+                data["openbids_legal"] = legal
+            item = self._normalize(data, bid_id)
+            if not self._matches(item, query):
+                continue
+            result.append(item)
+            if len(result) >= maximum:
+                break
+        return result
+
+    @staticmethod
+    def _json_payload(response: httpx.Response) -> dict[str, Any]:
+        try:
+            value = response.json()
+        except ValueError as exc:
+            raise DemandStarAccessError(DemandStarAccessState.CHANGED_MARKUP) from exc
+        if not isinstance(value, dict):
+            raise DemandStarAccessError(DemandStarAccessState.CHANGED_MARKUP)
+        return value
+
+    @staticmethod
+    def _api_document(value: Mapping[str, Any]) -> dict[str, Any]:
+        path = str(value.get("path") or "").strip()
+        return {
+            "id": str(value.get("bidDocID") or "") or None,
+            "label": value.get("fileName") or value.get("originalFileName") or "Document",
+            "filename": value.get("fileName") or value.get("originalFileName") or "document",
+            "url": path or None,
+            "mediaType": str(value.get("mimeType") or "").strip() or None,
+            "category": EunaOpenBidsDemandStarConnector._category(str(value.get("type") or "")),
+            "accessState": "public" if path else "registration_required",
+            "direct": bool(path),
+            "modifiedDate": value.get("modifiedDate"),
+            "fileSize": value.get("fileSize"),
+            "upstream": dict(value),
+        }
 
     def _normalize(self, data, raw_id):
         url = str(data.get("url") or self.profile.detail_url(raw_id))
@@ -459,6 +632,12 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
         return result
 
     async def _get(self, url, params=None):
+        return await self._request("GET", url, params=params)
+
+    async def _post(self, url: str, payload: Mapping[str, Any]):
+        return await self._request("POST", url, payload=payload)
+
+    async def _request(self, method: str, url: str, params=None, payload=None):
         if self._circuit_open():
             raise DemandStarError("profile circuit is open")
         safe = self._safe_url(url)
@@ -466,7 +645,11 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
             raise DemandStarError("unsafe URL")
         for attempt in range(self.profile.retries + 1):
             try:
-                response = await self._transport.get(safe, params=params)
+                response = (
+                    await self._transport.get(safe, params=params)
+                    if method == "GET"
+                    else await self._transport.post(safe, json=payload or {})
+                )
                 self._last_status = response.status_code
                 if response.status_code in self._transient and attempt < self.profile.retries:
                     await self._sleep(self._backoff(attempt, response.headers.get("retry-after")))
@@ -493,6 +676,7 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
             and self.profile.supported_hostname.casefold() in PLATFORM_HOSTS
             and self._safe_url(self.profile.discovery_url)
             and self._safe_url(self.profile.detail_url("fixture"))
+            and (not self.profile.api_base_url or self._safe_url(self.profile.api_base_url))
         )
 
     def _safe_url(self, value, document=False):

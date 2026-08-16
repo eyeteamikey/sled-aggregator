@@ -8,6 +8,7 @@ parsing, OCR, and structured extraction.
 import asyncio
 import email.utils
 import hashlib
+import html
 import ipaddress
 import random
 import re
@@ -293,7 +294,7 @@ FIXTURE_ONLY = _portal(
     "TT",
     "other public entity",
     "Fixture Public Entity",
-    current_events_url="https://fixture-public.ionwave.net/CurrentSourcingEvents.aspx",
+    sourcing_events_url="https://fixture-public.ionwave.net/SourcingEvents.aspx?SourceType=1",
     production=False,
     verification_status="fixture_verified",
     platform_variant="ionwave_modern",
@@ -684,6 +685,8 @@ class EunaIonWaveConnector(BaseConnector):
             self._last_status = response.status_code
             if not self._safe_url(str(response.url)):
                 raise IonWaveError("unsafe redirect target")
+            if response.status_code == 429 and self._detect_access(response) is IonWaveAccessState.CAPTCHA:
+                raise IonWaveAccessError(IonWaveAccessState.CAPTCHA)
             if response.status_code in self._transient_statuses:
                 if attempt == self.portal.retry_attempts:
                     raise IonWaveAvailabilityError(f"IonWave unavailable ({response.status_code})")
@@ -718,9 +721,108 @@ class EunaIonWaveConnector(BaseConnector):
             return records, not records
         if "html" not in content_type:
             raise IonWaveAccessError(IonWaveAccessState.MALFORMED)
+        if "ctl00_mainContent_rgBidList" in response.text:
+            return self._parse_live_grid(response.text)
+        if "ctl00_mainContent_pnlDetail" in response.text:
+            record = self._parse_live_detail(response.text, str(response.url))
+            return ([record] if record else []), False
         parser = _IonWaveHTMLParser()
         parser.feed(response.text)
         return parser.records, parser.zero_results
+
+    @staticmethod
+    def _text(fragment: str) -> str:
+        return _clean(html.unescape(re.sub(r"<[^>]+>", " ", fragment)))
+
+    def _parse_live_grid(self, text: str) -> tuple[list[dict[str, Any]], bool]:
+        keys_match = re.search(r'"_clientKeyValues":\{(.*?)\},"_controlToFocus"', text, re.S)
+        keys = {
+            int(index): bid_id
+            for index, bid_id in re.findall(r'"(\d+)":\{"BidID":"([^"\\]+)"\}', keys_match.group(1) if keys_match else "")
+        }
+        records: list[dict[str, Any]] = []
+        row_pattern = re.compile(
+            r'<tr class="rg(?:Alt)?Row"[^>]+id="ctl00_mainContent_rgBidList_ctl00__(\d+)"[^>]*>(.*?)</tr>',
+            re.I | re.S,
+        )
+        for index_text, row in row_pattern.findall(text):
+            cells = [self._text(value) for value in re.findall(r"<td\b[^>]*>(.*?)</td>", row, re.I | re.S)]
+            index = int(index_text)
+            if len(cells) < 7 or index not in keys:
+                continue
+            records.append(
+                {
+                    "bid_id": keys[index],
+                    "solicitation_number": cells[1],
+                    "title": cells[2],
+                    "type": cells[3],
+                    "agency": cells[4] or self.portal.owning_organization,
+                    "release_date": cells[5],
+                    "due_date": cells[6],
+                    "status": "Open",
+                    "opportunity_url": self.portal.opportunity_url(keys[index]),
+                }
+            )
+        zero = bool(re.search(r"\b0\s+items?\s+in\s+\b", text, re.I))
+        return records, zero
+
+    def _parse_live_detail(self, text: str, url: str) -> dict[str, Any]:
+        def field(suffix: str) -> str:
+            match = re.search(
+                rf'<(?:span|div)[^>]+id="ctl00_mainContent_{re.escape(suffix)}"[^>]*>(.*?)</(?:span|div)>',
+                text,
+                re.I | re.S,
+            )
+            return self._text(match.group(1)) if match else ""
+
+        query = dict(parse_qsl(urlparse(url).query))
+        bid_id = query.get("bidID", "")
+        number_and_title = field("lblNumber")
+        match = re.match(r"(.+?)\s*\((.+)\)\s*$", number_and_title)
+        documents: list[dict[str, Any]] = []
+        attachment_rows = re.findall(
+            r'<tr class="rg(?:Alt)?Row"[^>]+id="ctl00_mainContent_rgBidAttachments[^>]*>(.*?)</tr>',
+            text,
+            re.I | re.S,
+        )
+        for row in attachment_rows:
+            link = re.search(r'<a[^>]+href="([^"]*(?:extract|Extract)\.aspx\?e=[^"]+)"[^>]*>(.*?)</a>', row, re.I | re.S)
+            restricted = re.search(r'id="[^"]*lblRestrictedFileName"[^>]*>(.*?)</span>', row, re.I | re.S)
+            cells = [self._text(value) for value in re.findall(r"<td\b[^>]*>(.*?)</td>", row, re.I | re.S)]
+            if link:
+                documents.append(
+                    {
+                        "title": self._text(link.group(2)),
+                        "url": urljoin(url, html.unescape(link.group(1))),
+                        "description": cells[1] if len(cells) > 1 else "",
+                        "access": "public",
+                    }
+                )
+            elif restricted:
+                documents.append(
+                    {
+                        "title": self._text(restricted.group(1)),
+                        "url": url,
+                        "description": cells[1] if len(cells) > 1 else "",
+                        "access": "login_required",
+                    }
+                )
+        return {
+            "bid_id": bid_id,
+            "solicitation_number": match.group(1).strip() if match else number_and_title,
+            "title": match.group(2).strip() if match else number_and_title,
+            "type": field("lblType"),
+            "status": field("lblStatus"),
+            "release_date": field("lblIssue"),
+            "due_date": field("lblClose"),
+            "question_deadline": field("lblQuestionCutoff"),
+            "contact": field("lblName"),
+            "contact_address": field("lblAddress"),
+            "contact_phone": field("lblPhone"),
+            "contact_email": field("lblEmail"),
+            "opportunity_url": url,
+            "documents": documents,
+        }
 
     def _detect_access(self, response: httpx.Response) -> IonWaveAccessState:
         text = response.text[:200_000].casefold()

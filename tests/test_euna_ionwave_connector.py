@@ -29,6 +29,8 @@ FIXTURES = Path(__file__).parent / "fixtures"
 LISTING = (FIXTURES / "ionwave_event_list.html").read_text()
 DETAIL = (FIXTURES / "ionwave_public_detail.html").read_text()
 EMPTY = (FIXTURES / "ionwave_empty.html").read_text()
+LIVE_GRID = (FIXTURES / "ionwave_live_grid.html").read_text()
+LIVE_DETAIL = (FIXTURES / "ionwave_live_detail.html").read_text()
 
 
 def response(url, text, status=200, content_type="text/html", headers=None):
@@ -162,7 +164,31 @@ class IonWaveConnectorTests(unittest.IsolatedAsyncioTestCase):
             FIXTURE_ONLY,
         )
         self.assertEqual(fixture[0].source.source_id, "ionwave:fixture-public:solicitation:ifb-9")
-        self.assertIn("CurrentSourcingEvents.aspx", fake.calls[0][1])
+        self.assertIn("SourcingEvents.aspx?SourceType=1", fake.calls[0][1])
+
+    async def test_live_aspx_grid_detail_documents_and_human_boundary(self):
+        connector, fake, items = await self.collect(
+            [response(PISD.embed_list_url, LIVE_GRID), response(PISD.opportunity_url("42"), LIVE_DETAIL)]
+        )
+        self.assertEqual(len(items), 1)
+        item = items[0]
+        self.assertEqual((item.solicitation_number, item.title), ("RFP-26-042", "Fixture fleet services"))
+        self.assertEqual(item.source.source_id, "ionwave:pisd:bid:42")
+        documents = connector.document_candidates(item)
+        self.assertEqual(len(documents), 2)
+        self.assertTrue(documents[0].publicly_retrievable)
+        self.assertEqual(documents[1].access_state, AccessState.LOGIN_REQUIRED)
+        self.assertTrue(all(method == "GET" for method, _, _ in fake.calls))
+
+        challenged = EunaIonWaveConnector(
+            PISD,
+            transport=FakeTransport(
+                [response(PISD.embed_list_url, "Cloudflare challenge CAPTCHA", status=429)]
+            ),
+        )
+        with self.assertRaises(IonWaveAccessError) as caught:
+            [x async for x in challenged.discover(IonWaveQuery(include_details=False))]
+        self.assertEqual(caught.exception.state, IonWaveAccessState.CAPTCHA)
 
     async def test_access_migration_changed_shapes_and_ssrf_safety(self):
         cases = [
