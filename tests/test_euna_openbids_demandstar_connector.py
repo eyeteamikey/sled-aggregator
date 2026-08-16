@@ -7,7 +7,9 @@ import httpx
 from sled_aggregator.connectors.euna_bonfire import BonfireProcurementConnector
 from sled_aggregator.connectors.euna_ionwave import EunaIonWaveConnector
 from sled_aggregator.connectors.euna_openbids_demandstar import (
+    BUTLER_COUNTY,
     FIXTURE_PROFILE,
+    LYNN_HAVEN,
     DemandStarAccessError,
     DemandStarAccessState,
     DemandStarError,
@@ -22,6 +24,11 @@ from sled_aggregator.domain.enums import AccessState
 FIXTURES = Path(__file__).parent / "fixtures"
 LISTING = (FIXTURES / "demandstar_listing.html").read_text()
 DETAIL = (FIXTURES / "demandstar_detail.html").read_text()
+API_SEARCH = (FIXTURES / "demandstar_api_search.json").read_text()
+API_SUMMARY = (FIXTURES / "demandstar_api_summary.json").read_text()
+API_DOCUMENTS = (FIXTURES / "demandstar_api_documents.json").read_text()
+API_COMMODITIES = (FIXTURES / "demandstar_api_commodities.json").read_text()
+API_PLANHOLDERS = (FIXTURES / "demandstar_api_planholders.json").read_text()
 
 
 def response(url, text, status=200, headers=None):
@@ -48,6 +55,15 @@ class FakeTransport:
 
     async def aclose(self):
         self.closed = True
+
+
+class FakeAPITransport(FakeTransport):
+    async def post(self, url, *, json):
+        self.calls.append((url, dict(json)))
+        value = self.replies.pop(0)
+        if isinstance(value, Exception):
+            raise value
+        return value
 
 
 class DemandStarTests(unittest.IsolatedAsyncioTestCase):
@@ -77,6 +93,33 @@ class DemandStarTests(unittest.IsolatedAsyncioTestCase):
         for ambiguous in ("euna", "euna-procurement", "procurement"):
             with self.assertRaises(KeyError):
                 connector_registry.get(ambiguous)
+
+    async def test_live_profiles_and_anonymous_agency_api_contract(self):
+        self.assertEqual(BUTLER_COUNTY.verification_status, "live_har_validated")
+        self.assertEqual(LYNN_HAVEN.verification_status, "live_har_validated")
+        self.assertIn("/app/limited/bids/{opportunity_id}/details", LYNN_HAVEN.detail_url_template)
+        replies = [
+            response(LYNN_HAVEN.discovery_url, API_SEARCH, headers={"content-type": "application/json"}),
+            response(LYNN_HAVEN.discovery_url, API_SUMMARY, headers={"content-type": "application/json"}),
+            response(LYNN_HAVEN.discovery_url, API_DOCUMENTS, headers={"content-type": "application/json"}),
+            response(LYNN_HAVEN.discovery_url, API_COMMODITIES, headers={"content-type": "application/json"}),
+            response(LYNN_HAVEN.discovery_url, API_PLANHOLDERS, headers={"content-type": "application/json"}),
+        ]
+        transport = FakeAPITransport(replies)
+        connector = EunaOpenBidsDemandStarConnector(LYNN_HAVEN, transport=transport)
+        items = [item async for item in connector.discover(DemandStarQuery())]
+        self.assertEqual(len(items), 1)
+        item = items[0]
+        self.assertEqual(item.solicitation_number, "RFP-26-42")
+        self.assertEqual(item.source.source_id, "euna/openbids-demandstar:fl-lynn-haven:4242")
+        self.assertEqual(item.categories, ["Fixture radio services"])
+        self.assertEqual(len(item.raw_payload["public_planholders"]), 1)
+        self.assertEqual(len(item.raw_payload["documents"]), 2)
+        self.assertEqual(item.raw_payload["documents"][0]["accessState"], "registration_required")
+        self.assertEqual(connector.document_candidates(item), [])
+        self.assertEqual([call[0].rsplit("/", 1)[-1] for call in transport.calls], [
+            "search", "summary", "documents", "commodityByType", "planholders"
+        ])
 
     async def test_discovery_detail_identity_provenance_and_documents(self):
         c, t, items = await self.collect(

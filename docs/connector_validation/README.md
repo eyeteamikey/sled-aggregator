@@ -145,15 +145,15 @@ These families are likely to produce the greatest reuse during county, municipal
 
 ### Euna IonWave
 
-- [ ] First active configured IonWave tenant
+- [x] Plano ISD — anonymous live grid, details, mixed document access, and later human challenge
 - [ ] Second active configured IonWave tenant with a different public-portal configuration
 
 Prefer geographically distinct tenants and capture any differences in host routing, public details, Q&A, addenda, awards, and attachment gating.
 
 ### Euna OpenBids/DemandStar
 
-- [ ] First authoritative agency-scoped tenant
-- [ ] Second independently operated agency-scoped tenant
+- [x] Butler County, Kansas — authoritative agency-scoped tenant
+- [x] City of Lynn Haven, Florida — independently operated agency-scoped tenant
 
 Do not use paid DemandStar aggregation as the evidence source. Capture agency-scoped public surfaces and distinguish public metadata from registration- or payment-gated documents.
 
