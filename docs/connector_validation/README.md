@@ -1,5 +1,8 @@
 # Connector-Family HAR Validation Roadmap
 
+Operational planning for portals that require human assistance is documented in the
+[Human-Assisted HAR Capture Game Plan](../human_assisted_har_capture_gameplan.md).
+
 ## CODEX CLOUD PUBLICATION WORKFLOW
 
 For every evidence-ingestion or connector-correction task:
