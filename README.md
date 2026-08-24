@@ -674,7 +674,8 @@ new tenant is configuration, not a new connector class.
 
 Discovery uses the observed anonymous `POST
 /api/v1/government/{tenant}/project/public` JSON contract and is bounded by
-one-based page, page-size, and result limits. Only observed title, financial ID,
+one-based page, page-size, and result limits. The HTTP body is the query object
+itself, without an outer `data` wrapper. Only observed title, financial ID,
 status, department ID, category ID, and sorting fields are sent. Date bounds are
 applied locally because the public portal did not expose date filters. Detail and
 Q&A enrichment use the observed public GET routes. Empty results, malformed

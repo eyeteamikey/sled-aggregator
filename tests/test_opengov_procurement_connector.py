@@ -127,13 +127,14 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
                 )
                 method, url, body = fake.calls[0]
                 self.assertEqual((method, url), ("POST", portal.public_projects_url))
-                self.assertEqual(body["data"]["page"], 1)
-                self.assertEqual(body["data"]["limit"], 10)
-                self.assertEqual(body["data"]["sortField"], "releaseProjectDate")
-                self.assertEqual(body["data"]["sortDirection"], "ASC")
-                self.assertEqual(body["data"]["quickSearchQuery"], None)
+                self.assertNotIn("data", body)
+                self.assertEqual(body["page"], 1)
+                self.assertEqual(body["limit"], 10)
+                self.assertEqual(body["sortField"], "releaseProjectDate")
+                self.assertEqual(body["sortDirection"], "ASC")
+                self.assertEqual(body["quickSearchQuery"], None)
                 self.assertEqual(
-                    body["data"]["filters"],
+                    body["filters"],
                     [
                         {"type": "title", "value": "Parking"},
                         {"type": "financialId", "value": "902999"},
@@ -158,7 +159,7 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
             "ocean-county-nj:project:102",
             "ocean-county-nj:project:103",
         ])
-        self.assertEqual([call[2]["data"]["page"] for call in fake.calls], [1, 2])
+        self.assertEqual([call[2]["page"] for call in fake.calls], [1, 2])
         self.assertEqual(connector.health.consecutive_failures, 0)
 
     async def test_ocean_detail_contacts_amendments_questions_and_documents(self):
@@ -221,7 +222,7 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(item.source.source_id, "alameda-county-ca:project:201")
         self.assertEqual(item.solicitation_number, "902999")
         self.assertEqual(item.raw_payload["government"]["organization"]["timezone"], "America/Los_Angeles")
-        self.assertEqual(fake.calls[0][2]["data"]["filters"], [{"type": "status", "value": "open"}])
+        self.assertEqual(fake.calls[0][2]["filters"], [{"type": "status", "value": "open"}])
         self.assertEqual(fake.calls[0][1], ALAMEDA_COUNTY.public_projects_url)
 
     async def test_dates_are_local_post_filter_not_unobserved_post_vocabulary(self):

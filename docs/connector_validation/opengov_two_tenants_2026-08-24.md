@@ -3,22 +3,33 @@
 Validation date: 2026-08-24
 
 This validation establishes a reusable anonymous public request contract for two
-independently operated OpenGov Procurement tenants. It is a point-in-time
-observation, not a claim of continuous production availability.
+independently operated OpenGov Procurement tenants. It combines the earlier
+same-day interactive walkthrough with a follow-up live API replay that corrected
+the HTTP request envelope. It is a point-in-time observation, not a claim of
+continuous production availability.
 
 ## Tenants and evidence
 
-| Tenant | Starting URL | Tenant code | Organization timezone | Raw source HAR SHA-256 | Sanitized HAR SHA-256 |
+| Tenant | Starting URL | Tenant code | Organization timezone | Derived raw HAR SHA-256 | Sanitized derived HAR SHA-256 |
 | --- | --- | --- | --- | --- | --- |
 | Ocean County, New Jersey | `https://procurement.opengov.com/portal/oceancounty` | `oceancounty` | `America/New_York` | `6bc258cece119647da5a73f7c225acb373be93071799ecb334b89e60afb51f7d` | `7c34fcb55cc1882bcaf8b120b0d3515fe2c359aaf2e032a37ee7fd3adb0154ad` |
 | Alameda County, California | `https://procurement.opengov.com/portal/acgov` | `acgov` | `America/Los_Angeles` | `6f4048bb552f6056d9de550c7caaeb285307e77d3fcd94894f9ce69736e866af` | `664db6a10d2f07de9ad2fa153f6389a9d2f2bee7529bdd8f4d98f803f7e475db` |
 
-The raw and sanitized HARs remain under ignored `.sled-validation/` storage and
-must not be deleted until the evidence-derived pull request is merged and the
-functionality is confirmed on `master`. Neither HAR is committed. The repository
-scanner reported zero findings on the minimized sanitized contract artifacts.
-Response bodies were removed from those sanitized artifacts; reviewed minimal
-fixtures retain only the structural fields needed by tests.
+The raw and sanitized HAR-shaped artifacts remain under ignored
+`.sled-validation/` storage and must not be deleted until the evidence-derived
+pull request is merged and the functionality is confirmed on `master`. Neither
+artifact is committed. The repository scanner reported zero findings on the
+minimized sanitized artifacts. Response bodies were removed from the sanitized
+copies; reviewed minimal fixtures retain only the structural fields needed by
+tests.
+
+Evidence provenance matters here: these two HAR-shaped files were assembled from
+separately retained anonymous API responses after the walkthrough. They are
+deterministic contract/replay artifacts, not browser-export source HARs. Their
+hashes are recorded for integrity, but they do not independently prove the
+interactive sequence. The live request-shape correction described below was
+verified directly against both public APIs and against the retained public
+OpenGov application bundle. No complete browser HAR is committed or claimed.
 
 ## Shared request contract
 
@@ -27,16 +38,26 @@ route/schema family:
 
 - `GET /government/{tenantCode}` for public organization configuration.
 - `POST /government/{tenantCode}/project/public` for public listing, search,
-  filtering, sorting, and pagination. The body is exactly `{"data": query}`.
+  filtering, sorting, and pagination. The HTTP JSON body is the query object
+  itself; there is no outer `data` member.
 - `GET /project/{projectId}` for opportunity detail, contacts, addenda/notices,
   attachment metadata, configuration-dependent bid results, and award state.
 - `GET /project/{projectId}/question` for released public Q&A.
 
-The observed listing query contains `filters`, `quickSearchQuery`, `limit`,
+The listing query contains `filters`, `quickSearchQuery`, `limit`,
 `page`, `sortField`, and `sortDirection`. Page numbers are one-based. The public
 UI offered page sizes 5, 10, 20, and 50. The response shape is an object with an
 integer `count` and a `rows` array. Duplicate authoritative project IDs are
 discarded across pages.
+
+The public application calls its request helper with an options object shaped
+like `{data: query}`. That helper serializes `query`, not the options object, as
+the HTTP body. A follow-up live replay proved the distinction: sending the
+options envelope returned HTTP 200 but silently ignored filters, sorting, limits,
+and page numbers. Sending the query object directly returned Ocean's 13 open
+records with distinct page-two IDs, Ocean's closed records as closed, Alameda's
+single `contractor` title match, and Alameda department `11400` results. The
+connector and regression tests therefore fail the old outer-envelope shape.
 
 Observed public filter objects were:
 
@@ -54,10 +75,11 @@ optional date bounds are applied locally after retrieval.
 
 ## Walkthrough observations
 
-For each tenant the walkthrough covered the initial portal, active listing,
-keyword/title search, status and department filters, category search/selection,
-sorting, the second page, two open detail records, a closed/awarded record,
-public Q&A, addenda/notices, document selection, and the download boundary.
+For each tenant the earlier successful walkthrough covered the initial portal,
+active listing, keyword/title search, status and department filters, category
+search/selection, sorting, the second page, two open detail records, a
+closed/awarded record, public Q&A, addenda/notices, document selection, and the
+download boundary.
 
 Ocean County exposed 13 active opportunities over two pages during the review.
 An Engineering department filter used ID `589`; selection of civil engineering
@@ -108,18 +130,23 @@ document retrieval was attempted. Candidates use the authoritative public
 detail page as their metadata URL and are marked `login_required` and not
 publicly retrievable.
 
-Ocean's first portal load briefly displayed Cloudflare “Performing security
-verification” and then cleared without human action. No CAPTCHA was solved or
-bypassed. Alameda displayed no challenge during the reviewed walkthrough. The
-connector classifies CAPTCHA/Cloudflare challenge markup and login walls and
-fails closed.
+Ocean's earlier portal load briefly displayed Cloudflare “Performing security
+verification” and then cleared without human action. Alameda displayed no
+challenge during that walkthrough. During the follow-up validation, both portal
+loads remained at the same automatic Cloudflare verification screen. There was
+no checkbox or image challenge to complete, and no CAPTCHA was solved or
+bypassed. No further browser interaction was attempted. The anonymous API replay
+remained public for both tenants. The connector classifies CAPTCHA/Cloudflare
+challenge markup and login walls and fails closed.
 
 ## Fixture-tested versus live-observed
 
-Live-observed behavior established route hosts, tenant-code placement, request
-methods, listing body/filter vocabulary, sorting, pagination, response shape,
-detail/Q&A fields, status/timezone differences, attachment metadata, public
-contacts, Ocean vendor results, and the login/session boundaries.
+The earlier walkthrough and retained public responses established route hosts,
+tenant-code placement, filter vocabulary, response shapes, detail/Q&A fields,
+status/timezone differences, attachment metadata, public contacts, Ocean vendor
+results, and login/session boundaries. The follow-up live replay established the
+actual HTTP body envelope, filter behavior, sorting, pagination, and two current
+detail responses per tenant while the browser UI was challenge-bound.
 
 Small deterministic JSON fixtures use fictional people and `example.invalid`
 addresses while preserving those response structures. Automated tests cover
@@ -132,6 +159,11 @@ responses, retries/timeouts/circuit state, and injected versus owned clients.
 
 - Public document bodies were not downloaded because both tenants required
   login at the download action. No RFP/SOW/specification content was retrieved.
+- A complete browser-export source HAR was not available in this follow-up; the
+  retained HAR-shaped files are derived replay artifacts and are labeled as such.
+- Both portal UIs were held at automatic Cloudflare verification during the
+  follow-up, so the successful live recheck was API-only and did not repeat every
+  earlier visual interaction.
 - The public UI did not expose date filtering; only local date bounds are tested.
 - Related contracts are not collected because the observed direct POST was not
   anonymously reusable outside browser session state.

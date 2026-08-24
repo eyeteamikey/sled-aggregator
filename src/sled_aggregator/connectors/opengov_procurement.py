@@ -278,7 +278,12 @@ class OpenGovProcurementConnector(BaseConnector):
         seen: set[str] = set()
         try:
             for page in range(1, max_pages + 1):
-                body = {"data": self._listing_request(q, page, page_size)}
+                # OpenGov's application client passes ``{data: query}`` to its
+                # request helper, but the helper serializes ``query`` itself as
+                # the HTTP JSON body.  Sending the helper-options envelope over
+                # the wire is accepted with HTTP 200 but silently ignores every
+                # filter, sort, limit, and page field.
+                body = self._listing_request(q, page, page_size)
                 payload = await self._request_json("POST", self.portal.public_projects_url, body)
                 count, rows = self._listing_rows(payload)
                 for listed in rows:
