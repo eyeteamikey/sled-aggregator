@@ -161,7 +161,7 @@ class CoverageAuditTests(unittest.TestCase):
                 "live_verified": 0,
                 "production_monitored": 0,
                 "tier_0_remaining": 36,
-                "blocked_jurisdictions": 9,
+                "blocked_jurisdictions": 11,
             },
         )
         self.assertEqual(len(plan["unidentified_primary_sources"]), 36)
@@ -420,8 +420,9 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(render_json(report), render_json(report))
         self.assertEqual(json.loads(render_json(report))["summary"]["jurisdiction_count"], 56)
         rows = list(csv.DictReader(io.StringIO(render_csv(report))))
-        # Rhode Island and Michigan retain separate supplemental sources.
-        self.assertEqual(len(rows), 60)
+        # Rhode Island and Michigan retain separate supplemental sources; New
+        # Jersey and California now include validated local OpenGov sources.
+        self.assertEqual(len(rows), 62)
         self.assertEqual(len({x["jurisdiction_code"] for x in rows}), 56)
         markdown = render_markdown(report)
         self.assertEqual(markdown, render_markdown(report))

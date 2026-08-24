@@ -1,0 +1,22 @@
+{
+  "id": 201,
+  "financialId": "902999",
+  "title": "Fictional Parking Garage Services",
+  "summary": "<p>Provide cleaning services.</p>",
+  "status": "open",
+  "type": "Request For Quotation",
+  "releaseProjectDate": "2026-07-28T15:00:00.000Z",
+  "proposalDeadline": "2026-09-14T21:00:00.000Z",
+  "qaEnabled": false,
+  "contactDisplayName": "Taylor Buyer",
+  "contactEmail": "taylor.buyer@example.invalid",
+  "contactPhoneComplete": "(555) 010-0201",
+  "hideContact": false,
+  "procurementDisplayName": "Taylor Buyer",
+  "hideProcurementContact": true,
+  "department": {"id": 11400, "name": "General Services Agency-Procurement"},
+  "government": {"code": "acgov", "organization": {"name": "County of Example Alameda", "timezone": "America/Los_Angeles"}},
+  "documentAttachment": {"id": 9201, "filename": "RFQ 902999.pdf", "fileExtension": "pdf", "title": "Project Document"},
+  "attachments": [],
+  "addendums": []
+}

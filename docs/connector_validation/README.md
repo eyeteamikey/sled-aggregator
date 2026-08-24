@@ -135,8 +135,10 @@ These families are likely to produce the greatest reuse during county, municipal
 
 ### OpenGov Procurement/ProcureNow
 
-- [ ] Mohave County configured profile
-- [ ] Second independently operated OpenGov tenant selected from authoritative agency evidence
+- [x] Ocean County, New Jersey — anonymous listing/detail/Q&A and metadata; login-gated downloads
+- [x] Alameda County, California — same shared contract with independently configured tenant data
+
+Evidence: [OpenGov two-tenant validation](opengov_two_tenants_2026-08-24.md).
 
 ### Euna Bonfire
 

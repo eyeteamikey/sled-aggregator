@@ -1,0 +1,79 @@
+{
+  "id": 101,
+  "financialId": "OC-2026-01",
+  "title": "Fictional Sidewalk Engineering",
+  "summary": "<p>Design <strong>public sidewalks</strong>.</p>",
+  "status": "open",
+  "type": "Mini Grant",
+  "releaseProjectDate": "2026-08-04T04:00:00.000Z",
+  "proposalDeadline": "2026-09-30T20:00:00.000Z",
+  "qaEnabled": true,
+  "contactDisplayName": "Jordan Buyer",
+  "contactEmail": "jordan.buyer@example.invalid",
+  "contactPhoneComplete": "(555) 010-0101",
+  "contactTitle": "County Engineer",
+  "hideContact": false,
+  "procurementDisplayName": "Hidden Procurement",
+  "procurementEmail": "hidden@example.invalid",
+  "hideProcurementContact": true,
+  "department": {"id": 589, "name": "Engineering"},
+  "categories": [{"id": 7001, "code": "92517", "title": "Civil Engineering"}],
+  "government": {
+    "code": "oceancounty",
+    "organization": {
+      "name": "County of Example Ocean",
+      "timezone": "America/New_York",
+      "website": "https://ocean.example.invalid"
+    }
+  },
+  "documentAttachment": {
+    "id": 9001,
+    "filename": "OC-2026-01 Project.pdf",
+    "fileExtension": "pdf",
+    "title": "Project Document",
+    "type": "project_document",
+    "url": "https://files.example.invalid/document.pdf?token=REDACTED"
+  },
+  "attachments": [
+    {
+      "id": 9002,
+      "filename": "..\\Scope of Work.pdf",
+      "fileExtension": "pdf",
+      "title": "Scope of Work",
+      "type": "attachment",
+      "projectAttachments": [{"project_id": 101}]
+    }
+  ],
+  "addendums": [
+    {
+      "id": 8001,
+      "project_id": 101,
+      "number": 1,
+      "title": "Addendum 1",
+      "description": "Schedule correction",
+      "releasedAt": "2026-08-20T15:00:00.000Z",
+      "status": "released",
+      "type": "addendum",
+      "isNotice": false,
+      "user": {
+        "displayName": "Casey Officer",
+        "email": "casey.officer@example.invalid",
+        "phoneComplete": "(555) 010-0102",
+        "title": "Contracting Officer"
+      },
+      "attachments": [
+        {"id": 9003, "filename": "Addendum 1.pdf", "fileExtension": "pdf", "title": "Addendum 1"}
+      ]
+    },
+    {
+      "id": 8002,
+      "project_id": 101,
+      "number": 1,
+      "title": "Official Notice 1",
+      "releasedAt": "2026-08-21T15:00:00.000Z",
+      "type": "notice",
+      "isNotice": true,
+      "attachments": []
+    }
+  ]
+}

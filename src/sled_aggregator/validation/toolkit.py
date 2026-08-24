@@ -22,6 +22,7 @@ SANITIZER_VERSION = "1.0"
 REDACTED = "[REDACTED]"
 SENSITIVE_NAMES = re.compile(
     r"authorization|cookie|api[-_]?key|token|secret|password|passwd|session|csrf|xsrf|"
+    r"credential|signature|"
     r"oauth|saml|code|viewstate|javax\.faces|jsessionid|_afrloop|_adf\.ctrl-state|"
     r"oracle.*(?:state|session)|traceparent|x-request-id|username|supplier|phone|email",
     re.I,
@@ -512,6 +513,17 @@ def _redact_url(url: str, audit: list[AuditAction], index: int) -> str:
     return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(safe), ""))
 
 
+def _sanitize_json_urls(value: object, audit: list[AuditAction], index: int) -> object:
+    """Redact signed/query credentials nested in otherwise useful JSON bodies."""
+    if isinstance(value, dict):
+        return {key: _sanitize_json_urls(item, audit, index) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_sanitize_json_urls(item, audit, index) for item in value]
+    if isinstance(value, str) and value.casefold().startswith(("https://", "http://")):
+        return _redact_url(value, audit, index)
+    return value
+
+
 def _sanitize_headers(
     headers: list[dict], audit: list[AuditAction], index: int, side: str
 ) -> list[dict]:
@@ -586,6 +598,17 @@ def _sanitize_entry(entry: dict, index: int, audit: list[AuditAction], max_body:
         content.pop("text", None)
         content.pop("encoding", None)
         content["_sledBodyRemoved"] = True
+    elif text is not None and "json" in mime:
+        try:
+            parsed_body = json.loads(text)
+        except json.JSONDecodeError:
+            pass
+        else:
+            content["text"] = json.dumps(
+                _sanitize_json_urls(parsed_body, audit, index),
+                separators=(",", ":"),
+                sort_keys=True,
+            )
     for key in ("timings", "serverIPAddress", "connection", "_securityDetails"):
         entry.pop(key, None)
     return entry
@@ -744,6 +767,11 @@ def scan_artifact(path: Path) -> list[Finding]:
             )
     for match in re.finditer(r"(?<![A-Za-z0-9])[A-Za-z0-9+/=_-]{32,}(?![A-Za-z0-9])", text):
         value = match.group()
+        # Long public URL route fragments can look high-entropy when the regex
+        # includes slash-separated path segments. They are request-contract
+        # evidence, not credentials; query credentials are redacted separately.
+        if re.fullmatch(r"(?:com|org|gov|net)/api/[a-z0-9/_-]+", value, re.I):
+            continue
         counts = {char: value.count(char) for char in set(value)}
         entropy = -sum((n / len(value)) * math.log2(n / len(value)) for n in counts.values())
         if entropy >= 4.2 and value not in {REDACTED}:

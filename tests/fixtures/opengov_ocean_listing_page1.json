@@ -1,0 +1,30 @@
+{
+  "count": 3,
+  "rows": [
+    {
+      "id": 101,
+      "financialId": "OC-2026-01",
+      "title": "Fictional Sidewalk Engineering",
+      "status": "open",
+      "releaseProjectDate": "2026-08-04T04:00:00.000Z",
+      "proposalDeadline": "2026-09-30T20:00:00.000Z",
+      "summary": "<p>Design public sidewalks.</p>",
+      "department": {"id": 589, "name": "Engineering"},
+      "government": {
+        "code": "oceancounty",
+        "organization": {"name": "County of Example Ocean", "timezone": "America/New_York"}
+      }
+    },
+    {
+      "id": 102,
+      "title": "Fictional Traffic Equipment",
+      "status": "closed",
+      "closedSubstatus": "awarded",
+      "department": {"id": 589, "name": "Engineering"},
+      "government": {
+        "code": "oceancounty",
+        "organization": {"name": "County of Example Ocean", "timezone": "America/New_York"}
+      }
+    }
+  ]
+}

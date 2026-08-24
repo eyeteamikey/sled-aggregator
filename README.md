@@ -664,28 +664,33 @@ Authoritative starting points:
 ## OpenGov Procurement / ProcureNow
 
 Use `opengov/procurement` for the configurable, anonymous OpenGov Procurement
-(historically ProcureNow) portal family. Explicit aliases include `opengov`,
+(historically ProcureNow) portal family. Ocean County, New Jersey and Alameda
+County, California were live-validated on 2026-08-24. Explicit aliases include `opengov`,
 `opengov-procurement`, `procurenow`, `procurenow/opengov`, and
 `opengov-procurenow`; aliases for unrelated OpenGov product families are
-intentionally excluded. Production presets cover the City of Phoenix, Seattle,
-Cleveland, Bridgeport, Gallup, and Mohave County. A new tenant is configuration,
-not a new connector class.
+intentionally excluded. Validated presets are `ocean-county-nj` and
+`alameda-county-ca`; older configured presets remain explicitly unverified. A
+new tenant is configuration, not a new connector class.
 
-Discovery prefers the public embed project list and is bounded by page, page
-size, and result limits. Exact project/solicitation identifiers plus keyword,
-status, department, release-date, and due-date filters run locally when the
-tenant does not expose a stable anonymous GET search. Detail enrichment uses
-only configured public project pages. Genuine zero results, malformed markup,
-JavaScript-only shells, login/registration interstitials, CAPTCHA, restrictions,
-and transient failures remain distinct outcomes.
+Discovery uses the observed anonymous `POST
+/api/v1/government/{tenant}/project/public` JSON contract and is bounded by
+one-based page, page-size, and result limits. Only observed title, financial ID,
+status, department ID, category ID, and sorting fields are sent. Date bounds are
+applied locally because the public portal did not expose date filters. Detail and
+Q&A enrichment use the observed public GET routes. Empty results, malformed
+schemas, login walls, CAPTCHA/bot verification, restrictions, and transient
+failures remain distinct outcomes.
 
-Project documents, attachments, addenda, notices, public Q&A, and award links
-are retained as metadata with source provenance and safe-host validation.
+Project documents, attachments, addenda, notices, public Q&A, contacts, public
+bid-result vendors, and award state are retained as metadata with source
+provenance.
 `document_candidates()` converts that metadata to the established manifest and
-retrieval-queue input. The connector never retrieves attachment bodies, parses,
+routing input. The connector never retains signed attachment URLs, retrieves attachment bodies, parses,
 runs OCR, performs semantic extraction, registers, follows projects, accepts
-terms, acknowledges addenda, or submits responses. All network operations are
-anonymous GETs with bounded redirects, retries, per-tenant circuit state, and
+terms, acknowledges addenda, or submits responses. OpenGov's public UI required
+login before document download, so every attachment candidate is marked
+`login_required`. Network operations are limited to the exact listing POST and
+public GET contracts, with retries, timeout, per-tenant circuit state, and
 fixture-backed tests; CI does not depend on live OpenGov access.
 
 ## Solicitation document manifest and retrieval queue
