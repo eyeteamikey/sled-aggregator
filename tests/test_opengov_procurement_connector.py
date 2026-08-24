@@ -1,22 +1,20 @@
+import json
 import unittest
 from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
+from unittest.mock import patch
 
 import httpx
 
 from sled_aggregator.connectors.opengov_procurement import (
-    BRIDGEPORT,
-    CLEVELAND,
-    GALLUP,
-    MOHAVE_COUNTY,
+    ALAMEDA_COUNTY,
+    OCEAN_COUNTY,
     OPENGOV_PORTALS,
-    PHOENIX,
-    SEATTLE,
     OpenGovAccessError,
     OpenGovAccessState,
     OpenGovAvailabilityError,
-    OpenGovPortal,
+    OpenGovError,
     OpenGovProcurementConnector,
     OpenGovQuery,
 )
@@ -24,23 +22,52 @@ from sled_aggregator.connectors.registry import ConnectorRegistry, connector_reg
 from sled_aggregator.domain.enums import AccessState, OpportunityStatus
 
 FIXTURES = Path(__file__).parent / "fixtures"
-LISTING = (FIXTURES / "opengov_project_list.html").read_text()
-DETAIL = (FIXTURES / "opengov_project_detail.html").read_text()
-EMPTY = (FIXTURES / "opengov_empty.html").read_text()
 
 
-def response(url, text, status=200, content_type="text/html", headers=None):
-    return httpx.Response(status, text=text,
-                          headers={"content-type": content_type, **(headers or {})},
-                          request=httpx.Request("GET", url))
+def fixture(name):
+    return json.loads((FIXTURES / name).read_text())
+
+
+OCEAN_PAGE_1 = fixture("opengov_ocean_listing_page1.json")
+OCEAN_PAGE_2 = fixture("opengov_ocean_listing_page2.json")
+OCEAN_DETAIL = fixture("opengov_ocean_detail.json")
+OCEAN_QUESTIONS = fixture("opengov_ocean_questions.json")
+OCEAN_AWARDED = fixture("opengov_ocean_awarded_detail.json")
+ALAMEDA_LISTING = fixture("opengov_alameda_listing.json")
+ALAMEDA_DETAIL = fixture("opengov_alameda_detail.json")
+
+
+def response(url, payload, status=200, content_type="application/json", method="GET", headers=None):
+    if isinstance(payload, (dict, list)):
+        return httpx.Response(
+            status,
+            json=payload,
+            headers={"content-type": content_type, **(headers or {})},
+            request=httpx.Request(method, url),
+        )
+    return httpx.Response(
+        status,
+        text=payload,
+        headers={"content-type": content_type, **(headers or {})},
+        request=httpx.Request(method, url),
+    )
 
 
 class FakeTransport:
     def __init__(self, replies):
-        self.replies, self.calls, self.closed = list(replies), [], False
+        self.replies = list(replies)
+        self.calls = []
+        self.closed = False
 
-    async def get(self, url, *, params=None):
-        self.calls.append(("GET", url, dict(params or {})))
+    async def get(self, url):
+        self.calls.append(("GET", url, None))
+        return self._next()
+
+    async def post(self, url, *, json):
+        self.calls.append(("POST", url, json))
+        return self._next()
+
+    def _next(self):
         item = self.replies.pop(0)
         if isinstance(item, Exception):
             raise item
@@ -51,165 +78,232 @@ class FakeTransport:
 
 
 class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
-    async def collect(self, replies, query=None, portal=PHOENIX, **kwargs):
+    async def collect(self, replies, query=None, portal=OCEAN_COUNTY, **kwargs):
         fake = FakeTransport(replies)
         connector = OpenGovProcurementConnector(portal, transport=fake, **kwargs)
-        items = [x async for x in connector.discover(query or OpenGovQuery())]
+        items = [item async for item in connector.discover(query or OpenGovQuery())]
         return connector, fake, items
 
-    async def test_presets_routes_configuration_and_registry_aliases(self):
-        self.assertEqual(set(OPENGOV_PORTALS),
-                         {"phoenix", "seattle", "cleveland", "bridgeport", "mohave-county", "gallup"})
+    async def test_validated_profiles_routes_and_registry_aliases(self):
+        self.assertIn("ocean-county-nj", OPENGOV_PORTALS)
+        self.assertIn("alameda-county-ca", OPENGOV_PORTALS)
         expected = (
-            (PHOENIX, "phoenix", "America/Phoenix", "city"),
-            (SEATTLE, "seattle", "America/Los_Angeles", "city"),
-            (CLEVELAND, "clevelandoh", "America/New_York", "city"),
-            (BRIDGEPORT, "bridgeportct", "America/New_York", "city"),
-            (MOHAVE_COUNTY, "mohavecounty", "America/Phoenix", "county"),
-            (GALLUP, "gallupnm", "America/Denver", "city"),
+            (OCEAN_COUNTY, "oceancounty", "America/New_York"),
+            (ALAMEDA_COUNTY, "acgov", "America/Los_Angeles"),
         )
-        for portal, slug, timezone, kind in expected:
-            self.assertEqual(portal.tenant_slug, slug)
+        for portal, code, timezone in expected:
+            self.assertEqual(portal.tenant_slug, code)
             self.assertEqual(portal.default_timezone, timezone)
-            self.assertEqual(portal.organization_type, kind)
-            self.assertEqual(portal.portal_url, f"https://procurement.opengov.com/portal/{slug}")
-            self.assertIn(f"/embed/{slug}/project-list", portal.embed_list_url)
-        self.assertEqual(MOHAVE_COUNTY.contracts_portal_url,
-                         "https://procurement.opengov.com/portal/mohavecounty/contracts")
-        for alias in ("opengov", "opengov-procurement", "opengov/procurement",
-                      "procurenow", "procurenow/opengov", "opengov-procurenow"):
+            self.assertEqual(portal.verification_status, "live_validated_2026-08-24")
+            self.assertEqual(
+                portal.public_projects_url,
+                f"https://api.procurement.opengov.com/api/v1/government/{code}/project/public",
+            )
+        for alias in (
+            "opengov",
+            "opengov-procurement",
+            "opengov/procurement",
+            "procurenow",
+            "procurenow/opengov",
+            "opengov-procurenow",
+        ):
             self.assertIs(connector_registry.get(alias), OpenGovProcurementConnector)
 
-    async def test_listing_detail_documents_provenance_and_manifest_candidates(self):
-        connector, fake, items = await self.collect([
-            response(PHOENIX.embed_list_url, LISTING),
-            response(PHOENIX.project_url("42001"), DETAIL),
+    async def test_shared_listing_filter_and_sort_contract_for_both_tenants(self):
+        query = OpenGovQuery(
+            keyword="Parking",
+            solicitation_number="902999",
+            statuses=("closed",),
+            department_id=11400,
+            category_ids=(10007588, 10007587),
+            include_details=False,
+            sort_field="releaseProjectDate",
+            sort_direction="ASC",
+        )
+        for portal, listing in ((OCEAN_COUNTY, {"count": 0, "rows": []}), (ALAMEDA_COUNTY, ALAMEDA_LISTING)):
+            with self.subTest(tenant=portal.tenant_key):
+                _, fake, _ = await self.collect(
+                    [response(portal.public_projects_url, listing, method="POST")], query, portal
+                )
+                method, url, body = fake.calls[0]
+                self.assertEqual((method, url), ("POST", portal.public_projects_url))
+                self.assertEqual(body["data"]["page"], 1)
+                self.assertEqual(body["data"]["limit"], 10)
+                self.assertEqual(body["data"]["sortField"], "releaseProjectDate")
+                self.assertEqual(body["data"]["sortDirection"], "ASC")
+                self.assertEqual(body["data"]["quickSearchQuery"], None)
+                self.assertEqual(
+                    body["data"]["filters"],
+                    [
+                        {"type": "title", "value": "Parking"},
+                        {"type": "financialId", "value": "902999"},
+                        {"type": "department_id", "value": 11400},
+                        {"type": "categories", "value": [10007588, 10007587]},
+                        {"type": "status", "value": "closed"},
+                    ],
+                )
+
+    async def test_bounded_pagination_deduplication_and_result_limit(self):
+        portal = replace(OCEAN_COUNTY, page_size=2, maximum_pages=4)
+        connector, fake, items = await self.collect(
+            [
+                response(portal.public_projects_url, OCEAN_PAGE_1, method="POST"),
+                response(portal.public_projects_url, OCEAN_PAGE_2, method="POST"),
+            ],
+            OpenGovQuery(include_details=False, include_closed=True, limit=3),
+            portal,
+        )
+        self.assertEqual([item.source.source_id for item in items], [
+            "ocean-county-nj:project:101",
+            "ocean-county-nj:project:102",
+            "ocean-county-nj:project:103",
         ])
-        self.assertEqual(len(items), 1)  # closed records are opt-in
+        self.assertEqual([call[2]["data"]["page"] for call in fake.calls], [1, 2])
+        self.assertEqual(connector.health.consecutive_failures, 0)
+
+    async def test_ocean_detail_contacts_amendments_questions_and_documents(self):
+        listing = {"count": 1, "rows": [OCEAN_PAGE_1["rows"][0]]}
+        connector, fake, items = await self.collect([
+            response(OCEAN_COUNTY.public_projects_url, listing, method="POST"),
+            response(OCEAN_COUNTY.project_api_url("101"), OCEAN_DETAIL),
+            response(OCEAN_COUNTY.question_api_url("101"), OCEAN_QUESTIONS),
+        ])
+        self.assertEqual(len(items), 1)
         item = items[0]
-        self.assertEqual(item.source.source_id, "phoenix:project:42001")
-        self.assertEqual(item.title, "Network Modernization Services")
+        self.assertEqual(item.title, "Fictional Sidewalk Engineering")
+        self.assertEqual(item.solicitation_number, "OC-2026-01")
         self.assertEqual(item.status, OpportunityStatus.OPEN)
-        self.assertNotIn("timestamp", str(item.source.opportunity_url))
-        self.assertEqual(item.raw_payload["department"], "Information Technology Services")
-        self.assertEqual(item.raw_payload["procurement_officer"], "Alex Public")
-        self.assertEqual(len(item.raw_payload["documents"]), 3)
-        self.assertTrue(all(call[0] == "GET" for call in fake.calls))
+        self.assertEqual(item.description, "Design public sidewalks.")
+        self.assertEqual(item.categories, ["92517"])
+        self.assertEqual(len(item.raw_payload["contacts"]), 2)
+        self.assertNotIn("Hidden Procurement", str(item.raw_payload["contacts"]))
+        self.assertEqual(item.raw_payload["amendments"][0]["project_id"], 101)
+        self.assertEqual(len(item.raw_payload["notices"]), 1)
+        self.assertTrue(item.raw_payload["questions"][0]["is_answered"])
+        self.assertEqual(
+            item.raw_payload["questions"][0]["comments"][0]["description"],
+            "Public agency answer",
+        )
+        self.assertNotIn("files.example.invalid", str(item.raw_payload))
         candidates = connector.document_candidates(item)
         self.assertEqual(len(candidates), 3)
-        self.assertEqual(candidates[0].source_document_id, "doc-1")
-        self.assertEqual(candidates[1].category, "addendum")
-        self.assertEqual(candidates[2].access_state, AccessState.LOGIN_REQUIRED)
-        self.assertFalse(candidates[2].publicly_retrievable)
-        self.assertIn("source_provenance", item.raw_payload)
-        self.assertEqual(connector.health.access_state, OpenGovAccessState.PUBLIC)
+        self.assertEqual(candidates[1].filename, "Scope of Work.pdf")
+        self.assertEqual(candidates[2].category, "addendum")
+        self.assertEqual(candidates[2].addendum_number, "1")
+        self.assertTrue(all(x.opportunity_id == item.source.source_id for x in candidates))
+        self.assertTrue(all(x.access_state == AccessState.LOGIN_REQUIRED for x in candidates))
+        self.assertTrue(all(x.publicly_retrievable is False for x in candidates))
+        self.assertEqual([call[0] for call in fake.calls], ["POST", "GET", "GET"])
+        self.assertFalse(connector.health.document_download_supported)
 
-    async def test_fixture_only_tenant_proves_configuration_driven_json(self):
-        portal = OpenGovPortal(
-            "fixture-only", "fixturedistrict", "Fixture-only non-production tenant",
-            "Test Territory", "TT", "school district", "Fixture District",
-            production=False, verification_status="test_fixture_only",
+    async def test_award_vendor_and_public_contact_normalization(self):
+        listing = {"count": 1, "rows": [OCEAN_PAGE_1["rows"][1]]}
+        _, _, items = await self.collect([
+            response(OCEAN_COUNTY.public_projects_url, listing, method="POST"),
+            response(OCEAN_COUNTY.project_api_url("102"), OCEAN_AWARDED),
+        ], OpenGovQuery(include_closed=True, include_awarded=True))
+        item = items[0]
+        self.assertEqual(item.status, OpportunityStatus.AWARDED)
+        self.assertEqual([v["name"] for v in item.raw_payload["vendors"]], [
+            "Example Signal Products", "Example Traffic LLC",
+        ])
+        self.assertNotIn("vendor@example.invalid", str(item.raw_payload["vendors"]))
+        self.assertEqual({x["role"] for x in item.raw_payload["contacts"]}, {
+            "project_contact", "procurement_contact",
+        })
+
+    async def test_cross_tenant_same_contract_and_tenant_specific_timezone(self):
+        _, fake, items = await self.collect([
+            response(ALAMEDA_COUNTY.public_projects_url, ALAMEDA_LISTING, method="POST"),
+            response(ALAMEDA_COUNTY.project_api_url("201"), ALAMEDA_DETAIL),
+        ], portal=ALAMEDA_COUNTY)
+        item = items[0]
+        self.assertEqual(item.source.source_id, "alameda-county-ca:project:201")
+        self.assertEqual(item.solicitation_number, "902999")
+        self.assertEqual(item.raw_payload["government"]["organization"]["timezone"], "America/Los_Angeles")
+        self.assertEqual(fake.calls[0][2]["data"]["filters"], [{"type": "status", "value": "open"}])
+        self.assertEqual(fake.calls[0][1], ALAMEDA_COUNTY.public_projects_url)
+
+    async def test_dates_are_local_post_filter_not_unobserved_post_vocabulary(self):
+        query = OpenGovQuery(
+            include_details=False,
+            released_from=date(2026, 8, 1),
+            released_to=date(2026, 8, 5),
+            due_from=date(2026, 9, 1),
+            due_to=date(2026, 10, 1),
         )
-        payload = ('{"projects":[{"project_id":"T-7","title":"Bus services",'
-                   '"agency":"Fixture District","status":"Awarded"}]}')
-        _, _, items = await self.collect(
-            [response(portal.embed_list_url, payload, content_type="application/json")],
-            OpenGovQuery(include_details=False, include_awarded=True), portal,
+        _, fake, items = await self.collect([
+            response(OCEAN_COUNTY.public_projects_url, {"count": 1, "rows": [OCEAN_PAGE_1["rows"][0]]}, method="POST")
+        ], query)
+        self.assertEqual(len(items), 1)
+        self.assertNotIn("date", str(fake.calls[0][2]).casefold())
+
+    async def test_malformed_login_captcha_and_exact_post_boundary(self):
+        cases = (
+            (response(OCEAN_COUNTY.public_projects_url, {"wrong": []}, method="POST"), OpenGovAccessState.MALFORMED),
+            (response(OCEAN_COUNTY.public_projects_url, "Sign in to continue", content_type="text/html", method="POST"), OpenGovAccessState.LOGIN_REQUIRED),
+            (response(OCEAN_COUNTY.public_projects_url, "Performing security verification cf-chl-", content_type="text/html", method="POST"), OpenGovAccessState.CAPTCHA),
+            (response(OCEAN_COUNTY.public_projects_url, {}, status=401, method="POST"), OpenGovAccessState.LOGIN_REQUIRED),
         )
-        self.assertEqual(items[0].source.source_id, "fixture-only:project:T-7")
-        self.assertFalse(items[0].raw_payload["opengov_procurement"]["production_preset"])
-
-    async def test_local_filters_exact_ids_dates_departments_status_and_order(self):
-        query = OpenGovQuery(keyword="network", project_id="42001",
-                             solicitation_number="RFP-26-001", statuses=("open",),
-                             department="technology", released_from=date(2026, 7, 1),
-                             released_to=date(2026, 7, 2), due_from=date(2026, 8, 1),
-                             due_to=date(2026, 8, 31), include_details=False)
-        _, _, items = await self.collect([response(PHOENIX.embed_list_url, LISTING)], query)
-        self.assertEqual([x.source.source_id for x in items], ["phoenix:project:42001"])
-        _, _, closed = await self.collect(
-            [response(PHOENIX.embed_list_url, LISTING)],
-            OpenGovQuery(include_details=False, include_closed=True))
-        self.assertEqual(len(closed), 2)
-
-    async def test_empty_is_distinct_from_malformed_and_javascript_shell(self):
-        _, _, items = await self.collect([response(PHOENIX.embed_list_url, EMPTY)],
-                                         OpenGovQuery(include_details=False))
-        self.assertEqual(items, [])
-        for html, state in (
-            ("<html>unexpected changed markup</html>", OpenGovAccessState.MALFORMED),
-            ('<div id="root"></div><p>JavaScript required</p>', OpenGovAccessState.JAVASCRIPT_ONLY),
-            ("Supplier login username password", OpenGovAccessState.LOGIN_REQUIRED),
-            ("reCAPTCHA", OpenGovAccessState.CAPTCHA),
-        ):
+        for reply, state in cases:
             with self.subTest(state=state):
-                connector = OpenGovProcurementConnector(
-                    PHOENIX, transport=FakeTransport([response(PHOENIX.embed_list_url, html)]))
+                connector = OpenGovProcurementConnector(OCEAN_COUNTY, transport=FakeTransport([reply]))
                 with self.assertRaises(OpenGovAccessError) as caught:
-                    [x async for x in connector.discover(OpenGovQuery(include_details=False))]
+                    [item async for item in connector.discover(OpenGovQuery(include_details=False))]
                 self.assertEqual(caught.exception.state, state)
+        connector = OpenGovProcurementConnector(OCEAN_COUNTY, transport=FakeTransport([]))
+        with self.assertRaises(OpenGovError):
+            await connector._request_json("POST", OCEAN_COUNTY.project_api_url("101"), {"data": {}})
 
-    async def test_unsupported_search_invalid_config_and_url_safety(self):
-        portal = replace(PHOENIX, keyword_search_support="unsupported")
-        connector = OpenGovProcurementConnector(portal, transport=FakeTransport([]))
-        with self.assertRaises(OpenGovAccessError) as caught:
-            [x async for x in connector.discover(OpenGovQuery(keyword="roads"))]
-        self.assertEqual(caught.exception.state, OpenGovAccessState.UNSUPPORTED_SEARCH)
-        self.assertIsNone(connector._safe_url("javascript:alert(1)"))
-        self.assertIsNone(connector._safe_url("https://127.0.0.1/document.pdf", document=True))
-        self.assertIsNone(connector._safe_url("https://evil.example/document.pdf", document=True))
-        invalid = replace(PHOENIX, organization_type="corporation")
-        self.assertFalse(OpenGovProcurementConnector(invalid, transport=FakeTransport([])).health.configuration_valid)
-
-    async def test_bounded_pagination_deduplication_limit_and_get_only(self):
-        portal = replace(PHOENIX, page_size=2, maximum_pages=4)
-        connector, fake, items = await self.collect(
-            [response(portal.embed_list_url, LISTING), response(portal.embed_list_url, LISTING)],
-            OpenGovQuery(include_details=False, include_closed=True, limit=1), portal)
-        self.assertEqual(len(items), 1)
-        self.assertEqual(len(fake.calls), 2)
-        self.assertEqual(fake.calls[0][2], {"page": 1, "pageSize": 2})
-        self.assertTrue(all(method == "GET" for method, _, _ in fake.calls))
-        await connector.aclose()
-        self.assertFalse(fake.closed)
-
-    async def test_retry_transient_failure_and_circuit_isolation(self):
+    async def test_retry_timeout_circuit_breaker_and_health(self):
         sleeps = []
-        portal = replace(PHOENIX, retry_attempts=1)
-        retry = response(portal.embed_list_url, "busy", 429, headers={"Retry-After": "2"})
-        _, fake, items = await self.collect(
-            [retry, response(portal.embed_list_url, LISTING)],
-            OpenGovQuery(include_details=False), portal,
-            sleep=lambda d: self._record_sleep(sleeps, d))
-        self.assertEqual(len(items), 1)
+        portal = replace(OCEAN_COUNTY, retry_attempts=1)
+        retry = response(portal.public_projects_url, "busy", 429, method="POST", headers={"Retry-After": "2"})
+        connector, fake, items = await self.collect([
+            retry,
+            response(portal.public_projects_url, {"count": 0, "rows": []}, method="POST"),
+        ], OpenGovQuery(include_details=False), portal, sleep=lambda d: self._record_sleep(sleeps, d))
+        self.assertEqual(items, [])
         self.assertEqual(sleeps, [2.0])
         self.assertEqual(len(fake.calls), 2)
-        clock = [datetime(2026, 7, 30, tzinfo=UTC)]
-        circuit_portal = replace(PHOENIX, retry_attempts=0, circuit_breaker_threshold=1,
-                                 circuit_breaker_cooldown=10)
+        self.assertTrue(connector.health.available)
+
+        clock = [datetime(2026, 8, 24, tzinfo=UTC)]
+        broken_portal = replace(portal, retry_attempts=0, circuit_breaker_threshold=1, circuit_breaker_cooldown=10)
         broken = OpenGovProcurementConnector(
-            circuit_portal, transport=FakeTransport([httpx.ConnectError("down")]),
-            now=lambda: clock[0])
+            broken_portal, transport=FakeTransport([httpx.ReadTimeout("slow")]), now=lambda: clock[0]
+        )
         with self.assertRaises(OpenGovAvailabilityError):
-            [x async for x in broken.discover(OpenGovQuery())]
+            [item async for item in broken.discover(OpenGovQuery(include_details=False))]
         self.assertTrue(broken.health.circuit_open)
         clock[0] += timedelta(seconds=11)
         self.assertFalse(broken.health.circuit_open)
 
-    async def test_registry_safety_and_http_errors(self):
+    async def test_client_ownership_and_invalid_configuration(self):
+        injected = FakeTransport([])
+        connector = OpenGovProcurementConnector(OCEAN_COUNTY, transport=injected)
+        await connector.aclose()
+        self.assertFalse(injected.closed)
+
+        owned = FakeTransport([])
+        with patch("sled_aggregator.connectors.opengov_procurement.httpx.AsyncClient", return_value=owned):
+            connector = OpenGovProcurementConnector(OCEAN_COUNTY)
+            await connector.aclose()
+        self.assertTrue(owned.closed)
+
+        invalid = replace(OCEAN_COUNTY, organization_type="corporation")
+        connector = OpenGovProcurementConnector(invalid, transport=FakeTransport([]))
+        self.assertFalse(connector.health.configuration_valid)
+
+    async def test_unsupported_sort_and_registry_duplicate_safety(self):
+        connector = OpenGovProcurementConnector(OCEAN_COUNTY, transport=FakeTransport([]))
+        with self.assertRaises(OpenGovAccessError) as caught:
+            [item async for item in connector.discover(OpenGovQuery(sort_field="created_at"))]
+        self.assertEqual(caught.exception.state, OpenGovAccessState.UNSUPPORTED_SEARCH)
         registry = ConnectorRegistry()
         registry.register(OpenGovProcurementConnector)
         with self.assertRaises(ValueError):
             registry.register(OpenGovProcurementConnector)
-        for reply, state in (
-            (response(PHOENIX.embed_list_url, "missing", 404), OpenGovAccessState.NOT_FOUND),
-            (response(PHOENIX.embed_list_url, "binary", content_type="application/pdf"), OpenGovAccessState.MALFORMED),
-            (response(PHOENIX.embed_list_url, '{"wrong":1}', content_type="application/json"), OpenGovAccessState.MALFORMED),
-        ):
-            connector = OpenGovProcurementConnector(PHOENIX, transport=FakeTransport([reply]))
-            with self.assertRaises(OpenGovAccessError) as caught:
-                [x async for x in connector.discover(OpenGovQuery(include_details=False))]
-            self.assertEqual(caught.exception.state, state)
 
     async def _record_sleep(self, target, delay):
         target.append(delay)

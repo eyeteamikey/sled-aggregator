@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "as_of": "2026-08-03",
+  "as_of": "2026-08-24",
   "sources": [
     {
       "key": "al-alabamabuys",
@@ -1684,9 +1684,195 @@
       "blocker_reason": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
       "recommended_next_action": "Retain CAPTCHA-boundary evidence and do not promote unattended discovery without a future lawful challenge-free capture.",
       "evidence_url": "https://www.purchasing.ri.gov/"
+    },
+    {
+      "key": "nj-ocean-county-opengov",
+      "jurisdiction_code": "NJ",
+      "name": "Ocean County OpenGov Procurement",
+      "source_level": "local",
+      "source_role": "primary",
+      "official_url": "https://procurement.opengov.com/portal/oceancounty",
+      "platform_family": "opengov/procurement",
+      "connector_name": "opengov/procurement",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "login_required",
+      "award_access": "public",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/opengov_ocean_listing_page1.json",
+        "tests/fixtures/opengov_ocean_detail.json",
+        "tests/fixtures/opengov_ocean_questions.json",
+        "tests/fixtures/opengov_ocean_awarded_detail.json"
+      ],
+      "priority": 2,
+      "expected_coverage_impact": "Ocean County procurement only",
+      "source_id": "nj-ocean-county-opengov",
+      "jurisdiction_id": "NJ",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "County of Ocean",
+      "official_landing_page": "https://procurement.opengov.com/portal/oceancounty",
+      "public_bid_board_url": "https://procurement.opengov.com/portal/oceancounty",
+      "public_search_url": "https://api.procurement.opengov.com/api/v1/government/oceancounty/project/public",
+      "public_detail_url_pattern": "https://procurement.opengov.com/portal/oceancounty/projects/{project_id}",
+      "connector_key": "opengov/procurement",
+      "connector_alias": "opengov",
+      "portal_profile_key": "ocean-county-nj",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "login_required",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "document_download_only",
+      "captcha_classification": "transient_cloudflare_verification_observed_no_human_action",
+      "robots_access_notes": "Successful bounded anonymous walkthrough and API capture; no claim of continuous availability.",
+      "allowed_http_methods": [
+        "GET",
+        "POST"
+      ],
+      "validation_request_policy": {
+        "browser_capture_rules": [
+          {
+            "methods": ["POST"],
+            "hosts": ["api.procurement.opengov.com"],
+            "path_pattern": "/api/v1/government/oceancounty/project/public",
+            "purpose": "anonymous listing, filtering, sorting, and pagination"
+          }
+        ],
+        "connector_replay_approved": true,
+        "notes": "Only the exact anonymous listing POST is approved. Detail and Q&A use GET; download and contracts POST routes are not approved."
+      },
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/opengov_two_tenants_2026-08-24.md",
+        "tests/fixtures/opengov_ocean_listing_page1.json",
+        "tests/fixtures/opengov_ocean_detail.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/opengov_ocean_listing_page1.json",
+        "tests/fixtures/opengov_ocean_listing_page2.json",
+        "tests/fixtures/opengov_ocean_detail.json",
+        "tests/fixtures/opengov_ocean_questions.json",
+        "tests/fixtures/opengov_ocean_awarded_detail.json"
+      ],
+      "test_location": ["tests/test_opengov_procurement_connector.py"],
+      "last_verified": "2026-08-24",
+      "last_verified_date": "2026-08-24",
+      "known_limitations": [
+        "Document selection is public but download requires login; the connector never calls the download POST or retains signed URLs.",
+        "Related contracts were browser-visible on one awarded project, but the direct API POST returned HTTP 401 without browser session state.",
+        "The capture proves observed request contracts, not continuous production availability."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
+      "evidence_url": "https://procurement.opengov.com/portal/oceancounty"
+    },
+    {
+      "key": "ca-alameda-county-opengov",
+      "jurisdiction_code": "CA",
+      "name": "Alameda County OpenGov Procurement",
+      "source_level": "local",
+      "source_role": "primary",
+      "official_url": "https://procurement.opengov.com/portal/acgov",
+      "platform_family": "opengov/procurement",
+      "connector_name": "opengov/procurement",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "login_required",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/opengov_alameda_listing.json",
+        "tests/fixtures/opengov_alameda_detail.json"
+      ],
+      "priority": 2,
+      "expected_coverage_impact": "Alameda County procurement only",
+      "source_id": "ca-alameda-county-opengov",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "County of Alameda",
+      "official_landing_page": "https://procurement.opengov.com/portal/acgov",
+      "public_bid_board_url": "https://procurement.opengov.com/portal/acgov",
+      "public_search_url": "https://api.procurement.opengov.com/api/v1/government/acgov/project/public",
+      "public_detail_url_pattern": "https://procurement.opengov.com/portal/acgov/projects/{project_id}",
+      "connector_key": "opengov/procurement",
+      "connector_alias": "opengov",
+      "portal_profile_key": "alameda-county-ca",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "login_required",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "document_download_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "Successful bounded anonymous walkthrough and API capture; no claim of continuous availability.",
+      "allowed_http_methods": ["GET", "POST"],
+      "validation_request_policy": {
+        "browser_capture_rules": [
+          {
+            "methods": ["POST"],
+            "hosts": ["api.procurement.opengov.com"],
+            "path_pattern": "/api/v1/government/acgov/project/public",
+            "purpose": "anonymous listing, filtering, sorting, and pagination"
+          }
+        ],
+        "connector_replay_approved": true,
+        "notes": "Only the exact anonymous listing POST is approved. Detail and Q&A use GET; download and contracts POST routes are not approved."
+      },
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/opengov_two_tenants_2026-08-24.md",
+        "tests/fixtures/opengov_alameda_listing.json",
+        "tests/fixtures/opengov_alameda_detail.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/opengov_alameda_listing.json",
+        "tests/fixtures/opengov_alameda_detail.json"
+      ],
+      "test_location": ["tests/test_opengov_procurement_connector.py"],
+      "last_verified": "2026-08-24",
+      "last_verified_date": "2026-08-24",
+      "known_limitations": [
+        "Document selection is public but download requires login; the connector never calls the download POST or retains signed URLs.",
+        "Awarded status was public, but public vendor/result data was not exposed on the reviewed Alameda awarded record.",
+        "The capture proves observed request contracts, not continuous production availability."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
+      "evidence_url": "https://procurement.opengov.com/portal/acgov"
     }
   ],
   "evidence": [
+    {
+      "evidence_id": "har-6bc258cece119647",
+      "source_id": "nj-ocean-county-opengov",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": ["docs/connector_validation/opengov_two_tenants_2026-08-24.md"],
+      "capabilities": [
+        "discovery", "pagination", "filtering", "details", "attachments", "amendments", "awards", "normalization"
+      ],
+      "verification_date": "2026-08-24",
+      "notes": "Reviewed bounded anonymous capture; download is login-required and related-contract API access was session-dependent."
+    },
+    {
+      "evidence_id": "har-6f4048bb552f6056",
+      "source_id": "ca-alameda-county-opengov",
+      "evidence_type": "sanitized_har_contract",
+      "evidence_location": ["docs/connector_validation/opengov_two_tenants_2026-08-24.md"],
+      "capabilities": [
+        "discovery", "pagination", "filtering", "details", "attachments", "amendments", "awards", "normalization"
+      ],
+      "verification_date": "2026-08-24",
+      "notes": "Reviewed bounded anonymous capture; download is login-required and award status was public without vendor data on the reviewed awarded record."
+    },
     {
       "evidence_id": "ca-cal-eprocure-fixture-1",
       "source_id": "ca-cal-eprocure",

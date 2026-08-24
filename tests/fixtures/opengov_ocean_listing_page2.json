@@ -1,0 +1,18 @@
+{
+  "count": 3,
+  "rows": [
+    {
+      "id": 102,
+      "title": "Fictional Traffic Equipment",
+      "status": "closed",
+      "closedSubstatus": "awarded",
+      "government": {"code": "oceancounty", "organization": {"name": "County of Example Ocean"}}
+    },
+    {
+      "id": 103,
+      "title": "Fictional Road Striping",
+      "status": "open",
+      "government": {"code": "oceancounty", "organization": {"name": "County of Example Ocean"}}
+    }
+  ]
+}

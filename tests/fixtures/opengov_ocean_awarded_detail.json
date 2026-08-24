@@ -1,0 +1,27 @@
+{
+  "id": 102,
+  "title": "Fictional Traffic Equipment",
+  "status": "closed",
+  "closedSubstatus": "awarded",
+  "contractorSelectedDate": "2026-04-21T04:00:00.000Z",
+  "qaEnabled": false,
+  "contactDisplayName": "Avery Buyer",
+  "contactEmail": "avery.buyer@example.invalid",
+  "contactPhoneComplete": "(555) 010-0103",
+  "hideContact": false,
+  "procurementDisplayName": "Morgan Officer",
+  "procurementPhoneComplete": "(555) 010-0104",
+  "hideProcurementContact": false,
+  "department": {"id": 589, "name": "Engineering"},
+  "government": {"code": "oceancounty", "organization": {"name": "County of Example Ocean", "timezone": "America/New_York"}},
+  "isPublicBidResult": true,
+  "isPublicBidPricingResult": true,
+  "bidResults": {
+    "proposalsData": [
+      {"vendorName": "Example Signal Products", "vendorCity": "Exampleton", "vendorState": "NJ", "vendorEmail": "vendor@example.invalid"},
+      {"vendorName": "Example Traffic LLC", "vendorCity": "Sampleville", "vendorState": "PA"}
+    ]
+  },
+  "attachments": [],
+  "addendums": []
+}

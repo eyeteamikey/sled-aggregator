@@ -1,0 +1,21 @@
+[
+  {
+    "id": 7001,
+    "project_id": 101,
+    "number": 1,
+    "subject": "Anonymous public question",
+    "status": "released",
+    "isAnswered": true,
+    "releasedAt": "2026-08-18T15:00:00.000Z",
+    "questionComments": [
+      {
+        "id": 7101,
+        "description": "Public agency answer",
+        "isVendor": false,
+        "created_at": "2026-08-19T15:00:00.000Z",
+        "user": {"displayName": "Example Agency"}
+      }
+    ],
+    "attachments": []
+  }
+]

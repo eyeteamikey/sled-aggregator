@@ -1,0 +1,15 @@
+{
+  "count": 1,
+  "rows": [
+    {
+      "id": 201,
+      "financialId": "902999",
+      "title": "Fictional Parking Garage Services",
+      "status": "open",
+      "releaseProjectDate": "2026-07-28T15:00:00.000Z",
+      "proposalDeadline": "2026-09-14T21:00:00.000Z",
+      "department": {"id": 11400, "name": "General Services Agency-Procurement"},
+      "government": {"code": "acgov", "organization": {"name": "County of Example Alameda", "timezone": "America/Los_Angeles"}}
+    }
+  ]
+}

@@ -1,13 +1,14 @@
-"""Configurable anonymous OpenGov Procurement (formerly ProcureNow) connector.
+"""Anonymous OpenGov Procurement (formerly ProcureNow) connector.
 
-Only public GET routes configured on :class:`OpenGovPortal` are used.  The
-connector discovers attachment metadata; the document pipeline owns retrieval,
-parsing, OCR, and structured extraction.
+The request contract is limited to routes observed on the public Ocean County
+and Alameda County portals on 2026-08-24. Document download is not attempted:
+the public UI requires login before invoking its download endpoint, while detail
+responses contain short-lived signed URLs that must never be retained.
 """
 
 import asyncio
 import email.utils
-import hashlib
+import html
 import ipaddress
 import random
 import re
@@ -15,9 +16,9 @@ from collections.abc import AsyncIterator, Awaitable, Callable, Mapping
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from enum import StrEnum
-from html.parser import HTMLParser
+from pathlib import PurePosixPath
 from typing import Any, Protocol
-from urllib.parse import parse_qsl, urlencode, urljoin, urlparse, urlunparse
+from urllib.parse import urlparse
 
 import httpx
 
@@ -36,7 +37,6 @@ class OpenGovAccessState(StrEnum):
     UNAVAILABLE = "unavailable"
     NOT_FOUND = "not_found"
     MALFORMED = "malformed"
-    JAVASCRIPT_ONLY = "javascript_only"
     UNSUPPORTED_SEARCH = "unsupported_search"
     TRANSIENT_ERROR = "transient_error"
 
@@ -61,6 +61,8 @@ _ORGANIZATION_TYPES = frozenset(
         "school district", "university", "utility", "special district", "cooperative",
     }
 )
+_SORT_FIELDS = frozenset({"title", "status", "releaseProjectDate", "proposalDeadline"})
+_SORT_DIRECTIONS = frozenset({"ASC", "DESC"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,25 +75,10 @@ class OpenGovPortal:
     organization_type: str
     owning_organization: str
     portal_base_url: str = "https://procurement.opengov.com"
-    public_portal_url: str | None = None
-    public_embed_list_url: str | None = None
-    contracts_portal_url: str | None = None
-    approved_hosts: tuple[str, ...] = ("procurement.opengov.com",)
-    approved_attachment_hosts: tuple[str, ...] = ()
-    platform_variant: str = "OpenGov Procurement (ProcureNow)"
+    api_base_url: str = "https://api.procurement.opengov.com/api/v1"
     default_timezone: str = "UTC"
-    parser_strategy: str = "semantic-html"
-    discovery_strategy: str = "public-embed-list"
-    detail_strategy: str = "public-project-page"
-    document_strategy: str = "public-link-metadata"
-    q_and_a_strategy: str = "public-when-exposed"
-    addenda_strategy: str = "public-when-exposed"
-    award_strategy: str = "public-when-exposed"
-    keyword_search_support: str = "local"
-    department_filtering_support: str = "local"
-    status_filtering_support: str = "local"
-    page_size: int = 25
-    maximum_pages: int = 4
+    page_size: int = 10
+    maximum_pages: int = 10
     maximum_results: int = 100
     request_timeout: float = 30
     retry_attempts: int = 2
@@ -100,60 +87,65 @@ class OpenGovPortal:
     circuit_breaker_threshold: int = 3
     circuit_breaker_cooldown: float = 60
     enabled: bool = True
-    verification_status: str = "fixture_verified"
+    verification_status: str = "unverified_profile"
     notes: tuple[str, ...] = ()
     production: bool = True
 
     @property
     def portal_url(self) -> str:
-        return self.public_portal_url or f"{self.portal_base_url}/portal/{self.tenant_slug}"
+        return f"{self.portal_base_url}/portal/{self.tenant_slug}"
 
     @property
-    def embed_list_url(self) -> str:
-        return self.public_embed_list_url or (
-            f"{self.portal_base_url}/portal/embed/{self.tenant_slug}/project-list"
-        )
+    def public_projects_url(self) -> str:
+        return f"{self.api_base_url}/government/{self.tenant_slug}/project/public"
+
+    @property
+    def government_url(self) -> str:
+        return f"{self.api_base_url}/government/{self.tenant_slug}"
+
+    def project_api_url(self, project_id: str) -> str:
+        return f"{self.api_base_url}/project/{project_id}"
+
+    def question_api_url(self, project_id: str) -> str:
+        return f"{self.project_api_url(project_id)}/question"
 
     def project_url(self, project_id: str) -> str:
         return f"{self.portal_url}/projects/{project_id}"
 
 
-PHOENIX = OpenGovPortal(
-    "phoenix", "phoenix", "City of Phoenix, Arizona", "Arizona", "AZ", "city",
-    "City of Phoenix", default_timezone="America/Phoenix",
-    notes=("Newer Phoenix opportunities are on OpenGov; preserve authoritative upstream links.",
-           "This preset does not cover all Arizona opportunities.",
-           "Preserve department and procurement-officer details."),
+OCEAN_COUNTY = OpenGovPortal(
+    "ocean-county-nj", "oceancounty", "Ocean County, New Jersey", "New Jersey", "NJ",
+    "county", "County of Ocean", default_timezone="America/New_York",
+    verification_status="live_validated_2026-08-24",
+    notes=(
+        "Anonymous listing, filters, pagination, detail, Q&A, and attachment metadata validated.",
+        "Downloads require login; related contracts were browser-visible but the API returned 401 without browser session state.",
+    ),
 )
-SEATTLE = OpenGovPortal(
-    "seattle", "seattle", "City of Seattle, Washington", "Washington", "WA", "city",
-    "City of Seattle", default_timezone="America/Los_Angeles",
-    notes=("Includes public works, consultant services, supplies, and routine services.",
-           "Subscription prompts do not restrict anonymously visible metadata."),
+ALAMEDA_COUNTY = OpenGovPortal(
+    "alameda-county-ca", "acgov", "Alameda County, California", "California", "CA",
+    "county", "County of Alameda", default_timezone="America/Los_Angeles",
+    verification_status="live_validated_2026-08-24",
+    notes=(
+        "Anonymous listing, filters, pagination, detail, Q&A, and attachment metadata validated.",
+        "Document download requires login.",
+    ),
 )
-CLEVELAND = OpenGovPortal(
-    "cleveland", "clevelandoh", "City of Cleveland, Ohio", "Ohio", "OH", "city",
-    "City of Cleveland", default_timezone="America/New_York",
-    notes=("Preserve department, division, contact, pre-proposal, Q&A, and deadlines.",
-           "Preserve authoritative city and OpenGov URLs when both are public."),
-)
-BRIDGEPORT = OpenGovPortal(
-    "bridgeport", "bridgeportct", "City of Bridgeport, Connecticut", "Connecticut", "CT",
-    "city", "City of Bridgeport", default_timezone="America/New_York",
-)
-MOHAVE_COUNTY = OpenGovPortal(
-    "mohave-county", "mohavecounty", "Mohave County, Arizona", "Arizona", "AZ", "county",
-    "Mohave County", default_timezone="America/Phoenix",
-    contracts_portal_url="https://procurement.opengov.com/portal/mohavecounty/contracts",
-    notes=("Contracts are a separate optional record type and are not mixed with solicitations.",),
-)
-GALLUP = OpenGovPortal(
-    "gallup", "gallupnm", "City of Gallup, New Mexico", "New Mexico", "NM", "city",
-    "City of Gallup", default_timezone="America/Denver",
-)
-OPENGOV_PORTALS = {p.tenant_key: p for p in (
-    PHOENIX, SEATTLE, CLEVELAND, BRIDGEPORT, MOHAVE_COUNTY, GALLUP
-)}
+
+# Existing profiles remain available but are not promoted by this validation.
+PHOENIX = OpenGovPortal("phoenix", "phoenix", "City of Phoenix, Arizona", "Arizona", "AZ", "city", "City of Phoenix", default_timezone="America/Phoenix")
+SEATTLE = OpenGovPortal("seattle", "seattle", "City of Seattle, Washington", "Washington", "WA", "city", "City of Seattle", default_timezone="America/Los_Angeles")
+CLEVELAND = OpenGovPortal("cleveland", "clevelandoh", "City of Cleveland, Ohio", "Ohio", "OH", "city", "City of Cleveland", default_timezone="America/New_York")
+BRIDGEPORT = OpenGovPortal("bridgeport", "bridgeportct", "City of Bridgeport, Connecticut", "Connecticut", "CT", "city", "City of Bridgeport", default_timezone="America/New_York")
+MOHAVE_COUNTY = OpenGovPortal("mohave-county", "mohavecounty", "Mohave County, Arizona", "Arizona", "AZ", "county", "Mohave County", default_timezone="America/Phoenix")
+GALLUP = OpenGovPortal("gallup", "gallupnm", "City of Gallup, New Mexico", "New Mexico", "NM", "city", "City of Gallup", default_timezone="America/Denver")
+
+OPENGOV_PORTALS = {
+    p.tenant_key: p for p in (
+        OCEAN_COUNTY, ALAMEDA_COUNTY, PHOENIX, SEATTLE, CLEVELAND, BRIDGEPORT,
+        MOHAVE_COUNTY, GALLUP,
+    )
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -162,7 +154,8 @@ class OpenGovQuery(ConnectorQuery):
     project_id: str | None = None
     solicitation_number: str | None = None
     statuses: tuple[str, ...] = ()
-    department: str | None = None
+    department_id: int | None = None
+    category_ids: tuple[int, ...] = ()
     released_from: date | None = None
     released_to: date | None = None
     due_from: date | None = None
@@ -171,13 +164,17 @@ class OpenGovQuery(ConnectorQuery):
     include_awarded: bool = False
     include_details: bool = True
     include_documents: bool = True
+    include_questions: bool = True
+    sort_field: str = "proposalDeadline"
+    sort_direction: str = "DESC"
     page_size: int | None = None
     maximum_pages: int | None = None
     maximum_results: int | None = None
 
 
 class OpenGovTransport(Protocol):
-    async def get(self, url: str, *, params: Mapping[str, Any] | None = None) -> httpx.Response: ...
+    async def get(self, url: str) -> httpx.Response: ...
+    async def post(self, url: str, *, json: Mapping[str, Any]) -> httpx.Response: ...
     async def aclose(self) -> None: ...
 
 
@@ -187,7 +184,6 @@ class OpenGovHealth:
     access_state: OpenGovAccessState
     tenant: str
     platform: str
-    platform_variant: str
     circuit_open: bool
     consecutive_failures: int
     last_status_code: int | None
@@ -195,11 +191,11 @@ class OpenGovHealth:
     last_success_at: datetime | None
     last_error_class: str | None
     discovery_supported: bool
-    keyword_search_supported: bool
     detail_supported: bool
     document_discovery_supported: bool
-    contracts_supported: bool
-    parser_strategy: str
+    document_download_supported: bool
+    q_and_a_supported: bool
+    contracts_api_access: str
     configuration_valid: bool
 
 
@@ -207,82 +203,24 @@ def _clean(value: Any) -> str:
     return " ".join(str(value or "").replace("\xa0", " ").split())
 
 
-class _OpenGovHTMLParser(HTMLParser):
-    """Parse fixture-backed semantic HTML without tenant-specific selectors."""
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.records: list[dict[str, Any]] = []
-        self.zero_results = False
-        self._record: dict[str, Any] | None = None
-        self._depth = 0
-        self._field: str | None = None
-        self._section: str | None = None
-        self._href: str | None = None
-        self._attrs: dict[str, str | None] = {}
-        self._text: list[str] = []
-
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        values = dict(attrs)
-        marker = values.get("data-project-id") or values.get("data-opengov-project")
-        if marker is not None and self._record is None:
-            self._record, self._depth = {"project_id": marker}, 1
-        elif self._record is not None:
-            self._depth += 1
-        self._field = (values.get("data-field") or "").replace("-", "_") or None
-        self._section = values.get("data-section") or self._section
-        self._attrs, self._text = values, []
-        if tag == "a":
-            self._href = values.get("href")
-
-    def handle_data(self, data: str) -> None:
-        self._text.append(data)
-        if re.search(r"\bno (?:projects|opportunities|results) (?:found|available)\b", data, re.I):
-            self.zero_results = True
-
-    def handle_endtag(self, tag: str) -> None:
-        text = _clean("".join(self._text))
-        if self._record is not None:
-            if self._field and text:
-                if self._field in {"category", "contact", "notice", "question", "award"}:
-                    self._record.setdefault(self._field + "s", []).append(text)
-                else:
-                    self._record[self._field] = text
-            if tag == "a" and self._href:
-                link = {"title": text or "Document", "url": self._href,
-                        **{k[5:].replace("-", "_"): v for k, v in self._attrs.items()
-                           if k.startswith("data-")}}
-                if self._section in {"documents", "attachments", "addenda", "notices", "awards"} or re.search(
-                    r"\.(?:pdf|docx?|xlsx?|csv|zip)\b|addend|amend|notice|q\s*&\s*a|award|tabulation|\b(?:rfp|rfq|ifb|itb)\b",
-                    f"{text} {self._href}", re.I,
-                ):
-                    self._record.setdefault("documents", []).append(link)
-                elif self._field in {"upstream_url", "project_url"}:
-                    self._record[self._field] = self._href
-                    if self._field == "project_url" and text and not self._record.get("title"):
-                        self._record["title"] = text
-                elif not self._record.get("project_url"):
-                    self._record["project_url"] = self._href
-                self._href = None
-            self._depth -= 1
-            if self._depth == 0:
-                self.records.append(self._record)
-                self._record = None
-        self._field, self._text = None, []
-        if tag == "section":
-            self._section = None
+def _plain_text(value: Any) -> str:
+    text = _clean(html.unescape(re.sub(r"<[^>]+>", " ", str(value or ""))))
+    return re.sub(r"\s+([.,;:!?])", r"\1", text)
 
 
 class OpenGovProcurementConnector(BaseConnector):
     platform_family = "opengov/procurement"
     jurisdictions = tuple(dict.fromkeys(p.jurisdiction for p in OPENGOV_PORTALS.values()))
+    document_pipeline_compatible = True
     _transient_statuses = frozenset({408, 409, 425, 429, 500, 502, 503, 504})
-    _transient_query = frozenset({"timestamp", "time", "sessionid", "_"})
 
-    def __init__(self, portal: OpenGovPortal = PHOENIX, *, transport: OpenGovTransport | None = None,
-                 sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
-                 random_value: Callable[[], float] = random.random,
-                 now: Callable[[], datetime] = lambda: datetime.now(UTC)) -> None:
+    def __init__(
+        self, portal: OpenGovPortal = OCEAN_COUNTY, *,
+        transport: OpenGovTransport | None = None,
+        sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
+        random_value: Callable[[], float] = random.random,
+        now: Callable[[], datetime] = lambda: datetime.now(UTC),
+    ) -> None:
         self.portal, self._sleep, self._random, self._now = portal, sleep, random_value, now
         self._transport = transport or httpx.AsyncClient(
             timeout=portal.request_timeout, follow_redirects=True,
@@ -291,10 +229,11 @@ class OpenGovProcurementConnector(BaseConnector):
         )
         self._owns_transport = transport is None
         self._failures = 0
-        self._last_status = None
-        self._last_failure = self._last_success = None
-        self._last_error_class = None
-        self._access = OpenGovAccessState.PUBLIC
+        self._last_status: int | None = None
+        self._last_failure: datetime | None = None
+        self._last_success: datetime | None = None
+        self._last_error_class: str | None = None
+        self._access = OpenGovAccessState.PUBLIC_METADATA_ONLY
 
     async def __aenter__(self):
         return self
@@ -311,10 +250,9 @@ class OpenGovProcurementConnector(BaseConnector):
         opened = self._circuit_open()
         return OpenGovHealth(
             not opened and self._failures == 0, self._access, self.portal.tenant_key,
-            self.platform_family, self.portal.platform_variant, opened, self._failures,
-            self._last_status, self._last_failure, self._last_success, self._last_error_class,
-            self.portal.enabled, self.portal.keyword_search_support != "unsupported", True, True,
-            bool(self.portal.contracts_portal_url), self.portal.parser_strategy,
+            self.platform_family, opened, self._failures, self._last_status,
+            self._last_failure, self._last_success, self._last_error_class,
+            True, True, True, False, True, "session_dependent_not_called",
             self._configuration_valid(),
         )
 
@@ -330,56 +268,100 @@ class OpenGovProcurementConnector(BaseConnector):
             raise OpenGovAccessError(OpenGovAccessState.UNSUPPORTED_SEARCH)
         if self._circuit_open():
             raise OpenGovAvailabilityError(f"{self.portal.tenant_key} circuit is open")
-        if (q.keyword or q.keywords) and self.portal.keyword_search_support == "unsupported":
+        if q.sort_field not in _SORT_FIELDS or q.sort_direction not in _SORT_DIRECTIONS:
             raise OpenGovAccessError(OpenGovAccessState.UNSUPPORTED_SEARCH)
-        page_size = min(q.page_size or self.portal.page_size, 100)
-        max_pages = min(q.maximum_pages or self.portal.maximum_pages, 20)
-        maximum = min(q.limit, q.maximum_results or self.portal.maximum_results, 1000)
-        records: dict[str, dict[str, Any]] = {}
-        fingerprints: set[str] = set()
+        page_size = min(max(q.page_size or self.portal.page_size, 1), 50)
+        max_pages = min(max(q.maximum_pages or self.portal.maximum_pages, 1), 20)
+        maximum = min(max(q.limit, 0), q.maximum_results or self.portal.maximum_results, 1000)
+        if maximum == 0:
+            return
+        seen: set[str] = set()
         try:
             for page in range(1, max_pages + 1):
-                parsed, zero = self._parse(await self._request(
-                    self.portal.embed_list_url, {"page": page, "pageSize": page_size}
-                ))
-                if not parsed:
-                    if zero or page > 1:
-                        break
-                    raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
-                fingerprint = hashlib.sha256(repr(parsed).encode()).hexdigest()
-                if fingerprint in fingerprints:
+                body = {"data": self._listing_request(q, page, page_size)}
+                payload = await self._request_json("POST", self.portal.public_projects_url, body)
+                count, rows = self._listing_rows(payload)
+                for listed in rows:
+                    project_id = _clean(listed.get("id"))
+                    if not project_id:
+                        raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
+                    identity = f"{self.portal.tenant_key}:project:{project_id}"
+                    if identity in seen:
+                        continue
+                    seen.add(identity)
+                    record = dict(listed)
+                    questions: list[dict[str, Any]] = []
+                    if q.include_details:
+                        detail = await self._request_json("GET", self.portal.project_api_url(project_id))
+                        if not isinstance(detail, dict) or _clean(detail.get("id")) != project_id:
+                            raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
+                        record.update(detail)
+                        if q.include_questions and bool(record.get("qaEnabled")):
+                            question_payload = await self._request_json("GET", self.portal.question_api_url(project_id))
+                            if not isinstance(question_payload, list) or not all(isinstance(x, dict) for x in question_payload):
+                                raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
+                            questions = question_payload
+                    if not self._matches_local_dates(record, q):
+                        continue
+                    item = self._normalize(identity, record, questions, q)
+                    self._record_success()
+                    yield item
+                    maximum -= 1
+                    if maximum <= 0:
+                        return
+                if not rows or page * page_size >= count:
                     break
-                fingerprints.add(fingerprint)
-                for record in parsed:
-                    identity = self._identity(record)
-                    if identity:
-                        records[identity] = self._merge(records.get(identity, {}), record)
-                if len(parsed) < page_size:
-                    break
-            for identity in sorted(records):
-                record = records[identity]
-                if not self._matches(record, q):
-                    continue
-                if q.include_details:
-                    detail_url = self._project_url(record)
-                    if detail_url:
-                        detailed, _ = self._parse(await self._request(detail_url))
-                        if detailed:
-                            record = self._merge(record, detailed[0])
-                yield self._normalize(identity, record, q)
-                maximum -= 1
-                if maximum <= 0:
-                    return
+            self._record_success()
         except Exception as exc:
             self._record_failure(exc)
             raise
 
-    async def _request(self, url: str, params: Mapping[str, Any] | None = None) -> httpx.Response:
+    def _listing_request(self, q: OpenGovQuery, page: int, limit: int) -> dict[str, Any]:
+        filters: list[dict[str, Any]] = []
+        keyword = _clean(q.keyword or " ".join(q.keywords))
+        if keyword:
+            filters.append({"type": "title", "value": keyword})
+        if q.solicitation_number:
+            filters.append({"type": "financialId", "value": q.solicitation_number})
+        if q.department_id is not None:
+            filters.append({"type": "department_id", "value": q.department_id})
+        if q.category_ids:
+            filters.append({"type": "categories", "value": list(q.category_ids)})
+        if q.statuses:
+            if len(q.statuses) != 1:
+                raise OpenGovAccessError(OpenGovAccessState.UNSUPPORTED_SEARCH)
+            filters.append({"type": "status", "value": q.statuses[0].casefold()})
+        elif not q.include_closed and not q.include_awarded:
+            filters.append({"type": "status", "value": "open"})
+        return {
+            "filters": filters, "quickSearchQuery": None, "limit": limit, "page": page,
+            "sortField": q.sort_field, "sortDirection": q.sort_direction,
+        }
+
+    @staticmethod
+    def _listing_rows(payload: Any) -> tuple[int, list[dict[str, Any]]]:
+        if not isinstance(payload, dict):
+            raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
+        count, rows = payload.get("count"), payload.get("rows")
+        if not isinstance(count, int) or count < 0 or not isinstance(rows, list):
+            raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
+        if not all(isinstance(row, dict) for row in rows):
+            raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
+        return count, rows
+
+    async def _request_json(self, method: str, url: str, payload: Mapping[str, Any] | None = None) -> Any:
         if not self._safe_url(url):
             raise OpenGovError("unsafe public URL")
+        if method == "POST" and url != self.portal.public_projects_url:
+            raise OpenGovError("unobserved OpenGov POST route")
         for attempt in range(self.portal.retry_attempts + 1):
             try:
-                response = await self._transport.get(url, params=params)
+                if method == "GET":
+                    response = await self._transport.get(url)
+                elif method == "POST" and payload is not None:
+                    response = await self._transport.post(url, json=payload)
+                else:
+                    raise OpenGovError("unsupported request")
             except (httpx.TransportError, ConnectionError, OSError) as exc:
                 if attempt == self.portal.retry_attempts:
                     raise OpenGovAvailabilityError("OpenGov public connection failed") from exc
@@ -395,245 +377,239 @@ class OpenGovProcurementConnector(BaseConnector):
                 continue
             if response.status_code == 404:
                 raise OpenGovAccessError(OpenGovAccessState.NOT_FOUND)
+            if response.status_code in {401, 403}:
+                raise OpenGovAccessError(OpenGovAccessState.LOGIN_REQUIRED)
             if response.status_code >= 400:
                 raise OpenGovAccessError(OpenGovAccessState.RESTRICTED)
-            state = self._detect_access(response)
-            if state not in {OpenGovAccessState.PUBLIC, OpenGovAccessState.PUBLIC_METADATA_ONLY}:
-                raise OpenGovAccessError(state)
-            self._access, self._failures, self._last_failure = state, 0, None
-            self._last_success = self._now()
-            return response
-        raise AssertionError("retry loop exhausted")
-
-    def _parse(self, response: httpx.Response) -> tuple[list[dict[str, Any]], bool]:
-        content_type = response.headers.get("content-type", "").casefold()
-        if "json" in content_type:
+            access = self._detect_access(response)
+            if access not in {OpenGovAccessState.PUBLIC, OpenGovAccessState.PUBLIC_METADATA_ONLY}:
+                raise OpenGovAccessError(access)
             try:
-                payload = response.json()
+                return response.json()
             except ValueError as exc:
                 raise OpenGovAccessError(OpenGovAccessState.MALFORMED) from exc
-            records = payload.get("projects") if isinstance(payload, dict) else payload
-            if not isinstance(records, list) or not all(isinstance(x, dict) for x in records):
-                raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
-            return records, not records
-        if "html" not in content_type:
-            raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
-        parser = _OpenGovHTMLParser()
-        parser.feed(response.text)
-        return parser.records, parser.zero_results
+        raise OpenGovAvailabilityError("OpenGov retry loop exhausted")
 
-    def _detect_access(self, response: httpx.Response) -> OpenGovAccessState:
-        text = response.text[:200_000].casefold()
-        if re.search(r"captcha|access denied.{0,30}bot|cloudflare.{0,30}challenge", text):
+    @staticmethod
+    def _detect_access(response: httpx.Response) -> OpenGovAccessState:
+        content_type = response.headers.get("content-type", "").casefold()
+        text = response.text[:20_000].casefold()
+        if any(x in text for x in ("recaptcha", "hcaptcha", "cf-chl-", "performing security verification", "verify you are human", "captcha")):
             return OpenGovAccessState.CAPTCHA
-        if re.search(r"supplier login|sign in to your account|username.{0,50}password", text):
+        if any(x in text for x in ("supplier login", "sign in to continue", "login required")):
             return OpenGovAccessState.LOGIN_REQUIRED
-        if re.search(r"scheduled maintenance|service unavailable", text):
-            return OpenGovAccessState.UNAVAILABLE
-        if re.search(r"<app-root[^>]*>\s*</app-root>|<div[^>]+id=[\"']root[\"'][^>]*>\s*</div>.*javascript", text, re.S):
-            return OpenGovAccessState.JAVASCRIPT_ONLY
-        # Register/follow/respond calls-to-action may coexist with public metadata.
-        if "data-project-id" in text or "data-opengov-project" in text:
-            return OpenGovAccessState.PUBLIC
-        if re.search(r"registration required|create (?:a |your )?(?:supplier )?account", text):
-            return OpenGovAccessState.REGISTRATION_REQUIRED
-        return OpenGovAccessState.PUBLIC
+        if "json" not in content_type:
+            return OpenGovAccessState.MALFORMED
+        return OpenGovAccessState.PUBLIC_METADATA_ONLY
 
-    def _normalize(self, identity: str, record: dict[str, Any], q: OpenGovQuery) -> RawOpportunity:
-        title = _clean(record.get("title") or record.get("project_title"))
-        agency = _clean(record.get("agency") or record.get("organization")) or self.portal.owning_organization
-        if not title:
+    def _normalize(self, identity: str, record: Mapping[str, Any], questions: list[dict[str, Any]], query: OpenGovQuery) -> RawOpportunity:
+        project_id, title = _clean(record.get("id")), _clean(record.get("title"))
+        government = record.get("government") if isinstance(record.get("government"), dict) else {}
+        organization = government.get("organization") if isinstance(government.get("organization"), dict) else {}
+        agency = _clean(organization.get("name") or self.portal.owning_organization)
+        if not project_id or not title or not agency:
             raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
-        url = self._project_url(record) or self.portal.portal_url
-        payload = dict(record)
-        payload["opengov_procurement"] = {
-            "tenant_key": self.portal.tenant_key, "tenant_slug": self.portal.tenant_slug,
-            "platform_variant": self.portal.platform_variant, "access_state": self._access.value,
-            "verification_status": self.portal.verification_status,
-            "retrieved_at": self._now().isoformat(), "portal_url": self.portal.portal_url,
-            "embed_list_url": self.portal.embed_list_url,
-            "contracts_portal_url": self.portal.contracts_portal_url,
-            "record_type": "solicitation", "production_preset": self.portal.production,
+        project_url = self.portal.project_url(project_id)
+        documents = self._document_metadata(record, identity, project_url) if query.include_documents else []
+        payload = {
+            "project": {k: record.get(k) for k in (
+                "id", "financialId", "title", "status", "closedSubstatus", "closeOutReason",
+                "type", "releaseProjectDate", "postedAt", "proposalDeadline", "qaDeadline",
+                "qaResponseDeadline", "contractorSelectedDate",
+            ) if record.get(k) is not None},
+            "department": self._safe_object(record.get("department"), ("id", "name")),
+            "government": {"code": government.get("code"), "organization": {
+                k: organization.get(k) for k in (
+                    "name", "timezone", "website", "address", "city", "state", "zip"
+                ) if organization.get(k) is not None}},
+            "contacts": self._contacts(record),
+            "vendors": self._vendors(record),
+            "award": {
+                "closed_substatus": record.get("closedSubstatus"),
+                "contractor_selected_date": record.get("contractorSelectedDate"),
+                "public_bid_result": bool(record.get("isPublicBidResult")),
+                "public_bid_pricing_result": bool(record.get("isPublicBidPricingResult")),
+            },
+            "amendments": self._amendments(record, notice=False),
+            "notices": self._amendments(record, notice=True),
+            "questions": self._questions(questions),
+            "documents": documents,
+            "source_provenance": {
+                "listing_request": self.portal.public_projects_url,
+                "detail_request": self.portal.project_api_url(project_id),
+                "question_request": self.portal.question_api_url(project_id),
+                "opportunity_url": project_url,
+                "attachment_parent_id": project_id,
+                "document_download_access": "login_required",
+            },
+            "opengov_procurement": {
+                "tenant_key": self.portal.tenant_key, "tenant_code": self.portal.tenant_slug,
+                "verification_status": self.portal.verification_status,
+                "production_preset": self.portal.production,
+                "listing_contract": "POST government/{tenant}/project/public",
+                "detail_contract": "GET project/{id}",
+                "questions_contract": "GET project/{id}/question",
+            },
         }
-        payload["documents"] = self._documents(record, identity, url) if q.include_documents else []
-        payload["source_provenance"] = {
-            key: url for key in record if key not in {"documents"} and record.get(key) not in (None, "", [])
-        }
+        categories = [_clean(x.get("code") or x.get("title") or x.get("name")) for x in record.get("categories", []) if isinstance(x, dict)]
         return RawOpportunity(
-            source=SourceRef(platform_family=self.platform_family,
-                             jurisdiction=self.portal.jurisdiction,
-                             source_id=identity, opportunity_url=url),
-            title=title, agency=agency,
-            description=_clean(record.get("description") or record.get("summary")) or None,
-            solicitation_number=_clean(record.get("solicitation_number") or record.get("project_number")) or None,
-            status=self._status(record.get("status")),
-            posted_at=self._datetime(record.get("release_date") or record.get("posted_date")),
-            due_at=self._datetime(record.get("due_date") or record.get("response_deadline")),
-            categories=self._dedupe([*record.get("categorys", []), *record.get("categories", [])]),
-            raw_payload=payload,
+            source=SourceRef(platform_family=self.platform_family, jurisdiction=self.portal.jurisdiction, source_id=identity, opportunity_url=project_url),
+            title=title, agency=agency, description=_plain_text(record.get("summary")) or None,
+            solicitation_number=_clean(record.get("financialId")) or None,
+            status=self._status(record.get("status"), record.get("closedSubstatus")),
+            posted_at=self._datetime(record.get("releaseProjectDate") or record.get("postedAt")),
+            due_at=self._datetime(record.get("proposalDeadline")),
+            categories=list(dict.fromkeys(x for x in categories if x)), raw_payload=payload,
         )
 
     def document_candidates(self, opportunity: RawOpportunity) -> list[DocumentCandidate]:
-        """Convert discovery metadata into PR #12 manifest inputs without fetching bodies."""
         result = []
         for item in opportunity.raw_payload.get("documents", []):
-            state = AccessState(item.get("access_state", AccessState.PUBLIC.value))
             result.append(DocumentCandidate(
                 opportunity_id=opportunity.source.source_id,
-                source_document_url=item["public_download_url"],
+                source_document_url=item["public_detail_page_url"],
                 source_opportunity_url=opportunity.source.opportunity_url,
-                filename=item.get("displayed_filename") or "document",
-                label=item.get("document_title"), mime_type=item.get("media_type"),
-                access_state=state, source_document_id=item.get("source_document_id"),
-                category=item.get("document_category"), source_detail_url=opportunity.source.opportunity_url,
+                filename=item["displayed_filename"], label=item.get("document_title"),
+                mime_type=item.get("media_type"), access_state=AccessState.LOGIN_REQUIRED,
+                source_document_id=_clean(item.get("source_document_id")) or None,
+                category=item.get("document_category"), source_detail_url=item["public_detail_page_url"],
                 referring_page_url=opportunity.source.opportunity_url,
-                publicly_retrievable=item.get("publicly_retrievable"), raw_metadata=item,
+                posted_at=self._datetime(item.get("posted_date")),
+                addendum_number=_clean(item.get("addendum_number")) or None,
+                publicly_retrievable=False, raw_metadata=dict(item),
             ))
         return result
 
-    def _documents(self, record: Mapping[str, Any], identity: str, parent: str) -> list[dict[str, Any]]:
-        result, seen = [], set()
-        for item in record.get("documents", []):
+    def _document_metadata(self, record: Mapping[str, Any], identity: str, project_url: str) -> list[dict[str, Any]]:
+        result: list[dict[str, Any]] = []
+
+        def add(item: Any, category: str, *, number: Any = None, posted: Any = None) -> None:
             if not isinstance(item, dict):
-                continue
-            url = self._safe_url(item.get("url"), parent, document=True)
-            if not url or url in seen:
-                continue
-            seen.add(url)
-            title = _clean(item.get("title")) or "Document"
-            filename = _clean(item.get("filename")) or urlparse(url).path.rsplit("/", 1)[-1] or "document"
-            restricted = str(item.get("access", "")).casefold() in {"login_required", "restricted"}
+                return
+            document_id, filename = _clean(item.get("id")), self._filename(item)
+            if not document_id or not filename:
+                return
             result.append({
-                "document_title": title, "displayed_filename": filename,
-                "media_type": item.get("media_type"), "document_category": self._document_category(title),
-                "source_document_id": item.get("document_id"), "posted_date": item.get("posted_date"),
-                "addendum_or_amendment_number": item.get("number"), "public_download_url": url,
-                "public_detail_page_url": parent, "parent_project_id": identity,
-                "publicly_retrievable": not restricted,
-                "access_state": "login_required" if restricted else "public",
-                "raw_link_attributes": dict(item),
+                "source_document_id": document_id,
+                "document_title": _clean(item.get("title") or item.get("name") or filename),
+                "displayed_filename": filename, "media_type": self._mime_type(item.get("fileExtension")),
+                "document_category": category, "posted_date": posted or item.get("created_at"),
+                "addendum_number": number, "parent_project_id": _clean(record.get("id")),
+                "parent_opportunity_id": identity, "public_detail_page_url": project_url,
+                "publicly_retrievable": False, "access_state": "login_required",
+                "storage_metadata": {k: item.get(k) for k in (
+                    "id", "filename", "name", "title", "fileExtension", "type"
+                ) if item.get(k) is not None},
+            })
+
+        add(record.get("documentAttachment"), "solicitation")
+        for item in record.get("attachments", []):
+            add(item, self._document_category(_clean(item.get("title") or item.get("filename"))))
+        for amendment in record.get("addendums", []):
+            if not isinstance(amendment, dict):
+                continue
+            category = "notice" if amendment.get("isNotice") else "addendum"
+            for item in amendment.get("attachments", []):
+                add(item, category, number=amendment.get("number"), posted=amendment.get("releasedAt"))
+        return list({x["source_document_id"]: x for x in result}.values())
+
+    @staticmethod
+    def _contacts(record: Mapping[str, Any]) -> list[dict[str, Any]]:
+        contacts = []
+        for prefix, role, hidden in (
+            ("contact", "project_contact", bool(record.get("hideContact"))),
+            ("procurement", "procurement_contact", bool(record.get("hideProcurementContact"))),
+        ):
+            if hidden:
+                continue
+            name = _clean(record.get(f"{prefix}DisplayName") or record.get(f"{prefix}FullName"))
+            if name:
+                contacts.append({
+                    "role": role, "name": name, "title": _clean(record.get(f"{prefix}Title")) or None,
+                    "email": _clean(record.get(f"{prefix}Email")) or None,
+                    "phone": _clean(record.get(f"{prefix}PhoneComplete")) or None,
+                })
+        for amendment in record.get("addendums", []):
+            user = amendment.get("user") if isinstance(amendment, dict) else None
+            if not isinstance(user, dict):
+                continue
+            name = _clean(user.get("displayName") or user.get("fullName"))
+            if name:
+                contacts.append({
+                    "role": "notice_or_addendum_author", "name": name,
+                    "title": _clean(user.get("title")) or None,
+                    "email": _clean(user.get("email")) or None,
+                    "phone": _clean(user.get("phoneComplete")) or None,
+                })
+        return list({(x["role"], x["name"], x.get("email")): x for x in contacts}.values())
+
+    @staticmethod
+    def _vendors(record: Mapping[str, Any]) -> list[dict[str, Any]]:
+        bids = record.get("bidResults")
+        if not isinstance(bids, dict):
+            return []
+        result = []
+        for proposal in bids.get("proposalsData", []):
+            if isinstance(proposal, dict) and _clean(proposal.get("vendorName")):
+                result.append({
+                    "name": _clean(proposal.get("vendorName")),
+                    "city": _clean(proposal.get("vendorCity")) or None,
+                    "state": _clean(proposal.get("vendorState")) or None,
+                    "result_type": "public_bid_result",
+                })
+        return list({x["name"].casefold(): x for x in result}.values())
+
+    @staticmethod
+    def _amendments(record: Mapping[str, Any], *, notice: bool) -> list[dict[str, Any]]:
+        result = []
+        for item in record.get("addendums", []):
+            if isinstance(item, dict) and bool(item.get("isNotice")) == notice:
+                result.append({k: item.get(k) for k in (
+                    "id", "project_id", "number", "title", "description", "releasedAt", "status", "type"
+                ) if item.get(k) is not None})
+        return result
+
+    @staticmethod
+    def _questions(questions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        result = []
+        for item in questions:
+            comments = []
+            for comment in item.get("questionComments", []):
+                if not isinstance(comment, dict):
+                    continue
+                user = comment.get("user") if isinstance(comment.get("user"), dict) else {}
+                comments.append({
+                    "id": comment.get("id"),
+                    "description": comment.get("description"),
+                    "created_at": comment.get("created_at"),
+                    "is_vendor": bool(comment.get("isVendor")),
+                    "responder": _clean(user.get("displayName") or user.get("fullName")) or None,
+                })
+            result.append({
+                "id": item.get("id"), "project_id": item.get("project_id"),
+                "number": item.get("number"), "subject": item.get("subject"),
+                "status": item.get("status"), "is_answered": bool(item.get("isAnswered")),
+                "released_at": item.get("releasedAt"), "comments": comments,
             })
         return result
 
-    def _matches(self, record: Mapping[str, Any], q: OpenGovQuery) -> bool:
-        text = repr(record).casefold()
-        keyword = _clean(q.keyword or " ".join(q.keywords)).casefold()
-        if keyword and keyword not in text:
-            return False
-        if q.project_id and _clean(record.get("project_id")).casefold() != q.project_id.casefold():
-            return False
-        number = _clean(record.get("solicitation_number") or record.get("project_number"))
-        if q.solicitation_number and number.casefold() != q.solicitation_number.casefold():
-            return False
-        status = _clean(record.get("status")).casefold()
-        if q.statuses and status not in {x.casefold() for x in q.statuses}:
-            return False
-        if not q.include_closed and any(x in status for x in ("closed", "cancelled", "canceled")):
-            return False
-        if not q.include_awarded and "award" in status:
-            return False
-        if q.department and q.department.casefold() not in _clean(record.get("department")).casefold():
-            return False
-        released = self._datetime(record.get("release_date") or record.get("posted_date"))
-        due = self._datetime(record.get("due_date") or record.get("response_deadline"))
+    @staticmethod
+    def _safe_object(value: Any, keys: tuple[str, ...]) -> dict[str, Any]:
+        return {k: value.get(k) for k in keys if value.get(k) is not None} if isinstance(value, dict) else {}
+
+    def _matches_local_dates(self, record: Mapping[str, Any], q: OpenGovQuery) -> bool:
+        released = self._datetime(record.get("releaseProjectDate") or record.get("postedAt"))
+        due = self._datetime(record.get("proposalDeadline"))
         return self._in_range(released, q.released_from, q.released_to) and self._in_range(due, q.due_from, q.due_to)
 
-    def _identity(self, record: Mapping[str, Any]) -> str | None:
-        project_id = _clean(record.get("project_id"))
-        number = _clean(record.get("solicitation_number") or record.get("project_number"))
-        if project_id:
-            return f"{self.portal.tenant_key}:project:{project_id}"
-        if number:
-            return f"{self.portal.tenant_key}:number:{number}"
-        title = _clean(record.get("title") or record.get("project_title"))
-        if title:
-            digest = hashlib.sha256(f"{self.portal.tenant_key}|{title}".encode()).hexdigest()[:20]
-            return f"{self.portal.tenant_key}:derived:{digest}"
-        return None
-
-    def _project_url(self, record: Mapping[str, Any]) -> str | None:
-        direct = self._safe_url(record.get("project_url"), self.portal.portal_url)
-        if direct:
-            return self._canonical_url(direct)
-        project_id = _clean(record.get("project_id"))
-        return self.portal.project_url(project_id) if project_id else None
-
-    def _safe_url(self, value: Any, base: str | None = None, *, document: bool = False) -> str | None:
-        if not value:
-            return None
-        parsed = urlparse(urljoin(base or self.portal.portal_base_url, str(value).strip()))
-        if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
-            return None
-        host = parsed.hostname.casefold().rstrip(".")
-        try:
-            if not ipaddress.ip_address(host).is_global:
-                return None
-        except ValueError:
-            if host in {"localhost", "metadata.google.internal"} or host.endswith((".local", ".internal", ".localhost")):
-                return None
-        allowed = {h.casefold() for h in self.portal.approved_hosts}
-        if document:
-            allowed.update(h.casefold() for h in self.portal.approved_attachment_hosts)
-        if host not in allowed:
-            return None
-        return urlunparse(parsed)
-
-    def _configuration_valid(self) -> bool:
-        return bool(re.fullmatch(r"[a-z0-9][a-z0-9-]*", self.portal.tenant_slug)
-                    and self.portal.organization_type in _ORGANIZATION_TYPES
-                    and self._safe_url(self.portal.portal_url)
-                    and self._safe_url(self.portal.embed_list_url))
-
-    def _canonical_url(self, value: str) -> str:
-        parsed = urlparse(value)
-        query = [(k, v) for k, v in parse_qsl(parsed.query)
-                 if k.casefold() not in self._transient_query]
-        return urlunparse(parsed._replace(query=urlencode(query), fragment=""))
-
-    def _backoff(self, attempt: int, retry_after: str | None) -> float:
-        if retry_after:
-            try:
-                return max(0, float(retry_after))
-            except ValueError:
-                try:
-                    return max(0, (email.utils.parsedate_to_datetime(retry_after) - self._now()).total_seconds())
-                except (TypeError, ValueError):
-                    pass
-        return self.portal.retry_backoff_seconds * (2 ** attempt) + self.portal.retry_jitter_seconds * self._random()
-
-    def _record_failure(self, exc: Exception) -> None:
-        self._failures += 1
-        self._last_failure = self._now()
-        self._last_error_class = type(exc).__name__
-        self._access = exc.state if isinstance(exc, OpenGovAccessError) else OpenGovAccessState.TRANSIENT_ERROR
-
-    def _circuit_open(self) -> bool:
-        if self._failures < self.portal.circuit_breaker_threshold or not self._last_failure:
-            return False
-        if (self._now() - self._last_failure).total_seconds() >= self.portal.circuit_breaker_cooldown:
-            self._failures = 0
-            return False
-        return True
-
     @staticmethod
-    def _merge(old: Mapping[str, Any], new: Mapping[str, Any]) -> dict[str, Any]:
-        result = dict(old)
-        result.update({k: v for k, v in new.items() if v not in (None, "", [])})
-        result["documents"] = [*old.get("documents", []), *new.get("documents", [])]
-        return result
-
-    @staticmethod
-    def _dedupe(values: list[Any]) -> list[str]:
-        return list(dict.fromkeys(_clean(x) for x in values if _clean(x)))
-
-    @staticmethod
-    def _status(value: Any) -> OpportunityStatus:
-        text = _clean(value).casefold()
+    def _status(value: Any, substatus: Any = None) -> OpportunityStatus:
+        text = f"{_clean(value)} {_clean(substatus)}".casefold()
         if "cancel" in text:
             return OpportunityStatus.CANCELLED
         if "award" in text:
             return OpportunityStatus.AWARDED
-        if any(x in text for x in ("closed", "expired")):
+        if "closed" in text:
             return OpportunityStatus.CLOSED
         if any(x in text for x in ("open", "active", "posted")):
             return OpportunityStatus.OPEN
@@ -652,16 +628,84 @@ class OpenGovProcurementConnector(BaseConnector):
 
     @staticmethod
     def _in_range(value: datetime | None, start: date | None, end: date | None) -> bool:
-        return not ((start and (not value or value.date() < start)) or
-                    (end and (not value or value.date() > end)))
+        return not ((start and (not value or value.date() < start)) or (end and (not value or value.date() > end)))
+
+    @staticmethod
+    def _filename(item: Mapping[str, Any]) -> str:
+        value = _clean(item.get("filename") or item.get("name") or item.get("title")).replace("\\", "/")
+        return PurePosixPath(value).name[:240]
+
+    @staticmethod
+    def _mime_type(extension: Any) -> str | None:
+        return {
+            "pdf": "application/pdf", "doc": "application/msword",
+            "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "xls": "application/vnd.ms-excel",
+            "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "csv": "text/csv", "zip": "application/zip",
+        }.get(_clean(extension).casefold().lstrip("."))
 
     @staticmethod
     def _document_category(title: str) -> str:
-        for pattern, category in ((r"addend", "addendum"), (r"amend", "amendment"),
-                                  (r"q\s*&\s*a|questions", "questions_and_answers"),
-                                  (r"award|intent", "award_notice"),
-                                  (r"tabulation", "bid_tabulation"),
-                                  (r"\b(?:rfp|rfq|ifb|itb|rfi)\b", "solicitation")):
+        for pattern, category in (
+            (r"addend", "addendum"), (r"amend", "amendment"),
+            (r"q\s*&\s*a|questions", "questions_and_answers"),
+            (r"award|intent", "award_notice"), (r"tabulation", "bid_tabulation"),
+            (r"\b(?:rfp|rfq|ifb|itb|rfi)\b", "solicitation"),
+        ):
             if re.search(pattern, title, re.I):
                 return category
         return "other"
+
+    @staticmethod
+    def _safe_url(value: str) -> bool:
+        parsed = urlparse(value)
+        if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+            return False
+        host = parsed.hostname.casefold().rstrip(".")
+        try:
+            if not ipaddress.ip_address(host).is_global:
+                return False
+        except ValueError:
+            if host.endswith((".local", ".internal", ".localhost")) or host == "localhost":
+                return False
+        return host in {"procurement.opengov.com", "api.procurement.opengov.com"}
+
+    def _configuration_valid(self) -> bool:
+        return bool(
+            re.fullmatch(r"[a-z0-9][a-z0-9-]*", self.portal.tenant_slug)
+            and self.portal.organization_type in _ORGANIZATION_TYPES
+            and self._safe_url(self.portal.portal_url)
+            and self._safe_url(self.portal.public_projects_url)
+        )
+
+    def _backoff(self, attempt: int, retry_after: str | None) -> float:
+        if retry_after:
+            try:
+                return max(0, float(retry_after))
+            except ValueError:
+                try:
+                    return max(0, (email.utils.parsedate_to_datetime(retry_after) - self._now()).total_seconds())
+                except (TypeError, ValueError):
+                    pass
+        return self.portal.retry_backoff_seconds * (2**attempt) + self.portal.retry_jitter_seconds * self._random()
+
+    def _record_success(self) -> None:
+        self._failures = 0
+        self._last_success = self._now()
+        self._last_error_class = None
+        self._access = OpenGovAccessState.PUBLIC_METADATA_ONLY
+
+    def _record_failure(self, exc: Exception) -> None:
+        self._failures += 1
+        self._last_failure = self._now()
+        self._last_error_class = type(exc).__name__
+        self._access = exc.state if isinstance(exc, OpenGovAccessError) else OpenGovAccessState.TRANSIENT_ERROR
+
+    def _circuit_open(self) -> bool:
+        if self._failures < self.portal.circuit_breaker_threshold or not self._last_failure:
+            return False
+        if (self._now() - self._last_failure).total_seconds() >= self.portal.circuit_breaker_cooldown:
+            self._failures = 0
+            return False
+        return True

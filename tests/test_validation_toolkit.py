@@ -185,6 +185,31 @@ class ToolkitTests(unittest.TestCase):
             self.assertNotIn("live-jsf-secret", clean)
             self.assertNotIn("live-session-secret", clean)
 
+    def test_signed_urls_nested_in_json_response_are_sanitized(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw, out = Path(tmp) / "raw.har", Path(tmp) / "clean.har"
+            value = har()
+            value["log"]["entries"][0]["response"]["content"] = {
+                "mimeType": "application/json",
+                "text": json.dumps(
+                    {
+                        "contactEmail": "buyer@example.gov",
+                        "url": (
+                            "https://files.example.gov/document.pdf?"
+                            "X-Amz-Credential=temporary-credential&"
+                            "X-Amz-Signature=temporary-signature"
+                        ),
+                    }
+                ),
+            }
+            raw.write_text(json.dumps(value))
+            sanitize_har(raw, out, source_id="x")
+            clean = out.read_text()
+            self.assertIn("buyer@example.gov", clean)
+            self.assertNotIn("temporary-credential", clean)
+            self.assertNotIn("temporary-signature", clean)
+            self.assertIn("%5BREDACTED%5D", clean)
+
     def test_manual_import_preserves_original_and_inventories_risk(self):
         with tempfile.TemporaryDirectory(dir=Path.cwd()) as tmp:
             # Repository-local destinations other than .sled-validation are rejected.
