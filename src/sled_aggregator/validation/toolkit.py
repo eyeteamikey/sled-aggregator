@@ -86,6 +86,13 @@ MUTATION_PATTERN = re.compile(
     r"payment|acknowledge|accept.?terms|submit",
     re.I,
 )
+RAW_EMAIL_CANDIDATE = re.compile(
+    r"(?<![A-Za-z0-9.!#$%&'*+/=?^_`{|}~-])"
+    r"[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@"
+    r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+"
+    r"[A-Za-z]{2,63}\b",
+    re.I,
+)
 
 
 @dataclass(frozen=True)
@@ -669,7 +676,10 @@ def raw_risk_inventory(path: Path) -> dict:
         "cookies_present": r'"(?:Cookie|Set-Cookie|cookies)"',
         "authorization_headers_present": r'"(?:Authorization|Proxy-Authorization)"',
         "view_state_fields_present": r"javax\.faces\.ViewState|ViewState",
-        "email_candidates": PATTERNS["email"],
+        # Keep raw-file inventory linear on browser HARs containing megabyte-scale
+        # minified asset lines. The broader post-sanitization scanner remains
+        # unchanged; this matcher only counts plausible public email candidates.
+        "email_candidates": RAW_EMAIL_CANDIDATE,
         "tracking_identifiers_present": r"_ga|_gid|hotjar|google-analytics|traceparent",
     }
     counts = dict.fromkeys(checks, 0)

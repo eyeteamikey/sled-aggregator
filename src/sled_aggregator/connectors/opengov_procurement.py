@@ -61,8 +61,9 @@ _ORGANIZATION_TYPES = frozenset(
         "school district", "university", "utility", "special district", "cooperative",
     }
 )
-_SORT_FIELDS = frozenset({"title", "status", "releaseProjectDate", "proposalDeadline"})
+_SORT_FIELDS = frozenset({"releaseProjectDate", "proposalDeadline"})
 _SORT_DIRECTIONS = frozenset({"ASC", "DESC"})
+_STATUS_FILTERS = frozenset({"open", "closed"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,6 +91,7 @@ class OpenGovPortal:
     verification_status: str = "unverified_profile"
     notes: tuple[str, ...] = ()
     production: bool = True
+    planholders_observed: bool = False
 
     @property
     def portal_url(self) -> str:
@@ -109,6 +111,9 @@ class OpenGovPortal:
     def question_api_url(self, project_id: str) -> str:
         return f"{self.project_api_url(project_id)}/question"
 
+    def planholders_api_url(self, project_id: str) -> str:
+        return f"{self.project_api_url(project_id)}/planholders"
+
     def project_url(self, project_id: str) -> str:
         return f"{self.portal_url}/projects/{project_id}"
 
@@ -127,9 +132,11 @@ ALAMEDA_COUNTY = OpenGovPortal(
     "county", "County of Alameda", default_timezone="America/Los_Angeles",
     verification_status="live_validated_2026-08-24",
     notes=(
-        "Anonymous listing, filters, pagination, detail, Q&A, and attachment metadata validated.",
+        "Anonymous listing, observed filters, pagination, detail, Q&A, and attachment metadata validated.",
         "Document download requires login.",
+        "Public planholder data was observed on a configured awarded project.",
     ),
+    planholders_observed=True,
 )
 
 # Existing profiles remain available but are not promoted by this validation.
@@ -165,6 +172,8 @@ class OpenGovQuery(ConnectorQuery):
     include_details: bool = True
     include_documents: bool = True
     include_questions: bool = True
+    include_planholders: bool = False
+    maximum_planholders: int = 100
     sort_field: str = "proposalDeadline"
     sort_direction: str = "DESC"
     page_size: int | None = None
@@ -195,6 +204,7 @@ class OpenGovHealth:
     document_discovery_supported: bool
     document_download_supported: bool
     q_and_a_supported: bool
+    public_vendor_discovery_supported: bool
     contracts_api_access: str
     configuration_valid: bool
 
@@ -252,7 +262,8 @@ class OpenGovProcurementConnector(BaseConnector):
             not opened and self._failures == 0, self._access, self.portal.tenant_key,
             self.platform_family, opened, self._failures, self._last_status,
             self._last_failure, self._last_success, self._last_error_class,
-            True, True, True, False, True, "session_dependent_not_called",
+            True, True, True, False, True, self.portal.planholders_observed,
+            "session_dependent_not_called",
             self._configuration_valid(),
         )
 
@@ -270,6 +281,14 @@ class OpenGovProcurementConnector(BaseConnector):
             raise OpenGovAvailabilityError(f"{self.portal.tenant_key} circuit is open")
         if q.sort_field not in _SORT_FIELDS or q.sort_direction not in _SORT_DIRECTIONS:
             raise OpenGovAccessError(OpenGovAccessState.UNSUPPORTED_SEARCH)
+        if q.solicitation_number or q.category_ids:
+            raise OpenGovAccessError(OpenGovAccessState.UNSUPPORTED_SEARCH)
+        if q.statuses and (
+            len(q.statuses) != 1 or q.statuses[0].casefold() not in _STATUS_FILTERS
+        ):
+            raise OpenGovAccessError(OpenGovAccessState.UNSUPPORTED_SEARCH)
+        if q.include_planholders and not self.portal.planholders_observed:
+            raise OpenGovAccessError(OpenGovAccessState.UNSUPPORTED_SEARCH)
         page_size = min(max(q.page_size or self.portal.page_size, 1), 50)
         max_pages = min(max(q.maximum_pages or self.portal.maximum_pages, 1), 20)
         maximum = min(max(q.limit, 0), q.maximum_results or self.portal.maximum_results, 1000)
@@ -278,7 +297,12 @@ class OpenGovProcurementConnector(BaseConnector):
         seen: set[str] = set()
         try:
             for page in range(1, max_pages + 1):
-                body = {"data": self._listing_request(q, page, page_size)}
+                # OpenGov's application client passes ``{data: query}`` to its
+                # request helper, but the helper serializes ``query`` itself as
+                # the HTTP JSON body.  Sending the helper-options envelope over
+                # the wire is accepted with HTTP 200 but silently ignores every
+                # filter, sort, limit, and page field.
+                body = self._listing_request(q, page, page_size)
                 payload = await self._request_json("POST", self.portal.public_projects_url, body)
                 count, rows = self._listing_rows(payload)
                 for listed in rows:
@@ -291,6 +315,7 @@ class OpenGovProcurementConnector(BaseConnector):
                     seen.add(identity)
                     record = dict(listed)
                     questions: list[dict[str, Any]] = []
+                    planholders: list[dict[str, Any]] = []
                     if q.include_details:
                         detail = await self._request_json("GET", self.portal.project_api_url(project_id))
                         if not isinstance(detail, dict) or _clean(detail.get("id")) != project_id:
@@ -301,9 +326,19 @@ class OpenGovProcurementConnector(BaseConnector):
                             if not isinstance(question_payload, list) or not all(isinstance(x, dict) for x in question_payload):
                                 raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
                             questions = question_payload
+                        if q.include_planholders and bool(record.get("showPlanholders")):
+                            planholder_payload = await self._request_json(
+                                "GET", self.portal.planholders_api_url(project_id)
+                            )
+                            if not isinstance(planholder_payload, list) or not all(
+                                isinstance(x, dict) for x in planholder_payload
+                            ):
+                                raise OpenGovAccessError(OpenGovAccessState.MALFORMED)
+                            planholder_limit = min(max(q.maximum_planholders, 0), 100)
+                            planholders = planholder_payload[:planholder_limit]
                     if not self._matches_local_dates(record, q):
                         continue
-                    item = self._normalize(identity, record, questions, q)
+                    item = self._normalize(identity, record, questions, planholders, q)
                     self._record_success()
                     yield item
                     maximum -= 1
@@ -321,17 +356,13 @@ class OpenGovProcurementConnector(BaseConnector):
         keyword = _clean(q.keyword or " ".join(q.keywords))
         if keyword:
             filters.append({"type": "title", "value": keyword})
-        if q.solicitation_number:
-            filters.append({"type": "financialId", "value": q.solicitation_number})
         if q.department_id is not None:
             filters.append({"type": "department_id", "value": q.department_id})
-        if q.category_ids:
-            filters.append({"type": "categories", "value": list(q.category_ids)})
         if q.statuses:
-            if len(q.statuses) != 1:
-                raise OpenGovAccessError(OpenGovAccessState.UNSUPPORTED_SEARCH)
             filters.append({"type": "status", "value": q.statuses[0].casefold()})
-        elif not q.include_closed and not q.include_awarded:
+        elif q.include_closed or q.include_awarded:
+            filters.append({"type": "status", "value": "closed"})
+        else:
             filters.append({"type": "status", "value": "open"})
         return {
             "filters": filters, "quickSearchQuery": None, "limit": limit, "page": page,
@@ -402,7 +433,14 @@ class OpenGovProcurementConnector(BaseConnector):
             return OpenGovAccessState.MALFORMED
         return OpenGovAccessState.PUBLIC_METADATA_ONLY
 
-    def _normalize(self, identity: str, record: Mapping[str, Any], questions: list[dict[str, Any]], query: OpenGovQuery) -> RawOpportunity:
+    def _normalize(
+        self,
+        identity: str,
+        record: Mapping[str, Any],
+        questions: list[dict[str, Any]],
+        planholders: list[dict[str, Any]],
+        query: OpenGovQuery,
+    ) -> RawOpportunity:
         project_id, title = _clean(record.get("id")), _clean(record.get("title"))
         government = record.get("government") if isinstance(record.get("government"), dict) else {}
         organization = government.get("organization") if isinstance(government.get("organization"), dict) else {}
@@ -423,7 +461,7 @@ class OpenGovProcurementConnector(BaseConnector):
                     "name", "timezone", "website", "address", "city", "state", "zip"
                 ) if organization.get(k) is not None}},
             "contacts": self._contacts(record),
-            "vendors": self._vendors(record),
+            "vendors": self._vendors(record, planholders),
             "award": {
                 "closed_substatus": record.get("closedSubstatus"),
                 "contractor_selected_date": record.get("contractorSelectedDate"),
@@ -438,6 +476,10 @@ class OpenGovProcurementConnector(BaseConnector):
                 "listing_request": self.portal.public_projects_url,
                 "detail_request": self.portal.project_api_url(project_id),
                 "question_request": self.portal.question_api_url(project_id),
+                "planholders_request": (
+                    self.portal.planholders_api_url(project_id) if planholders else None
+                ),
+                "planholders_retained": len(planholders),
                 "opportunity_url": project_url,
                 "attachment_parent_id": project_id,
                 "document_download_access": "login_required",
@@ -449,6 +491,11 @@ class OpenGovProcurementConnector(BaseConnector):
                 "listing_contract": "POST government/{tenant}/project/public",
                 "detail_contract": "GET project/{id}",
                 "questions_contract": "GET project/{id}/question",
+                "planholders_contract": (
+                    "GET project/{id}/planholders"
+                    if self.portal.planholders_observed
+                    else "not_observed_for_tenant"
+                ),
             },
         }
         categories = [_clean(x.get("code") or x.get("title") or x.get("name")) for x in record.get("categories", []) if isinstance(x, dict)]
@@ -544,20 +591,59 @@ class OpenGovProcurementConnector(BaseConnector):
         return list({(x["role"], x["name"], x.get("email")): x for x in contacts}.values())
 
     @staticmethod
-    def _vendors(record: Mapping[str, Any]) -> list[dict[str, Any]]:
+    def _vendors(
+        record: Mapping[str, Any], planholders: list[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
         bids = record.get("bidResults")
-        if not isinstance(bids, dict):
-            return []
         result = []
-        for proposal in bids.get("proposalsData", []):
-            if isinstance(proposal, dict) and _clean(proposal.get("vendorName")):
-                result.append({
-                    "name": _clean(proposal.get("vendorName")),
-                    "city": _clean(proposal.get("vendorCity")) or None,
-                    "state": _clean(proposal.get("vendorState")) or None,
-                    "result_type": "public_bid_result",
-                })
-        return list({x["name"].casefold(): x for x in result}.values())
+        if isinstance(bids, dict):
+            for proposal in bids.get("proposalsData", []):
+                if isinstance(proposal, dict) and _clean(proposal.get("vendorName")):
+                    result.append({
+                        "name": _clean(proposal.get("vendorName")),
+                        "city": _clean(proposal.get("vendorCity")) or None,
+                        "state": _clean(proposal.get("vendorState")) or None,
+                        "result_type": "public_bid_result",
+                    })
+        for holder in planholders:
+            organization = (
+                holder.get("organization")
+                if isinstance(holder.get("organization"), dict)
+                else {}
+            )
+            name = _clean(organization.get("name"))
+            if not name:
+                continue
+            subscriptions = holder.get("projectVendorUserSubscriptions")
+            designations = sorted({
+                _clean(item.get("type"))
+                for item in subscriptions or []
+                if isinstance(item, dict) and _clean(item.get("type"))
+            })
+            result.append({
+                "name": name,
+                "city": _clean(organization.get("city") or holder.get("city")) or None,
+                "state": _clean(organization.get("state") or holder.get("state")) or None,
+                "result_type": "public_planholder",
+                "designations": designations,
+                "is_proposer": bool(holder.get("isProposer")),
+                "contact": {
+                    "name": _clean(holder.get("displayName") or holder.get("fullName")) or None,
+                    "title": _clean(holder.get("title")) or None,
+                    "email": _clean(holder.get("email")) or None,
+                    "phone": _clean(holder.get("phoneComplete")) or None,
+                    "address1": _clean(holder.get("address1")) or None,
+                    "address2": _clean(holder.get("address2")) or None,
+                    "city": _clean(holder.get("city")) or None,
+                    "state": _clean(holder.get("state")) or None,
+                    "zip": _clean(holder.get("zipCode")) or None,
+                    "country_code": _clean(holder.get("countryCode")) or None,
+                },
+            })
+        return list({
+            (x["result_type"], x["name"].casefold(), x.get("contact", {}).get("email")): x
+            for x in result
+        }.values())
 
     @staticmethod
     def _amendments(record: Mapping[str, Any], *, notice: bool) -> list[dict[str, Any]]:

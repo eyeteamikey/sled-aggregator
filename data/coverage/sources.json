@@ -1729,7 +1729,7 @@
       "document_pipeline_classification": "manifest_only",
       "authentication_requirement": "document_download_only",
       "captcha_classification": "transient_cloudflare_verification_observed_no_human_action",
-      "robots_access_notes": "Successful bounded anonymous walkthrough and API capture; no claim of continuous availability.",
+      "robots_access_notes": "Earlier bounded anonymous walkthrough plus follow-up live API replay; the follow-up portal UI remained at automatic Cloudflare verification. No claim of continuous availability.",
       "allowed_http_methods": [
         "GET",
         "POST"
@@ -1746,7 +1746,7 @@
         "connector_replay_approved": true,
         "notes": "Only the exact anonymous listing POST is approved. Detail and Q&A use GET; download and contracts POST routes are not approved."
       },
-      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
+      "evidence_type": "live_api_contract_with_sanitized_derived_har_and_synthetic_fixture",
       "evidence_location": [
         "docs/connector_validation/opengov_two_tenants_2026-08-24.md",
         "tests/fixtures/opengov_ocean_listing_page1.json",
@@ -1765,7 +1765,9 @@
       "known_limitations": [
         "Document selection is public but download requires login; the connector never calls the download POST or retains signed URLs.",
         "Related contracts were browser-visible on one awarded project, but the direct API POST returned HTTP 401 without browser session state.",
-        "The capture proves observed request contracts, not continuous production availability."
+        "The retained HAR-shaped artifact was derived from saved public responses rather than exported from the browser.",
+        "The follow-up browser load remained at automatic Cloudflare verification; the public API contract was still anonymously available.",
+        "The evidence proves point-in-time request contracts, not continuous production availability."
       ],
       "blocker_reason": null,
       "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
@@ -1812,8 +1814,8 @@
       "attachment_classification": "login_required",
       "document_pipeline_classification": "manifest_only",
       "authentication_requirement": "document_download_only",
-      "captcha_classification": "none_observed",
-      "robots_access_notes": "Successful bounded anonymous walkthrough and API capture; no claim of continuous availability.",
+      "captcha_classification": "transient_cloudflare_verification_observed_no_human_action",
+      "robots_access_notes": "Earlier bounded anonymous walkthrough plus follow-up live API replay; the follow-up portal UI remained at automatic Cloudflare verification. No claim of continuous availability.",
       "allowed_http_methods": ["GET", "POST"],
       "validation_request_policy": {
         "browser_capture_rules": [
@@ -1827,7 +1829,7 @@
         "connector_replay_approved": true,
         "notes": "Only the exact anonymous listing POST is approved. Detail and Q&A use GET; download and contracts POST routes are not approved."
       },
-      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
+      "evidence_type": "live_api_contract_with_sanitized_derived_har_and_synthetic_fixture",
       "evidence_location": [
         "docs/connector_validation/opengov_two_tenants_2026-08-24.md",
         "tests/fixtures/opengov_alameda_listing.json",
@@ -1843,7 +1845,9 @@
       "known_limitations": [
         "Document selection is public but download requires login; the connector never calls the download POST or retains signed URLs.",
         "Awarded status was public, but public vendor/result data was not exposed on the reviewed Alameda awarded record.",
-        "The capture proves observed request contracts, not continuous production availability."
+        "The retained HAR-shaped artifact was derived from saved public responses rather than exported from the browser.",
+        "The follow-up browser load remained at automatic Cloudflare verification; the public API contract was still anonymously available.",
+        "The evidence proves point-in-time request contracts, not continuous production availability."
       ],
       "blocker_reason": null,
       "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
@@ -1854,24 +1858,24 @@
     {
       "evidence_id": "har-6bc258cece119647",
       "source_id": "nj-ocean-county-opengov",
-      "evidence_type": "sanitized_har_contract",
+      "evidence_type": "sanitized_derived_har_contract",
       "evidence_location": ["docs/connector_validation/opengov_two_tenants_2026-08-24.md"],
       "capabilities": [
         "discovery", "pagination", "filtering", "details", "attachments", "amendments", "awards", "normalization"
       ],
       "verification_date": "2026-08-24",
-      "notes": "Reviewed bounded anonymous capture; download is login-required and related-contract API access was session-dependent."
+      "notes": "Derived HAR-shaped replay artifact plus live API verification; not a browser-export source HAR. Download is login-required and related-contract API access was session-dependent."
     },
     {
       "evidence_id": "har-6f4048bb552f6056",
       "source_id": "ca-alameda-county-opengov",
-      "evidence_type": "sanitized_har_contract",
+      "evidence_type": "sanitized_derived_har_contract",
       "evidence_location": ["docs/connector_validation/opengov_two_tenants_2026-08-24.md"],
       "capabilities": [
         "discovery", "pagination", "filtering", "details", "attachments", "amendments", "awards", "normalization"
       ],
       "verification_date": "2026-08-24",
-      "notes": "Reviewed bounded anonymous capture; download is login-required and award status was public without vendor data on the reviewed awarded record."
+      "notes": "Derived HAR-shaped replay artifact plus live API verification; not a browser-export source HAR. Download is login-required and award status was public without vendor data on the reviewed awarded record."
     },
     {
       "evidence_id": "ca-cal-eprocure-fixture-1",

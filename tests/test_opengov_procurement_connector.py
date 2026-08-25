@@ -35,6 +35,7 @@ OCEAN_QUESTIONS = fixture("opengov_ocean_questions.json")
 OCEAN_AWARDED = fixture("opengov_ocean_awarded_detail.json")
 ALAMEDA_LISTING = fixture("opengov_alameda_listing.json")
 ALAMEDA_DETAIL = fixture("opengov_alameda_detail.json")
+ALAMEDA_PLANHOLDERS = fixture("opengov_alameda_planholders.json")
 
 
 def response(url, payload, status=200, content_type="application/json", method="GET", headers=None):
@@ -99,6 +100,8 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
                 portal.public_projects_url,
                 f"https://api.procurement.opengov.com/api/v1/government/{code}/project/public",
             )
+        self.assertFalse(OCEAN_COUNTY.planholders_observed)
+        self.assertTrue(ALAMEDA_COUNTY.planholders_observed)
         for alias in (
             "opengov",
             "opengov-procurement",
@@ -112,10 +115,8 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
     async def test_shared_listing_filter_and_sort_contract_for_both_tenants(self):
         query = OpenGovQuery(
             keyword="Parking",
-            solicitation_number="902999",
             statuses=("closed",),
             department_id=11400,
-            category_ids=(10007588, 10007587),
             include_details=False,
             sort_field="releaseProjectDate",
             sort_direction="ASC",
@@ -127,18 +128,17 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
                 )
                 method, url, body = fake.calls[0]
                 self.assertEqual((method, url), ("POST", portal.public_projects_url))
-                self.assertEqual(body["data"]["page"], 1)
-                self.assertEqual(body["data"]["limit"], 10)
-                self.assertEqual(body["data"]["sortField"], "releaseProjectDate")
-                self.assertEqual(body["data"]["sortDirection"], "ASC")
-                self.assertEqual(body["data"]["quickSearchQuery"], None)
+                self.assertNotIn("data", body)
+                self.assertEqual(body["page"], 1)
+                self.assertEqual(body["limit"], 10)
+                self.assertEqual(body["sortField"], "releaseProjectDate")
+                self.assertEqual(body["sortDirection"], "ASC")
+                self.assertEqual(body["quickSearchQuery"], None)
                 self.assertEqual(
-                    body["data"]["filters"],
+                    body["filters"],
                     [
                         {"type": "title", "value": "Parking"},
-                        {"type": "financialId", "value": "902999"},
                         {"type": "department_id", "value": 11400},
-                        {"type": "categories", "value": [10007588, 10007587]},
                         {"type": "status", "value": "closed"},
                     ],
                 )
@@ -158,7 +158,7 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
             "ocean-county-nj:project:102",
             "ocean-county-nj:project:103",
         ])
-        self.assertEqual([call[2]["data"]["page"] for call in fake.calls], [1, 2])
+        self.assertEqual([call[2]["page"] for call in fake.calls], [1, 2])
         self.assertEqual(connector.health.consecutive_failures, 0)
 
     async def test_ocean_detail_contacts_amendments_questions_and_documents(self):
@@ -221,8 +221,53 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(item.source.source_id, "alameda-county-ca:project:201")
         self.assertEqual(item.solicitation_number, "902999")
         self.assertEqual(item.raw_payload["government"]["organization"]["timezone"], "America/Los_Angeles")
-        self.assertEqual(fake.calls[0][2]["data"]["filters"], [{"type": "status", "value": "open"}])
+        self.assertEqual(fake.calls[0][2]["filters"], [{"type": "status", "value": "open"}])
         self.assertEqual(fake.calls[0][1], ALAMEDA_COUNTY.public_projects_url)
+
+    async def test_alameda_opt_in_planholder_vendor_normalization(self):
+        detail = {**ALAMEDA_DETAIL, "showPlanholders": True}
+        _, fake, items = await self.collect([
+            response(ALAMEDA_COUNTY.public_projects_url, ALAMEDA_LISTING, method="POST"),
+            response(ALAMEDA_COUNTY.project_api_url("201"), detail),
+            response(ALAMEDA_COUNTY.planholders_api_url("201"), ALAMEDA_PLANHOLDERS),
+        ], OpenGovQuery(include_planholders=True), portal=ALAMEDA_COUNTY)
+        vendors = items[0].raw_payload["vendors"]
+        self.assertEqual([vendor["name"] for vendor in vendors], [
+            "Example Builders LLC", "Sample Plan Room",
+        ])
+        self.assertEqual(vendors[0]["designations"], ["Prime"])
+        self.assertTrue(vendors[0]["is_proposer"])
+        self.assertEqual(vendors[0]["contact"]["email"], "alex@example.invalid")
+        self.assertEqual(fake.calls[-1][1], ALAMEDA_COUNTY.planholders_api_url("201"))
+        self.assertEqual(items[0].raw_payload["source_provenance"]["planholders_retained"], 2)
+        alameda_health = OpenGovProcurementConnector(
+            ALAMEDA_COUNTY, transport=FakeTransport([])
+        ).health
+        self.assertTrue(alameda_health.public_vendor_discovery_supported)
+
+        _, _, limited = await self.collect([
+            response(ALAMEDA_COUNTY.public_projects_url, ALAMEDA_LISTING, method="POST"),
+            response(ALAMEDA_COUNTY.project_api_url("201"), detail),
+            response(ALAMEDA_COUNTY.planholders_api_url("201"), ALAMEDA_PLANHOLDERS),
+        ], OpenGovQuery(include_planholders=True, maximum_planholders=1), portal=ALAMEDA_COUNTY)
+        self.assertEqual(len(limited[0].raw_payload["vendors"]), 1)
+
+        connector = OpenGovProcurementConnector(
+            ALAMEDA_COUNTY,
+            transport=FakeTransport([
+                response(ALAMEDA_COUNTY.public_projects_url, ALAMEDA_LISTING, method="POST"),
+                response(ALAMEDA_COUNTY.project_api_url("201"), detail),
+                response(ALAMEDA_COUNTY.planholders_api_url("201"), {"wrong": []}),
+            ]),
+        )
+        with self.assertRaises(OpenGovAccessError) as caught:
+            [
+                item
+                async for item in connector.discover(
+                    OpenGovQuery(include_planholders=True)
+                )
+            ]
+        self.assertEqual(caught.exception.state, OpenGovAccessState.MALFORMED)
 
     async def test_dates_are_local_post_filter_not_unobserved_post_vocabulary(self):
         query = OpenGovQuery(
@@ -254,6 +299,23 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
         connector = OpenGovProcurementConnector(OCEAN_COUNTY, transport=FakeTransport([]))
         with self.assertRaises(OpenGovError):
             await connector._request_json("POST", OCEAN_COUNTY.project_api_url("101"), {"data": {}})
+
+    async def test_unobserved_filter_and_tenant_planholder_contracts_fail_closed(self):
+        cases = (
+            OpenGovQuery(category_ids=(811118,), include_details=False),
+            OpenGovQuery(solicitation_number="902999", include_details=False),
+            OpenGovQuery(statuses=("pending",), include_details=False),
+            OpenGovQuery(sort_field="title", include_details=False),
+            OpenGovQuery(include_planholders=True, include_details=False),
+        )
+        for query in cases:
+            with self.subTest(query=query):
+                connector = OpenGovProcurementConnector(
+                    OCEAN_COUNTY, transport=FakeTransport([])
+                )
+                with self.assertRaises(OpenGovAccessError) as caught:
+                    [item async for item in connector.discover(query)]
+                self.assertEqual(caught.exception.state, OpenGovAccessState.UNSUPPORTED_SEARCH)
 
     async def test_retry_timeout_circuit_breaker_and_health(self):
         sleeps = []

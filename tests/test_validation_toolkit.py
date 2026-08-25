@@ -25,6 +25,7 @@ from sled_aggregator.validation.toolkit import (
     ingest_evidence,
     inspect_bidbuy_result_state,
     normalize_diagnostic,
+    raw_risk_inventory,
     run_operator_phase,
     sanitize_diagnostic_message,
     sanitize_har,
@@ -224,6 +225,18 @@ class ToolkitTests(unittest.TestCase):
                 self.assertTrue(result["raw_risk_inventory"]["cookies_present"])
             finally:
                 shutil.rmtree(workspace, ignore_errors=True)
+
+    def test_raw_risk_inventory_bounds_email_candidates_in_minified_text(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            raw = Path(tmp) / "large-line.har"
+            raw.write_text(
+                ("a" * 100_000) + "@example.gov\n" + "buyer@example.gov\n",
+                encoding="utf-8",
+            )
+
+            inventory = raw_risk_inventory(raw)
+
+            self.assertEqual(inventory["email_candidates"], 1)
 
     def test_label_url_and_config_safety(self):
         for label in ("", "../raw", "a/b", "C:evil", "NUL"):
