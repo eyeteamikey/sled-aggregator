@@ -2,171 +2,169 @@
 
 Validation date: 2026-08-24
 
-This validation establishes a reusable anonymous public request contract for two
-independently operated OpenGov Procurement tenants. It combines the earlier
-same-day interactive walkthrough with a follow-up live API replay that corrected
-the HTTP request envelope. It is a point-in-time observation, not a claim of
+This point-in-time validation establishes a shared anonymous public contract for
+two independently operated OpenGov Procurement tenants. It does not claim
 continuous production availability.
 
-## Tenants and evidence
+## Tenants and genuine browser evidence
 
-| Tenant | Starting URL | Tenant code | Organization timezone | Derived raw HAR SHA-256 | Sanitized derived HAR SHA-256 |
+| Tenant / capture | Starting URL | Tenant code | Source HAR SHA-256 | Sanitized SHA-256 | Capture ID |
 | --- | --- | --- | --- | --- | --- |
-| Ocean County, New Jersey | `https://procurement.opengov.com/portal/oceancounty` | `oceancounty` | `America/New_York` | `6bc258cece119647da5a73f7c225acb373be93071799ecb334b89e60afb51f7d` | `7c34fcb55cc1882bcaf8b120b0d3515fe2c359aaf2e032a37ee7fd3adb0154ad` |
-| Alameda County, California | `https://procurement.opengov.com/portal/acgov` | `acgov` | `America/Los_Angeles` | `6f4048bb552f6056d9de550c7caaeb285307e77d3fcd94894f9ce69736e866af` | `664db6a10d2f07de9ad2fa153f6389a9d2f2bee7529bdd8f4d98f803f7e475db` |
+| Ocean County, New Jersey | `https://procurement.opengov.com/portal/oceancounty` | `oceancounty` | `bc3b9a7240e010dd97acc22793ee0ab5c017cf32dbc4365758bf012174d9a2e9` | `1d96fc202faa478c883a57f315560bb83ebcf8ffbe9bca6ad37c28b9f816cd15` | `nj-ocean-county-opengov-20260825015534` |
+| Alameda County, California | `https://procurement.opengov.com/portal/acgov` | `acgov` | `306b790c5af442e4c492252a60df878ab50c49aefe0c7c3ec5643c56f45588e5` | `71aeba1b8d035ff40107ec3ffc907263678dae95dae5df360bd08e51f1bbb300` | `ca-alameda-county-opengov-20260825025702` |
+| Alameda category supplement | same Alameda portal | `acgov` | `e8e2108e861f0961e85efcd1d425cb65ac60e0741a4ad0a688d176567c337e1b` | `f166411c71b5f8bfe7446ad5ece5f168ba82e04dbf05204fbf4e281332c66459` | `ca-alameda-county-opengov-20260825030321` |
 
-The raw and sanitized HAR-shaped artifacts remain under ignored
-`.sled-validation/` storage and must not be deleted until the evidence-derived
-pull request is merged and the functionality is confirmed on `master`. Neither
-artifact is committed. The repository scanner reported zero findings on the
-minimized sanitized artifacts. Response bodies were removed from the sanitized
-copies; reviewed minimal fixtures retain only the structural fields needed by
-tests.
+These are genuine Chrome DevTools Network exports with response content from a
+visible Incognito walkthrough. Untouched sources remain under ignored
+`sled-har-evidence/`; imported raw copies, sanitized copies, audit files,
+findings, analyses, and evidence reports remain under ignored
+`.sled-validation/`. They must not be deleted until the pull request is merged
+and confirmed on `master`. No complete HAR or production document is committed.
 
-Evidence provenance matters here: these two HAR-shaped files were assembled from
-separately retained anonymous API responses after the walkthrough. They are
-deterministic contract/replay artifacts, not browser-export source HARs. Their
-hashes are recorded for integrity, but they do not independently prove the
-interactive sequence. The live request-shape correction described below was
-verified directly against both public APIs and against the retained public
-OpenGov application bundle. No complete browser HAR is committed or claimed.
+The raw inventories found no authorization headers or ViewState values. They did
+find browser cookies, tracking identifiers, and public procurement email/phone
+data. Sanitization removed cookie/session material while deliberately retaining
+public procurement contacts and vendor data. The conservative scanner reported
+high-entropy/static-asset and public-contact candidates, so none of the captures
+was automatically approved; the findings files remain local for review.
 
-## Shared request contract
+## Evidence classes
 
-Both tenants used `https://api.procurement.opengov.com/api/v1` and the same
+- **Genuine browser-observed evidence:** the three source/sanitized HAR pairs in
+  the table, plus the visible walkthrough findings below.
+- **Live API replay:** same-day anonymous requests used before browser capture to
+  check the listing envelope and selected public responses. Replay corroborates
+  a contract but is not labeled browser evidence.
+- **Deterministic fixtures:** small fictional JSON structures under
+  `tests/fixtures/` that test parsers and request construction. They do not prove
+  live availability.
+- **Derived replay artifacts:** earlier HAR-shaped files assembled from retained
+  API responses, with source/sanitized hashes
+  `6bc258ce...51f7d`/`7c34fcb5...154ad` (Ocean) and
+  `6f4048bb...866af`/`664db6a1...475db` (Alameda). They remain local and are not
+  substitutes for the genuine browser exports above.
+
+## Shared observed request contract
+
+Both tenants used `https://api.procurement.opengov.com/api/v1` and the same core
 route/schema family:
 
-- `GET /government/{tenantCode}` for public organization configuration.
-- `POST /government/{tenantCode}/project/public` for public listing, search,
-  filtering, sorting, and pagination. The HTTP JSON body is the query object
-  itself; there is no outer `data` member.
-- `GET /project/{projectId}` for opportunity detail, contacts, addenda/notices,
-  attachment metadata, configuration-dependent bid results, and award state.
-- `GET /project/{projectId}/question` for released public Q&A.
+- `POST /government/{tenantCode}/project/public` for listing, title search,
+  observed filters, sorting, and one-based pagination.
+- `GET /project/{projectId}` for authoritative detail, flattened public contacts,
+  attachment metadata, addenda/notices embedded in the detail, and award flags.
+- `GET /project/{projectId}/addendums` when the Addenda & Notices tab opens.
+- `GET /project/{projectId}/question` when public Q&A opens.
+- `GET /government/{tenantCode}/calendar/public` for the portal calendar.
+- `POST /categories/search` for category lookup only.
 
-The listing query contains `filters`, `quickSearchQuery`, `limit`,
-`page`, `sortField`, and `sortDirection`. Page numbers are one-based. The public
-UI offered page sizes 5, 10, 20, and 50. The response shape is an object with an
-integer `count` and a `rows` array. Duplicate authoritative project IDs are
-discarded across pages.
+The listing body is the query object itself, not an outer `{data: query}`
+envelope. It contains `filters`, `quickSearchQuery`, `limit`, `page`, and, after
+the initial load, `sortField` and `sortDirection`. The response is an object with
+an integer `count` and a `rows` array. The observed page size was 10, and both
+tenants exposed a second page. Authoritative project IDs are stable across list
+and detail and are used for deduplication.
 
-The public application calls its request helper with an options object shaped
-like `{data: query}`. That helper serializes `query`, not the options object, as
-the HTTP body. A follow-up live replay proved the distinction: sending the
-options envelope returned HTTP 200 but silently ignored filters, sorting, limits,
-and page numbers. Sending the query object directly returned Ocean's 13 open
-records with distinct page-two IDs, Ocean's closed records as closed, Alameda's
-single `contractor` title match, and Alameda department `11400` results. The
-connector and regression tests therefore fail the old outer-envelope shape.
+Genuine browser requests established these exact filter objects:
 
-Observed public filter objects were:
+- title: `{"type":"title","value":"..."}`
+- status: `{"type":"status","value":"open|closed"}`
+- department: `{"type":"department_id","value":589}` for Ocean and
+  `{"type":"department_id","value":11400}` for Alameda
 
-- title/keyword: `{"type":"title","value":"..."}`
-- solicitation number (labeled Project ID in the UI):
-  `{"type":"financialId","value":"..."}`
-- status: `{"type":"status","value":"open|closed|pending"}`
-- department: `{"type":"department_id","value": numericId}`
-- categories: `{"type":"categories","value":[numericCategoryIds]}`
+Observed sorting was default `proposalDeadline DESC` and user-selected
+`releaseProjectDate ASC`. The connector fails closed for other sort fields,
+unobserved status values, Project ID/financial-ID search, and category listing
+filters.
 
-Observed sorting used `title`, `status`, `releaseProjectDate`, or
-`proposalDeadline` with `ASC` or `DESC`. The public portal did not expose date
-filter controls, so the connector does not send invented date filter objects;
-optional date bounds are applied locally after retrieval.
+Both portals exposed category lookup and selection. In the genuine captures,
+selecting a category and pressing Search emitted `POST /categories/search` but
+did not emit a category-filtered listing POST or alter the rows. The connector
+therefore does not manufacture a `categories` listing filter. The portal exposed
+a calendar rather than list-page date filters; optional date bounds remain local
+post-retrieval checks and are never sent as invented POST vocabulary.
 
-## Walkthrough observations
+## Detail, contacts, Q&A, addenda, and attachments
 
-For each tenant the earlier successful walkthrough covered the initial portal,
-active listing, keyword/title search, status and department filters, category
-search/selection, sorting, the second page, two open detail records, a
-closed/awarded record, public Q&A, addenda/notices, document selection, and the
-download boundary.
+The shared detail schema exposed project ID, solicitation number (`financialId`),
+title, agency/department, description, status/substatus, issue and due dates,
+Pacific or Eastern organization timezone, categories, and flattened project and
+procurement contacts. Public contact names, government email addresses, telephone
+numbers, titles, and addendum authors are retained. Contacts hidden by the
+tenant's `hideContact` or `hideProcurementContact` flags are excluded.
 
-Ocean County exposed 13 active opportunities over two pages during the review.
-An Engineering department filter used ID `589`; selection of civil engineering
-demonstrated numeric parent/child category IDs. Ocean detail data exposed agency
-contacts, contracting/addendum authors, amendments, official notices, public
-Q&A, public bid-result vendor names on an awarded record, and related contract
-cards in the browser. A direct anonymous contracts-list POST returned HTTP 401,
-so the connector does not call it and does not claim a reusable anonymous
-contracts API.
+Ocean and Alameda both returned released addenda/notices and attachment metadata.
+Alameda project `287567` exposed Addendum 1 and 37 public questions. Ocean also
+exposed public Q&A. Attachment metadata retained IDs, displayed filenames,
+extensions, timestamps, addendum/notice classification, the authoritative detail
+URL, and parent project/opportunity linkage.
 
-Alameda County exposed active opportunities over two pages. Its General
-Services Agency-Procurement department used ID `11400`. Reviewed records
-included invitation-for-bid and request-for-quotation types, Pacific-time
-deadlines, agency contacts, addenda, notices, and public Q&A. A reviewed closed
-record exposed `Awarded` status, but no vendor Results tab; Alameda award coverage
-therefore remains metadata-only.
+Detail responses contained temporary signed storage URLs. They are active
+session material, not durable source URLs, and are not retained. On both tenants,
+selecting a representative solicitation document and pressing Download opened a
+login/create-account dialog before document retrieval. No credentials were
+entered and no production document was downloaded. Document candidates are
+therefore metadata-only, `login_required`, and not publicly retrievable.
 
-## Details, contacts, vendors, and awards
+## Tenant-specific public vendor and award behavior
 
-The shared detail schema supplies authoritative project ID, optional
-`financialId`, title, HTML summary/background, status and closed substatus,
-department, dates, type, organization/timezone, categories, and flattened
-contact/procurement fields. The connector converts summary HTML to text and
-retains public contact name, title, government email, and telephone fields.
-Contact roles hidden by the tenant's `hideContact` or `hideProcurementContact`
-flags are not normalized as public contacts. Released addendum/notice authors
-are retained when exposed.
+Ocean displayed public Results/Contracts information on an awarded record. The
+standalone contracts-list POST worked in the anonymous browser session but a
+cookie-free replay returned 401, so the connector does not call it and records it
+as browser-session-dependent. Existing fictional award fixtures exercise the
+separately replayed public bid-result shape.
 
-Ocean's reviewed awarded record exposed public bid-result vendor names and
-locations. Vendor email fields present only in the raw API, but not visibly
-published in the reviewed Results UI, are deliberately not normalized. Closed
-substatus `awarded` maps to canonical `awarded`; cancellation and ordinary
-closed states remain distinct.
+Alameda awarded project `259389` did not expose Ocean-style Results/Contracts
+tabs. It did expose a public Followers list backed by
+`GET /project/259389/planholders`: 90 organizations, public contact fields,
+`Prime`/`Sub`/`Plan Room` designations, and 15 proposer markers. Alameda's tenant
+profile enables this exact GET contract as an opt-in bounded query; Ocean's
+profile fails closed because that route was not observed there. Fictional
+`example.invalid` fixtures cover normalization without committing production
+vendor payloads.
 
-## Attachments and authentication boundary
+## Walkthrough and access boundaries
 
-Both detail schemas exposed a compiled project document, regular attachments,
-and addendum/notice attachments with IDs, filenames, extensions, timestamps,
-and parent project linkage. The connector preserves this metadata and creates a
-candidate for each unique attachment ID linked to the parent opportunity.
+Ocean was completed first and Alameda second. Each visible walkthrough covered
+initial load, active listing, title search, status and department filters,
+category lookup/selection, sorting, pagination, calendar/month navigation, at
+least two details, public contacts, addenda/notices, Q&A, attachment metadata,
+closed/awarded records, and the document-download boundary.
 
-Detail responses also contained short-lived signed object-storage URLs. They
-are authentication material, not durable public source links: the connector
-does not retain or follow them. In both tenants, selecting a document and
-pressing Download produced a login/create-account dialog before the UI would
-invoke its download POST. No login, registration, credential, download POST, or
-document retrieval was attempted. Candidates use the authoritative public
-detail page as their metadata URL and are marked `login_required` and not
-publicly retrievable.
-
-Ocean's earlier portal load briefly displayed Cloudflare “Performing security
-verification” and then cleared without human action. Alameda displayed no
-challenge during that walkthrough. During the follow-up validation, both portal
-loads remained at the same automatic Cloudflare verification screen. There was
-no checkbox or image challenge to complete, and no CAPTCHA was solved or
-bypassed. No further browser interaction was attempted. The anonymous API replay
-remained public for both tenants. The connector classifies CAPTCHA/Cloudflare
-challenge markup and login walls and fails closed.
+Ocean presented a Cloudflare verification step. Automation stopped and the human
+operator completed it; no challenge was solved or bypassed by code. Alameda did
+not present a CAPTCHA or browser challenge. Neither walkthrough logged in,
+registered, followed a project, drafted/submitted a response, uploaded a file,
+asked a question, or performed another mutation. No rate limit was observed.
 
 ## Fixture-tested versus live-observed
 
-The earlier walkthrough and retained public responses established route hosts,
-tenant-code placement, filter vocabulary, response shapes, detail/Q&A fields,
-status/timezone differences, attachment metadata, public contacts, Ocean vendor
-results, and login/session boundaries. The follow-up live replay established the
-actual HTTP body envelope, filter behavior, sorting, pagination, and two current
-detail responses per tenant while the browser UI was challenge-bound.
+Genuine browser evidence establishes the hosts, tenant placement, listing body,
+title/status/department filters, sorting, pagination, detail/addenda/Q&A/calendar
+routes, attachment/login boundary, public contacts, Ocean session-dependent
+results/contracts behavior, and Alameda planholders. Live API replay separately
+corroborated the listing envelope and selected response shapes.
 
-Small deterministic JSON fixtures use fictional people and `example.invalid`
-addresses while preserving those response structures. Automated tests cover
-tenant resolution, shared request construction, filtering, pagination,
-deduplication, detail/contact/vendor/award normalization, amendments, Q&A,
-attachment parent linkage and filename handling, login/CAPTCHA/malformed
-responses, retries/timeouts/circuit state, and injected versus owned clients.
+Deterministic tests cover both tenant profiles, shared listing discovery,
+observed filtering/sorting, pagination, deduplication, detail/contact/status/date
+normalization, Q&A, amendments/notices, attachment discovery and parent linkage,
+filename handling, award fixture normalization, opt-in Alameda planholders,
+login/CAPTCHA/malformed responses, retry/timeout/circuit state, and injected
+versus connector-owned clients. Tests explicitly reject the unobserved category,
+financial-ID, pending-status, title-sort, and Ocean planholder contracts.
 
 ## Remaining limitations
 
-- Public document bodies were not downloaded because both tenants required
-  login at the download action. No RFP/SOW/specification content was retrieved.
-- A complete browser-export source HAR was not available in this follow-up; the
-  retained HAR-shaped files are derived replay artifacts and are labeled as such.
-- Both portal UIs were held at automatic Cloudflare verification during the
-  follow-up, so the successful live recheck was API-only and did not repeat every
-  earlier visual interaction.
-- The public UI did not expose date filtering; only local date bounds are tested.
-- Related contracts are not collected because the observed direct POST was not
-  anonymously reusable outside browser session state.
-- Vendor/award visibility varies by record and tenant configuration.
-- The fixtures demonstrate the observed schema but do not imply current portal
-  uptime or protect against future OpenGov contract changes.
+- No production solicitation document was downloaded because the visible action
+  required login.
+- Category lookup/selection was visible, but no category-filtered listing request
+  was emitted; category listing syntax remains unknown.
+- Project ID/financial-ID filtering and non-calendar date filtering were not
+  browser-observed and are unsupported.
+- Ocean contracts/results require browser session state; no reusable standalone
+  connector route is claimed.
+- Alameda planholders are a tenant-specific opt-in surface, not a family-wide
+  guarantee or an award determination.
+- Vendor/award fields vary by record and tenant configuration.
+- The evidence is dated and fixture-backed; it does not imply current uptime or
+  protect against future OpenGov changes.

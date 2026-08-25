@@ -1,0 +1,36 @@
+[
+  {
+    "id": 501,
+    "displayName": "Alex Example",
+    "email": "alex@example.invalid",
+    "phoneComplete": "(555) 010-0501",
+    "address1": "100 Example Plaza",
+    "city": "Example City",
+    "state": "CA",
+    "zipCode": "90001",
+    "countryCode": "US",
+    "isProposer": true,
+    "organization": {
+      "name": "Example Builders LLC",
+      "city": "Example City",
+      "state": "CA"
+    },
+    "projectVendorUserSubscriptions": [
+      {"project_id": 201, "user_id": 501, "type": "Prime"}
+    ]
+  },
+  {
+    "id": 502,
+    "displayName": "Jordan Sample",
+    "email": "jordan@example.invalid",
+    "isProposer": false,
+    "organization": {
+      "name": "Sample Plan Room",
+      "city": "Example City",
+      "state": "CA"
+    },
+    "projectVendorUserSubscriptions": [
+      {"project_id": 201, "user_id": 502, "type": "Plan Room"}
+    ]
+  }
+]
