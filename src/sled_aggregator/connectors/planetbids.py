@@ -18,6 +18,7 @@ from enum import StrEnum
 from html.parser import HTMLParser
 from typing import Any, Protocol
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+from zoneinfo import ZoneInfo
 
 import httpx
 
@@ -26,7 +27,9 @@ from sled_aggregator.domain.enums import AccessState, OpportunityStatus
 from sled_aggregator.domain.models import DocumentCandidate, RawOpportunity, SourceRef
 
 CANONICAL_FAMILY = "planetbids"
-PLATFORM_HOSTS = frozenset({"planetbids.com", "www.planetbids.com", "pbsystem.planetbids.com"})
+PLATFORM_HOSTS = frozenset(
+    {"planetbids.com", "www.planetbids.com", "pbsystem.planetbids.com", "vendors.planetbids.com"}
+)
 
 
 class PlanetBidsAccessState(StrEnum):
@@ -124,7 +127,56 @@ FIXTURE_PROFILE = PlanetBidsProfile(
     approved_hosts=("www.planetbids.com",),
     approved_document_hosts=("docs.fixture.gov",),
 )
-PLANETBIDS_PROFILES = {FIXTURE_PROFILE.profile_key: FIXTURE_PROFILE}
+STANISLAUS_COUNTY_PROFILE = PlanetBidsProfile(
+    profile_key="stanislaus-county-ca",
+    jurisdiction="Stanislaus County, California",
+    state_code="CA",
+    government_level="county",
+    agency_name="County of Stanislaus",
+    agency_slug="stanislaus-county",
+    organization_id="14599",
+    procurement_landing_url="https://www.stancounty.com/purchasing/county-bids.shtm",
+    agency_page_url="https://vendors.planetbids.com/portal/14599/portal-home",
+    discovery_url="https://vendors.planetbids.com/portal/14599/bo/bo-search",
+    detail_url_template="https://vendors.planetbids.com/portal/14599/bo/bo-detail/{opportunity_id}",
+    official_procurement_url="https://www.stancounty.com/purchasing/county-bids.shtm",
+    supported_hostname="vendors.planetbids.com",
+    profile_status="active",
+    expected_access_model="public_metadata_mixed_documents",
+    maximum_pages=1,
+    markup_variant="ember_rendered_html",
+    verification_status="live_public_verified",
+    verification_timestamp=datetime(2026, 8, 30, tzinfo=UTC),
+    verification_notes="Anonymous direct portal and public detail observed; background API requires HAR.",
+    approved_hosts=("vendors.planetbids.com",),
+)
+LACOE_PROFILE = PlanetBidsProfile(
+    profile_key="lacoe-ca",
+    jurisdiction="Los Angeles County Office of Education, California",
+    state_code="CA",
+    government_level="education",
+    agency_name="Los Angeles County Office of Education",
+    agency_slug="lacoe",
+    organization_id="61954",
+    procurement_landing_url="https://www.lacoe.edu/services/business/vendors",
+    agency_page_url="https://vendors.planetbids.com/portal/61954/portal-home",
+    discovery_url="https://vendors.planetbids.com/portal/61954/bo/bo-search",
+    detail_url_template="https://vendors.planetbids.com/portal/61954/bo/bo-detail/{opportunity_id}",
+    official_procurement_url="https://www.lacoe.edu/services/business/vendors",
+    supported_hostname="vendors.planetbids.com",
+    profile_status="active",
+    expected_access_model="public_metadata_mixed_documents",
+    maximum_pages=1,
+    markup_variant="ember_rendered_html",
+    verification_status="live_public_verified",
+    verification_timestamp=datetime(2026, 8, 30, tzinfo=UTC),
+    verification_notes="Anonymous direct portal and public detail observed; background API requires HAR.",
+    approved_hosts=("vendors.planetbids.com",),
+)
+PLANETBIDS_PROFILES = {
+    profile.profile_key: profile
+    for profile in (FIXTURE_PROFILE, STANISLAUS_COUNTY_PROFILE, LACOE_PROFILE)
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -164,9 +216,16 @@ class _PageParser(HTMLParser):
         self.json_text = []
         self._script = False
         self._text = []
+        self.rendered_rows = []
+        self._row = None
+        self._cell = None
 
     def handle_starttag(self, tag, attrs):
         values = dict(attrs)
+        if tag == "tr" and values.get("rowattribute"):
+            self._row = {"id": values["rowattribute"], "cells": []}
+        elif tag == "td" and self._row is not None:
+            self._cell = {"class": values.get("class", ""), "title": values.get("title", ""), "text": []}
         if tag == "a" and values.get("href"):
             self.links.append(
                 (
@@ -180,11 +239,27 @@ class _PageParser(HTMLParser):
             self._script = True
 
     def handle_endtag(self, tag):
+        if tag == "td" and self._cell is not None and self._row is not None:
+            self._cell["text"] = " ".join("".join(self._cell["text"]).split())
+            self._row["cells"].append(self._cell)
+            self._cell = None
+        elif tag == "tr" and self._row is not None:
+            cells = self._row["cells"]
+            if len(cells) >= 6:
+                def cell(index):
+                    return cells[index].get("title") or cells[index].get("text")
+                self.rendered_rows.append({
+                    "id": self._row["id"], "postedDate": cell(0), "title": cell(1),
+                    "solicitationNumber": cell(2), "dueDate": cell(3), "status": cell(5),
+                })
+            self._row = None
         if tag == "script":
             self._script = False
 
     def handle_data(self, data):
         self._text.append(data)
+        if self._cell is not None:
+            self._cell["text"].append(data)
         if self._script:
             self.json_text.append(data)
 
@@ -238,6 +313,7 @@ def parse_page(
                 payloads.extend(x for x in candidates if isinstance(x, dict))
         elif isinstance(value, list):
             payloads.extend(x for x in value if isinstance(x, dict))
+    payloads.extend(parser.rendered_rows)
     return payloads, parser.links
 
 
@@ -258,7 +334,7 @@ class PlanetBidsConnector(BaseConnector):
     ):
         self.profile = profile
         self._transport = transport or httpx.AsyncClient(
-            follow_redirects=False, timeout=profile.timeout
+            follow_redirects=False, timeout=profile.timeout, trust_env=False
         )
         self._owns_transport = transport is None
         self._sleep = sleep
@@ -561,7 +637,7 @@ class PlanetBidsConnector(BaseConnector):
         return self.profile.backoff * 2**attempt + self.profile.jitter * self._random()
 
     def _matches(self, item, q):
-        text = f"{item.title} {item.description or ''}".casefold()
+        text = f"{item.title} {item.description or ''} {item.solicitation_number or ''}".casefold()
         return (
             (not q.keywords or all(k.casefold() in text for k in q.keywords))
             and (
@@ -586,8 +662,18 @@ class PlanetBidsConnector(BaseConnector):
             return None
         try:
             parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-            return parsed if parsed.tzinfo else parsed.replace(tzinfo=UTC)
+            return parsed if parsed.tzinfo else parsed.replace(
+                tzinfo=ZoneInfo("America/Los_Angeles")
+            )
         except ValueError:
+            cleaned = re.sub(r"\s+\((?:PDT|PST)\)$", "", str(value).strip())
+            for pattern in ("%m/%d/%Y %I:%M %p", "%Y-%m-%d %H:%M:%S.%f", "%m/%d/%Y"):
+                try:
+                    return datetime.strptime(cleaned, pattern).replace(
+                        tzinfo=ZoneInfo("America/Los_Angeles")
+                    )
+                except ValueError:
+                    continue
             return None
 
     @staticmethod
@@ -599,7 +685,7 @@ class PlanetBidsConnector(BaseConnector):
             return OpportunityStatus.AWARDED
         if "close" in text:
             return OpportunityStatus.CLOSED
-        if "open" in text:
+        if "open" in text or "bidding" in text or "planning" in text:
             return OpportunityStatus.OPEN
         return OpportunityStatus.UNKNOWN
 

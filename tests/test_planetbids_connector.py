@@ -6,6 +6,9 @@ import httpx
 
 from sled_aggregator.connectors.planetbids import (
     FIXTURE_PROFILE,
+    LACOE_PROFILE,
+    PLANETBIDS_PROFILES,
+    STANISLAUS_COUNTY_PROFILE,
     PlanetBidsAccessError,
     PlanetBidsAccessState,
     PlanetBidsConnector,
@@ -21,6 +24,7 @@ from sled_aggregator.domain.enums import AccessState
 FIXTURES = Path(__file__).parent / "fixtures"
 LISTING = (FIXTURES / "planetbids_listing.html").read_text()
 DETAIL = (FIXTURES / "planetbids_detail.html").read_text()
+RENDERED_LISTING = (FIXTURES / "planetbids_rendered_listing.html").read_text()
 
 
 def response(url, text, status=200, headers=None):
@@ -79,6 +83,39 @@ class PlanetBidsTests(unittest.IsolatedAsyncioTestCase):
         )
         for state in ("active", "configured_unverified", "legacy", "migrated", "unavailable"):
             self.assertIsInstance(replace(FIXTURE_PROFILE, profile_status=state), PlanetBidsProfile)
+
+    def test_live_profile_resolution_preserves_portal_and_buyer_class(self):
+        self.assertIs(PLANETBIDS_PROFILES["stanislaus-county-ca"], STANISLAUS_COUNTY_PROFILE)
+        self.assertIs(PLANETBIDS_PROFILES["lacoe-ca"], LACOE_PROFILE)
+        self.assertEqual(STANISLAUS_COUNTY_PROFILE.organization_id, "14599")
+        self.assertEqual(STANISLAUS_COUNTY_PROFILE.government_level, "county")
+        self.assertEqual(LACOE_PROFILE.organization_id, "61954")
+        self.assertEqual(LACOE_PROFILE.government_level, "education")
+        self.assertEqual(LACOE_PROFILE.agency_name, "Los Angeles County Office of Education")
+        for profile in (STANISLAUS_COUNTY_PROFILE, LACOE_PROFILE):
+            self.assertTrue(PlanetBidsConnector(profile, transport=FakeTransport([])).health.configuration_valid)
+            self.assertIn(f"/portal/{profile.organization_id}/", profile.discovery_url)
+
+    async def test_rendered_ember_listing_cross_tenant_identity_dates_and_dedup(self):
+        profile = replace(STANISLAUS_COUNTY_PROFILE, maximum_pages=2)
+        _, transport, items = await self.collect(
+            [response(profile.discovery_url, RENDERED_LISTING), response(profile.discovery_url, RENDERED_LISTING)],
+            PlanetBidsQuery(include_details=False, maximum_pages=2, maximum_results=10),
+            profile=profile,
+        )
+        self.assertEqual(len(transport.calls), 1)
+        self.assertEqual(len(items), 2)
+        self.assertEqual(items[0].source.source_id, "planetbids:stanislaus-county-ca:144525")
+        self.assertEqual(items[0].solicitation_number, "2026-260024")
+        self.assertEqual(items[0].posted_at.tzinfo.key, "America/Los_Angeles")
+        self.assertEqual(items[1].status.value, "awarded")
+
+        _, _, number_match = await self.collect(
+            [response(profile.discovery_url, RENDERED_LISTING)],
+            PlanetBidsQuery(include_details=False, keywords=("1795-26/27",)),
+            profile=profile,
+        )
+        self.assertEqual([item.solicitation_number for item in number_match], ["1795-26/27"])
 
     async def test_discovery_detail_identity_provenance_and_mixed_documents(self):
         c, _, items = await self.collect(
