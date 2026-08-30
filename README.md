@@ -1095,6 +1095,14 @@ CAPTCHA, or evade robots or technical restrictions. Fixture verification demonst
 against captured test inputs. It does not prove that every live Public Purchase agency,
 opportunity, or attachment remains anonymously accessible.
 
+Fresno County and Kern County are live-verified presets as of 2026-08-30. Both expose the
+anonymous legacy GEMS `publicInfo` open-bid table and `publicClosedBidsInfo` closed/finalized
+table. Their representative detail links resolve to a login form, so records are metadata-only
+and no attachment is marked publicly retrievable. Kern's `/home` route advertises login while
+its official county page embeds the separate anonymous `publicInfo` route. See
+`docs/connector_validation/public_purchase_two_tenants_2026-08-30.md` for the observed search,
+pagination, addendum-summary, lifecycle, access-boundary, and fixture evidence.
+
 ### Rhode Island RIVIP External Solicitations
 
 `rhode-island/rivip-external` collects bounded anonymous notices for Rhode Island external

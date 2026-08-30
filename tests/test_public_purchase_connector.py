@@ -6,12 +6,16 @@ import httpx
 
 from sled_aggregator.connectors.public_purchase import (
     FIXTURE_PROFILE,
+    FRESNO_COUNTY_PROFILE,
+    KERN_COUNTY_PROFILE,
+    PUBLIC_PURCHASE_PROFILES,
     PublicPurchaseAccessError,
     PublicPurchaseAccessState,
     PublicPurchaseConnector,
     PublicPurchaseError,
     PublicPurchaseQuery,
     detect_access_boundary,
+    parse_page,
 )
 from sled_aggregator.connectors.registry import connector_registry
 from sled_aggregator.domain.enums import AccessState
@@ -84,6 +88,53 @@ class PublicPurchaseTests(unittest.IsolatedAsyncioTestCase):
                 replace(FIXTURE_PROFILE, profile_key="Bad Key"), transport=FakeTransport([])
             ).health.configuration_valid
         )
+
+    def test_live_verified_fresno_and_kern_profiles_are_explicit(self):
+        self.assertEqual(
+            set(PUBLIC_PURCHASE_PROFILES),
+            {"fixture-agency-profile", "ca-fresno-county", "ca-kern-county"},
+        )
+        for profile in (FRESNO_COUNTY_PROFILE, KERN_COUNTY_PROFILE):
+            self.assertEqual(profile.verification_status, "live_public_verified")
+            self.assertEqual(profile.expected_access_model, "anonymous_listing_login_detail")
+            self.assertTrue(profile.discovery_url.endswith("/buyer/public/publicInfo"))
+            self.assertTrue(profile.closed_discovery_url.endswith("/publicClosedBidsInfo"))
+            self.assertTrue(
+                PublicPurchaseConnector(profile, transport=FakeTransport([])).health.configuration_valid
+            )
+
+    def test_observed_gems_open_and_closed_tables(self):
+        open_html = (FIXTURES / "public_purchase_gems_open_table.html").read_text()
+        closed_html = (FIXTURES / "public_purchase_gems_closed_table.html").read_text()
+        opened, _ = parse_page(open_html)
+        closed, links = parse_page(closed_html)
+        self.assertEqual(opened[0]["id"], "123456")
+        self.assertEqual(opened[0]["solicitationNumber"], "27-005")
+        self.assertEqual(opened[0]["title"], "Snow Services")
+        self.assertEqual(opened[0]["status"], "Open")
+        self.assertEqual(opened[0]["accessState"], "public_metadata_only")
+        self.assertFalse(opened[0]["documentsComplete"])
+        self.assertEqual(closed[0]["status"], "FINALIZED")
+        self.assertEqual(closed[0]["solicitationNumber"], "PA-1686")
+        self.assertTrue(any(href == "#" for href, *_ in links))
+
+    async def test_observed_table_normalization_and_detail_login_boundary(self):
+        listing = (FIXTURES / "public_purchase_gems_open_table.html").read_text()
+        login = (FIXTURES / "public_purchase_gems_login_detail.html").read_text()
+        connector, _, items = await self.collect(
+            [
+                response(FRESNO_COUNTY_PROFILE.discovery_url, listing),
+                response(FRESNO_COUNTY_PROFILE.detail_url("123456"), login),
+            ],
+            profile=FRESNO_COUNTY_PROFILE,
+        )
+        item = items[0]
+        self.assertEqual(item.source.source_id, "public-purchase:ca-fresno-county:123456")
+        self.assertEqual(item.solicitation_number, "27-005")
+        self.assertEqual(item.posted_at.isoformat(), "2026-08-17T13:07:58-07:00")
+        self.assertEqual(item.raw_payload["detail_access_state"], "login_required")
+        self.assertFalse(item.raw_payload["documents_complete"])
+        self.assertEqual(connector.document_candidates(item), [])
 
     async def test_discovery_normalization_provenance_documents_and_filters(self):
         c, _, items = await self.collect(
