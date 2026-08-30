@@ -1,0 +1,21 @@
+{
+  "projects": [
+    {
+      "ProjectID": "250430",
+      "ReferenceID": "RD27-09(I)",
+      "ProjectName": "Culvert Repairs - Example Road at Milepost 2.68",
+      "DepartmentID": "3812",
+      "DateClose": "2026-09-01 21:00:00"
+    },
+    {
+      "ProjectID": "250434",
+      "ReferenceID": "RD27-06",
+      "ProjectName": "Example Road Emergency Repairs",
+      "DepartmentID": "3812",
+      "DateClose": "2026-09-09 21:00:00"
+    }
+  ],
+  "departments": {
+    "3812": {"DepartmentID": "3812", "DepartmentName": "PWA"}
+  }
+}
