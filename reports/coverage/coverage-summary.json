@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-03",
+  "as_of": "2026-08-24",
   "connector_inventory": [
     {
       "aliases": [
@@ -149,22 +149,25 @@
         "openbids"
       ],
       "canonical_name": "euna/openbids-demandstar",
-      "detail_capability": false,
+      "detail_capability": true,
       "discovery_capability": true,
       "document_link_capability": false,
       "document_pipeline_compatible": false,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
-      "fixture_count": 0,
+      "fixture_count": 2,
       "implementation_module": "sled_aggregator.connectors.euna_openbids_demandstar",
       "implementation_status": "implemented",
       "jurisdictions": [
         "configurable"
       ],
-      "profile_count": 0,
+      "profile_count": 2,
       "public_read_only": true,
       "registry_presence": true,
       "request_method_policy": "bounded public read-only",
-      "supported_jurisdictions": [],
+      "supported_jurisdictions": [
+        "IL",
+        "MN"
+      ],
       "test_references": [
         "tests/test_euna_openbids_demandstar_connector.py"
       ]
@@ -341,26 +344,31 @@
         "procurenow/opengov"
       ],
       "canonical_name": "opengov/procurement",
-      "detail_capability": false,
+      "detail_capability": true,
       "discovery_capability": true,
       "document_link_capability": false,
       "document_pipeline_compatible": false,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
-      "fixture_count": 0,
+      "fixture_count": 6,
       "implementation_module": "sled_aggregator.connectors.opengov_procurement",
       "implementation_status": "implemented",
       "jurisdictions": [
+        "New Jersey",
+        "California",
         "Arizona",
         "Washington",
         "Ohio",
         "Connecticut",
         "New Mexico"
       ],
-      "profile_count": 0,
+      "profile_count": 2,
       "public_read_only": true,
       "registry_presence": true,
       "request_method_policy": "bounded public read-only",
-      "supported_jurisdictions": [],
+      "supported_jurisdictions": [
+        "CA",
+        "NJ"
+      ],
       "test_references": [
         "tests/test_opengov_procurement_connector.py"
       ]
@@ -461,7 +469,7 @@
       "document_link_capability": true,
       "document_pipeline_compatible": false,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
-      "fixture_count": 2,
+      "fixture_count": 5,
       "implementation_module": "sled_aggregator.connectors.periscope",
       "implementation_status": "implemented",
       "jurisdictions": [
@@ -618,7 +626,7 @@
       "document_link_capability": true,
       "document_pipeline_compatible": true,
       "documented_limitations": "Profile and access claims remain tenant-specific.",
-      "fixture_count": 3,
+      "fixture_count": 6,
       "implementation_module": "sled_aggregator.connectors.tyler_munis_vss",
       "implementation_status": "implemented",
       "jurisdictions": [
@@ -1571,6 +1579,7 @@
       "primary_source_id": "ca-cal-eprocure",
       "primary_source_name": "Cal eProcure",
       "source_keys": [
+        "ca-alameda-county-opengov",
         "ca-cal-eprocure"
       ],
       "statewide_source_keys": [
@@ -1638,8 +1647,8 @@
       "attachment_status": "unknown",
       "authentication": "none",
       "baseline_operational": true,
-      "blocker": null,
-      "captcha": "none_observed_in_fixture",
+      "blocker": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
+      "captcha": "captcha_present",
       "code": "CT",
       "connector": "webprocure/proactis",
       "coverage_status": "fixture_verified",
@@ -2012,7 +2021,7 @@
       "active": true,
       "attachment_capable": true,
       "attachment_status": "mixed",
-      "authentication": "none",
+      "authentication": "detail_application_route",
       "baseline_operational": true,
       "blocker": null,
       "captcha": "none_observed_in_fixture",
@@ -2167,7 +2176,8 @@
       "primary_source_id": "il-bidbuy",
       "primary_source_name": "BidBuy",
       "source_keys": [
-        "il-bidbuy"
+        "il-bidbuy",
+        "il-will-county-demandstar"
       ],
       "statewide_source_keys": [
         "il-bidbuy"
@@ -2503,7 +2513,7 @@
       "attachment_status": "fixture_verified_mixed",
       "authentication": "none",
       "baseline_operational": true,
-      "blocker": null,
+      "blocker": "Observed AltSelfService route produced HTTP 404/403 and failed requests.",
       "captcha": "none_observed_in_fixture",
       "code": "ME",
       "connector": "cgi/advantage-vss",
@@ -2562,7 +2572,7 @@
       "attachment_status": "fixture_verified_public",
       "authentication": "none",
       "baseline_operational": true,
-      "blocker": null,
+      "blocker": "Observed solicitation-search route returned HTTP 404.",
       "captcha": "none_observed_in_fixture",
       "code": "MI",
       "connector": "cgi/advantage-vss",
@@ -2652,7 +2662,7 @@
       "last_verified_at": null,
       "live_validation_status": "not_validated",
       "live_verified": false,
-      "local_evidence_only": false,
+      "local_evidence_only": true,
       "name": "Minnesota",
       "next_action": "Research and register an authoritative statewide source with evidence.",
       "notes": "Capabilities are derived only from repository evidence; local records never establish statewide coverage.",
@@ -2662,7 +2672,9 @@
       "primary": true,
       "primary_source_id": null,
       "primary_source_name": null,
-      "source_keys": [],
+      "source_keys": [
+        "mn-ramsey-county-demandstar"
+      ],
       "statewide_source_keys": [],
       "supplemental_source_ids": [],
       "timezones": [],
@@ -3129,7 +3141,8 @@
       "primary_source_id": "nj-njstart",
       "primary_source_name": "NJSTART",
       "source_keys": [
-        "nj-njstart"
+        "nj-njstart",
+        "nj-ocean-county-opengov"
       ],
       "statewide_source_keys": [
         "nj-njstart"
@@ -3588,8 +3601,8 @@
       "attachment_status": "unknown",
       "authentication": "none",
       "baseline_operational": true,
-      "blocker": null,
-      "captcha": "none_observed_in_fixture",
+      "blocker": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
+      "captcha": "captcha_present",
       "code": "RI",
       "connector": "webprocure/proactis",
       "coverage_status": "fixture_verified",
@@ -3859,7 +3872,7 @@
       "active": true,
       "attachment_capable": true,
       "attachment_status": "mixed",
-      "authentication": "none",
+      "authentication": "detail_application_route",
       "baseline_operational": true,
       "blocker": null,
       "captcha": "none_observed_in_fixture",
@@ -4300,6 +4313,11 @@
     {
       "coverage_tier": 2,
       "jurisdiction_code": "CA",
+      "source_key": "ca-alameda-county-opengov"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "CA",
       "source_key": "ca-cal-eprocure"
     },
     {
@@ -4321,6 +4339,11 @@
       "coverage_tier": 2,
       "jurisdiction_code": "IL",
       "source_key": "il-bidbuy"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "IL",
+      "source_key": "il-will-county-demandstar"
     },
     {
       "coverage_tier": 2,
@@ -4348,9 +4371,19 @@
       "source_key": "mi-detroit-oracle-fusion"
     },
     {
+      "coverage_tier": 0,
+      "jurisdiction_code": "MN",
+      "source_key": "mn-ramsey-county-demandstar"
+    },
+    {
       "coverage_tier": 2,
       "jurisdiction_code": "NJ",
       "source_key": "nj-njstart"
+    },
+    {
+      "coverage_tier": 2,
+      "jurisdiction_code": "NJ",
+      "source_key": "nj-ocean-county-opengov"
     },
     {
       "coverage_tier": 2,
@@ -4510,8 +4543,9 @@
       "connector_family": "periscope/buyspeed",
       "dependencies": [],
       "evidence_available": [
-        "tests/fixtures/periscope_board.html",
-        "tests/fixtures/periscope_results.json"
+        "tests/fixtures/il_bidbuy_initial.html",
+        "tests/fixtures/il_bidbuy_results.xml",
+        "tests/fixtures/il_bidbuy_detail.html"
       ],
       "evidence_required": [
         "dated bounded anonymous live-validation result"
@@ -4902,6 +4936,30 @@
         "oh-ohiobuys"
       ],
       "task_type": "public_contract_capture"
+    },
+    {
+      "connector_family": null,
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/demandstar_ramsey_live_shape.json"
+      ],
+      "evidence_required": [
+        "official primary statewide source evidence"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "MN"
+      ],
+      "priority_band": "P2",
+      "proposed_title": "Research authoritative statewide coverage for Minnesota",
+      "recommended_order": 21,
+      "risk_level": "high",
+      "score": 20,
+      "source_ids": [
+        "mn-ramsey-county-demandstar"
+      ],
+      "task_type": "coverage_correction"
     }
   ],
   "schema_version": "2.0",
@@ -4967,7 +5025,8 @@
     },
     {
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "anonymous_detail_classification": "public",
       "anonymous_discovery_classification": "public",
@@ -4976,7 +5035,7 @@
       "authoritative": true,
       "award_access": "metadata_only",
       "blocker_reason": null,
-      "captcha_classification": "none_observed_in_fixture",
+      "captcha_classification": "third_party_resources_observed_no_first_party_challenge",
       "connector_alias": null,
       "connector_key": "tyler/munis-vss",
       "connector_name": "tyler/munis-vss",
@@ -4986,10 +5045,11 @@
       "document_access": "public",
       "document_pipeline_classification": "compatible",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "tests/fixtures/tyler_vss_opelika_results.html",
         "tests/fixtures/tyler_vss_detail.html"
       ],
-      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "expected_coverage_impact": "City of Opelika procurement only",
       "fixture_location": [
         "tests/fixtures/tyler_vss_opelika_results.html",
@@ -5004,9 +5064,10 @@
       "jurisdiction_scope": "local",
       "key": "al-opelika-tyler-munis-vss",
       "known_limitations": [
-        "City of Opelika procurement only"
+        "City of Opelika procurement only",
+        "Capture proves observed anonymous contracts, not continuous availability."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "migration_status": "current",
       "name": "City of Opelika Tyler Munis Vendor Self Service",
       "official_landing_page": "https://ss.opelika-al.gov/vss/",
@@ -5018,8 +5079,8 @@
       "public_bid_board_url": "https://ss.opelika-al.gov/vss/",
       "public_detail_url_pattern": null,
       "public_search_url": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "source_id": "al-opelika-tyler-munis-vss",
       "source_level": "local",
       "source_role": "primary",
@@ -5029,6 +5090,95 @@
         "tests/test_tyler_munis_vss_connector.py"
       ],
       "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET",
+        "POST"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "login_required",
+      "authentication_requirement": "document_download_only",
+      "authoritative": true,
+      "award_access": "metadata_only",
+      "blocker_reason": null,
+      "captcha_classification": "transient_cloudflare_verification_observed_no_human_action",
+      "connector_alias": "opengov",
+      "connector_key": "opengov/procurement",
+      "connector_name": "opengov/procurement",
+      "connector_status": "implemented",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "login_required",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "docs/connector_validation/opengov_two_tenants_2026-08-24.md",
+        "tests/fixtures/opengov_alameda_listing.json",
+        "tests/fixtures/opengov_alameda_detail.json"
+      ],
+      "evidence_type": "live_api_contract_with_sanitized_derived_har_and_synthetic_fixture",
+      "evidence_url": "https://procurement.opengov.com/portal/acgov",
+      "expected_coverage_impact": "Alameda County procurement only",
+      "fixture_location": [
+        "tests/fixtures/opengov_alameda_listing.json",
+        "tests/fixtures/opengov_alameda_detail.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/opengov_alameda_listing.json",
+        "tests/fixtures/opengov_alameda_detail.json"
+      ],
+      "jurisdiction_code": "CA",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local",
+      "key": "ca-alameda-county-opengov",
+      "known_limitations": [
+        "Document selection is public but download requires login; the connector never calls the download POST or retains signed URLs.",
+        "Awarded status was public, but public vendor/result data was not exposed on the reviewed Alameda awarded record.",
+        "The retained HAR-shaped artifact was derived from saved public responses rather than exported from the browser.",
+        "The follow-up browser load remained at automatic Cloudflare verification; the public API contract was still anonymously available.",
+        "The evidence proves point-in-time request contracts, not continuous production availability."
+      ],
+      "last_verified": "2026-08-24",
+      "last_verified_date": "2026-08-24",
+      "migration_status": "current",
+      "name": "Alameda County OpenGov Procurement",
+      "official_landing_page": "https://procurement.opengov.com/portal/acgov",
+      "official_url": "https://procurement.opengov.com/portal/acgov",
+      "owning_public_entity": "County of Alameda",
+      "platform_family": "opengov/procurement",
+      "portal_profile_key": "alameda-county-ca",
+      "priority": 2,
+      "public_bid_board_url": "https://procurement.opengov.com/portal/acgov",
+      "public_detail_url_pattern": "https://procurement.opengov.com/portal/acgov/projects/{project_id}",
+      "public_search_url": "https://api.procurement.opengov.com/api/v1/government/acgov/project/public",
+      "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
+      "robots_access_notes": "Earlier bounded anonymous walkthrough plus follow-up live API replay; the follow-up portal UI remained at automatic Cloudflare verification. No claim of continuous availability.",
+      "source_id": "ca-alameda-county-opengov",
+      "source_level": "local",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_opengov_procurement_connector.py"
+      ],
+      "validation_request_policy": {
+        "browser_capture_rules": [
+          {
+            "hosts": [
+              "api.procurement.opengov.com"
+            ],
+            "methods": [
+              "POST"
+            ],
+            "path_pattern": "/api/v1/government/acgov/project/public",
+            "purpose": "anonymous listing, filtering, sorting, and pagination"
+          }
+        ],
+        "connector_replay_approved": true,
+        "notes": "Only the exact anonymous listing POST is approved. Detail and Q&A use GET; download and contracts POST routes are not approved."
+      },
+      "verification_status": "live_public_verified"
     },
     {
       "allowed_http_methods": [
@@ -5106,8 +5256,8 @@
       "authentication_requirement": "none",
       "authoritative": true,
       "award_access": "metadata_only",
-      "blocker_reason": null,
-      "captcha_classification": "none_observed_in_fixture",
+      "blocker_reason": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
+      "captcha_classification": "captcha_present",
       "connector_alias": null,
       "connector_key": "webprocure/proactis",
       "connector_name": "webprocure/proactis",
@@ -5117,11 +5267,12 @@
       "document_access": "unknown",
       "document_pipeline_classification": "unknown",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://portal.ct.gov/das/ctsource/ctsource",
         "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
         "tests/fixtures/webprocure_results.json"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_url": "https://portal.ct.gov/das/ctsource/ctsource",
       "expected_coverage_impact": "statewide",
       "fixture_location": [
@@ -5135,11 +5286,10 @@
       "jurisdiction_scope": "primary_statewide",
       "key": "ct-ctsource",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared fixture establishes bounded discovery and record normalization only; separate public detail and attachment retrieval are not established.",
-        "The production full-text endpoint was unreachable from the Codex Cloud network, so current tenant availability and access walls remain unknown."
+        "Public JSON/detail/document traffic was observed, but reCAPTCHA prevents an unattended anonymous-validation claim.",
+        "No CAPTCHA bypass is supported."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "migration_status": "current",
       "name": "CTsource",
       "official_landing_page": "https://portal.ct.gov/das/ctsource/ctsource",
@@ -5151,8 +5301,8 @@
       "public_bid_board_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=51&oid=-1",
       "public_detail_url_pattern": null,
       "public_search_url": "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols",
-      "recommended_next_action": "Perform bounded anonymous GET validation of one discovery page from a permitted network before classifying any live capability.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Retain CAPTCHA-boundary evidence and do not promote unattended discovery without a future lawful challenge-free capture.",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "source_id": "ct-ctsource",
       "source_level": "statewide",
       "source_role": "primary",
@@ -5231,12 +5381,13 @@
     },
     {
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
-      "anonymous_detail_classification": "public",
+      "anonymous_detail_classification": "login_required",
       "anonymous_discovery_classification": "public",
       "attachment_classification": "mixed",
-      "authentication_requirement": "none",
+      "authentication_requirement": "detail_application_route",
       "authoritative": true,
       "award_access": "metadata_only",
       "blocker_reason": null,
@@ -5250,12 +5401,13 @@
       "document_access": "mixed",
       "document_pipeline_classification": "manifest_only",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities",
         "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
         "tests/fixtures/jaggaer_iowa_listing.html",
         "tests/fixtures/jaggaer_detail.html"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_url": "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities",
       "expected_coverage_impact": "statewide",
       "fixture_location": [
@@ -5271,11 +5423,10 @@
       "jurisdiction_scope": "primary_statewide",
       "key": "ia-impacs",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared detail fixture demonstrates the family contract; tenant-specific document availability can vary.",
-        "Attachment metadata may include login-required documents and retrieval is capability-gated."
+        "Public-event discovery and public PDFs were observed anonymously.",
+        "The sourcing-event application redirected to SupplierLogin; no login workflow is supported."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "migration_status": "current",
       "name": "Iowa IMPACS",
       "official_landing_page": "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities",
@@ -5287,8 +5438,8 @@
       "public_bid_board_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
       "public_detail_url_pattern": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa&eventNumExact={event_number}",
       "public_search_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
-      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "source_id": "ia-impacs",
       "source_level": "statewide",
       "source_role": "primary",
@@ -5302,7 +5453,8 @@
     },
     {
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "anonymous_detail_classification": "public",
       "anonymous_discovery_classification": "public",
@@ -5323,30 +5475,33 @@
       "evidence_location": [
         "https://cpo-general.illinois.gov/bidbuy.html",
         "https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml",
-        "tests/fixtures/periscope_board.html",
-        "tests/fixtures/periscope_results.json"
+        "tests/fixtures/il_bidbuy_initial.html",
+        "tests/fixtures/il_bidbuy_results.xml",
+        "tests/fixtures/il_bidbuy_detail.html"
       ],
       "evidence_type": "official_source_and_sanitized_fixture",
       "evidence_url": "https://cpo-general.illinois.gov/bidbuy.html",
       "expected_coverage_impact": "statewide",
       "fixture_location": [
-        "tests/fixtures/periscope_board.html",
-        "tests/fixtures/periscope_results.json"
+        "tests/fixtures/il_bidbuy_initial.html",
+        "tests/fixtures/il_bidbuy_results.xml",
+        "tests/fixtures/il_bidbuy_detail.html"
       ],
       "fixture_references": [
-        "tests/fixtures/periscope_board.html",
-        "tests/fixtures/periscope_results.json"
+        "tests/fixtures/il_bidbuy_initial.html",
+        "tests/fixtures/il_bidbuy_results.xml",
+        "tests/fixtures/il_bidbuy_detail.html"
       ],
       "jurisdiction_code": "IL",
       "jurisdiction_id": "IL",
       "jurisdiction_scope": "primary_statewide",
       "key": "il-bidbuy",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
-        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+        "Request contracts are fixture-verified from a successful anonymous public capture; this does not claim continuous production availability.",
+        "Attachment downloads require continuity with the anonymous JSF session and remain bounded by connector limits.",
+        "No login, registration, CAPTCHA bypass, bid submission, or vendor mutation is supported."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-12",
       "migration_status": "current",
       "name": "BidBuy",
       "official_landing_page": "https://cpo-general.illinois.gov/bidbuy.html",
@@ -5358,7 +5513,7 @@
       "public_bid_board_url": "https://www.bidbuy.illinois.gov/",
       "public_detail_url_pattern": "https://www.bidbuy.illinois.gov/bso/external/bidDetail.sda?docId={bid_id}",
       "public_search_url": "https://www.bidbuy.illinois.gov/bso/view/search/external/advancedSearchBid.xhtml",
-      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
+      "recommended_next_action": "Perform bounded anonymous validation of registered read-only GET and POST discovery/detail contracts.",
       "robots_access_notes": "not_live_validated",
       "source_id": "il-bidbuy",
       "source_level": "statewide",
@@ -5369,11 +5524,127 @@
         "tests/test_periscope_connector.py",
         "tests/test_coverage_audit.py"
       ],
+      "validation_request_policy": {
+        "browser_capture_rules": [
+          {
+            "hosts": [
+              "www.bidbuy.illinois.gov"
+            ],
+            "methods": [
+              "POST"
+            ],
+            "path_pattern": "/bso/view/search/external/advancedSearchBid\\.xhtml",
+            "purpose": "anonymous search, filtering, sorting, and pagination"
+          },
+          {
+            "hosts": [
+              "www.bidbuy.illinois.gov"
+            ],
+            "methods": [
+              "POST"
+            ],
+            "path_pattern": "/bso/external/bidDetail\\.sda",
+            "purpose": "anonymous solicitation detail and document-metadata navigation"
+          }
+        ],
+        "connector_replay_approved": true,
+        "notes": "Only exact anonymous read-only search, pagination, detail, and attachment request contracts are approved. Public procurement contacts and disclosed vendors are retained; authentication/session values are dynamic and never persisted."
+      },
+      "validation_startup_contract": {
+        "expected_document_path": "/bso/view/search/external/advancedSearchBid.xhtml",
+        "expected_initial_request": {
+          "anonymous": true,
+          "method": "POST",
+          "path": "/bso/view/search/external/advancedSearchBid.xhtml"
+        },
+        "loading_overlay_selectors": [
+          ".ui-blockui",
+          ".ui-widget-overlay"
+        ],
+        "required_script_markers": [
+          "javax.faces.resource",
+          "primefaces"
+        ],
+        "requires_empty_or_results_state": true,
+        "success_state_selectors": [
+          ".ui-datatable",
+          "#bidSearchResultsForm",
+          "[id*=bidSearchResults]"
+        ]
+      },
       "verification_status": "fixture_verified"
     },
     {
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "registration_required",
+      "authentication_requirement": "document_download_only",
+      "authoritative": true,
+      "award_access": "unknown",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed",
+      "connector_alias": "demandstar",
+      "connector_key": "euna/openbids-demandstar",
+      "connector_name": "euna/openbids-demandstar",
+      "connector_status": "implemented",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "registration_required",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "docs/connector_validation/demandstar_two_tenants_2026-08-30.md"
+      ],
+      "evidence_type": "live_browser_and_public_api_contract_with_synthetic_fixture",
+      "evidence_url": "https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids",
+      "expected_coverage_impact": "Will County DemandStar opportunities; the county-hosted bid board remains primary for public files",
+      "fixture_location": [
+        "tests/fixtures/demandstar_will_live_shape.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/demandstar_will_live_shape.json"
+      ],
+      "jurisdiction_code": "IL",
+      "jurisdiction_id": "IL",
+      "jurisdiction_scope": "local",
+      "key": "il-will-county-demandstar",
+      "known_limitations": [
+        "DemandStar document metadata is anonymous but downloads require login.",
+        "The official county board independently provides public files.",
+        "No distinct public award or Q&A API was observed."
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "migration_status": "current",
+      "name": "Will County Euna OpenBids / DemandStar",
+      "official_landing_page": "https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids",
+      "official_url": "https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids",
+      "owning_public_entity": "Will County",
+      "platform_family": "euna/openbids-demandstar",
+      "portal_profile_key": "il-will-county",
+      "priority": 2,
+      "public_bid_board_url": "https://www.demandstar.com/app/agencies/illinois/will-county/procurement-opportunities/34dea608-18ea-4dae-ab75-e117314d8f28",
+      "public_detail_url_pattern": "https://www.demandstar.com/app/limited/bids/{bid_id}/details",
+      "public_search_url": "https://api.demandstar.com/contents/agency/search?id=34dea608-18ea-4dae-ab75-e117314d8f28",
+      "recommended_next_action": "Capture a desktop HAR to verify UI search controls and any unobserved award or Q&A routes.",
+      "robots_access_notes": "Anonymous browser and bounded API replay succeeded; no continuous-availability claim.",
+      "source_id": "il-will-county-demandstar",
+      "source_level": "local",
+      "source_role": "supplemental",
+      "source_status": "active",
+      "supplemental": true,
+      "test_location": [
+        "tests/test_euna_openbids_demandstar_connector.py"
+      ],
+      "verification_status": "live_public_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET",
+        "POST"
       ],
       "anonymous_detail_classification": "public",
       "anonymous_discovery_classification": "public",
@@ -5392,12 +5663,13 @@
       "document_access": "mixed",
       "document_pipeline_classification": "manifest_only",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://www.mass.gov/commbuys",
         "https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml",
         "tests/fixtures/periscope_board.html",
         "tests/fixtures/periscope_results.json"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_url": "https://www.mass.gov/commbuys",
       "expected_coverage_impact": "statewide",
       "fixture_location": [
@@ -5413,11 +5685,10 @@
       "jurisdiction_scope": "primary_statewide",
       "key": "ma-commbuys",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared fixtures demonstrate the BuySpeed family contract; tenant-specific production markup and attachment availability can vary.",
-        "Attachment metadata is manifest-only until anonymous retrieval is separately established."
+        "Capture proves observed anonymous contracts, not continuous availability.",
+        "One observed detail returned HTTP 401; record-level detail and document access remains mixed."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "migration_status": "current",
       "name": "COMMBUYS",
       "official_landing_page": "https://www.mass.gov/commbuys",
@@ -5429,8 +5700,8 @@
       "public_bid_board_url": "https://www.commbuys.com/",
       "public_detail_url_pattern": "https://www.commbuys.com/bso/external/bidDetail.sda?docId={bid_id}",
       "public_search_url": "https://www.commbuys.com/bso/view/search/external/advancedSearchBid.xhtml",
-      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "source_id": "ma-commbuys",
       "source_level": "statewide",
       "source_role": "primary",
@@ -5517,7 +5788,7 @@
       "authentication_requirement": "none",
       "authoritative": true,
       "award_access": "public",
-      "blocker_reason": null,
+      "blocker_reason": "Observed AltSelfService route produced HTTP 404/403 and failed requests.",
       "captcha_classification": "none_observed_in_fixture",
       "connector_alias": "maine/vss",
       "connector_key": "cgi/advantage-vss",
@@ -5528,12 +5799,13 @@
       "document_access": "mixed",
       "document_pipeline_classification": "manifest_only",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
         "tests/fixtures/cgi_vss_maine_landing.html",
         "tests/fixtures/cgi_vss_search.html",
         "tests/fixtures/cgi_vss_detail.html"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_url": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
       "expected_coverage_impact": "primary statewide procurement opportunities published in VSS on or after October 1, 2025",
       "fixture_location": [
@@ -5551,11 +5823,10 @@
       "jurisdiction_scope": "primary_statewide",
       "key": "me-vss",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "Maine guidance places RFPs published on or after October 1, 2025 in VSS; earlier RFPs remain in separate archives.",
-        "Attachment fixtures establish manifest metadata only; document retrieval and pipeline compatibility are not established."
+        "The attempted solicitation route produced 404, 403, and failed requests.",
+        "No usable anonymous solicitation workflow was established."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "migration_status": "current",
       "name": "Maine Vendor Self Service",
       "official_landing_page": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
@@ -5567,8 +5838,8 @@
       "public_bid_board_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService",
       "public_detail_url_pattern": null,
       "public_search_url": "https://mevss.hostams.com/PRDVSS1X1/AltSelfService/SolicitationSearch",
-      "recommended_next_action": "Perform a bounded anonymous GET validation of guest discovery, detail, and one explicitly public attachment from a permitted network.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Reconfirm the current official public route and access policy before another bounded capture.",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "source_id": "me-vss",
       "source_level": "statewide",
       "source_role": "primary",
@@ -5590,7 +5861,7 @@
       "authentication_requirement": "none",
       "authoritative": true,
       "award_access": "public",
-      "blocker_reason": null,
+      "blocker_reason": "Observed solicitation-search route returned HTTP 404.",
       "captcha_classification": "none_observed_in_fixture",
       "connector_alias": "michigan/sigma-vss",
       "connector_key": "cgi/advantage-vss",
@@ -5601,13 +5872,14 @@
       "document_access": "public",
       "document_pipeline_classification": "manifest_only",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://www.michigan.gov/budget/budget-offices/sigma",
         "https://www.michigan.gov/dtmb/procurement/contractconnect",
         "tests/fixtures/cgi_vss_advantage4_landing.html",
         "tests/fixtures/cgi_vss_search.html",
         "tests/fixtures/cgi_vss_detail.html"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_url": "https://www.michigan.gov/budget/budget-offices/sigma",
       "expected_coverage_impact": "primary statewide procurement opportunities published in Michigan SIGMA VSS",
       "fixture_location": [
@@ -5625,11 +5897,10 @@
       "jurisdiction_scope": "primary_statewide",
       "key": "mi-sigma-vss",
       "known_limitations": [
-        "Fixture verification does not establish current production operation.",
-        "Attachment fixtures establish manifest metadata only; retrieval and document parsing are not established.",
-        "Some Michigan procurement notices may remain on Contract Connect or agency-specific systems."
+        "The attempted Advantage4/SolicitationSearch route returned only HTTP 404 responses.",
+        "No live capability was established."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "migration_status": "current",
       "name": "Michigan SIGMA Vendor Self Service",
       "official_landing_page": "https://www.michigan.gov/budget/budget-offices/sigma",
@@ -5641,8 +5912,8 @@
       "public_bid_board_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4",
       "public_detail_url_pattern": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4?solicitation_number={solicitation_number}",
       "public_search_url": "https://sigma.michigan.gov/PRDVSS1X1/Advantage4/SolicitationSearch",
-      "recommended_next_action": "Perform a bounded anonymous GET validation of SIGMA discovery, one detail, and at most one explicitly public attachment from a permitted network.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Reconfirm the current official public route before another bounded capture.",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "source_id": "mi-sigma-vss",
       "source_level": "statewide",
       "source_role": "primary",
@@ -5724,6 +5995,73 @@
     },
     {
       "allowed_http_methods": [
+        "GET",
+        "POST"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "registration_required",
+      "authentication_requirement": "document_download_only",
+      "authoritative": true,
+      "award_access": "unknown",
+      "blocker_reason": null,
+      "captcha_classification": "none_observed",
+      "connector_alias": "openbids",
+      "connector_key": "euna/openbids-demandstar",
+      "connector_name": "euna/openbids-demandstar",
+      "connector_status": "implemented",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "registration_required",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "docs/connector_validation/demandstar_two_tenants_2026-08-30.md"
+      ],
+      "evidence_type": "live_browser_and_public_api_contract_with_synthetic_fixture",
+      "evidence_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county",
+      "expected_coverage_impact": "Ramsey County DemandStar opportunities",
+      "fixture_location": [
+        "tests/fixtures/demandstar_ramsey_live_shape.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/demandstar_ramsey_live_shape.json"
+      ],
+      "jurisdiction_code": "MN",
+      "jurisdiction_id": "MN",
+      "jurisdiction_scope": "local",
+      "key": "mn-ramsey-county-demandstar",
+      "known_limitations": [
+        "DemandStar document metadata is anonymous but downloads require login.",
+        "The official page states that free registration/subscription provides documents and results.",
+        "No distinct public award or Q&A API was observed."
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "migration_status": "current",
+      "name": "Ramsey County Euna OpenBids / DemandStar",
+      "official_landing_page": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county",
+      "official_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county",
+      "owning_public_entity": "Ramsey County",
+      "platform_family": "euna/openbids-demandstar",
+      "portal_profile_key": "mn-ramsey-county",
+      "priority": 2,
+      "public_bid_board_url": "https://www.demandstar.com/app/agencies/minnesota/ramsey-county/procurement-opportunities/98cdb2f5-ed67-485d-8b2e-291e644403e5/",
+      "public_detail_url_pattern": "https://www.demandstar.com/app/limited/bids/{bid_id}/details",
+      "public_search_url": "https://api.demandstar.com/contents/agency/search?id=98cdb2f5-ed67-485d-8b2e-291e644403e5",
+      "recommended_next_action": "Capture a desktop HAR to verify UI search controls and any unobserved award or Q&A routes.",
+      "robots_access_notes": "Anonymous browser and bounded API replay succeeded; no continuous-availability claim.",
+      "source_id": "mn-ramsey-county-demandstar",
+      "source_level": "local",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_euna_openbids_demandstar_connector.py"
+      ],
+      "verification_status": "live_public_verified"
+    },
+    {
+      "allowed_http_methods": [
         "GET"
       ],
       "anonymous_detail_classification": "public",
@@ -5792,6 +6130,100 @@
         "tests/test_coverage_audit.py"
       ],
       "verification_status": "fixture_verified"
+    },
+    {
+      "allowed_http_methods": [
+        "GET",
+        "POST"
+      ],
+      "anonymous_detail_classification": "public",
+      "anonymous_discovery_classification": "public",
+      "attachment_classification": "login_required",
+      "authentication_requirement": "document_download_only",
+      "authoritative": true,
+      "award_access": "public",
+      "blocker_reason": null,
+      "captcha_classification": "transient_cloudflare_verification_observed_no_human_action",
+      "connector_alias": "opengov",
+      "connector_key": "opengov/procurement",
+      "connector_name": "opengov/procurement",
+      "connector_status": "implemented",
+      "detail_access": "public",
+      "discovery_access": "public",
+      "document_access": "login_required",
+      "document_pipeline_classification": "manifest_only",
+      "evidence_location": [
+        "docs/connector_validation/opengov_two_tenants_2026-08-24.md",
+        "tests/fixtures/opengov_ocean_listing_page1.json",
+        "tests/fixtures/opengov_ocean_detail.json"
+      ],
+      "evidence_type": "live_api_contract_with_sanitized_derived_har_and_synthetic_fixture",
+      "evidence_url": "https://procurement.opengov.com/portal/oceancounty",
+      "expected_coverage_impact": "Ocean County procurement only",
+      "fixture_location": [
+        "tests/fixtures/opengov_ocean_listing_page1.json",
+        "tests/fixtures/opengov_ocean_listing_page2.json",
+        "tests/fixtures/opengov_ocean_detail.json",
+        "tests/fixtures/opengov_ocean_questions.json",
+        "tests/fixtures/opengov_ocean_awarded_detail.json"
+      ],
+      "fixture_references": [
+        "tests/fixtures/opengov_ocean_listing_page1.json",
+        "tests/fixtures/opengov_ocean_detail.json",
+        "tests/fixtures/opengov_ocean_questions.json",
+        "tests/fixtures/opengov_ocean_awarded_detail.json"
+      ],
+      "jurisdiction_code": "NJ",
+      "jurisdiction_id": "NJ",
+      "jurisdiction_scope": "local",
+      "key": "nj-ocean-county-opengov",
+      "known_limitations": [
+        "Document selection is public but download requires login; the connector never calls the download POST or retains signed URLs.",
+        "Related contracts were browser-visible on one awarded project, but the direct API POST returned HTTP 401 without browser session state.",
+        "The retained HAR-shaped artifact was derived from saved public responses rather than exported from the browser.",
+        "The follow-up browser load remained at automatic Cloudflare verification; the public API contract was still anonymously available.",
+        "The evidence proves point-in-time request contracts, not continuous production availability."
+      ],
+      "last_verified": "2026-08-24",
+      "last_verified_date": "2026-08-24",
+      "migration_status": "current",
+      "name": "Ocean County OpenGov Procurement",
+      "official_landing_page": "https://procurement.opengov.com/portal/oceancounty",
+      "official_url": "https://procurement.opengov.com/portal/oceancounty",
+      "owning_public_entity": "County of Ocean",
+      "platform_family": "opengov/procurement",
+      "portal_profile_key": "ocean-county-nj",
+      "priority": 2,
+      "public_bid_board_url": "https://procurement.opengov.com/portal/oceancounty",
+      "public_detail_url_pattern": "https://procurement.opengov.com/portal/oceancounty/projects/{project_id}",
+      "public_search_url": "https://api.procurement.opengov.com/api/v1/government/oceancounty/project/public",
+      "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
+      "robots_access_notes": "Earlier bounded anonymous walkthrough plus follow-up live API replay; the follow-up portal UI remained at automatic Cloudflare verification. No claim of continuous availability.",
+      "source_id": "nj-ocean-county-opengov",
+      "source_level": "local",
+      "source_role": "primary",
+      "source_status": "active",
+      "supplemental": false,
+      "test_location": [
+        "tests/test_opengov_procurement_connector.py"
+      ],
+      "validation_request_policy": {
+        "browser_capture_rules": [
+          {
+            "hosts": [
+              "api.procurement.opengov.com"
+            ],
+            "methods": [
+              "POST"
+            ],
+            "path_pattern": "/api/v1/government/oceancounty/project/public",
+            "purpose": "anonymous listing, filtering, sorting, and pagination"
+          }
+        ],
+        "connector_replay_approved": true,
+        "notes": "Only the exact anonymous listing POST is approved. Detail and Q&A use GET; download and contracts POST routes are not approved."
+      },
+      "verification_status": "live_public_verified"
     },
     {
       "allowed_http_methods": [
@@ -5925,7 +6357,8 @@
     },
     {
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "anonymous_detail_classification": "public",
       "anonymous_discovery_classification": "public",
@@ -5934,7 +6367,7 @@
       "authoritative": true,
       "award_access": "metadata_only",
       "blocker_reason": null,
-      "captcha_classification": "none_observed_in_fixture",
+      "captcha_classification": "third_party_resources_observed_no_first_party_challenge",
       "connector_alias": null,
       "connector_key": "tyler/munis-vss",
       "connector_name": "tyler/munis-vss",
@@ -5944,27 +6377,37 @@
       "document_access": "public",
       "document_pipeline_classification": "compatible",
       "evidence_location": [
-        "tests/fixtures/tyler_vss_results_1.html",
-        "tests/fixtures/tyler_vss_detail.html"
+        "docs/tyler_munis_vss_evidence.md",
+        "tests/fixtures/tyler_vss_live_search.html",
+        "tests/fixtures/tyler_vss_live_results.html",
+        "tests/fixtures/tyler_vss_live_detail.html"
       ],
-      "evidence_type": "sanitized_fixture_and_automated_test",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "expected_coverage_impact": "Summit County procurement only",
       "fixture_location": [
         "tests/fixtures/tyler_vss_results_1.html",
-        "tests/fixtures/tyler_vss_detail.html"
+        "tests/fixtures/tyler_vss_detail.html",
+        "tests/fixtures/tyler_vss_live_search.html",
+        "tests/fixtures/tyler_vss_live_results.html",
+        "tests/fixtures/tyler_vss_live_detail.html"
       ],
       "fixture_references": [
         "tests/fixtures/tyler_vss_results_1.html",
-        "tests/fixtures/tyler_vss_detail.html"
+        "tests/fixtures/tyler_vss_detail.html",
+        "tests/fixtures/tyler_vss_live_search.html",
+        "tests/fixtures/tyler_vss_live_results.html",
+        "tests/fixtures/tyler_vss_live_detail.html"
       ],
       "jurisdiction_code": "OH",
       "jurisdiction_id": "OH",
       "jurisdiction_scope": "local",
       "key": "oh-summit-county-tyler-munis-vss",
       "known_limitations": [
-        "Summit County procurement only"
+        "Summit County procurement only",
+        "The capture proves the observed anonymous request contracts, not continuous production availability.",
+        "Awards and amendments were not separately established by this capture."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-12",
       "migration_status": "current",
       "name": "Summit County Tyler Munis Vendor Self Service",
       "official_landing_page": "https://summitcountyoh.munisselfservice.com/vss/",
@@ -5976,8 +6419,8 @@
       "public_bid_board_url": "https://summitcountyoh.munisselfservice.com/vss/",
       "public_detail_url_pattern": null,
       "public_search_url": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Run bounded connector validation periodically and fail closed on login, CAPTCHA, or contract drift.",
+      "robots_access_notes": "Successful anonymous browser capture observed; this is request-contract evidence, not a claim of continuous availability.",
       "source_id": "oh-summit-county-tyler-munis-vss",
       "source_level": "local",
       "source_role": "primary",
@@ -6134,8 +6577,8 @@
       "authentication_requirement": "none",
       "authoritative": true,
       "award_access": "metadata_only",
-      "blocker_reason": null,
-      "captcha_classification": "none_observed_in_fixture",
+      "blocker_reason": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
+      "captcha_classification": "captcha_present",
       "connector_alias": null,
       "connector_key": "webprocure/proactis",
       "connector_name": "webprocure/proactis",
@@ -6145,11 +6588,12 @@
       "document_access": "unknown",
       "document_pipeline_classification": "unknown",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://www.purchasing.ri.gov/",
         "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
         "tests/fixtures/webprocure_results.json"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_url": "https://www.purchasing.ri.gov/",
       "expected_coverage_impact": "statewide",
       "fixture_location": [
@@ -6163,11 +6607,10 @@
       "jurisdiction_scope": "primary_statewide",
       "key": "ri-ocean-state-procures",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared fixture establishes bounded discovery and record normalization only; separate public detail and attachment retrieval are not established.",
-        "The production full-text endpoint was unreachable from the Codex Cloud network, so current tenant availability and access walls remain unknown."
+        "Public JSON/detail/document traffic was observed, but reCAPTCHA prevents an unattended anonymous-validation claim.",
+        "No CAPTCHA bypass is supported."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "migration_status": "current",
       "name": "Ocean State Procures",
       "official_landing_page": "https://www.purchasing.ri.gov/",
@@ -6179,8 +6622,8 @@
       "public_bid_board_url": "https://webprocure.proactiscloud.com/wp-web-public/#/bidboard/search?customerid=46&oid=120002",
       "public_detail_url_pattern": null,
       "public_search_url": "https://webprocure.proactiscloud.com/wp-full-text-search/search/sols",
-      "recommended_next_action": "Perform bounded anonymous GET validation of one discovery page from a permitted network before classifying any live capability.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Retain CAPTCHA-boundary evidence and do not promote unattended discovery without a future lawful challenge-free capture.",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "source_id": "ri-ocean-state-procures",
       "source_level": "statewide",
       "source_role": "primary",
@@ -6318,12 +6761,13 @@
     },
     {
       "allowed_http_methods": [
-        "GET"
+        "GET",
+        "POST"
       ],
-      "anonymous_detail_classification": "public",
+      "anonymous_detail_classification": "login_required",
       "anonymous_discovery_classification": "public",
       "attachment_classification": "mixed",
-      "authentication_requirement": "none",
+      "authentication_requirement": "detail_application_route",
       "authoritative": true,
       "award_access": "metadata_only",
       "blocker_reason": null,
@@ -6337,12 +6781,13 @@
       "document_access": "mixed",
       "document_pipeline_classification": "manifest_only",
       "evidence_location": [
+        "docs/connector_validation/batch1_har_evidence_2026-08-13.md",
         "https://purchasing.utah.gov/currentbids/",
         "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
         "tests/fixtures/jaggaer_listing.html",
         "tests/fixtures/jaggaer_detail.html"
       ],
-      "evidence_type": "official_source_and_sanitized_fixture",
+      "evidence_type": "reviewed_sanitized_har_contract_and_synthetic_fixture",
       "evidence_url": "https://purchasing.utah.gov/currentbids/",
       "expected_coverage_impact": "statewide",
       "fixture_location": [
@@ -6358,11 +6803,10 @@
       "jurisdiction_scope": "primary_statewide",
       "key": "ut-u3p",
       "known_limitations": [
-        "Fixture verification does not establish live production operation.",
-        "The shared detail fixture demonstrates the family contract; tenant-specific document availability can vary.",
-        "Attachment metadata may include login-required documents and retrieval is capability-gated."
+        "Public-event discovery and public PDFs were observed anonymously.",
+        "The sourcing-event application redirected to SupplierLogin; no login workflow is supported."
       ],
-      "last_verified_date": null,
+      "last_verified_date": "2026-08-13",
       "migration_status": "current",
       "name": "Utah Public Procurement Place (U3P)",
       "official_landing_page": "https://purchasing.utah.gov/currentbids/",
@@ -6374,8 +6818,8 @@
       "public_bid_board_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
       "public_detail_url_pattern": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah&eventNumExact={event_number}",
       "public_search_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
-      "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
-      "robots_access_notes": "not_live_validated",
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
+      "robots_access_notes": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
       "source_id": "ut-u3p",
       "source_level": "statewide",
       "source_role": "primary",
@@ -6523,10 +6967,10 @@
   ],
   "summary": {
     "attachment_capable_jurisdiction_count": 16,
-    "authentication_blocked_jurisdiction_count": 0,
+    "authentication_blocked_jurisdiction_count": 2,
     "automated_access_block_count": 0,
     "baseline_operational_count": 18,
-    "captcha_affected_jurisdiction_count": 0,
+    "captcha_affected_jurisdiction_count": 2,
     "captcha_count": 0,
     "changed_markup_count": 0,
     "connector_family_counts": {
@@ -6557,22 +7001,22 @@
     "jurisdiction_count": 56,
     "lacking_primary_source_count": 36,
     "live_validated_jurisdiction_count": 0,
-    "local_evidence_only_count": 0,
-    "login_required_count": 0,
+    "local_evidence_only_count": 1,
+    "login_required_count": 2,
     "metadata_only_count": 2,
     "migrated_source_count": 0,
-    "missing_source_count": 36,
+    "missing_source_count": 35,
     "operational_status_distribution": {
       "baseline_operational": 18,
       "not_operational": 38
     },
     "payment_required_count": 0,
-    "public_detail_count": 20,
-    "public_discovery_count": 22,
+    "public_detail_count": 24,
+    "public_discovery_count": 26,
     "public_document_pipeline_count": 10,
-    "registration_required_count": 0,
+    "registration_required_count": 2,
     "robots_policy_count": 0,
-    "source_count": 24,
+    "source_count": 28,
     "subscription_required_count": 0,
     "unverified_source_count": 24
   },

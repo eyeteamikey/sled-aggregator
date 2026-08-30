@@ -86,7 +86,8 @@
     "entry_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
     "jurisdiction_id": "IA",
     "method_policy": [
-      "GET"
+      "GET",
+      "POST"
     ],
     "order": 4,
     "platform_family": "jaggaer/sciquest",
@@ -111,7 +112,8 @@
     "entry_url": "https://www.bidbuy.illinois.gov/",
     "jurisdiction_id": "IL",
     "method_policy": [
-      "GET"
+      "GET",
+      "POST"
     ],
     "order": 5,
     "platform_family": "periscope/buyspeed",
@@ -136,7 +138,8 @@
     "entry_url": "https://www.commbuys.com/",
     "jurisdiction_id": "MA",
     "method_policy": [
-      "GET"
+      "GET",
+      "POST"
     ],
     "order": 6,
     "platform_family": "periscope/buyspeed",
@@ -386,7 +389,8 @@
     "entry_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
     "jurisdiction_id": "UT",
     "method_policy": [
-      "GET"
+      "GET",
+      "POST"
     ],
     "order": 16,
     "platform_family": "jaggaer/sciquest",
