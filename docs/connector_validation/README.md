@@ -175,8 +175,8 @@ Do not infer support from VendorLine or unrelated PlanetBids marketing pages. Bo
 
 ### BidNet Direct
 
-- [ ] First member agency or regional purchasing group
-- [ ] Second independently operated member agency or regional purchasing group
+- [x] Maricopa County Procurement Services — Arizona Purchasing Group member agency
+- [x] City and County of Denver General Services Purchasing — Rocky Mountain E-Purchasing System member agency
 
 Record whether metadata is anonymous, documents require registration, and an official agency-hosted public copy exists. Do not use paid geographic aggregation.
 

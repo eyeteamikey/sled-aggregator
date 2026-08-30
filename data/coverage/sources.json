@@ -2001,6 +2001,141 @@
       "blocker_reason": null,
       "recommended_next_action": "Capture a desktop HAR to verify UI search controls and any unobserved award or Q&A routes.",
       "evidence_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county"
+    },
+    {
+      "key": "az-maricopa-county-bidnet",
+      "jurisdiction_code": "AZ",
+      "name": "Maricopa County Procurement Services BidNet Direct",
+      "source_level": "county",
+      "source_role": "primary",
+      "official_url": "https://www.maricopa.gov/2190/Solicitations",
+      "platform_family": "bidnet-direct",
+      "connector_name": "bidnet-direct",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "metadata_only",
+      "document_access": "registration_required",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/bidnet_direct_mets_maricopa.html",
+        "tests/fixtures/bidnet_direct_mets_gated_detail.html"
+      ],
+      "priority": 2,
+      "expected_coverage_impact": "Maricopa County procurement only",
+      "source_id": "az-maricopa-county-bidnet",
+      "jurisdiction_id": "AZ",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "Maricopa County Procurement Services",
+      "official_landing_page": "https://www.maricopa.gov/2190/Solicitations",
+      "public_bid_board_url": "https://www.bidnetdirect.com/arizona/maricopacounty",
+      "public_search_url": "https://www.bidnetdirect.com/arizona/maricopacounty/solicitations/open-bids?selectedContent=BUYER",
+      "public_detail_url_pattern": "https://www.bidnetdirect.com/arizona/solicitations/{status}/{title}/{opportunity_id}",
+      "connector_key": "bidnet-direct",
+      "connector_alias": "bidnet",
+      "portal_profile_key": "az-maricopa-county",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public_metadata_only",
+      "attachment_classification": "registration_required",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "detail_fields_and_documents",
+      "captcha_classification": "none_observed_in_browser",
+      "robots_access_notes": "Visible browser succeeded; direct HTTP returned bare 403. No HAR captured and no continuous-availability claim.",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_dom_and_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/bidnet_direct_two_tenants_2026-08-30.md"
+      ],
+      "fixture_location": [
+        "tests/fixtures/bidnet_direct_mets_maricopa.html",
+        "tests/fixtures/bidnet_direct_mets_gated_detail.html"
+      ],
+      "test_location": [
+        "tests/test_bidnet_direct_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Anonymous details and documents are registration-gated.",
+        "No source HAR or anonymous document download was available."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture and sanitize a desktop HAR before scheduled live promotion.",
+      "evidence_url": "https://www.maricopa.gov/2190/Solicitations"
+    },
+    {
+      "key": "co-denver-general-services-bidnet",
+      "jurisdiction_code": "CO",
+      "name": "Denver General Services BidNet Direct",
+      "source_level": "municipality",
+      "source_role": "primary",
+      "official_url": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities",
+      "platform_family": "bidnet-direct",
+      "connector_name": "bidnet-direct",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "metadata_only",
+      "document_access": "registration_required",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/bidnet_direct_mets_denver.html",
+        "tests/fixtures/bidnet_direct_mets_gated_detail.html"
+      ],
+      "priority": 2,
+      "expected_coverage_impact": "Denver General Services procurement only",
+      "source_id": "co-denver-general-services-bidnet",
+      "jurisdiction_id": "CO",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "City and County of Denver General Services Purchasing",
+      "official_landing_page": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities",
+      "public_bid_board_url": "https://www.bidnetdirect.com/colorado/city-and-county-of-denver-general-services-purchasing",
+      "public_search_url": "https://www.bidnetdirect.com/colorado/city-and-county-of-denver-general-services-purchasing/solicitations/open-bids?selectedContent=BUYER",
+      "public_detail_url_pattern": "https://www.bidnetdirect.com/colorado/solicitations/{status}/{title}/{opportunity_id}",
+      "connector_key": "bidnet-direct",
+      "connector_alias": "bidnet",
+      "portal_profile_key": "co-denver-general-services",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public_metadata_only",
+      "attachment_classification": "registration_required",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "detail_fields_and_documents",
+      "captcha_classification": "none_observed_in_browser",
+      "robots_access_notes": "Visible browser succeeded; direct HTTP returned bare 403. No HAR captured and no continuous-availability claim.",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_dom_and_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/bidnet_direct_two_tenants_2026-08-30.md"
+      ],
+      "fixture_location": [
+        "tests/fixtures/bidnet_direct_mets_denver.html",
+        "tests/fixtures/bidnet_direct_mets_gated_detail.html"
+      ],
+      "test_location": [
+        "tests/test_bidnet_direct_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Anonymous details and documents are registration-gated.",
+        "DOTI is a distinct unconfigured surface.",
+        "No source HAR or anonymous document download was available."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture and sanitize a desktop HAR before scheduled live promotion.",
+      "evidence_url": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities"
     }
   ],
   "evidence": [
