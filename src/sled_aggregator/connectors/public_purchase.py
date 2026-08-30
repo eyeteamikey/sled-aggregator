@@ -71,6 +71,7 @@ class PublicPurchaseProfile:
     procurement_landing_url: str | None = None
     agency_page_url: str = ""
     discovery_url: str = ""
+    closed_discovery_url: str | None = None
     supported_hostname: str = "www.publicpurchase.com"
     detail_url_template: str = ""
     official_procurement_url: str | None = None
@@ -131,7 +132,81 @@ FIXTURE_PROFILE = PublicPurchaseProfile(
     approved_hosts=("www.publicpurchase.com",),
     approved_document_hosts=("docs.fixture.gov",),
 )
-PUBLIC_PURCHASE_PROFILES = {FIXTURE_PROFILE.profile_key: FIXTURE_PROFILE}
+FRESNO_COUNTY_PROFILE = PublicPurchaseProfile(
+    profile_key="ca-fresno-county",
+    jurisdiction="Fresno County, California",
+    state_code="CA",
+    government_level="county",
+    agency_name="County of Fresno",
+    agency_slug="fresnoco,ca",
+    agency_source_identifier="fresnoco,ca",
+    procurement_landing_url=(
+        "https://www.fresnocountyca.gov/Departments/General-Services-Department/"
+        "Purchasing-Services/Bid-Opportunities"
+    ),
+    agency_page_url="https://www.publicpurchase.com/gems/fresnoco%2Cca/buyer/public/publicInfo",
+    discovery_url="https://www.publicpurchase.com/gems/fresnoco%2Cca/buyer/public/publicInfo",
+    closed_discovery_url=(
+        "https://www.publicpurchase.com/gems/fresnoco%2Cca/buyer/public/publicClosedBidsInfo"
+    ),
+    detail_url_template=(
+        "https://www.publicpurchase.com/gems/fresnoco%2Cca/bid/bidView?bidId={opportunity_id}"
+    ),
+    official_procurement_url=(
+        "https://www.fresnocountyca.gov/Departments/General-Services-Department/"
+        "Purchasing-Services/Bid-Opportunities"
+    ),
+    profile_status="active",
+    expected_access_model="anonymous_listing_login_detail",
+    maximum_pages=1,
+    verification_status="live_public_verified",
+    verification_timestamp=datetime(2026, 8, 30, tzinfo=UTC),
+    verification_notes=(
+        "Anonymous open and closed tables verified; detail and documents require login."
+    ),
+    approved_hosts=("www.publicpurchase.com",),
+)
+
+KERN_COUNTY_PROFILE = PublicPurchaseProfile(
+    profile_key="ca-kern-county",
+    jurisdiction="Kern County, California",
+    state_code="CA",
+    government_level="county",
+    agency_name="Kern County",
+    agency_slug="kern,ca",
+    agency_source_identifier="kern,ca",
+    procurement_landing_url=(
+        "https://www.kerncounty.com/government/county-administrative-office/how-do-i/"
+        "view/current-bid-opportunities"
+    ),
+    agency_page_url="https://www.publicpurchase.com/gems/kern%2Cca/buyer/public/home",
+    discovery_url="https://www.publicpurchase.com/gems/kern%2Cca/buyer/public/publicInfo",
+    closed_discovery_url=(
+        "https://www.publicpurchase.com/gems/kern%2Cca/buyer/public/publicClosedBidsInfo"
+    ),
+    detail_url_template=(
+        "https://www.publicpurchase.com/gems/kern%2Cca/bid/bidView?bidId={opportunity_id}"
+    ),
+    official_procurement_url=(
+        "https://www.kerncounty.com/government/county-administrative-office/how-do-i/"
+        "view/current-bid-opportunities"
+    ),
+    profile_status="active",
+    expected_access_model="anonymous_listing_login_detail",
+    maximum_pages=1,
+    verification_status="live_public_verified",
+    verification_timestamp=datetime(2026, 8, 30, tzinfo=UTC),
+    verification_notes=(
+        "Supplied home route advertises login; shared publicInfo and closed-table routes are "
+        "anonymous. Detail and documents require login."
+    ),
+    approved_hosts=("www.publicpurchase.com",),
+)
+
+PUBLIC_PURCHASE_PROFILES = {
+    profile.profile_key: profile
+    for profile in (FIXTURE_PROFILE, FRESNO_COUNTY_PROFILE, KERN_COUNTY_PROFILE)
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -177,9 +252,19 @@ class _PageParser(HTMLParser):
         self.json_text = []
         self._script = False
         self._text = []
+        self._table_depth = 0
+        self._row = None
+        self._cell = None
+        self.rows = []
 
     def handle_starttag(self, tag, attrs):
         values = dict(attrs)
+        if tag == "table":
+            self._table_depth += 1
+        elif tag == "tr" and self._table_depth:
+            self._row = []
+        elif tag in {"td", "th"} and self._row is not None:
+            self._cell = {"text": [], "href": None}
         if tag == "a" and values.get("href"):
             self.links.append(
                 (
@@ -189,21 +274,39 @@ class _PageParser(HTMLParser):
                     values.get("data-version"),
                 )
             )
+            if self._cell is not None:
+                self._cell["href"] = values["href"]
         if tag == "script" and values.get("type") in {"application/json", "application/ld+json"}:
             self._script = True
 
     def handle_endtag(self, tag):
         if tag == "script":
             self._script = False
+        elif tag in {"td", "th"} and self._cell is not None:
+            self._cell["text"] = " ".join("".join(self._cell["text"]).split())
+            self._row.append(self._cell)
+            self._cell = None
+        elif tag == "tr" and self._row is not None:
+            if self._row:
+                self.rows.append(self._row)
+            self._row = None
+        elif tag == "table" and self._table_depth:
+            self._table_depth -= 1
 
     def handle_data(self, data):
         self._text.append(data)
+        if self._cell is not None:
+            self._cell["text"].append(data)
         if self._script:
             self.json_text.append(data)
 
 
 def detect_access_boundary(text: str) -> PublicPurchaseAccessState:
     value = re.sub(r"\s+", " ", text).casefold()
+    if re.search(r"action=[\"'][^\"']*/login/process", value) or (
+        "type=\"password\"" in value and "username" in value and "login" in value
+    ):
+        return PublicPurchaseAccessState.LOGIN_REQUIRED
     for state, terms in (
         (
             PublicPurchaseAccessState.ROBOTS_POLICY_BLOCKED,
@@ -271,7 +374,51 @@ def parse_page(
                 payloads.extend(x for x in candidates if isinstance(x, dict))
         elif isinstance(value, list):
             payloads.extend(x for x in value if isinstance(x, dict))
+    payloads.extend(_parse_public_tables(parser.rows))
     return payloads, parser.links
+
+
+def _parse_public_tables(rows: list[list[dict[str, Any]]]) -> list[dict[str, Any]]:
+    """Parse the two anonymous Public Purchase table variants observed in GEMS."""
+    result = []
+    for row in rows:
+        if len(row) not in {3, 5} or not row[0].get("href"):
+            continue
+        match = re.search(r"(?:\?|&)bidId=(\d+)(?:&|$)", row[0]["href"], re.I)
+        if not match:
+            continue
+        heading = row[0]["text"]
+        number, title = _split_heading(heading)
+        if len(row) == 5:
+            status, posted, due = "Open", row[1]["text"], row[2]["text"]
+            addenda = [] if "no addendum" in row[4]["text"].casefold() else [row[4]["text"]]
+        else:
+            status, posted, due, addenda = row[1]["text"], None, row[2]["text"], []
+        result.append(
+            {
+                "id": match.group(1),
+                "displayedSourceId": number or match.group(1),
+                "solicitationNumber": number,
+                "title": title,
+                "status": status,
+                "postedDate": posted,
+                "dueDate": due,
+                "addendaSummary": addenda,
+                "url": row[0]["href"],
+                "accessState": "public_metadata_only",
+                "documentsComplete": False,
+                "markupVariant": "gems_public_table",
+            }
+        )
+    return result
+
+
+def _split_heading(value: str) -> tuple[str | None, str]:
+    if " - " not in value:
+        return None, value
+    prefix, title = value.split(" - ", 1)
+    number = prefix.split("#", 1)[1].strip() if "#" in prefix else prefix.strip()
+    return number or None, title.strip()
 
 
 class PublicPurchaseConnector(BaseConnector):
@@ -414,6 +561,8 @@ class PublicPurchaseConnector(BaseConnector):
 
     def _normalize(self, data, raw_id):
         url = str(data.get("url") or self.profile.detail_url(raw_id))
+        if url.startswith("/"):
+            url = f"https://{self.profile.supported_hostname}{url}"
         safe = self._safe_url(url) or self.profile.detail_url(raw_id)
         docs = data.get("documents") if isinstance(data.get("documents"), list) else []
         source_id = f"{CANONICAL_FAMILY}:{self.profile.profile_key}:{raw_id}"
@@ -455,7 +604,8 @@ class PublicPurchaseConnector(BaseConnector):
                 "documents": docs,
                 "source_provenance": provenance,
                 "access_state": data.get("accessState", "public"),
-                "documents_complete": all(
+                "documents_complete": data.get("documentsComplete", bool(docs))
+                and all(
                     str(x.get("accessState", "public")) == "public"
                     for x in docs
                     if isinstance(x, dict)
@@ -659,10 +809,18 @@ class PublicPurchaseConnector(BaseConnector):
     def _datetime(value):
         if not value:
             return None
+        text = re.sub(r"\s+", " ", str(value)).strip()
+        text = re.sub(r"\bPST\b", "-08:00", text)
+        text = re.sub(r"\bPDT\b", "-07:00", text)
         try:
-            parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+            parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
             return parsed if parsed.tzinfo else parsed.replace(tzinfo=UTC)
         except ValueError:
+            for fmt in ("%b %d, %Y %I:%M:%S %p %z", "%b %d, %Y %I:%M %p %z"):
+                try:
+                    return datetime.strptime(text, fmt)
+                except ValueError:
+                    continue
             return None
 
     @staticmethod
@@ -670,7 +828,7 @@ class PublicPurchaseConnector(BaseConnector):
         text = str(value or "").casefold()
         if "cancel" in text:
             return OpportunityStatus.CANCELLED
-        if "award" in text:
+        if "award" in text or "final" in text:
             return OpportunityStatus.AWARDED
         if "close" in text:
             return OpportunityStatus.CLOSED
