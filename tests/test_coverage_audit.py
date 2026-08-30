@@ -161,7 +161,7 @@ class CoverageAuditTests(unittest.TestCase):
                 "live_verified": 0,
                 "production_monitored": 0,
                 "tier_0_remaining": 36,
-                "blocked_jurisdictions": 14,
+                "blocked_jurisdictions": 16,
             },
         )
         self.assertEqual(len(plan["unidentified_primary_sources"]), 36)

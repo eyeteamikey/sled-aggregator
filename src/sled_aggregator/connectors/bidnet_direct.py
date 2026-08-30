@@ -17,7 +17,8 @@ from datetime import UTC, date, datetime
 from enum import StrEnum
 from html.parser import HTMLParser
 from typing import Any, Protocol
-from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+from urllib.parse import parse_qsl, urlencode, urljoin, urlparse, urlunparse
+from zoneinfo import ZoneInfo
 
 import httpx
 
@@ -69,6 +70,9 @@ class BidNetDirectProfile:
     agency_source_identifier: str | None = None
     regional_purchasing_group_name: str | None = None
     regional_purchasing_group_slug: str | None = None
+    purchasing_group_id: str | None = None
+    buyer_id: str | None = None
+    timezone: str = "UTC"
     procurement_landing_url: str | None = None
     agency_page_url: str = ""
     discovery_url: str = ""
@@ -111,6 +115,7 @@ class BidNetDirectProfile:
             or not 1 <= self.maximum_results <= 1000
         ):
             raise ValueError("discovery bounds are invalid")
+        ZoneInfo(self.timezone)
 
     def detail_url(self, opportunity_id: str) -> str:
         return self.detail_url_template.format(opportunity_id=opportunity_id)
@@ -136,6 +141,67 @@ FIXTURE_PROFILE = BidNetDirectProfile(
 )
 BIDNET_DIRECT_PROFILES = {FIXTURE_PROFILE.profile_key: FIXTURE_PROFILE}
 
+MARICOPA_COUNTY_PROFILE = BidNetDirectProfile(
+    profile_key="az-maricopa-county",
+    jurisdiction="Maricopa County, Arizona",
+    state_code="AZ",
+    government_level="county",
+    agency_name="Maricopa County Procurement Services",
+    agency_slug="maricopacounty",
+    agency_source_identifier="3165696805",
+    regional_purchasing_group_name="Arizona Purchasing Group",
+    regional_purchasing_group_slug="arizona",
+    purchasing_group_id="700132901",
+    buyer_id="3165696805",
+    timezone="America/Phoenix",
+    procurement_landing_url="https://www.maricopa.gov/2190/Solicitations",
+    agency_page_url="https://www.bidnetdirect.com/arizona/maricopacounty",
+    discovery_url="https://www.bidnetdirect.com/arizona/maricopacounty/solicitations/open-bids?selectedContent=BUYER",
+    detail_url_template="https://www.bidnetdirect.com/arizona/maricopacounty/solicitations/{opportunity_id}",
+    official_procurement_url="https://www.maricopa.gov/2190/Solicitations",
+    profile_status="active",
+    expected_access_model="public_listing_registration_gated_details_documents",
+    markup_variant="mets_table_html",
+    verification_status="live_browser_observed",
+    verification_timestamp=datetime(2026, 8, 30, tzinfo=UTC),
+    verification_notes="Anonymous browser listing observed; detail fields and documents are registration-gated.",
+    approved_hosts=("www.bidnetdirect.com",),
+)
+
+DENVER_GENERAL_SERVICES_PROFILE = BidNetDirectProfile(
+    profile_key="co-denver-general-services",
+    jurisdiction="City and County of Denver, Colorado",
+    state_code="CO",
+    government_level="city_county",
+    agency_name="City and County of Denver General Services Purchasing",
+    agency_slug="city-and-county-of-denver-general-services-purchasing",
+    agency_source_identifier="15320617",
+    regional_purchasing_group_name="Rocky Mountain E-Purchasing System",
+    regional_purchasing_group_slug="colorado",
+    purchasing_group_id="8409951",
+    buyer_id="15320617",
+    timezone="America/Denver",
+    procurement_landing_url="https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities",
+    agency_page_url="https://www.bidnetdirect.com/colorado/city-and-county-of-denver-general-services-purchasing",
+    discovery_url="https://www.bidnetdirect.com/colorado/city-and-county-of-denver-general-services-purchasing/solicitations/open-bids?selectedContent=BUYER",
+    detail_url_template="https://www.bidnetdirect.com/colorado/city-and-county-of-denver-general-services-purchasing/solicitations/{opportunity_id}",
+    official_procurement_url="https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities",
+    profile_status="active",
+    expected_access_model="public_listing_registration_gated_details_documents",
+    markup_variant="mets_table_html",
+    verification_status="live_browser_observed",
+    verification_timestamp=datetime(2026, 8, 30, tzinfo=UTC),
+    verification_notes="Anonymous browser listing observed; detail fields and documents are registration-gated.",
+    approved_hosts=("www.bidnetdirect.com",),
+)
+
+BIDNET_DIRECT_PROFILES.update(
+    {
+        MARICOPA_COUNTY_PROFILE.profile_key: MARICOPA_COUNTY_PROFILE,
+        DENVER_GENERAL_SERVICES_PROFILE.profile_key: DENVER_GENERAL_SERVICES_PROFILE,
+    }
+)
+
 
 @dataclass(frozen=True, slots=True)
 class BidNetDirectQuery(ConnectorQuery):
@@ -153,6 +219,8 @@ class BidNetDirectQuery(ConnectorQuery):
     maximum_pages: int | None = None
     maximum_results: int | None = None
     include_details: bool = True
+    sort_field: str = "publicationDate"
+    sort_direction: str = "desc"
 
 
 @dataclass(frozen=True, slots=True)
@@ -180,8 +248,16 @@ class _PageParser(HTMLParser):
         self.json_text = []
         self._script = False
         self._text = []
+        self.rows = []
+        self._row = None
+        self._capture = None
+        self._capture_tag = None
+        self._capture_depth = 0
+        self._capture_text = []
+        self._depth = 0
 
     def handle_starttag(self, tag, attrs):
+        self._depth += 1
         values = dict(attrs)
         if tag == "a" and values.get("href"):
             self.links.append(
@@ -194,15 +270,63 @@ class _PageParser(HTMLParser):
             )
         if tag == "script" and values.get("type") in {"application/json", "application/ld+json"}:
             self._script = True
+        classes = set(values.get("class", "").split())
+        if tag == "tr" and "mets-table-row" in classes:
+            self._row = {}
+        if self._row is not None:
+            field = next(
+                (
+                    name
+                    for css, name in (
+                        ("sol-num", "solicitationNumber"),
+                        ("sol-region-item", "location"),
+                        ("sol-publication-date", "postedDate"),
+                        ("sol-closing-date", "dueDate"),
+                    )
+                    if css in classes
+                ),
+                None,
+            )
+            if field and self._capture is None:
+                self._capture = field
+                self._capture_tag = tag
+                self._capture_depth = self._depth
+                self._capture_text = []
+            if tag == "a" and "solicitation-link" in classes:
+                self._row["url"] = values.get("href")
+                self._capture = "title"
+                self._capture_tag = tag
+                self._capture_depth = self._depth
+                self._capture_text = []
 
     def handle_endtag(self, tag):
         if tag == "script":
             self._script = False
+        if self._capture is not None and tag == self._capture_tag and self._depth == self._capture_depth:
+            value = " ".join(" ".join(self._capture_text).split())
+            if self._capture in {"postedDate", "dueDate"}:
+                matches = re.findall(r"\d{2}/\d{2}/\d{4}", value)
+                value = matches[-1] if matches else value
+            self._row[self._capture] = value
+            self._capture = None
+        if tag == "tr" and self._row is not None:
+            href = str(self._row.get("url") or "")
+            match = re.search(r"/(\d{7,})(?:\?|$)", href)
+            if match and self._row.get("title"):
+                self._row["id"] = match.group(1)
+                self._row["status"] = (
+                    "Closed" if "closed-bids" in href else "Awarded" if "awarded-bids" in href else "Open"
+                )
+                self.rows.append(self._row)
+            self._row = None
+        self._depth -= 1
 
     def handle_data(self, data):
         self._text.append(data)
         if self._script:
             self.json_text.append(data)
+        if self._capture is not None:
+            self._capture_text.append(data)
 
 
 def detect_access_boundary(text: str) -> BidNetDirectAccessState:
@@ -236,7 +360,12 @@ def detect_access_boundary(text: str) -> BidNetDirectAccessState:
         ),
         (
             BidNetDirectAccessState.REGISTRATION_REQUIRED,
-            ("registration required", "create a supplier account", "register to download"),
+            (
+                "registration required",
+                "create a supplier account",
+                "register to download",
+                "registered members only",
+            ),
         ),
         (
             BidNetDirectAccessState.LOGIN_REQUIRED,
@@ -267,6 +396,7 @@ def parse_page(
                 payloads.extend(x for x in candidates if isinstance(x, dict))
         elif isinstance(value, list):
             payloads.extend(x for x in value if isinstance(x, dict))
+    payloads.extend(parser.rows)
     return payloads, parser.links
 
 
@@ -287,7 +417,7 @@ class BidNetDirectConnector(BaseConnector):
     ):
         self.profile = profile
         self._transport = transport or httpx.AsyncClient(
-            follow_redirects=False, timeout=profile.timeout
+            follow_redirects=False, timeout=profile.timeout, trust_env=False
         )
         self._owns_transport = transport is None
         self._sleep = sleep
@@ -340,18 +470,30 @@ class BidNetDirectConnector(BaseConnector):
             )
         if not self._configuration_valid():
             raise BidNetDirectError("invalid or unsafe BidNetDirect profile")
+        if q.sort_field not in {
+            "solicitationNumber",
+            "noticeTitle",
+            "region",
+            "publicationDate",
+            "closingDate",
+        } or q.sort_direction not in {"asc", "desc"}:
+            raise BidNetDirectError("unsupported BidNet Direct sort contract")
         pages = min(q.maximum_pages or self.profile.maximum_pages, self.profile.maximum_pages)
         maximum = min(q.maximum_results or q.limit, self.profile.maximum_results, q.limit)
         seen_pages = set()
         records = {}
-        next_url = self.profile.discovery_url
+        next_url = self._status_url(q.status)
         for page in range(1, pages + 1):
+            params = {
+                "keywords": " ".join(q.keywords) if q.keywords else None,
+                "sortBy": q.sort_field,
+                "sortDirection": q.sort_direction,
+            }
+            if page > 1:
+                params["pageNumber"] = page
             response = await self._get(
                 next_url,
-                params={
-                    "page": page,
-                    "pageSize": min(q.page_size or self.profile.page_size, self.profile.page_size),
-                },
+                params={key: value for key, value in params.items() if value is not None},
             )
             digest = hashlib.sha256(response.content).digest()
             if digest in seen_pages:
@@ -370,6 +512,10 @@ class BidNetDirectConnector(BaseConnector):
                     raise BidNetDirectAccessError(BidNetDirectAccessState.CHANGED_MARKUP)
                 break
             for data in items:
+                if q.status:
+                    data["status"] = str(q.status).title()
+                else:
+                    data.setdefault("status", "Open")
                 raw_id = (
                     str(data.get("id") or data.get("opportunityId") or data.get("uuid") or "")
                     .strip()
@@ -381,7 +527,7 @@ class BidNetDirectConnector(BaseConnector):
                 records.setdefault(raw_id, data)
             if len(records) >= maximum:
                 break
-            if not any(rel == "next" for _, rel, _, _ in links):
+            if not any("pageNumber=" in href and "next" in response.text.casefold() for href, *_ in links):
                 break
         for raw_id, data in sorted(
             records.items(), key=lambda x: (str(x[1].get("postedDate", "")), x[0]), reverse=True
@@ -392,7 +538,7 @@ class BidNetDirectConnector(BaseConnector):
             if not self._matches(item, q):
                 continue
             if q.include_details:
-                response = await self._get(self.profile.detail_url(raw_id))
+                response = await self._get(str(item.source.opportunity_url))
                 detail, _ = parse_page(response.text)
                 boundary = detect_access_boundary(response.text)
                 # Structured opportunity data may legitimately describe individual
@@ -410,6 +556,7 @@ class BidNetDirectConnector(BaseConnector):
 
     def _normalize(self, data, raw_id):
         url = str(data.get("url") or self.profile.detail_url(raw_id))
+        url = urljoin(self.profile.agency_page_url, url)
         safe = self._safe_url(url) or self.profile.detail_url(raw_id)
         docs = data.get("documents") if isinstance(data.get("documents"), list) else []
         source_id = f"{CANONICAL_FAMILY}:{self.profile.profile_key}:{raw_id}"
@@ -441,9 +588,12 @@ class BidNetDirectConnector(BaseConnector):
                 "tenant_key": self.profile.profile_key,
                 "displayed_source_id": data.get("displayedSourceId") or raw_id,
                 "purchasing_group_identity": self.profile.regional_purchasing_group_slug,
+                "purchasing_group_id": self.profile.purchasing_group_id,
                 "regional_purchasing_group": self.profile.regional_purchasing_group_name,
                 "agency_identity": self.profile.agency_source_identifier
                 or self.profile.agency_slug,
+                "buyer_id": self.profile.buyer_id,
+                "timezone": self.profile.timezone,
                 "source_classification": data.get("sourceClassification", "member_agency_original"),
                 "discovered_url": data.get("discoveredUrl") or safe,
                 "authoritative_url": safe,
@@ -517,7 +667,11 @@ class BidNetDirectConnector(BaseConnector):
                     await self._sleep(self._backoff(attempt, response.headers.get("retry-after")))
                     continue
                 if response.status_code in {401, 403}:
-                    raise BidNetDirectAccessError(BidNetDirectAccessState.LOGIN_REQUIRED)
+                    raise BidNetDirectAccessError(
+                        BidNetDirectAccessState.LOGIN_REQUIRED
+                        if response.status_code == 401
+                        else BidNetDirectAccessState.RESTRICTED
+                    )
                 response.raise_for_status()
                 self._failures = 0
                 self._last_success = self._now()
@@ -645,6 +799,17 @@ class BidNetDirectConnector(BaseConnector):
             and self._range(item.due_at, q.due_from, q.due_to)
         )
 
+    def _status_url(self, status):
+        value = str(status or "open").casefold()
+        route = (
+            "awarded-bids"
+            if value == "awarded"
+            else "closed-bids"
+            if value == "closed"
+            else "open-bids"
+        )
+        return re.sub(r"/(?:open|closed|awarded)-bids", f"/{route}", self.profile.discovery_url)
+
     @staticmethod
     def _range(value, start, end):
         return not (
@@ -652,15 +817,19 @@ class BidNetDirectConnector(BaseConnector):
             or (end and (not value or value.date() > end))
         )
 
-    @staticmethod
-    def _datetime(value):
+    def _datetime(self, value):
         if not value:
             return None
         try:
             parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-            return parsed if parsed.tzinfo else parsed.replace(tzinfo=UTC)
+            return parsed if parsed.tzinfo else parsed.replace(tzinfo=ZoneInfo(self.profile.timezone))
         except ValueError:
-            return None
+            try:
+                return datetime.strptime(str(value), "%m/%d/%Y").replace(
+                    tzinfo=ZoneInfo(self.profile.timezone)
+                )
+            except ValueError:
+                return None
 
     @staticmethod
     def _status(value):
