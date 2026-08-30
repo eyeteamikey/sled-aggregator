@@ -145,8 +145,10 @@ Evidence: [OpenGov two-tenant validation](opengov_two_tenants_2026-08-24.md).
 
 ### Euna Bonfire
 
-- [ ] Fairfax County configured profile
-- [ ] Second independently operated Bonfire tenant selected from authoritative agency evidence
+- [x] County of Ventura, California — official linkage and anonymous listing metadata; detail challenged
+- [x] Hillsborough County, Florida — official linkage and shared listing contract; detail challenged
+
+Evidence: [Euna Bonfire two-tenant validation](euna_bonfire_two_tenants_2026-08-30.md).
 
 ### Euna IonWave
 
