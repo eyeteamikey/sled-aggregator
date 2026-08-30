@@ -148,6 +148,8 @@ for _alias in (
     "maine/vss",
     "michigan/sigma-vss",
     "colorado/vss",
+    "fl-palm-beach-county/vss",
+    "ca-los-angeles-county/vss",
 ):
     connector_registry.register_alias(_alias, CGIAdvantageVSSConnector)
 for _alias in (
