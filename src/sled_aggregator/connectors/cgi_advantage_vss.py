@@ -33,6 +33,12 @@ class CGIAdvantageVSSVariant(StrEnum):
     LINK_ONLY = "link-only"
 
 
+class LACountySurfaceRole(StrEnum):
+    CUSTOM_PUBLIC_DISCOVERY = "custom_public_discovery"
+    CGI_PUBLIC_AND_AUTHENTICATED_VSS = "cgi_public_and_authenticated_vss"
+    VENDOR_REGISTRATION = "vendor_registration"
+
+
 class CGIAdvantageVSSAccessState(StrEnum):
     PUBLIC = "public"
     PUBLIC_GUEST = "public_guest"
@@ -170,8 +176,62 @@ COLORADO_VSS = CGIAdvantageVSSPortal(
     validation_level="configured_unverified",
     availability_schedule="Jurisdiction-published availability and maintenance windows apply",
 )
+PALM_BEACH_VSS = CGIAdvantageVSSPortal(
+    key="fl-palm-beach-county/vss",
+    jurisdiction="Palm Beach County, Florida",
+    country_subdivision="US-FL",
+    source_system="Palm Beach County CGI Advantage4 VSS",
+    base_url="https://pbcvssp.pbc.gov/vssprd/",
+    landing_route="Advantage4",
+    variant=CGIAdvantageVSSVariant.ADVANTAGE4,
+    timezone="America/New_York",
+    response_strategy="advantage4-sofia-session",
+    guest_bootstrap_required=True,
+    anonymous_session_required=True,
+    validation_level="live_browser_observed",
+    last_validation_date=date(2026, 8, 30),
+    known_restrictions=(
+        "Public discovery is a JavaScript-driven guest session with per-session CSRF state",
+        "Exact read-only POST contract requires a sanitized desktop HAR before connector enablement",
+        "Bid response is disabled for anonymous users",
+    ),
+)
+LOS_ANGELES_VSS = CGIAdvantageVSSPortal(
+    key="ca-los-angeles-county/vss",
+    jurisdiction="Los Angeles County, California",
+    country_subdivision="US-CA",
+    source_system="Los Angeles County legacy CGI Advantage VSS",
+    base_url="https://lacovss.lacounty.gov/webapp/VSSPSRV11/",
+    landing_route="AltSelfService",
+    guest_route="AltSelfService",
+    variant=CGIAdvantageVSSVariant.ALT_SELF_SERVICE,
+    timezone="America/Los_Angeles",
+    response_strategy="legacy-frameset-guest-session",
+    guest_bootstrap_required=True,
+    anonymous_session_required=True,
+    validation_level="live_browser_observed",
+    last_validation_date=date(2026, 8, 30),
+    known_restrictions=(
+        "Public Access opens a stateful frameset using URL-bound session identifiers",
+        "LACoBids, not this VSS surface, is the county's primary anonymous discovery listing",
+        "Login is required for responses and vendor-account maintenance",
+    ),
+)
 CGI_ADVANTAGE_VSS_PORTALS = {
-    portal.key: portal for portal in (MAINE_VSS, MICHIGAN_SIGMA_VSS, COLORADO_VSS)
+    portal.key: portal
+    for portal in (
+        MAINE_VSS,
+        MICHIGAN_SIGMA_VSS,
+        COLORADO_VSS,
+        PALM_BEACH_VSS,
+        LOS_ANGELES_VSS,
+    )
+}
+
+LA_COUNTY_SURFACES = {
+    "https://camisvr.co.la.ca.us/lacobids/": LACountySurfaceRole.CUSTOM_PUBLIC_DISCOVERY,
+    "https://lacovss.lacounty.gov/": LACountySurfaceRole.CGI_PUBLIC_AND_AUTHENTICATED_VSS,
+    "https://camisvr.co.la.ca.us/webven/": LACountySurfaceRole.VENDOR_REGISTRATION,
 }
 
 
@@ -328,7 +388,13 @@ class _VSSParser(HTMLParser):
 
 class CGIAdvantageVSSConnector(BaseConnector):
     platform_family = "cgi/advantage-vss"
-    jurisdictions = ("Maine", "Michigan", "Colorado")
+    jurisdictions = (
+        "Maine",
+        "Michigan",
+        "Colorado",
+        "Palm Beach County, Florida",
+        "Los Angeles County, California",
+    )
     _transient = frozenset({429, 502, 503, 504})
 
     def __init__(

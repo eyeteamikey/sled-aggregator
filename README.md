@@ -600,7 +600,8 @@ circumvention is performed.
 Use `cgi/advantage-vss` for the configurable, public-read-only CGI Advantage
 Vendor Self-Service family. Explicit aliases are `cgi/vss`, `cgi-advantage`,
 `cgi-advantage-vss`, and `advantage-vss`; tenant aliases are `maine/vss`,
-`michigan/sigma-vss`, and `colorado/vss`. The intentionally ambiguous `vss`,
+`michigan/sigma-vss`, `colorado/vss`, `fl-palm-beach-county/vss`, and
+`ca-los-angeles-county/vss`. The intentionally ambiguous `vss`,
 `sigma`, `advantage`, `vendor-portal`, and `supplier-portal` names are not
 registered.
 
@@ -613,6 +614,14 @@ current anonymous production operation remains unvalidated. ColoradoVSS is
 configured-unverified and disabled until its tenant-specific search, detail,
 attachment, award, and contract behavior is independently evidenced.
 Branding alone never enables another CGI tenant.
+
+Palm Beach County and Los Angeles County were browser-observed on 2026-08-30,
+but remain fail-closed. Palm Beach uses modern, stateful Advantage4/Sofia public
+discovery. LA's VSS is legacy, frameset-based AltSelfService; LA also operates
+LACoBids as a separate custom anonymous discovery application and WebVen for
+vendor registration. Those three LA surfaces are not one interchangeable CGI
+contract. See
+`docs/connector_validation/cgi_advantage_vss_palm_beach_los_angeles_2026-08-30.md`.
 
 Discovery is bounded by page, page-size, and record limits. It supports
 configuration for exact solicitation number, keyword, type, status, department,

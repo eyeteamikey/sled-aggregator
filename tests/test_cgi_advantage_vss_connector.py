@@ -8,14 +8,18 @@ import httpx
 from sled_aggregator.connectors.cgi_advantage_vss import (
     CGI_ADVANTAGE_VSS_PORTALS,
     COLORADO_VSS,
+    LA_COUNTY_SURFACES,
+    LOS_ANGELES_VSS,
     MAINE_VSS,
     MICHIGAN_SIGMA_VSS,
+    PALM_BEACH_VSS,
     CGIAdvantageVSSAccessError,
     CGIAdvantageVSSAccessState,
     CGIAdvantageVSSAvailabilityError,
     CGIAdvantageVSSConnector,
     CGIAdvantageVSSQuery,
     CGIAdvantageVSSVariant,
+    LACountySurfaceRole,
 )
 from sled_aggregator.connectors.registry import ConnectorRegistry, connector_registry
 from sled_aggregator.domain.enums import OpportunityStatus
@@ -24,6 +28,8 @@ FIXTURES = Path(__file__).parent / "fixtures"
 LANDING = (FIXTURES / "cgi_vss_maine_landing.html").read_text()
 SEARCH = (FIXTURES / "cgi_vss_search.html").read_text()
 DETAIL = (FIXTURES / "cgi_vss_detail.html").read_text()
+PALM_BEACH_LIVE = (FIXTURES / "cgi_vss_palm_beach_live_sanitized.html").read_text()
+LOS_ANGELES_LIVE = (FIXTURES / "cgi_vss_los_angeles_live_sanitized.html").read_text()
 
 
 def response(url, text, status=200, headers=None):
@@ -230,6 +236,18 @@ class CGIAdvantageVSSConnectorTests(unittest.IsolatedAsyncioTestCase):
                     [item async for item in connector.discover(CGIAdvantageVSSQuery())]
                 self.assertEqual(caught.exception.state, state)
 
+    def test_live_sanitized_landing_detection_has_no_session_material(self):
+        for portal, html in (
+            (PALM_BEACH_VSS, PALM_BEACH_LIVE),
+            (LOS_ANGELES_VSS, LOS_ANGELES_LIVE),
+        ):
+            connector = CGIAdvantageVSSConnector(portal, transport=FakeTransport([]))
+            state = connector._detect_access(response(portal.landing_url, html))
+            self.assertEqual(state, CGIAdvantageVSSAccessState.PUBLIC_GUEST)
+            lowered = html.casefold()
+            for secret_name in ("session_id", "jsessionid", "csrf_token", "viewstate"):
+                self.assertNotIn(secret_name, lowered)
+
     async def test_stable_403_not_retried(self):
         portal = replace(VERIFIED, guest_bootstrap_required=False)
         fake = FakeTransport([response(portal.search_url, "Forbidden", 403)])
@@ -350,7 +368,14 @@ class CGIAdvantageVSSConnectorTests(unittest.IsolatedAsyncioTestCase):
 
     def test_portal_presets_and_registry(self):
         self.assertEqual(
-            set(CGI_ADVANTAGE_VSS_PORTALS), {"maine/vss", "michigan/sigma-vss", "colorado/vss"}
+            set(CGI_ADVANTAGE_VSS_PORTALS),
+            {
+                "maine/vss",
+                "michigan/sigma-vss",
+                "colorado/vss",
+                "fl-palm-beach-county/vss",
+                "ca-los-angeles-county/vss",
+            },
         )
         self.assertEqual(MAINE_VSS.variant, CGIAdvantageVSSVariant.ALT_SELF_SERVICE)
         self.assertTrue(MAINE_VSS.enabled)
@@ -366,6 +391,16 @@ class CGIAdvantageVSSConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(MICHIGAN_SIGMA_VSS.validation_level, "fixture_verified")
         self.assertEqual(COLORADO_VSS.timezone, "America/Denver")
         self.assertFalse(COLORADO_VSS.enabled)
+        self.assertEqual(PALM_BEACH_VSS.variant, CGIAdvantageVSSVariant.ADVANTAGE4)
+        self.assertEqual(PALM_BEACH_VSS.response_strategy, "advantage4-sofia-session")
+        self.assertFalse(PALM_BEACH_VSS.enabled)
+        self.assertEqual(LOS_ANGELES_VSS.variant, CGIAdvantageVSSVariant.ALT_SELF_SERVICE)
+        self.assertEqual(LOS_ANGELES_VSS.response_strategy, "legacy-frameset-guest-session")
+        self.assertFalse(LOS_ANGELES_VSS.enabled)
+        self.assertEqual(
+            LA_COUNTY_SURFACES["https://camisvr.co.la.ca.us/lacobids/"],
+            LACountySurfaceRole.CUSTOM_PUBLIC_DISCOVERY,
+        )
         keys = (
             "cgi/advantage-vss",
             "cgi/vss",
@@ -375,6 +410,8 @@ class CGIAdvantageVSSConnectorTests(unittest.IsolatedAsyncioTestCase):
             "maine/vss",
             "michigan/sigma-vss",
             "colorado/vss",
+            "fl-palm-beach-county/vss",
+            "ca-los-angeles-county/vss",
         )
         for key in keys:
             self.assertIs(connector_registry.get(key), CGIAdvantageVSSConnector)
