@@ -153,6 +153,10 @@ SOURCE_FIELDS = {
     "known_limitations",
     "blocker_reason",
     "recommended_next_action",
+    "tenant_id",
+    "buyer_class",
+    "evidence_tier",
+    "capabilities",
 }
 
 STATEWIDE_SCOPES = {"statewide", "territory-wide"}
@@ -530,6 +534,66 @@ def validate(jdata: dict | None = None, sdata: dict | None = None) -> list[Valid
                         "register the connector in PIPELINE_CONNECTORS",
                     )
                 )
+        evidence_tier = source.get("evidence_tier")
+        allowed_tiers = {
+            "production_monitored",
+            "scheduled_live_verified",
+            "live_public_verified",
+            "public_metadata_only",
+            "official_link_verified",
+            "fixture_verified",
+            "configured_unverified",
+            "blocked",
+            "not_researched",
+        }
+        if evidence_tier not in allowed_tiers:
+            issues.append(
+                _issue(
+                    SOURCES_PATH,
+                    key,
+                    "evidence_tier",
+                    evidence_tier,
+                    "use exactly one required evidence tier",
+                )
+            )
+        required_capabilities = {
+            "listing_discovery",
+            "keyword_search",
+            "filters",
+            "sorting",
+            "pagination",
+            "opportunity_details",
+            "public_contacts",
+            "amendments_addenda",
+            "public_q_and_a",
+            "awards",
+            "vendors_bidders_awardees",
+            "attachment_metadata",
+            "anonymous_document_download",
+            "document_text_extraction",
+            "OCR_when_required",
+        }
+        capabilities = source.get("capabilities")
+        if not isinstance(capabilities, dict) or set(capabilities) != required_capabilities:
+            issues.append(
+                _issue(
+                    SOURCES_PATH,
+                    key,
+                    "capabilities",
+                    capabilities,
+                    "classify every required capability exactly once",
+                )
+            )
+        if not source.get("tenant_id") or not source.get("buyer_class"):
+            issues.append(
+                _issue(
+                    SOURCES_PATH,
+                    key,
+                    "tenant_id",
+                    source.get("tenant_id"),
+                    "record normalized tenant and buyer class",
+                )
+            )
         replacement = source.get("replacement_source")
         if replacement and not replacement.startswith("external:") and replacement not in all_keys:
             issues.append(
@@ -908,7 +972,10 @@ def closeout_plan(report: dict) -> dict:
             "primary_sources_identified": sum(bool(j.get("primary_source_id")) for j in records),
             "platform_families_identified": sum(bool(j["platform_family"]) for j in records),
             "registered_connector_profiles": sum(
-                bool(j["connector"] and primary_by_id[j["primary_source_id"]].get("portal_profile_key"))
+                bool(
+                    j["connector"]
+                    and primary_by_id[j["primary_source_id"]].get("portal_profile_key")
+                )
                 for j in records
                 if j.get("primary_source_id")
             ),
@@ -916,9 +983,7 @@ def closeout_plan(report: dict) -> dict:
             "discovery_capable": summary["discovery_capable_jurisdiction_count"],
             "detail_capable": summary["detail_capable_jurisdiction_count"],
             "attachment_capable": summary["attachment_capable_jurisdiction_count"],
-            "document_pipeline_compatible": summary[
-                "document_pipeline_capable_jurisdiction_count"
-            ],
+            "document_pipeline_compatible": summary["document_pipeline_capable_jurisdiction_count"],
             "live_verified": summary["live_validated_jurisdiction_count"],
             "production_monitored": 0,
             "tier_0_remaining": summary["coverage_tier_distribution"]["0"],
@@ -1286,7 +1351,9 @@ def milestone_report(report: dict) -> dict:
             ):
                 validations[source_id] = {**row, "evidence_report": str(path.relative_to(ROOT))}
     attempted = sorted(validations)
-    blocked = {kind: [] for kind in ("authentication_required", "captcha_blocked", "network_blocked")}
+    blocked = {
+        kind: [] for kind in ("authentication_required", "captcha_blocked", "network_blocked")
+    }
     for source_id, result in validations.items():
         classifications = {
             observation.get("classification") for observation in result.get("observations", [])
@@ -1299,66 +1366,110 @@ def milestone_report(report: dict) -> dict:
 
     counts = {
         "total_jurisdictions": len(records),
-        "primary_statewide_sources_identified": sum(bool(row.get("primary_source_id")) for row in records),
+        "primary_statewide_sources_identified": sum(
+            bool(row.get("primary_source_id")) for row in records
+        ),
         "platform_families_identified": sum(bool(row.get("platform_family")) for row in records),
         "registered_statewide_profiles": sum(bool(row.get("connector")) for row in records),
         "fixture_verified_jurisdictions": sum(row["fixture_verified"] for row in records),
         "discovery_capable_jurisdictions": sum(row["discovery_capable"] for row in records),
         "detail_capable_jurisdictions": sum(row["detail_capable"] for row in records),
         "attachment_capable_jurisdictions": sum(row["attachment_capable"] for row in records),
-        "document_pipeline_compatible_jurisdictions": sum(row["document_pipeline_capable"] for row in records),
+        "document_pipeline_compatible_jurisdictions": sum(
+            row["document_pipeline_capable"] for row in records
+        ),
         "live_verified_jurisdictions": sum(row["live_verified"] for row in records),
-        "production_monitored_jurisdictions": sum(row.get("operational_status") == "production_monitored" for row in records),
+        "production_monitored_jurisdictions": sum(
+            row.get("operational_status") == "production_monitored" for row in records
+        ),
         "network_blocked_validation_sources": len(blocked["network_blocked"]),
         "authentication_required_validation_sources": len(blocked["authentication_required"]),
         "captcha_blocked_validation_sources": len(blocked["captcha_blocked"]),
         "tier_0_jurisdictions": sum(row["coverage_tier"] == 0 for row in records),
-        "jurisdictions_lacking_primary_source": sum(not row.get("primary_source_id") for row in records),
+        "jurisdictions_lacking_primary_source": sum(
+            not row.get("primary_source_id") for row in records
+        ),
     }
     queue = closeout_plan(report)
     unattempted = [task for task in queue["validation_tasks"] if task["source_id"] not in attempted]
-    connector_work = [task for task in report["prioritized_recommendations"] if task["task_type"] != "live_validation"]
+    connector_work = [
+        task
+        for task in report["prioritized_recommendations"]
+        if task["task_type"] != "live_validation"
+    ]
     matrix = [
         {
-            "jurisdiction_id": row["code"], "primary_source_id": row.get("primary_source_id"),
-            "discovery": row["discovery_capable"], "detail": row["detail_capable"],
-            "attachments": row["attachment_capable"], "document_pipeline": row["document_pipeline_capable"],
+            "jurisdiction_id": row["code"],
+            "primary_source_id": row.get("primary_source_id"),
+            "discovery": row["discovery_capable"],
+            "detail": row["detail_capable"],
+            "attachments": row["attachment_capable"],
+            "document_pipeline": row["document_pipeline_capable"],
         }
         for row in records
     ]
     return {
-        "schema_version": "1.0", "as_of": report["as_of"],
+        "schema_version": "1.0",
+        "as_of": report["as_of"],
         "executive_summary": "Fixture breadth is closed; bounded first-pass production validation remains in progress.",
         "coverage_totals": counts,
         "jurisdictions_by_tier": {
-            str(tier_number): [row["code"] for row in records if row["coverage_tier"] == tier_number]
+            str(tier_number): [
+                row["code"] for row in records if row["coverage_tier"] == tier_number
+            ]
             for tier_number in range(7)
         },
         "primary_statewide_source_inventory": [source["key"] for source in primary],
         "connector_family_inventory": report["summary"]["connector_family_counts"],
-        "platform_reuse_by_jurisdiction": {row["code"]: row["platform_family"] for row in records if row["platform_family"]},
-        "fixture_verified_sources": [row["primary_source_id"] for row in records if row["fixture_verified"]],
-        "live_verified_sources": [row["primary_source_id"] for row in records if row["live_verified"]],
-        "production_monitored_sources": [row["primary_source_id"] for row in records if row.get("operational_status") == "production_monitored"],
+        "platform_reuse_by_jurisdiction": {
+            row["code"]: row["platform_family"] for row in records if row["platform_family"]
+        },
+        "fixture_verified_sources": [
+            row["primary_source_id"] for row in records if row["fixture_verified"]
+        ],
+        "live_verified_sources": [
+            row["primary_source_id"] for row in records if row["live_verified"]
+        ],
+        "production_monitored_sources": [
+            row["primary_source_id"]
+            for row in records
+            if row.get("operational_status") == "production_monitored"
+        ],
         "capability_matrix": matrix,
         "validation_blockers": blocked,
         "manual_evidence_capture_sources": [task["source_ids"][0] for task in connector_work],
-        "remaining_tier_0_jurisdictions": [row["code"] for row in records if row["coverage_tier"] == 0],
+        "remaining_tier_0_jurisdictions": [
+            row["code"] for row in records if row["coverage_tier"] == 0
+        ],
         "remaining_connector_profile_work": connector_work,
-        "remaining_document_adapter_work": [row["code"] for row in records if row["attachment_capable"] and not row["document_pipeline_capable"]],
+        "remaining_document_adapter_work": [
+            row["code"]
+            for row in records
+            if row["attachment_capable"] and not row["document_pipeline_capable"]
+        ],
         "ordered_live_validation_queue": unattempted,
         "validation_attempt_evidence": [validations[key] for key in sorted(validations)],
-        "estimated_prs_remaining_fixture_breadth": 0 if queue["breadth_complete"] else math.ceil(len(connector_work) / 2),
+        "estimated_prs_remaining_fixture_breadth": 0
+        if queue["breadth_complete"]
+        else math.ceil(len(connector_work) / 2),
         "estimated_prs_remaining_first_pass_validation": math.ceil(len(unattempted) / 3),
         "definition_of_done": {
-            "all_primary_sources_identified": counts["primary_statewide_sources_identified"] == counts["total_jurisdictions"],
-            "all_platforms_classified": counts["platform_families_identified"] == counts["total_jurisdictions"],
-            "all_connector_profiles_registered": counts["registered_statewide_profiles"] == counts["total_jurisdictions"],
-            "all_fixture_verified_discovery": counts["discovery_capable_jurisdictions"] == counts["total_jurisdictions"],
-            "all_detail_capable": counts["detail_capable_jurisdictions"] == counts["total_jurisdictions"],
-            "all_attachment_capable": counts["attachment_capable_jurisdictions"] == counts["total_jurisdictions"],
-            "all_document_pipeline_compatible": counts["document_pipeline_compatible_jurisdictions"] == counts["total_jurisdictions"],
-            "all_live_verified": counts["live_verified_jurisdictions"] == counts["total_jurisdictions"],
+            "all_primary_sources_identified": counts["primary_statewide_sources_identified"]
+            == counts["total_jurisdictions"],
+            "all_platforms_classified": counts["platform_families_identified"]
+            == counts["total_jurisdictions"],
+            "all_connector_profiles_registered": counts["registered_statewide_profiles"]
+            == counts["total_jurisdictions"],
+            "all_fixture_verified_discovery": counts["discovery_capable_jurisdictions"]
+            == counts["total_jurisdictions"],
+            "all_detail_capable": counts["detail_capable_jurisdictions"]
+            == counts["total_jurisdictions"],
+            "all_attachment_capable": counts["attachment_capable_jurisdictions"]
+            == counts["total_jurisdictions"],
+            "all_document_pipeline_compatible": counts["document_pipeline_compatible_jurisdictions"]
+            == counts["total_jurisdictions"],
+            "all_live_verified": counts["live_verified_jurisdictions"]
+            == counts["total_jurisdictions"],
             "any_production_monitored": counts["production_monitored_jurisdictions"] > 0,
         },
     }
@@ -1366,14 +1477,34 @@ def milestone_report(report: dict) -> dict:
 
 def render_milestone_markdown(milestone: dict) -> str:
     counts = milestone["coverage_totals"]
-    lines = ["# PR #50 authoritative 56-jurisdiction milestone", "", milestone["executive_summary"], "", "## Coverage totals", ""]
+    lines = [
+        "# PR #50 authoritative 56-jurisdiction milestone",
+        "",
+        milestone["executive_summary"],
+        "",
+        "## Coverage totals",
+        "",
+    ]
     lines.extend(f"- **{key.replace('_', ' ')}:** {value}" for key, value in counts.items())
     lines.extend(["", "## Definition of done", ""])
-    lines.extend(f"- **{key.replace('_', ' ')}:** {'yes' if value else 'no'}" for key, value in milestone["definition_of_done"].items())
+    lines.extend(
+        f"- **{key.replace('_', ' ')}:** {'yes' if value else 'no'}"
+        for key, value in milestone["definition_of_done"].items()
+    )
     lines.extend(["", "## Validation blockers observed in committed evidence", ""])
     for kind, source_ids in milestone["validation_blockers"].items():
-        lines.append(f"- **{kind.replace('_', ' ')}:** {', '.join(f'`{value}`' for value in source_ids) or 'None'}")
-    lines.extend(["", "## Remaining work", "", f"- Fixture-breadth PRs: {milestone['estimated_prs_remaining_fixture_breadth']}", f"- First-pass validation PRs (three sources per PR): {milestone['estimated_prs_remaining_first_pass_validation']}"])
+        lines.append(
+            f"- **{kind.replace('_', ' ')}:** {', '.join(f'`{value}`' for value in source_ids) or 'None'}"
+        )
+    lines.extend(
+        [
+            "",
+            "## Remaining work",
+            "",
+            f"- Fixture-breadth PRs: {milestone['estimated_prs_remaining_fixture_breadth']}",
+            f"- First-pass validation PRs (three sources per PR): {milestone['estimated_prs_remaining_first_pass_validation']}",
+        ]
+    )
     return "\n".join(lines) + "\n"
 
 
