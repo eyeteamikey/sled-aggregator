@@ -9,19 +9,123 @@
       "source_id": "al-alabamabuys"
     },
     {
+      "authentication": "none",
+      "blocker": null,
+      "captcha": "third_party_resources_observed_no_first_party_challenge",
+      "jurisdiction_id": "AL",
+      "robots": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
+      "source_id": "al-opelika-tyler-munis-vss"
+    },
+    {
+      "authentication": "document_download_only",
+      "blocker": null,
+      "captcha": "transient_cloudflare_verification_observed_no_human_action",
+      "jurisdiction_id": "CA",
+      "robots": "Earlier bounded anonymous walkthrough plus follow-up live API replay; the follow-up portal UI remained at automatic Cloudflare verification. No claim of continuous availability.",
+      "source_id": "ca-alameda-county-opengov"
+    },
+    {
+      "authentication": "none",
+      "blocker": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
+      "captcha": "captcha_present",
+      "jurisdiction_id": "CT",
+      "robots": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
+      "source_id": "ct-ctsource"
+    },
+    {
+      "authentication": "detail_application_route",
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "jurisdiction_id": "IA",
+      "robots": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
+      "source_id": "ia-impacs"
+    },
+    {
+      "authentication": "document_download_only",
+      "blocker": null,
+      "captcha": "none_observed",
+      "jurisdiction_id": "IL",
+      "robots": "Anonymous browser and bounded API replay succeeded; no continuous-availability claim.",
+      "source_id": "il-will-county-demandstar"
+    },
+    {
+      "authentication": "none",
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "jurisdiction_id": "MA",
+      "robots": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
+      "source_id": "ma-commbuys"
+    },
+    {
+      "authentication": "none",
+      "blocker": "Observed AltSelfService route produced HTTP 404/403 and failed requests.",
+      "captcha": "none_observed_in_fixture",
+      "jurisdiction_id": "ME",
+      "robots": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
+      "source_id": "me-vss"
+    },
+    {
+      "authentication": "none",
+      "blocker": "Observed solicitation-search route returned HTTP 404.",
+      "captcha": "none_observed_in_fixture",
+      "jurisdiction_id": "MI",
+      "robots": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
+      "source_id": "mi-sigma-vss"
+    },
+    {
+      "authentication": "document_download_only",
+      "blocker": null,
+      "captcha": "none_observed",
+      "jurisdiction_id": "MN",
+      "robots": "Anonymous browser and bounded API replay succeeded; no continuous-availability claim.",
+      "source_id": "mn-ramsey-county-demandstar"
+    },
+    {
+      "authentication": "document_download_only",
+      "blocker": null,
+      "captcha": "transient_cloudflare_verification_observed_no_human_action",
+      "jurisdiction_id": "NJ",
+      "robots": "Earlier bounded anonymous walkthrough plus follow-up live API replay; the follow-up portal UI remained at automatic Cloudflare verification. No claim of continuous availability.",
+      "source_id": "nj-ocean-county-opengov"
+    },
+    {
       "authentication": "unknown",
       "blocker": "Tenant, public routes, request parameters, response fields, access behavior, and attachment contract require sanitized capture.",
       "captcha": "unknown",
       "jurisdiction_id": "OH",
       "robots": "not_observed",
       "source_id": "oh-ohiobuys"
+    },
+    {
+      "authentication": "none",
+      "blocker": null,
+      "captcha": "third_party_resources_observed_no_first_party_challenge",
+      "jurisdiction_id": "OH",
+      "robots": "Successful anonymous browser capture observed; this is request-contract evidence, not a claim of continuous availability.",
+      "source_id": "oh-summit-county-tyler-munis-vss"
+    },
+    {
+      "authentication": "none",
+      "blocker": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
+      "captcha": "captcha_present",
+      "jurisdiction_id": "RI",
+      "robots": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
+      "source_id": "ri-ocean-state-procures"
+    },
+    {
+      "authentication": "detail_application_route",
+      "blocker": null,
+      "captcha": "none_observed_in_fixture",
+      "jurisdiction_id": "UT",
+      "robots": "Reviewed anonymous browser request-contract capture; not a claim of continuous availability.",
+      "source_id": "ut-u3p"
     }
   ],
-  "as_of": "2026-08-03",
+  "as_of": "2026-08-24",
   "breadth_complete": true,
   "breadth_totals": {
     "attachment_capable": 16,
-    "blocked_jurisdictions": 2,
+    "blocked_jurisdictions": 13,
     "detail_capable": 16,
     "discovery_capable": 18,
     "document_pipeline_compatible": 6,
@@ -187,7 +291,8 @@
       "entry_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
       "jurisdiction_id": "IA",
       "method_policy": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "order": 4,
       "platform_family": "jaggaer/sciquest",
@@ -212,7 +317,8 @@
       "entry_url": "https://www.bidbuy.illinois.gov/",
       "jurisdiction_id": "IL",
       "method_policy": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "order": 5,
       "platform_family": "periscope/buyspeed",
@@ -237,7 +343,8 @@
       "entry_url": "https://www.commbuys.com/",
       "jurisdiction_id": "MA",
       "method_policy": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "order": 6,
       "platform_family": "periscope/buyspeed",
@@ -487,7 +594,8 @@
       "entry_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
       "jurisdiction_id": "UT",
       "method_policy": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "order": 16,
       "platform_family": "jaggaer/sciquest",

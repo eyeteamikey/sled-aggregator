@@ -1,0 +1,13 @@
+<form method="post" action="/gems/example,ca/buyer/public/publicClosedBidsInfo" id="searchBidForm">
+  <input type="hidden" name="page"><input type="hidden" name="sortBy">
+  <input type="text" name="bidTitle"><input type="text" name="bidNumber">
+  <select name="endingTimeInterval"><option value="3m">last 3 months</option></select>
+</form>
+<table class="tabHome">
+  <tr><th>Title</th><th>Status</th><th>End Date</th></tr>
+  <tr>
+    <td><a href="/gems/example,ca/bid/bidView?bidId=654321">RFQ #PA-1686 - Equipment Agreement</a></td>
+    <td>FINALIZED</td><td>Jun 18, 2026 11:00:00 AM PDT</td>
+  </tr>
+</table>
+<a href="#" onclick="srchPage('1');return false;">2</a>

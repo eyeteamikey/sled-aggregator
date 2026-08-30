@@ -19,6 +19,7 @@ from enum import StrEnum
 from html.parser import HTMLParser
 from typing import Any, Protocol
 from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import httpx
 
@@ -66,6 +67,7 @@ class DemandStarProfile:
     agency_name: str
     agency_slug: str
     organization_id: str | None = None
+    legacy_member_id: int | None = None
     api_base_url: str | None = None
     public_planholders: bool = False
     public_legal: bool = False
@@ -77,6 +79,7 @@ class DemandStarProfile:
     official_procurement_url: str | None = None
     profile_status: str = "configured_unverified"
     expected_access_model: str = "mixed"
+    timezone: str = "UTC"
     page_size: int = 25
     maximum_pages: int = 4
     maximum_results: int = 100
@@ -170,8 +173,55 @@ LYNN_HAVEN = DemandStarProfile(
     verification_notes="Anonymous agency search, details, document metadata, commodities, and planholders observed.",
     approved_hosts=("www.demandstar.com", "api.demandstar.com"),
 )
+WILL_COUNTY = DemandStarProfile(
+    profile_key="il-will-county",
+    jurisdiction="Will County, Illinois",
+    state_code="IL",
+    government_level="county",
+    agency_name="Will County",
+    agency_slug="will-county",
+    organization_id="34dea608-18ea-4dae-ab75-e117314d8f28",
+    legacy_member_id=122067,
+    api_base_url="https://api.demandstar.com/contents/agency",
+    public_planholders=True,
+    public_legal=True,
+    agency_page_url="https://www.demandstar.com/app/agencies/illinois/will-county/procurement-opportunities/34dea608-18ea-4dae-ab75-e117314d8f28",
+    discovery_url="https://www.demandstar.com/app/agencies/illinois/will-county/procurement-opportunities/34dea608-18ea-4dae-ab75-e117314d8f28",
+    detail_url_template="https://www.demandstar.com/app/limited/bids/{opportunity_id}/details",
+    official_procurement_url="https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids",
+    profile_status="active",
+    verification_status="live_public_verified",
+    verification_timestamp=datetime(2026, 8, 30, tzinfo=UTC),
+    verification_notes="Legacy member 122067 redirects to the modern UUID tenant; anonymous agency API and two details observed.",
+    timezone="America/Chicago",
+    approved_hosts=("www.demandstar.com", "api.demandstar.com"),
+)
+RAMSEY_COUNTY = DemandStarProfile(
+    profile_key="mn-ramsey-county",
+    jurisdiction="Ramsey County, Minnesota",
+    state_code="MN",
+    government_level="county",
+    agency_name="Ramsey County",
+    agency_slug="ramsey-county",
+    organization_id="98cdb2f5-ed67-485d-8b2e-291e644403e5",
+    legacy_member_id=686378,
+    api_base_url="https://api.demandstar.com/contents/agency",
+    public_planholders=True,
+    public_legal=True,
+    agency_page_url="https://www.demandstar.com/app/agencies/minnesota/ramsey-county/procurement-opportunities/98cdb2f5-ed67-485d-8b2e-291e644403e5/",
+    discovery_url="https://www.demandstar.com/app/agencies/minnesota/ramsey-county/procurement-opportunities/98cdb2f5-ed67-485d-8b2e-291e644403e5/",
+    detail_url_template="https://www.demandstar.com/app/limited/bids/{opportunity_id}/details",
+    official_procurement_url="https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county",
+    profile_status="active",
+    verification_status="live_public_verified",
+    verification_timestamp=datetime(2026, 8, 30, tzinfo=UTC),
+    verification_notes="Official member 686378 and supplied modern UUID resolve to the same anonymous agency contract; two details observed.",
+    timezone="America/Chicago",
+    approved_hosts=("www.demandstar.com", "api.demandstar.com"),
+)
 DEMANDSTAR_PROFILES = {
-    profile.profile_key: profile for profile in (BUTLER_COUNTY, LYNN_HAVEN, FIXTURE_PROFILE)
+    profile.profile_key: profile
+    for profile in (BUTLER_COUNTY, LYNN_HAVEN, WILL_COUNTY, RAMSEY_COUNTY, FIXTURE_PROFILE)
 }
 
 
@@ -491,9 +541,18 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
                             or summary.get("bidIdentifier")
                             or data["solicitationNumber"],
                             "description": summary.get("scopeOfWork"),
-                            "status": summary.get("bidStatusText") or data["status"],
+                            "status": summary.get("bidExternalStatus")
+                            or summary.get("bidStatusText")
+                            or data["status"],
                             "postedDate": summary.get("broadcastDate") or data["postedDate"],
                             "dueDate": summary.get("dueDate") or data["dueDate"],
+                            "questionDate": summary.get("questionDate"),
+                            "opportunityType": summary.get("bidTypeDescription")
+                            or summary.get("bidType"),
+                            "department": summary.get("departmentName"),
+                            "buyerName": summary.get("bidWriter"),
+                            "timezone": summary.get("tzfn") or summary.get("tzn"),
+                            "statusNarrative": summary.get("bidStatusText"),
                             "openbids_summary": summary,
                         }
                     )
@@ -508,6 +567,16 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
                     ]
                 data["public_planholders"] = planholders
                 data["openbids_legal"] = legal
+                if legal:
+                    data["buyer_contact"] = {
+                        "name": " ".join(
+                            str(legal.get(key) or "").strip()
+                            for key in ("firstName", "lastName")
+                        ).strip()
+                        or data.get("buyerName"),
+                        "title": legal.get("jobTitle"),
+                        "phone": legal.get("phoneNumber") or legal.get("memberPhoneNumber"),
+                    }
             item = self._normalize(data, bid_id)
             if not self._matches(item, query):
                 continue
@@ -548,8 +617,8 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
         safe = self._safe_url(url) or self.profile.detail_url(raw_id)
         docs = data.get("documents") if isinstance(data.get("documents"), list) else []
         source_id = f"{CANONICAL_FAMILY}:{self.profile.profile_key}:{raw_id}"
-        posted = self._datetime(data.get("postedDate"))
-        due = self._datetime(data.get("dueDate"))
+        posted = self._datetime(data.get("postedDate"), self.profile.timezone)
+        due = self._datetime(data.get("dueDate"), self.profile.timezone)
         provenance = {
             k: {"source": "public embedded JSON", "value": v, "inferred": False}
             for k, v in data.items()
@@ -752,13 +821,15 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
         )
 
     @staticmethod
-    def _datetime(value):
+    def _datetime(value, timezone="UTC"):
         if not value:
             return None
         try:
             parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-            return parsed if parsed.tzinfo else parsed.replace(tzinfo=UTC)
-        except ValueError:
+            if parsed.tzinfo:
+                return parsed
+            return parsed.replace(tzinfo=ZoneInfo(timezone))
+        except (ValueError, ZoneInfoNotFoundError):
             return None
 
     @staticmethod
@@ -768,9 +839,9 @@ class EunaOpenBidsDemandStarConnector(BaseConnector):
             return OpportunityStatus.CANCELLED
         if "award" in text:
             return OpportunityStatus.AWARDED
-        if "close" in text:
+        if "close" in text or "evaluation" in text:
             return OpportunityStatus.CLOSED
-        if "open" in text:
+        if "open" in text or "active" in text:
             return OpportunityStatus.OPEN
         return OpportunityStatus.UNKNOWN
 
