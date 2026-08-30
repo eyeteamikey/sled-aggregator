@@ -5,13 +5,17 @@ from pathlib import Path
 import httpx
 
 from sled_aggregator.connectors.bidnet_direct import (
+    BIDNET_DIRECT_PROFILES,
+    DENVER_GENERAL_SERVICES_PROFILE,
     FIXTURE_PROFILE,
+    MARICOPA_COUNTY_PROFILE,
     BidNetDirectAccessError,
     BidNetDirectAccessState,
     BidNetDirectConnector,
     BidNetDirectError,
     BidNetDirectQuery,
     detect_access_boundary,
+    parse_page,
 )
 from sled_aggregator.connectors.registry import connector_registry
 from sled_aggregator.domain.enums import AccessState
@@ -19,6 +23,9 @@ from sled_aggregator.domain.enums import AccessState
 FIXTURES = Path(__file__).parent / "fixtures"
 LISTING = (FIXTURES / "bidnet_direct_listing.html").read_text()
 DETAIL = (FIXTURES / "bidnet_direct_detail.html").read_text()
+MARICOPA_METS = (FIXTURES / "bidnet_direct_mets_maricopa.html").read_text()
+DENVER_METS = (FIXTURES / "bidnet_direct_mets_denver.html").read_text()
+GATED_DETAIL = (FIXTURES / "bidnet_direct_mets_gated_detail.html").read_text()
 
 
 def response(url, text, status=200, headers=None):
@@ -83,6 +90,85 @@ class BidNetDirectTests(unittest.IsolatedAsyncioTestCase):
                 replace(FIXTURE_PROFILE, profile_key="Bad Key"), transport=FakeTransport([])
             ).health.configuration_valid
         )
+
+    def test_live_observed_profiles_keep_tenant_group_and_buyer_separate(self):
+        self.assertIs(BIDNET_DIRECT_PROFILES["az-maricopa-county"], MARICOPA_COUNTY_PROFILE)
+        self.assertIs(
+            BIDNET_DIRECT_PROFILES["co-denver-general-services"],
+            DENVER_GENERAL_SERVICES_PROFILE,
+        )
+        self.assertEqual(MARICOPA_COUNTY_PROFILE.purchasing_group_id, "700132901")
+        self.assertEqual(MARICOPA_COUNTY_PROFILE.buyer_id, "3165696805")
+        self.assertEqual(DENVER_GENERAL_SERVICES_PROFILE.purchasing_group_id, "8409951")
+        self.assertEqual(DENVER_GENERAL_SERVICES_PROFILE.buyer_id, "15320617")
+        self.assertNotEqual(
+            MARICOPA_COUNTY_PROFILE.purchasing_group_id,
+            MARICOPA_COUNTY_PROFILE.buyer_id,
+        )
+
+    def test_mets_html_listing_parser_is_shared_and_fails_closed(self):
+        maricopa, _ = parse_page(MARICOPA_METS)
+        denver, _ = parse_page(DENVER_METS)
+        self.assertEqual(maricopa[0]["id"], "0000433474")
+        self.assertEqual(maricopa[0]["solicitationNumber"], "EX-260128-RFP")
+        self.assertEqual(denver[0]["id"], "0000434478")
+        self.assertEqual(denver[0]["location"], "Colorado")
+        self.assertEqual(parse_page("<table><tr><td>changed</td></tr></table>")[0], [])
+
+    async def test_cross_tenant_html_discovery_search_sort_timezone_and_ids(self):
+        for profile, listing, raw_id, zone in (
+            (MARICOPA_COUNTY_PROFILE, MARICOPA_METS, "0000433474", "America/Phoenix"),
+            (DENVER_GENERAL_SERVICES_PROFILE, DENVER_METS, "0000434478", "America/Denver"),
+        ):
+            _, transport, items = await self.collect(
+                [response(profile.discovery_url, listing)],
+                BidNetDirectQuery(
+                    keywords=("Example",),
+                    include_details=False,
+                    maximum_results=1,
+                    sort_field="closingDate",
+                    sort_direction="asc",
+                ),
+                profile=profile,
+            )
+            self.assertEqual(len(items), 1)
+            self.assertEqual(items[0].source.source_id, f"bidnet-direct:{profile.profile_key}:{raw_id}")
+            self.assertEqual(str(items[0].posted_at.tzinfo), zone)
+            self.assertEqual(items[0].raw_payload["purchasing_group_id"], profile.purchasing_group_id)
+            self.assertEqual(items[0].raw_payload["buyer_id"], profile.buyer_id)
+            self.assertEqual(
+                transport.calls[0][1],
+                {"keywords": "Example", "sortBy": "closingDate", "sortDirection": "asc"},
+            )
+
+    async def test_observed_detail_registration_wall_is_recorded_not_bypassed(self):
+        detail_url = (
+            "https://www.bidnetdirect.com/colorado/solicitations/open-bids/"
+            "Example-Design-Services/0000434478?purchasingGroupId=8409951&origin=2"
+        )
+        _, transport, items = await self.collect(
+            [
+                response(DENVER_GENERAL_SERVICES_PROFILE.discovery_url, DENVER_METS),
+                response(detail_url, GATED_DETAIL),
+            ],
+            BidNetDirectQuery(maximum_results=1),
+            profile=DENVER_GENERAL_SERVICES_PROFILE,
+        )
+        self.assertEqual(items[0].raw_payload["detail_access_state"], "registration_required")
+        self.assertEqual(transport.calls[1][0], detail_url)
+        self.assertEqual(items[0].raw_payload["documents"], [])
+
+    async def test_unobserved_sort_contract_fails_before_request(self):
+        transport = FakeTransport([])
+        connector = BidNetDirectConnector(MARICOPA_COUNTY_PROFILE, transport=transport)
+        with self.assertRaisesRegex(BidNetDirectError, "unsupported"):
+            [
+                item
+                async for item in connector.discover(
+                    BidNetDirectQuery(sort_field="unobserved", include_details=False)
+                )
+            ]
+        self.assertEqual(transport.calls, [])
 
     async def test_discovery_normalization_provenance_documents_and_filters(self):
         c, _, items = await self.collect(

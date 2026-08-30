@@ -819,7 +819,8 @@ EqualLevel, and other distinct Euna product families.
 Production presets cover Anacortes (city, WA), Bend (city, OR), Fairfax County Government
 (county, VA), Fairfax County Public Schools (school district, VA), Corona-Norco USD (school
 district, CA), Florence 1 Schools (school district, SC), Region 10 ESC (cooperative purchasing
-organization, TX), and the registration-required Charlotte pilot (city, NC). A non-production
+organization, TX), the registration-required Charlotte pilot (city, NC), and evidence-scoped
+Ventura County (CA) and Hillsborough County (FL) public-listing profiles. A non-production
 fixture-only tenant demonstrates configuration-driven parsing. Presets are fixture verified,
 not proof of live production availability; Charlotte is explicitly `registration_required`.
 One tenant is not statewide coverage.
@@ -831,6 +832,12 @@ on `bonfirehub.com`. Supported variants are `bonfire_legacy`, `bonfire_current`,
 covers fixture/live public verification, metadata-only, registration/login/CAPTCHA boundaries,
 changed markup, migration, blocking, and unavailability. Euna ownership does not make Bonfire,
 IonWave, and DemandStar one parser family.
+
+The Ventura and Hillsborough portal code exposes a shared anonymous GET section route returning a
+single `projects` payload consumed by client-side DataTables. Search, sorting, paging, and optional
+department filtering are client-side; the connector does not invent server pagination parameters.
+Both detail routes produced Cloudflare verification in the 2026-08-30 cloud run, so those profiles
+are intentionally metadata-only and do not claim detail or document discovery.
 
 Discovery uses bounded public HTML or explicitly observed fixture-backed JSON, bounded pages and
 results, duplicate suppression, exact IDs/numbers, and local keyword/status/department/date

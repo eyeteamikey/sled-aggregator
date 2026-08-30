@@ -1,47 +1,62 @@
-## Motivation
+## Tenants validated
 
-Replace fixture-only PlanetBids assumptions with evidence-backed numeric portal profiles and rendered-listing support across a county buyer and a distinct education buyer.
+- Will County, Illinois — official county Current Bids page and DemandStar legacy member `122067`; modern UUID `34dea608-18ea-4dae-ab75-e117314d8f28`.
+- Ramsey County, Minnesota — official county contracting page and DemandStar legacy member `686378`; modern UUID `98cdb2f5-ed67-485d-8b2e-291e644403e5`.
 
-## Tenants and official evidence
+## Official evidence and shared request contract
 
-- County of Stanislaus, California — official active-bids page links to PlanetBids portal `14599`.
-- Los Angeles County Office of Education (LACOE), California — official vendor page links to PlanetBids portal `61954`.
+Both official county pages link DemandStar. Anonymous browser validation and bounded HTTP replay established the existing `https://api.demandstar.com/contents/agency` family contract:
 
-LACOE is preserved as an education entity, not Los Angeles County government or the City of Los Angeles. No fallback was required. See `docs/connector_validation/planetbids_two_tenants_2026-08-30.md`.
+- `GET /search?id={agency_uuid}`
+- `POST /summary` with `bidId`
+- `POST /documents` with `bidId`
+- `POST /commodityByType` with `bidId` and `type: Bid`
+- `POST /planholders` with `bidId`
+- `POST /legal` with `bidId`
 
-## Shared request contract and county/education findings
+No authorization header, CSRF value, or pre-established cookie was required. Only those exact anonymous read-only routes/bodies remain implemented; there is no unrestricted POST support.
 
-Both public portals use GET-navigable routes on `vendors.planetbids.com`: `/portal/{portal_id}/bo/bo-search` and `/portal/{portal_id}/bo/bo-detail/{opportunity_id}`. Rendered rows expose stable numeric IDs through `rowattribute`; the shared UI exposes keyword, type, category, stage, department, due-date, sorting, and detail navigation. Dates displayed in PDT are normalized with `America/Los_Angeles`.
+## Modern / legacy behavior
 
-Stanislaus exposes county departments, public-works solicitations, and County contacts. LACOE exposes education/service solicitations and remains buyer class `education`. Solicitation numbering and configured option vocabularies vary by tenant.
+The legacy numeric member ID locates the agency, while the modern route uses an agency UUID. API search rows repeat the legacy `mi`, and public details use numeric `/app/limited/bids/{bidId}/details`. Numeric `bidId`, namespaced by tenant profile, is the stable authoritative opportunity identity.
 
-The exact background API/POST, pagination, tab, and document-download contracts were not captured in cloud mode, so none are invented or replay-authorized.
+## Code, profiles, fixtures, and tests
 
-## Connector changes and public fields retained
+- Adds live-observed Will and Ramsey profiles with UUID and legacy member IDs.
+- Fixes status normalization to use `bidExternalStatus`; `bidStatusText` is retained as narrative.
+- Interprets naive timestamps in the tenant's evidenced `America/Chicago` timezone.
+- Preserves bid type, buyer, public contact, planholder, legal, attachment, and raw provenance fields.
+- Adds two compact, synthetic fixtures derived from observed response shapes.
+- Adds regression coverage for tenant resolution, modern/legacy IDs, exact method/route construction, bounds/local filters, stable identity, timezone/status/contact normalization, registration-gated documents, malformed responses, and shared behavior. Existing retry, timeout, circuit, SSRF, and client-ownership tests remain green.
 
-- Adds profiles for portal `14599` and `61954`, official landing pages, legal names, buyer classes, authoritative detail templates, and numeric tenant IDs.
-- Adds `vendors.planetbids.com` to the platform allowlist.
-- Parses observed Ember rendered rows, stable IDs, solicitation numbers, titles, stage, posted/due dates, and Pacific timezone.
-- Maps Bidding/Planning to canonical open status, retains source provenance, and deduplicates by profile plus authoritative opportunity ID.
-- Preserves retry, timeout, circuit-breaker, unsafe-URL, malformed-markup, and injected/owned-client behavior.
+## Attachments, authentication, CAPTCHA, and awards
 
-## Attachments, authentication, CAPTCHA, and coverage
+Document metadata is anonymous on both tenants, but reviewed records returned empty document paths. The public “Download Bid Package” action opened login, so connector candidates remain `registration_required` and are not sent to the downloader. Will County independently serves public files from its county-hosted Current Bids page; one representative PDF returned HTTP 200 and its bytes were discarded.
 
-Document/addenda/Q&A/bidder/submission/award tabs were visible on configured opportunities, but their payload and representative download contract remain desktop work. The connector retains existing mixed public/login/registration/prospective-bidder document classifications only where fixture data supplies them. No login, registration, CAPTCHA, WAF challenge, or rate limit was encountered on the two direct public surfaces. Complete HARs, production documents, cookies, tokens, sessions, CSRF values, and browser material are not committed.
+Ramsey's official page states registration/subscription is free and provides documents/results. No registration or subscription was performed. No CAPTCHA, WAF denial, or 429 was encountered. Planholder/vendor data was public. No distinct anonymous award/vendor-result or Q&A route was observed, so none was added.
 
-Coverage documentation now records two live-observed rendered portal surfaces. It does not claim scheduled production collection, attachment retrieval, pagination replay, or continuous availability.
+## Coverage changes
+
+Adds live-public local coverage records for both counties, marks DemandStar detail metadata public and document download registration-required, records award/Q&A as unknown, and regenerates authoritative coverage reports. Fixture success is not presented as production proof; the records cite the dated live browser/API evidence.
 
 ## Validation
 
-- `PYTHONPATH=src python -m unittest discover -s tests -v` — 347 tests, OK.
-- `ruff check .` — all checks passed.
+- `PYTHONPATH=src python -m unittest discover -s tests -v` — 341 tests passed.
+- `ruff check .` — passed.
 - `PYTHONPATH=src python -m compileall src tests` — passed.
 - `PYTHONPATH=src python -m sled_aggregator.coverage validate` — 56 jurisdictions, 0 warnings, 0 errors.
-- `PYTHONPATH=src python -m sled_aggregator.coverage recommend` — passed.
+- `PYTHONPATH=src python -m sled_aggregator.coverage recommend` — passed; 23 recommendations.
 - `git diff --check` — passed.
 
-## Limitations and remaining desktop work
+The repository virtual environment was used because the system interpreter lacks project dependencies; SOCKS proxy variables were excluded during tests because the environment does not include optional `socksio`.
 
-Capture one bounded HAR per tenant, hash and retain each complete HAR locally, sanitize only exact anonymous request contracts, exercise filters/sorting/continuation, inspect at least two details per tenant, and download at most one clearly public solicitation document per tenant. Then add API-shaped fixtures and only the routes evidenced by those captures.
+## Limitations and remaining browser work
 
-No complete HAR, production solicitation document, or secret is committed.
+- No source HAR was captured in this cloud session; no HAR hash is claimed.
+- A desktop HAR is still needed to determine whether UI-only keyword/category/department/date filters, alternate sorting, pagination/load-more, Q&A, amendments, and award requests exist.
+- The observed API returned a single fixed agency set (100 for each tenant) newest-first; the connector performs bounded keyword/status/date filtering locally and does not invent server parameters.
+- No claim of continuous production availability is made.
+
+## Evidence safety
+
+No complete HAR, production document, cookie, token, credential, session material, CSRF value, archive, or browser profile is committed. There were no newly captured source HARs to preserve; the ignored evidence directories remain ignored.

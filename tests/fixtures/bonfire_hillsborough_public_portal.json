@@ -1,0 +1,17 @@
+{
+  "projects": [
+    {
+      "ProjectID": "235258",
+      "ReferenceID": "RFP-26-00262",
+      "ProjectName": "Customer Billing, Payment, and Engagement Solution",
+      "DateClose": "2026-08-31 18:00:00"
+    },
+    {
+      "ProjectID": "250690",
+      "ReferenceID": "SS-26-00387",
+      "ProjectName": "Example Branded Trucks Maintenance and OEM Parts",
+      "DateClose": "2026-08-31 21:00:00"
+    }
+  ],
+  "departments": []
+}

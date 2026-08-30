@@ -2001,6 +2001,269 @@
       "blocker_reason": null,
       "recommended_next_action": "Capture a desktop HAR to verify UI search controls and any unobserved award or Q&A routes.",
       "evidence_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county"
+    },
+    {
+      "key": "ca-ventura-county-bonfire",
+      "jurisdiction_code": "CA",
+      "name": "County of Ventura Euna Bonfire",
+      "source_level": "local",
+      "source_role": "primary",
+      "official_url": "https://venturacounty.gov/general-services-agency/procurement-home/",
+      "platform_family": "euna/bonfire",
+      "connector_name": "euna/bonfire",
+      "connector_status": "partially_implemented",
+      "verification_status": "public_metadata_only",
+      "discovery_access": "public",
+      "detail_access": "blocked",
+      "document_access": "unknown",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "priority": 2,
+      "expected_coverage_impact": "Ventura County procurement only",
+      "source_id": "ca-ventura-county-bonfire",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "County of Ventura",
+      "official_landing_page": "https://venturacounty.gov/general-services-agency/procurement-home/",
+      "public_bid_board_url": "https://ventura.bonfirehub.com/portal/?tab=openOpportunities",
+      "public_search_url": "https://ventura.bonfirehub.com/PublicPortal/getOpenPublicOpportunitiesSectionData",
+      "public_detail_url_pattern": "https://ventura.bonfirehub.com/opportunities/{project_id}",
+      "connector_key": "euna/bonfire",
+      "connector_alias": "bonfire",
+      "portal_profile_key": "ventura-county-ca",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "blocked",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "not_evidenced",
+      "authentication_requirement": "submission_only_observed",
+      "registration_requirement": "submission_only_observed",
+      "captcha_classification": "cloudflare_challenge_on_detail_in_cloud_browser",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_listing_and_route_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/euna_bonfire_two_tenants_2026-08-30.md"
+      ],
+      "fixture_references": [
+        "tests/fixtures/bonfire_ventura_public_portal.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/bonfire_ventura_public_portal.json"
+      ],
+      "test_location": [
+        "tests/test_euna_bonfire_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Listing metadata is public; detail navigation was challenged by Cloudflare; documents and post-listing capabilities remain unverified."
+      ],
+      "blocker_reason": "Cloudflare security verification on project detail in the cloud browser.",
+      "recommended_next_action": "Capture a bounded anonymous desktop HAR for detail and document validation.",
+      "evidence_url": "https://ventura.bonfirehub.com/portal/?tab=openOpportunities"
+    },
+    {
+      "key": "fl-hillsborough-county-bonfire",
+      "jurisdiction_code": "FL",
+      "name": "Hillsborough County Euna Bonfire",
+      "source_level": "local",
+      "source_role": "primary",
+      "official_url": "https://hcfl.gov/departments/procurement",
+      "platform_family": "euna/bonfire",
+      "connector_name": "euna/bonfire",
+      "connector_status": "partially_implemented",
+      "verification_status": "public_metadata_only",
+      "discovery_access": "public",
+      "detail_access": "blocked",
+      "document_access": "unknown",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "priority": 2,
+      "expected_coverage_impact": "Hillsborough County procurement only",
+      "source_id": "fl-hillsborough-county-bonfire",
+      "jurisdiction_id": "FL",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "Hillsborough County",
+      "official_landing_page": "https://hcfl.gov/departments/procurement",
+      "public_bid_board_url": "https://hillsboroughcounty.bonfirehub.com/portal/?tab=openOpportunities",
+      "public_search_url": "https://hillsboroughcounty.bonfirehub.com/PublicPortal/getOpenPublicOpportunitiesSectionData",
+      "public_detail_url_pattern": "https://hillsboroughcounty.bonfirehub.com/opportunities/{project_id}",
+      "connector_key": "euna/bonfire",
+      "connector_alias": "bonfire",
+      "portal_profile_key": "hillsborough-county-fl",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "blocked",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "not_evidenced",
+      "authentication_requirement": "submission_only_observed",
+      "registration_requirement": "submission_only_observed",
+      "captcha_classification": "cloudflare_challenge_on_detail_in_cloud_browser",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_listing_and_route_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/euna_bonfire_two_tenants_2026-08-30.md"
+      ],
+      "fixture_references": [
+        "tests/fixtures/bonfire_hillsborough_public_portal.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/bonfire_hillsborough_public_portal.json"
+      ],
+      "test_location": [
+        "tests/test_euna_bonfire_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Listing metadata is public; detail navigation was challenged by Cloudflare; documents and post-listing capabilities remain unverified."
+      ],
+      "blocker_reason": "Cloudflare security verification on project detail in the cloud browser.",
+      "recommended_next_action": "Capture a bounded anonymous desktop HAR for detail and document validation.",
+      "evidence_url": "https://hillsboroughcounty.bonfirehub.com/portal/?tab=openOpportunities"
+    },
+    {
+      "key": "az-maricopa-county-bidnet",
+      "jurisdiction_code": "AZ",
+      "name": "Maricopa County Procurement Services BidNet Direct",
+      "source_level": "county",
+      "source_role": "primary",
+      "official_url": "https://www.maricopa.gov/2190/Solicitations",
+      "platform_family": "bidnet-direct",
+      "connector_name": "bidnet-direct",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "metadata_only",
+      "document_access": "registration_required",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/bidnet_direct_mets_maricopa.html",
+        "tests/fixtures/bidnet_direct_mets_gated_detail.html"
+      ],
+      "priority": 2,
+      "expected_coverage_impact": "Maricopa County procurement only",
+      "source_id": "az-maricopa-county-bidnet",
+      "jurisdiction_id": "AZ",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "Maricopa County Procurement Services",
+      "official_landing_page": "https://www.maricopa.gov/2190/Solicitations",
+      "public_bid_board_url": "https://www.bidnetdirect.com/arizona/maricopacounty",
+      "public_search_url": "https://www.bidnetdirect.com/arizona/maricopacounty/solicitations/open-bids?selectedContent=BUYER",
+      "public_detail_url_pattern": "https://www.bidnetdirect.com/arizona/solicitations/{status}/{title}/{opportunity_id}",
+      "connector_key": "bidnet-direct",
+      "connector_alias": "bidnet",
+      "portal_profile_key": "az-maricopa-county",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public_metadata_only",
+      "attachment_classification": "registration_required",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "detail_fields_and_documents",
+      "captcha_classification": "none_observed_in_browser",
+      "robots_access_notes": "Visible browser succeeded; direct HTTP returned bare 403. No HAR captured and no continuous-availability claim.",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_dom_and_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/bidnet_direct_two_tenants_2026-08-30.md"
+      ],
+      "fixture_location": [
+        "tests/fixtures/bidnet_direct_mets_maricopa.html",
+        "tests/fixtures/bidnet_direct_mets_gated_detail.html"
+      ],
+      "test_location": [
+        "tests/test_bidnet_direct_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Anonymous details and documents are registration-gated.",
+        "No source HAR or anonymous document download was available."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture and sanitize a desktop HAR before scheduled live promotion.",
+      "evidence_url": "https://www.maricopa.gov/2190/Solicitations"
+    },
+    {
+      "key": "co-denver-general-services-bidnet",
+      "jurisdiction_code": "CO",
+      "name": "Denver General Services BidNet Direct",
+      "source_level": "municipality",
+      "source_role": "primary",
+      "official_url": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities",
+      "platform_family": "bidnet-direct",
+      "connector_name": "bidnet-direct",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "metadata_only",
+      "document_access": "registration_required",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/bidnet_direct_mets_denver.html",
+        "tests/fixtures/bidnet_direct_mets_gated_detail.html"
+      ],
+      "priority": 2,
+      "expected_coverage_impact": "Denver General Services procurement only",
+      "source_id": "co-denver-general-services-bidnet",
+      "jurisdiction_id": "CO",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "City and County of Denver General Services Purchasing",
+      "official_landing_page": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities",
+      "public_bid_board_url": "https://www.bidnetdirect.com/colorado/city-and-county-of-denver-general-services-purchasing",
+      "public_search_url": "https://www.bidnetdirect.com/colorado/city-and-county-of-denver-general-services-purchasing/solicitations/open-bids?selectedContent=BUYER",
+      "public_detail_url_pattern": "https://www.bidnetdirect.com/colorado/solicitations/{status}/{title}/{opportunity_id}",
+      "connector_key": "bidnet-direct",
+      "connector_alias": "bidnet",
+      "portal_profile_key": "co-denver-general-services",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public_metadata_only",
+      "attachment_classification": "registration_required",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "detail_fields_and_documents",
+      "captcha_classification": "none_observed_in_browser",
+      "robots_access_notes": "Visible browser succeeded; direct HTTP returned bare 403. No HAR captured and no continuous-availability claim.",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_dom_and_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/bidnet_direct_two_tenants_2026-08-30.md"
+      ],
+      "fixture_location": [
+        "tests/fixtures/bidnet_direct_mets_denver.html",
+        "tests/fixtures/bidnet_direct_mets_gated_detail.html"
+      ],
+      "test_location": [
+        "tests/test_bidnet_direct_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Anonymous details and documents are registration-gated.",
+        "DOTI is a distinct unconfigured surface.",
+        "No source HAR or anonymous document download was available."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture and sanitize a desktop HAR before scheduled live promotion.",
+      "evidence_url": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities"
     }
   ],
   "evidence": [
