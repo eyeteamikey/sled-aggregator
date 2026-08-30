@@ -33,7 +33,7 @@ Coverage documentation now records two live-observed rendered portal surfaces. I
 
 ## Validation
 
-- `PYTHONPATH=src python -m unittest discover -s tests -v` — 340 tests, OK.
+- `PYTHONPATH=src python -m unittest discover -s tests -v` — 347 tests, OK.
 - `ruff check .` — all checks passed.
 - `PYTHONPATH=src python -m compileall src tests` — passed.
 - `PYTHONPATH=src python -m sled_aggregator.coverage validate` — 56 jurisdictions, 0 warnings, 0 errors.
