@@ -11,6 +11,7 @@ from sled_aggregator.connectors.opengov_procurement import (
     ALAMEDA_COUNTY,
     OCEAN_COUNTY,
     OPENGOV_PORTALS,
+    SAN_MATEO_COUNTY,
     OpenGovAccessError,
     OpenGovAccessState,
     OpenGovAvailabilityError,
@@ -88,20 +89,23 @@ class OpenGovConnectorTests(unittest.IsolatedAsyncioTestCase):
     async def test_validated_profiles_routes_and_registry_aliases(self):
         self.assertIn("ocean-county-nj", OPENGOV_PORTALS)
         self.assertIn("alameda-county-ca", OPENGOV_PORTALS)
+        self.assertIn("san-mateo-county-ca", OPENGOV_PORTALS)
         expected = (
-            (OCEAN_COUNTY, "oceancounty", "America/New_York"),
-            (ALAMEDA_COUNTY, "acgov", "America/Los_Angeles"),
+            (OCEAN_COUNTY, "oceancounty", "America/New_York", "live_validated_2026-08-24"),
+            (ALAMEDA_COUNTY, "acgov", "America/Los_Angeles", "live_validated_2026-08-24"),
+            (SAN_MATEO_COUNTY, "smcgov", "America/Los_Angeles", "live_validated_2026-08-30"),
         )
-        for portal, code, timezone in expected:
+        for portal, code, timezone, verification_status in expected:
             self.assertEqual(portal.tenant_slug, code)
             self.assertEqual(portal.default_timezone, timezone)
-            self.assertEqual(portal.verification_status, "live_validated_2026-08-24")
+            self.assertEqual(portal.verification_status, verification_status)
             self.assertEqual(
                 portal.public_projects_url,
                 f"https://api.procurement.opengov.com/api/v1/government/{code}/project/public",
             )
         self.assertFalse(OCEAN_COUNTY.planholders_observed)
         self.assertTrue(ALAMEDA_COUNTY.planholders_observed)
+        self.assertFalse(SAN_MATEO_COUNTY.planholders_observed)
         for alias in (
             "opengov",
             "opengov-procurement",

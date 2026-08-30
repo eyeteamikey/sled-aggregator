@@ -138,6 +138,16 @@ ALAMEDA_COUNTY = OpenGovPortal(
     ),
     planholders_observed=True,
 )
+SAN_MATEO_COUNTY = OpenGovPortal(
+    "san-mateo-county-ca", "smcgov", "San Mateo County, California", "California", "CA",
+    "county", "County of San Mateo", default_timezone="America/Los_Angeles",
+    verification_status="live_validated_2026-08-30",
+    notes=(
+        "Anonymous fallback validation covered listings, status filtering, pagination, detail, contacts, Q&A, addenda, and attachment metadata.",
+        "A representative attachment action required login; no production document was downloaded.",
+        "Closed listings visibly distinguished awarded and canceled records.",
+    ),
+)
 
 # Existing profiles remain available but are not promoted by this validation.
 PHOENIX = OpenGovPortal("phoenix", "phoenix", "City of Phoenix, Arizona", "Arizona", "AZ", "city", "City of Phoenix", default_timezone="America/Phoenix")
@@ -149,7 +159,8 @@ GALLUP = OpenGovPortal("gallup", "gallupnm", "City of Gallup, New Mexico", "New 
 
 OPENGOV_PORTALS = {
     p.tenant_key: p for p in (
-        OCEAN_COUNTY, ALAMEDA_COUNTY, PHOENIX, SEATTLE, CLEVELAND, BRIDGEPORT,
+        OCEAN_COUNTY, ALAMEDA_COUNTY, SAN_MATEO_COUNTY, PHOENIX, SEATTLE,
+        CLEVELAND, BRIDGEPORT,
         MOHAVE_COUNTY, GALLUP,
     )
 }

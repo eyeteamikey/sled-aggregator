@@ -168,3 +168,29 @@ financial-ID, pending-status, title-sort, and Ocean planholder contracts.
 - Vendor/award fields vary by record and tenant configuration.
 - The evidence is dated and fixture-backed; it does not imply current uptime or
   protect against future OpenGov changes.
+
+## Anonymous fallback revalidation on 2026-08-30
+
+The two primary tenant URLs and the requested San Mateo fallback were revisited
+in an anonymous browser session. Ocean County presented Cloudflare's security
+verification boundary, which was neither solved nor bypassed. Alameda loaded its
+public active-project grid anonymously with the same department/status/search
+controls, 10-row default page size, and two visible pages.
+
+San Mateo (`smcgov`) was used as the fallback and independently corroborated the
+shared public UI contract. Its active grid exposed department and status filters,
+search, 10-row pages, and three pages of current records. Page navigation changed
+the visible rows without login. A representative detail exposed the stable
+`/portal/smcgov/projects/{project_id}` route, project metadata, Pacific timezone,
+project and procurement contacts, project-document sections, addenda, attachment
+filenames, and answered public Q&A. The closed filter exposed 61 pages and visibly
+distinguished `Awarded` and `Canceled` substatuses.
+
+Selecting one representative addendum attachment
+(`SBM_CrockerGate_Phase2_ProjectMap_georef.pdf`) opened a dialog stating that
+login or account creation was required. No credentials were entered and no
+production file was downloaded. The visible portal continued to expose `Sign Up`,
+`Log In`, `Follow`, `Draft Response`, `No Bid`, and `Ask Question` as boundaries;
+none was invoked. No rate-limit response was observed. This revalidation adds a
+San Mateo tenant preset but does not change the family request vocabulary or
+promote document downloads to public access.
