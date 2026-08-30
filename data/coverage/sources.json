@@ -1737,8 +1737,12 @@
       "validation_request_policy": {
         "browser_capture_rules": [
           {
-            "methods": ["POST"],
-            "hosts": ["api.procurement.opengov.com"],
+            "methods": [
+              "POST"
+            ],
+            "hosts": [
+              "api.procurement.opengov.com"
+            ],
             "path_pattern": "/api/v1/government/oceancounty/project/public",
             "purpose": "anonymous listing, filtering, sorting, and pagination"
           }
@@ -1759,7 +1763,9 @@
         "tests/fixtures/opengov_ocean_questions.json",
         "tests/fixtures/opengov_ocean_awarded_detail.json"
       ],
-      "test_location": ["tests/test_opengov_procurement_connector.py"],
+      "test_location": [
+        "tests/test_opengov_procurement_connector.py"
+      ],
       "last_verified": "2026-08-24",
       "last_verified_date": "2026-08-24",
       "known_limitations": [
@@ -1816,12 +1822,19 @@
       "authentication_requirement": "document_download_only",
       "captcha_classification": "transient_cloudflare_verification_observed_no_human_action",
       "robots_access_notes": "Earlier bounded anonymous walkthrough plus follow-up live API replay; the follow-up portal UI remained at automatic Cloudflare verification. No claim of continuous availability.",
-      "allowed_http_methods": ["GET", "POST"],
+      "allowed_http_methods": [
+        "GET",
+        "POST"
+      ],
       "validation_request_policy": {
         "browser_capture_rules": [
           {
-            "methods": ["POST"],
-            "hosts": ["api.procurement.opengov.com"],
+            "methods": [
+              "POST"
+            ],
+            "hosts": [
+              "api.procurement.opengov.com"
+            ],
             "path_pattern": "/api/v1/government/acgov/project/public",
             "purpose": "anonymous listing, filtering, sorting, and pagination"
           }
@@ -1839,7 +1852,9 @@
         "tests/fixtures/opengov_alameda_listing.json",
         "tests/fixtures/opengov_alameda_detail.json"
       ],
-      "test_location": ["tests/test_opengov_procurement_connector.py"],
+      "test_location": [
+        "tests/test_opengov_procurement_connector.py"
+      ],
       "last_verified": "2026-08-24",
       "last_verified_date": "2026-08-24",
       "known_limitations": [
@@ -1852,6 +1867,140 @@
       "blocker_reason": null,
       "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
       "evidence_url": "https://procurement.opengov.com/portal/acgov"
+    },
+    {
+      "key": "il-will-county-demandstar",
+      "jurisdiction_code": "IL",
+      "name": "Will County Euna OpenBids / DemandStar",
+      "source_level": "local",
+      "source_role": "supplemental",
+      "official_url": "https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids",
+      "platform_family": "euna/openbids-demandstar",
+      "connector_name": "euna/openbids-demandstar",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "registration_required",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": true,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/demandstar_will_live_shape.json"
+      ],
+      "priority": 2,
+      "expected_coverage_impact": "Will County DemandStar opportunities; the county-hosted bid board remains primary for public files",
+      "source_id": "il-will-county-demandstar",
+      "jurisdiction_id": "IL",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "Will County",
+      "official_landing_page": "https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids",
+      "public_bid_board_url": "https://www.demandstar.com/app/agencies/illinois/will-county/procurement-opportunities/34dea608-18ea-4dae-ab75-e117314d8f28",
+      "public_search_url": "https://api.demandstar.com/contents/agency/search?id=34dea608-18ea-4dae-ab75-e117314d8f28",
+      "public_detail_url_pattern": "https://www.demandstar.com/app/limited/bids/{bid_id}/details",
+      "connector_key": "euna/openbids-demandstar",
+      "connector_alias": "demandstar",
+      "portal_profile_key": "il-will-county",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "registration_required",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "document_download_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "Anonymous browser and bounded API replay succeeded; no continuous-availability claim.",
+      "allowed_http_methods": [
+        "GET",
+        "POST"
+      ],
+      "evidence_type": "live_browser_and_public_api_contract_with_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/demandstar_two_tenants_2026-08-30.md"
+      ],
+      "fixture_location": [
+        "tests/fixtures/demandstar_will_live_shape.json"
+      ],
+      "test_location": [
+        "tests/test_euna_openbids_demandstar_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "DemandStar document metadata is anonymous but downloads require login.",
+        "The official county board independently provides public files.",
+        "No distinct public award or Q&A API was observed."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture a desktop HAR to verify UI search controls and any unobserved award or Q&A routes.",
+      "evidence_url": "https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids"
+    },
+    {
+      "key": "mn-ramsey-county-demandstar",
+      "jurisdiction_code": "MN",
+      "name": "Ramsey County Euna OpenBids / DemandStar",
+      "source_level": "local",
+      "source_role": "primary",
+      "official_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county",
+      "platform_family": "euna/openbids-demandstar",
+      "connector_name": "euna/openbids-demandstar",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "registration_required",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "fixture_references": [
+        "tests/fixtures/demandstar_ramsey_live_shape.json"
+      ],
+      "priority": 2,
+      "expected_coverage_impact": "Ramsey County DemandStar opportunities",
+      "source_id": "mn-ramsey-county-demandstar",
+      "jurisdiction_id": "MN",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "Ramsey County",
+      "official_landing_page": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county",
+      "public_bid_board_url": "https://www.demandstar.com/app/agencies/minnesota/ramsey-county/procurement-opportunities/98cdb2f5-ed67-485d-8b2e-291e644403e5/",
+      "public_search_url": "https://api.demandstar.com/contents/agency/search?id=98cdb2f5-ed67-485d-8b2e-291e644403e5",
+      "public_detail_url_pattern": "https://www.demandstar.com/app/limited/bids/{bid_id}/details",
+      "connector_key": "euna/openbids-demandstar",
+      "connector_alias": "openbids",
+      "portal_profile_key": "mn-ramsey-county",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "registration_required",
+      "document_pipeline_classification": "manifest_only",
+      "authentication_requirement": "document_download_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "Anonymous browser and bounded API replay succeeded; no continuous-availability claim.",
+      "allowed_http_methods": [
+        "GET",
+        "POST"
+      ],
+      "evidence_type": "live_browser_and_public_api_contract_with_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/demandstar_two_tenants_2026-08-30.md"
+      ],
+      "fixture_location": [
+        "tests/fixtures/demandstar_ramsey_live_shape.json"
+      ],
+      "test_location": [
+        "tests/test_euna_openbids_demandstar_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "DemandStar document metadata is anonymous but downloads require login.",
+        "The official page states that free registration/subscription provides documents and results.",
+        "No distinct public award or Q&A API was observed."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture a desktop HAR to verify UI search controls and any unobserved award or Q&A routes.",
+      "evidence_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county"
     }
   ],
   "evidence": [
@@ -1859,9 +2008,18 @@
       "evidence_id": "har-6bc258cece119647",
       "source_id": "nj-ocean-county-opengov",
       "evidence_type": "sanitized_derived_har_contract",
-      "evidence_location": ["docs/connector_validation/opengov_two_tenants_2026-08-24.md"],
+      "evidence_location": [
+        "docs/connector_validation/opengov_two_tenants_2026-08-24.md"
+      ],
       "capabilities": [
-        "discovery", "pagination", "filtering", "details", "attachments", "amendments", "awards", "normalization"
+        "discovery",
+        "pagination",
+        "filtering",
+        "details",
+        "attachments",
+        "amendments",
+        "awards",
+        "normalization"
       ],
       "verification_date": "2026-08-24",
       "notes": "Derived HAR-shaped replay artifact plus live API verification; not a browser-export source HAR. Download is login-required and related-contract API access was session-dependent."
@@ -1870,9 +2028,18 @@
       "evidence_id": "har-6f4048bb552f6056",
       "source_id": "ca-alameda-county-opengov",
       "evidence_type": "sanitized_derived_har_contract",
-      "evidence_location": ["docs/connector_validation/opengov_two_tenants_2026-08-24.md"],
+      "evidence_location": [
+        "docs/connector_validation/opengov_two_tenants_2026-08-24.md"
+      ],
       "capabilities": [
-        "discovery", "pagination", "filtering", "details", "attachments", "amendments", "awards", "normalization"
+        "discovery",
+        "pagination",
+        "filtering",
+        "details",
+        "attachments",
+        "amendments",
+        "awards",
+        "normalization"
       ],
       "verification_date": "2026-08-24",
       "notes": "Derived HAR-shaped replay artifact plus live API verification; not a browser-export source HAR. Download is login-required and award status was public without vendor data on the reviewed awarded record."
@@ -2104,7 +2271,7 @@
       "location": "https://procurement.maryland.gov/emma-2/",
       "verified_at": "2026-08-03",
       "sanitization_status": "not_applicable",
-      "notes": "The Maryland Office of State Procurement identifies eMaryland Marketplace Advantage (eMMA) as Maryland\u2019s online procurement platform and links its public portal.",
+      "notes": "The Maryland Office of State Procurement identifies eMaryland Marketplace Advantage (eMMA) as Maryland’s online procurement platform and links its public portal.",
       "limitations": "This source-identity evidence does not establish current anonymous search, detail, or document operability."
     },
     {

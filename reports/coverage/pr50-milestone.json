@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-03",
+  "as_of": "2026-08-24",
   "capability_matrix": [
     {
       "attachments": false,
@@ -585,7 +585,8 @@
   "live_verified_sources": [],
   "manual_evidence_capture_sources": [
     "al-alabamabuys",
-    "oh-ohiobuys"
+    "oh-ohiobuys",
+    "mn-ramsey-county-demandstar"
   ],
   "ordered_live_validation_queue": [
     {
@@ -650,7 +651,8 @@
       "entry_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=DASIowa",
       "jurisdiction_id": "IA",
       "method_policy": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "order": 4,
       "platform_family": "jaggaer/sciquest",
@@ -800,7 +802,8 @@
       "entry_url": "https://bids.sciquest.com/apps/Router/PublicEvent?CustomerOrg=StateOfUtah",
       "jurisdiction_id": "UT",
       "method_policy": [
-        "GET"
+        "GET",
+        "POST"
       ],
       "order": 16,
       "platform_family": "jaggaer/sciquest",
@@ -932,6 +935,30 @@
         "oh-ohiobuys"
       ],
       "task_type": "public_contract_capture"
+    },
+    {
+      "connector_family": null,
+      "dependencies": [],
+      "evidence_available": [
+        "tests/fixtures/demandstar_ramsey_live_shape.json"
+      ],
+      "evidence_required": [
+        "official primary statewide source evidence"
+      ],
+      "expected_baseline_coverage_increase": 0,
+      "expected_document_pipeline_increase": 0,
+      "jurisdiction_ids": [
+        "MN"
+      ],
+      "priority_band": "P2",
+      "proposed_title": "Research authoritative statewide coverage for Minnesota",
+      "recommended_order": 21,
+      "risk_level": "high",
+      "score": 20,
+      "source_ids": [
+        "mn-ramsey-county-demandstar"
+      ],
+      "task_type": "coverage_correction"
     }
   ],
   "remaining_document_adapter_work": [

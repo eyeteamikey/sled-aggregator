@@ -100,8 +100,9 @@
     "connector_family": "periscope/buyspeed",
     "dependencies": [],
     "evidence_available": [
-      "tests/fixtures/periscope_board.html",
-      "tests/fixtures/periscope_results.json"
+      "tests/fixtures/il_bidbuy_initial.html",
+      "tests/fixtures/il_bidbuy_results.xml",
+      "tests/fixtures/il_bidbuy_detail.html"
     ],
     "evidence_required": [
       "dated bounded anonymous live-validation result"
@@ -492,5 +493,29 @@
       "oh-ohiobuys"
     ],
     "task_type": "public_contract_capture"
+  },
+  {
+    "connector_family": null,
+    "dependencies": [],
+    "evidence_available": [
+      "tests/fixtures/demandstar_ramsey_live_shape.json"
+    ],
+    "evidence_required": [
+      "official primary statewide source evidence"
+    ],
+    "expected_baseline_coverage_increase": 0,
+    "expected_document_pipeline_increase": 0,
+    "jurisdiction_ids": [
+      "MN"
+    ],
+    "priority_band": "P2",
+    "proposed_title": "Research authoritative statewide coverage for Minnesota",
+    "recommended_order": 21,
+    "risk_level": "high",
+    "score": 20,
+    "source_ids": [
+      "mn-ramsey-county-demandstar"
+    ],
+    "task_type": "coverage_correction"
   }
 ]

@@ -159,6 +159,8 @@ Prefer geographically distinct tenants and capture any differences in host routi
 
 - [x] Butler County, Kansas — authoritative agency-scoped tenant
 - [x] City of Lynn Haven, Florida — independently operated agency-scoped tenant
+- [x] Will County, Illinois — official legacy member link mapped to modern UUID tenant
+- [x] Ramsey County, Minnesota — official legacy member link mapped to modern UUID tenant
 
 Do not use paid DemandStar aggregation as the evidence source. Capture agency-scoped public surfaces and distinguish public metadata from registration- or payment-gated documents.
 

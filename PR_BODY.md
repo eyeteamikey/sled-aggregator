@@ -1,50 +1,62 @@
-## Motivation
+## Tenants validated
 
-Execute PR #45's highest-value evidence-capture tranche without speculative connector code by registering AlabamaBuys and OhioBuys as the authoritative statewide source identities and explicitly recording the contract evidence still required.
+- Will County, Illinois — official county Current Bids page and DemandStar legacy member `122067`; modern UUID `34dea608-18ea-4dae-ab75-e117314d8f28`.
+- Ramsey County, Minnesota — official county contracting page and DemandStar legacy member `686378`; modern UUID `98cdb2f5-ed67-485d-8b2e-291e644403e5`.
 
-## PR #45 merge verification
+## Official evidence and shared request contract
 
-PR #45 is present as merge `890c09d` and substantive commit `8ae815d`. Its audit, capture checklist, reports, and queue are present; this PR does not recreate them.
+Both official county pages link DemandStar. Anonymous browser validation and bounded HTTP replay established the existing `https://api.demandstar.com/contents/agency` family contract:
 
-## Selection rationale and evidence
+- `GET /search?id={agency_uuid}`
+- `POST /summary` with `bidId`
+- `POST /documents` with `bidId`
+- `POST /commodityByType` with `bidId` and `type: Bid`
+- `POST /planholders` with `bidId`
+- `POST /legal` with `bidId`
 
-After 18 fixture-operational live-validation tasks are excluded, Alabama and Ohio are generated ranks 19 and 20 (score 20) and breadth evidence rank 1. Source IDs are `al-alabamabuys` and `oh-ohiobuys`; both are primary statewide sources. Official state-controlled landing pages establish identity and scope. Platform family, tenant, and public request contract remain unknown: Codex Cloud's outbound CONNECT proxy returned 403 before reaching either host. No JAGGAER or other profile is inferred.
+No authorization header, CSRF value, or pre-established cookie was required. Only those exact anonymous read-only routes/bodies remain implemented; there is no unrestricted POST support.
 
-## Implementation and behavior
+## Modern / legacy behavior
 
-- Adds source-identified statewide registry records and official identity evidence.
-- Keeps discovery, detail, attachments, amendments, document retrieval, authentication, and CAPTCHA `unknown`; document compatibility is not claimed.
-- Changes queue generation so only fixture/live-verified sources receive live-validation tasks; identified-but-unverified sources receive deterministic `public_contract_capture` tasks.
-- Adds regression coverage and regenerates the complete report set.
+The legacy numeric member ID locates the agency, while the modern route uses an agency UUID. API search rows repeat the legacy `mi`, and public details use numeric `/app/limited/bids/{bidId}/details`. Numeric `bidId`, namespaced by tenant profile, is the stable authoritative opportunity identity.
 
-No fixture or production validation occurred. **Fixture verification is not live verification.** Live-verified and production-monitored counts remain zero.
+## Code, profiles, fixtures, and tests
 
-## Security boundaries
+- Adds live-observed Will and Ramsey profiles with UUID and legacy member IDs.
+- Fixes status normalization to use `bidExternalStatus`; `bidStatusText` is retained as narrative.
+- Interprets naive timestamps in the tenant's evidenced `America/Chicago` timezone.
+- Preserves bid type, buyer, public contact, planholder, legal, attachment, and raw provenance fields.
+- Adds two compact, synthetic fixtures derived from observed response shapes.
+- Adds regression coverage for tenant resolution, modern/legacy IDs, exact method/route construction, bounds/local filters, stable identity, timezone/status/contact normalization, registration-gated documents, malformed responses, and shared behavior. Existing retry, timeout, circuit, SSRF, and client-ownership tests remain green.
 
-No login, vendor registration, bid submission, credential/cookie handling, CAPTCHA circumvention, access-control bypass, unvalidated redirect, arbitrary host, unbounded collection, or discovery-time document download is introduced. Unknown contracts fail closed.
+## Attachments, authentication, CAPTCHA, and awards
 
-## Coverage before / after
+Document metadata is anonymous on both tenants, but reviewed records returned empty document paths. The public “Download Bid Package” action opened login, so connector candidates remain `registration_required` and are not sent to the downloader. Will County independently serves public files from its county-hosted Current Bids page; one representative PDF returned HTTP 200 and its bytes were discarded.
 
-| Metric | Before | After |
-|---|---:|---:|
-| Primary statewide sources identified | 18 | 20 |
-| Platform families identified | 10 | 10 |
-| Fixture-verified / baseline / discovery | 18 | 18 |
-| Detail / attachment | 16 | 16 |
-| Document-pipeline compatible | 6 | 6 |
-| Live-verified / production-monitored | 0 | 0 |
-| Tier 0 | 38 | 36 |
-| Tier 1 | 0 | 2 |
-| Missing primary statewide source | 38 | 36 |
+Ramsey's official page states registration/subscription is free and provides documents/results. No registration or subscription was performed. No CAPTCHA, WAF denial, or 429 was encountered. Planholder/vendor data was public. No distinct anonymous award/vendor-result or Q&A route was observed, so none was added.
 
-## Reports and files
+## Coverage changes
 
-Regenerated status, missing sources, capability matrix, connector reuse, blocked sources, document readiness, next-PR queue, and consistency outputs. Changed the two coverage registries, queue generator, audit tests, generated reports, this PR body, and `docs/pr46_alabama_ohio_capture_selection.md`.
+Adds live-public local coverage records for both counties, marks DemandStar detail metadata public and document download registration-required, records award/Q&A as unknown, and regenerates authoritative coverage reports. Fixture success is not presented as production proof; the records cite the dated live browser/API evidence.
 
 ## Validation
 
-Exact final results are recorded after the focused commit. Commit: `COMMIT_HASH`.
+- `PYTHONPATH=src python -m unittest discover -s tests -v` — 341 tests passed.
+- `ruff check .` — passed.
+- `PYTHONPATH=src python -m compileall src tests` — passed.
+- `PYTHONPATH=src python -m sled_aggregator.coverage validate` — 56 jurisdictions, 0 warnings, 0 errors.
+- `PYTHONPATH=src python -m sled_aggregator.coverage recommend` — passed; 23 recommendations.
+- `git diff --check` — passed.
 
-## Limitations and next work
+The repository virtual environment was used because the system interpreter lacks project dependencies; SOCKS proxy variables were excluded during tests because the environment does not include optional `socksio`.
 
-No public bid-board URL, platform, tenant, route, parameter, response schema, anonymous access behavior, attachment contract, authentication, or CAPTCHA behavior has been established. Next perform bounded sanitized AlabamaBuys contract capture, then OhioBuys; split implementation by platform family if evidence differs. The remaining 36 Tier 0 jurisdictions require official statewide source identity evidence. Live validation remains deferred.
+## Limitations and remaining browser work
+
+- No source HAR was captured in this cloud session; no HAR hash is claimed.
+- A desktop HAR is still needed to determine whether UI-only keyword/category/department/date filters, alternate sorting, pagination/load-more, Q&A, amendments, and award requests exist.
+- The observed API returned a single fixed agency set (100 for each tenant) newest-first; the connector performs bounded keyword/status/date filtering locally and does not invent server parameters.
+- No claim of continuous production availability is made.
+
+## Evidence safety
+
+No complete HAR, production document, cookie, token, credential, session material, CSRF value, archive, or browser profile is committed. There were no newly captured source HARs to preserve; the ignored evidence directories remain ignored.
