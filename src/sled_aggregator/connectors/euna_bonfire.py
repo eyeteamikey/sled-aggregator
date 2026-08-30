@@ -18,6 +18,7 @@ from enum import StrEnum
 from html.parser import HTMLParser
 from typing import Any, Protocol, cast
 from urllib.parse import parse_qsl, urlencode, urljoin, urlparse, urlunparse
+from zoneinfo import ZoneInfo
 
 import httpx
 
@@ -144,6 +145,10 @@ class BonfirePortal:
             or f"https://{self.portal_hostname}/portal/?tab=openOpportunities"
         )
 
+    @property
+    def listing_is_single_payload(self) -> bool:
+        return self.pagination_strategy == "client-side-datatable"
+
     def opportunity_url(self, opportunity_id: str) -> str:
         template = (
             self.opportunity_detail_url_template
@@ -267,6 +272,70 @@ CHARLOTTE = _portal(
     default_timezone="America/New_York",
     registration_policy_notes="Participating solicitations require vendor registration; no registration is attempted.",
 )
+VENTURA_COUNTY = _portal(
+    "ventura-county-ca",
+    "ventura",
+    "County of Ventura Vendor Information Portal",
+    "Ventura County, California",
+    "CA",
+    "county",
+    "County of Ventura",
+    authoritative_agency_procurement_url=(
+        "https://venturacounty.gov/general-services-agency/procurement-home/"
+    ),
+    public_portal_url="https://ventura.bonfirehub.com/portal/",
+    open_opportunities_url=(
+        "https://ventura.bonfirehub.com/PublicPortal/getOpenPublicOpportunitiesSectionData"
+    ),
+    default_timezone="America/Los_Angeles",
+    parser_strategy="bonfire-public-portal-json",
+    discovery_strategy="anonymous-public-json-get",
+    pagination_strategy="client-side-datatable",
+    detail_strategy="cloudflare-challenged-in-cloud-validation",
+    document_strategy="registration-or-challenge-boundary-unverified",
+    detail_enrichment_support=False,
+    document_discovery_support=False,
+    q_and_a_support=False,
+    addenda_support=False,
+    award_support=False,
+    verification_status="public_metadata_only",
+    document_access_notes=(
+        "Portal advertises public files but unauthenticated downloading is disabled; detail "
+        "and document behavior require desktop validation."
+    ),
+)
+HILLSBOROUGH_COUNTY = _portal(
+    "hillsborough-county-fl",
+    "hillsboroughcounty",
+    "Hillsborough County Euna Procurement Portal",
+    "Hillsborough County, Florida",
+    "FL",
+    "county",
+    "Hillsborough County",
+    authoritative_agency_procurement_url="https://hcfl.gov/departments/procurement",
+    public_portal_url="https://hillsboroughcounty.bonfirehub.com/portal/",
+    open_opportunities_url=(
+        "https://hillsboroughcounty.bonfirehub.com/PublicPortal/"
+        "getOpenPublicOpportunitiesSectionData"
+    ),
+    default_timezone="America/New_York",
+    parser_strategy="bonfire-public-portal-json",
+    discovery_strategy="anonymous-public-json-get",
+    pagination_strategy="client-side-datatable",
+    detail_strategy="cloudflare-challenged-in-cloud-validation",
+    document_strategy="registration-or-challenge-boundary-unverified",
+    department_filtering_support="unsupported",
+    detail_enrichment_support=False,
+    document_discovery_support=False,
+    q_and_a_support=False,
+    addenda_support=False,
+    award_support=False,
+    verification_status="public_metadata_only",
+    document_access_notes=(
+        "Portal exposes Public Contracts and vendor-field features, but detail and document "
+        "behavior require desktop validation."
+    ),
+)
 FIXTURE_ONLY = _portal(
     "fixture-only",
     "fixture-public",
@@ -289,6 +358,8 @@ BONFIRE_PORTALS = {
         FLORENCE_1,
         REGION_10,
         CHARLOTTE,
+        VENTURA_COUNTY,
+        HILLSBOROUGH_COUNTY,
         FIXTURE_ONLY,
     )
 }
@@ -489,8 +560,8 @@ class BonfireProcurementConnector(BaseConnector):
             self._last_error_class,
             self.portal.enabled,
             self.portal.keyword_search_support != "unsupported",
-            True,
-            True,
+            self.portal.detail_enrichment_support,
+            self.portal.document_discovery_support,
             bool(self.portal.authoritative_agency_procurement_url),
             self.portal.parser_strategy,
             self._configuration_valid(),
@@ -531,7 +602,10 @@ class BonfireProcurementConnector(BaseConnector):
             for page in range(1, max_pages + 1):
                 parsed, zero = self._parse(
                     await self._request(
-                        self.portal.embed_list_url, {"page": page, "pageSize": page_size}
+                        self.portal.embed_list_url,
+                        None
+                        if self.portal.listing_is_single_payload
+                        else {"page": page, "pageSize": page_size},
                     )
                 )
                 if not parsed:
@@ -548,11 +622,13 @@ class BonfireProcurementConnector(BaseConnector):
                         records[identity] = self._merge(records.get(identity, {}), record)
                 if len(parsed) < page_size:
                     break
+                if self.portal.listing_is_single_payload:
+                    break
             for identity in sorted(records):
                 record = records[identity]
                 if not self._matches(record, q):
                     continue
-                if q.include_details:
+                if q.include_details and self.portal.detail_enrichment_support:
                     detail_url = self._opportunity_url(record)
                     if detail_url:
                         detailed, _ = self._parse(await self._request(detail_url))
@@ -604,10 +680,14 @@ class BonfireProcurementConnector(BaseConnector):
                 payload = response.json()
             except ValueError as exc:
                 raise BonfireAccessError(BonfireAccessState.MALFORMED) from exc
-            records = payload.get("opportunities") if isinstance(payload, dict) else payload
+            records = (
+                payload.get("projects", payload.get("opportunities"))
+                if isinstance(payload, dict)
+                else payload
+            )
             if not isinstance(records, list) or not all(isinstance(x, dict) for x in records):
                 raise BonfireAccessError(BonfireAccessState.MALFORMED)
-            return records, not records
+            return [self._canonical_record(x, payload) for x in records], not records
         if "html" not in content_type:
             raise BonfireAccessError(BonfireAccessState.MALFORMED)
         parser = _BonfireHTMLParser()
@@ -686,6 +766,34 @@ class BonfireProcurementConnector(BaseConnector):
             categories=self._dedupe([*record.get("categorys", []), *record.get("categories", [])]),
             raw_payload=payload,
         )
+
+    def _canonical_record(
+        self, record: Mapping[str, Any], envelope: Mapping[str, Any]
+    ) -> dict[str, Any]:
+        """Map the live PublicPortal JSON vocabulary without discarding the source fields."""
+        result = dict(record)
+        aliases = {
+            "opportunity_id": "ProjectID",
+            "solicitation_number": "ReferenceID",
+            "title": "ProjectName",
+            "department_id": "DepartmentID",
+            "status": "Status",
+            "release_date": "DateOpen",
+            "due_date": "DateClose",
+            "description": "Description",
+        }
+        for canonical, source in aliases.items():
+            if result.get(canonical) in (None, "") and result.get(source) not in (None, ""):
+                result[canonical] = result[source]
+        departments = envelope.get("departments", {})
+        department_id = str(result.get("department_id") or "")
+        if not result.get("department") and isinstance(departments, Mapping):
+            department = departments.get(department_id)
+            if isinstance(department, Mapping):
+                result["department"] = department.get("DepartmentName")
+        result.setdefault("agency", self.portal.owning_organization)
+        result.setdefault("status", "Open")
+        return result
 
     def document_candidates(self, opportunity: RawOpportunity) -> list[DocumentCandidate]:
         """Convert discovery metadata into PR #12 manifest inputs without fetching bodies."""
@@ -906,8 +1014,7 @@ class BonfireProcurementConnector(BaseConnector):
             return OpportunityStatus.OPEN
         return OpportunityStatus.UNKNOWN
 
-    @staticmethod
-    def _datetime(value: Any) -> datetime | None:
+    def _datetime(self, value: Any) -> datetime | None:
         text = _clean(value)
         if not text:
             return None
@@ -915,6 +1022,20 @@ class BonfireProcurementConnector(BaseConnector):
             parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
             return parsed if parsed.tzinfo else parsed.replace(tzinfo=UTC)
         except ValueError:
+            normalized = re.sub(r"(\d)(?:st|nd|rd|th)\b", r"\1", text, flags=re.I)
+            normalized = re.sub(r"\s+(?:PST|PDT|MST|MDT|CST|CDT|EST|EDT)$", "", normalized)
+            try:
+                return datetime.strptime(normalized, "%b %d %Y, %I:%M %p").replace(
+                    tzinfo=ZoneInfo(self.portal.default_timezone)
+                )
+            except ValueError:
+                pass
+            try:
+                # Bonfire's DB_DATE_STRING values are UTC; the portal renders them in
+                # the tenant timezone with moment-timezone.
+                return datetime.strptime(normalized, "%Y-%m-%d %H:%M:%S").replace(tzinfo=UTC)
+            except ValueError:
+                pass
             return None
 
     @staticmethod

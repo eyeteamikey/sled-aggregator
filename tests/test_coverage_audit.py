@@ -161,7 +161,7 @@ class CoverageAuditTests(unittest.TestCase):
                 "live_verified": 0,
                 "production_monitored": 0,
                 "tier_0_remaining": 36,
-                "blocked_jurisdictions": 15,
+                "blocked_jurisdictions": 16,
             },
         )
         self.assertEqual(len(plan["unidentified_primary_sources"]), 36)
@@ -421,9 +421,10 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(json.loads(render_json(report))["summary"]["jurisdiction_count"], 56)
         rows = list(csv.DictReader(io.StringIO(render_csv(report))))
         # Rhode Island and Michigan retain separate supplemental sources; New
-        # Jersey and California include validated local OpenGov sources; the
-        # local DemandStar inventory now also includes Will and Ramsey counties.
-        self.assertEqual(len(rows), 63)
+        # Jersey and California include validated local OpenGov sources; Will
+        # and Ramsey add DemandStar, while Ventura and Hillsborough add
+        # evidence-scoped local Bonfire sources.
+        self.assertEqual(len(rows), 64)
         self.assertEqual(len({x["jurisdiction_code"] for x in rows}), 56)
         markdown = render_markdown(report)
         self.assertEqual(markdown, render_markdown(report))

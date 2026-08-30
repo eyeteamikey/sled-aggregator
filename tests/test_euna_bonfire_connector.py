@@ -15,7 +15,9 @@ from sled_aggregator.connectors.euna_bonfire import (
     FCPS,
     FIXTURE_ONLY,
     FLORENCE_1,
+    HILLSBOROUGH_COUNTY,
     REGION_10,
+    VENTURA_COUNTY,
     BonfireAccessError,
     BonfireAccessState,
     BonfireAvailabilityError,
@@ -29,6 +31,8 @@ FIXTURES = Path(__file__).parent / "fixtures"
 LISTING = (FIXTURES / "bonfire_opportunity_list.html").read_text()
 DETAIL = (FIXTURES / "bonfire_opportunity_detail.html").read_text()
 EMPTY = (FIXTURES / "bonfire_empty.html").read_text()
+VENTURA_LISTING = (FIXTURES / "bonfire_ventura_public_portal.json").read_text()
+HILLSBOROUGH_LISTING = (FIXTURES / "bonfire_hillsborough_public_portal.json").read_text()
 
 
 def response(url, text, status=200, content_type="text/html", headers=None):
@@ -73,6 +77,8 @@ class BonfireConnectorTests(unittest.IsolatedAsyncioTestCase):
                 "fsd1",
                 "region10",
                 "charlottenc",
+                "ventura-county-ca",
+                "hillsborough-county-fl",
                 "fixture-only",
             },
         )
@@ -85,6 +91,8 @@ class BonfireConnectorTests(unittest.IsolatedAsyncioTestCase):
             (FLORENCE_1, "fsd1.bonfirehub.com", "school district"),
             (REGION_10, "region10.bonfirehub.com", "cooperative purchasing organization"),
             (CHARLOTTE, "charlottenc.bonfirehub.com", "city"),
+            (VENTURA_COUNTY, "ventura.bonfirehub.com", "county"),
+            (HILLSBOROUGH_COUNTY, "hillsboroughcounty.bonfirehub.com", "county"),
         ]
         for portal, host, entity in expected:
             self.assertEqual(portal.portal_hostname, host)
@@ -97,6 +105,8 @@ class BonfireConnectorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(FCPS.platform_variant, "euna_branded_bonfire")
         self.assertEqual(CHARLOTTE.verification_status, "registration_required")
         self.assertFalse(FIXTURE_ONLY.production)
+        self.assertEqual(VENTURA_COUNTY.verification_status, "public_metadata_only")
+        self.assertEqual(HILLSBOROUGH_COUNTY.department_filtering_support, "unsupported")
         for alias in (
             "euna/bonfire",
             "bonfire",
@@ -153,6 +163,79 @@ class BonfireConnectorTests(unittest.IsolatedAsyncioTestCase):
             FIXTURE_ONLY,
         )
         self.assertEqual(fixture[0].source.source_id, "bonfire:fixture-public:solicitation:ifb-9")
+
+    async def test_live_public_portal_json_contract_is_shared_across_tenants(self):
+        cases = (
+            (
+                VENTURA_COUNTY,
+                VENTURA_LISTING,
+                "250430",
+                "RD27-09(I)",
+                "PWA",
+                "America/Los_Angeles",
+            ),
+            (
+                HILLSBOROUGH_COUNTY,
+                HILLSBOROUGH_LISTING,
+                "235258",
+                "RFP-26-00262",
+                None,
+                "America/New_York",
+            ),
+        )
+        for portal, payload, project_id, reference, department, timezone in cases:
+            with self.subTest(portal=portal.portal_key):
+                connector, fake, items = await self.collect(
+                    [response(portal.embed_list_url, payload, content_type="application/json")],
+                    BonfireQuery(include_details=True, keyword=reference, maximum_pages=9),
+                    portal,
+                )
+                self.assertEqual(len(items), 1)
+                item = items[0]
+                self.assertEqual(
+                    item.source.source_id,
+                    f"bonfire:{portal.tenant_slug}:opportunity:{project_id}",
+                )
+                self.assertEqual(item.solicitation_number, reference)
+                self.assertEqual(item.raw_payload.get("department"), department)
+                self.assertEqual(str(item.due_at.tzinfo), "UTC")
+                rendered = (
+                    "Sep 1st 2026, 2:00 PM PDT"
+                    if timezone == "America/Los_Angeles"
+                    else "Aug 31st 2026, 2:00 PM EDT"
+                )
+                self.assertEqual(str(connector._datetime(rendered).tzinfo), timezone)
+                self.assertEqual(str(item.source.opportunity_url), portal.opportunity_url(project_id))
+                self.assertEqual(fake.calls, [("GET", portal.embed_list_url, {})])
+                self.assertFalse(connector.health.detail_supported)
+                self.assertFalse(connector.health.document_discovery_supported)
+
+    async def test_public_portal_json_filters_limits_dedup_and_malformed_shape(self):
+        _, _, items = await self.collect(
+            [
+                response(
+                    VENTURA_COUNTY.embed_list_url,
+                    VENTURA_LISTING,
+                    content_type="application/json",
+                )
+            ],
+            BonfireQuery(
+                include_details=False,
+                department="PWA",
+                statuses=("Open",),
+                maximum_results=1,
+            ),
+            VENTURA_COUNTY,
+        )
+        self.assertEqual(len(items), 1)
+        malformed = '{"projects":{"ProjectID":"not-a-list"}}'
+        with self.assertRaises(BonfireAccessError) as caught:
+            await self.collect(
+                [response(VENTURA_COUNTY.embed_list_url, malformed, content_type="application/json")],
+                BonfireQuery(include_details=False),
+                VENTURA_COUNTY,
+            )
+        self.assertEqual(caught.exception.state, BonfireAccessState.MALFORMED)
 
     async def test_access_classification_changed_shapes_and_safety(self):
         cases = [

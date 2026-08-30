@@ -2003,6 +2003,134 @@
       "evidence_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county"
     },
     {
+      "key": "ca-ventura-county-bonfire",
+      "jurisdiction_code": "CA",
+      "name": "County of Ventura Euna Bonfire",
+      "source_level": "local",
+      "source_role": "primary",
+      "official_url": "https://venturacounty.gov/general-services-agency/procurement-home/",
+      "platform_family": "euna/bonfire",
+      "connector_name": "euna/bonfire",
+      "connector_status": "partially_implemented",
+      "verification_status": "public_metadata_only",
+      "discovery_access": "public",
+      "detail_access": "blocked",
+      "document_access": "unknown",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "priority": 2,
+      "expected_coverage_impact": "Ventura County procurement only",
+      "source_id": "ca-ventura-county-bonfire",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "County of Ventura",
+      "official_landing_page": "https://venturacounty.gov/general-services-agency/procurement-home/",
+      "public_bid_board_url": "https://ventura.bonfirehub.com/portal/?tab=openOpportunities",
+      "public_search_url": "https://ventura.bonfirehub.com/PublicPortal/getOpenPublicOpportunitiesSectionData",
+      "public_detail_url_pattern": "https://ventura.bonfirehub.com/opportunities/{project_id}",
+      "connector_key": "euna/bonfire",
+      "connector_alias": "bonfire",
+      "portal_profile_key": "ventura-county-ca",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "blocked",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "not_evidenced",
+      "authentication_requirement": "submission_only_observed",
+      "registration_requirement": "submission_only_observed",
+      "captcha_classification": "cloudflare_challenge_on_detail_in_cloud_browser",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_listing_and_route_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/euna_bonfire_two_tenants_2026-08-30.md"
+      ],
+      "fixture_references": [
+        "tests/fixtures/bonfire_ventura_public_portal.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/bonfire_ventura_public_portal.json"
+      ],
+      "test_location": [
+        "tests/test_euna_bonfire_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Listing metadata is public; detail navigation was challenged by Cloudflare; documents and post-listing capabilities remain unverified."
+      ],
+      "blocker_reason": "Cloudflare security verification on project detail in the cloud browser.",
+      "recommended_next_action": "Capture a bounded anonymous desktop HAR for detail and document validation.",
+      "evidence_url": "https://ventura.bonfirehub.com/portal/?tab=openOpportunities"
+    },
+    {
+      "key": "fl-hillsborough-county-bonfire",
+      "jurisdiction_code": "FL",
+      "name": "Hillsborough County Euna Bonfire",
+      "source_level": "local",
+      "source_role": "primary",
+      "official_url": "https://hcfl.gov/departments/procurement",
+      "platform_family": "euna/bonfire",
+      "connector_name": "euna/bonfire",
+      "connector_status": "partially_implemented",
+      "verification_status": "public_metadata_only",
+      "discovery_access": "public",
+      "detail_access": "blocked",
+      "document_access": "unknown",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": false,
+      "source_status": "active",
+      "migration_status": "current",
+      "priority": 2,
+      "expected_coverage_impact": "Hillsborough County procurement only",
+      "source_id": "fl-hillsborough-county-bonfire",
+      "jurisdiction_id": "FL",
+      "jurisdiction_scope": "local",
+      "owning_public_entity": "Hillsborough County",
+      "official_landing_page": "https://hcfl.gov/departments/procurement",
+      "public_bid_board_url": "https://hillsboroughcounty.bonfirehub.com/portal/?tab=openOpportunities",
+      "public_search_url": "https://hillsboroughcounty.bonfirehub.com/PublicPortal/getOpenPublicOpportunitiesSectionData",
+      "public_detail_url_pattern": "https://hillsboroughcounty.bonfirehub.com/opportunities/{project_id}",
+      "connector_key": "euna/bonfire",
+      "connector_alias": "bonfire",
+      "portal_profile_key": "hillsborough-county-fl",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "blocked",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "not_evidenced",
+      "authentication_requirement": "submission_only_observed",
+      "registration_requirement": "submission_only_observed",
+      "captcha_classification": "cloudflare_challenge_on_detail_in_cloud_browser",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_listing_and_route_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "docs/connector_validation/euna_bonfire_two_tenants_2026-08-30.md"
+      ],
+      "fixture_references": [
+        "tests/fixtures/bonfire_hillsborough_public_portal.json"
+      ],
+      "fixture_location": [
+        "tests/fixtures/bonfire_hillsborough_public_portal.json"
+      ],
+      "test_location": [
+        "tests/test_euna_bonfire_connector.py"
+      ],
+      "last_verified": "2026-08-30",
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Listing metadata is public; detail navigation was challenged by Cloudflare; documents and post-listing capabilities remain unverified."
+      ],
+      "blocker_reason": "Cloudflare security verification on project detail in the cloud browser.",
+      "recommended_next_action": "Capture a bounded anonymous desktop HAR for detail and document validation.",
+      "evidence_url": "https://hillsboroughcounty.bonfirehub.com/portal/?tab=openOpportunities"
+    },
+    {
       "key": "az-maricopa-county-bidnet",
       "jurisdiction_code": "AZ",
       "name": "Maricopa County Procurement Services BidNet Direct",
