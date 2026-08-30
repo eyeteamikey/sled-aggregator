@@ -1,0 +1,187 @@
+{
+  "as_of": "2026-08-30",
+  "buyer_class_distribution": {
+    "K\u201312": 1,
+    "airport": 0,
+    "cooperative": 3,
+    "county": 13,
+    "higher education": 0,
+    "housing": 0,
+    "municipality": 1,
+    "port": 0,
+    "regional": 0,
+    "special district": 0,
+    "transit": 0,
+    "tribal": 0
+  },
+  "capability_distribution": {
+    "OCR_when_required": {
+      "not_verified": 28,
+      "pipeline_available": 10
+    },
+    "amendments_addenda": {
+      "metadata_only": 3,
+      "not_verified": 35
+    },
+    "anonymous_document_download": {
+      "gated": 4,
+      "not_verified": 34
+    },
+    "attachment_metadata": {
+      "fixture_verified": 20,
+      "gated": 6,
+      "live_verified": 3,
+      "not_verified": 9
+    },
+    "awards": {
+      "metadata_only": 6,
+      "not_verified": 32
+    },
+    "document_text_extraction": {
+      "fixture_verified": 10,
+      "not_verified": 28
+    },
+    "filters": {
+      "fixture_verified": 2,
+      "live_verified": 7,
+      "not_verified": 29
+    },
+    "keyword_search": {
+      "fixture_verified": 2,
+      "live_verified": 9,
+      "not_verified": 27
+    },
+    "listing_discovery": {
+      "fixture_verified": 22,
+      "live_verified": 14,
+      "not_verified": 2
+    },
+    "opportunity_details": {
+      "blocked": 2,
+      "fixture_verified": 20,
+      "gated": 2,
+      "live_verified": 7,
+      "metadata_only": 5,
+      "not_verified": 2
+    },
+    "pagination": {
+      "client_side_live_verified": 2,
+      "live_verified": 5,
+      "not_verified": 31
+    },
+    "public_contacts": {
+      "live_verified": 5,
+      "not_verified": 33
+    },
+    "public_q_and_a": {
+      "not_verified": 38
+    },
+    "sorting": {
+      "live_verified": 9,
+      "not_verified": 29
+    },
+    "vendors_bidders_awardees": {
+      "live_verified": 2,
+      "not_verified": 36
+    }
+  },
+  "core_sled_potential_portal_owners": 103947,
+  "counts": {
+    "anonymous_document_downloads_verified": 0,
+    "attachment_metadata_verified": 3,
+    "captcha_or_waf_blocked_tenants": 2,
+    "connector_families_implemented": 21,
+    "connector_families_with_two_independent_tenants": 11,
+    "details_verified": 12,
+    "document_extraction_pipeline_verified": 10,
+    "login_or_registration_gated_tenants": 8,
+    "public_anonymous_listings_verified": 14,
+    "registered_source_records": 38,
+    "unique_platform_families": 19,
+    "unique_portal_tenants": 36
+  },
+  "coverage_funnel": [
+    {
+      "completed": 103947,
+      "denominator": 103947,
+      "meaning": "Fixed universe of potential portal-owning core SLED organizations; not a validation claim.",
+      "percentage": 100.0,
+      "remaining": 0,
+      "stage": "core_potential_portal_owners"
+    },
+    {
+      "completed": 38,
+      "denominator": 103947,
+      "meaning": "Entities with an official procurement source recorded, measured against the core universe.",
+      "percentage": 0.0366,
+      "remaining": 103909,
+      "stage": "official_source_discovered"
+    },
+    {
+      "completed": 36,
+      "denominator": 38,
+      "meaning": "Connector-backed unique tenants among entities with a discovered source.",
+      "percentage": 94.7368,
+      "remaining": 2,
+      "stage": "normalized_portal_tenant"
+    },
+    {
+      "completed": 36,
+      "denominator": 36,
+      "meaning": "Normalized tenants with an official government starting link recorded.",
+      "percentage": 100.0,
+      "remaining": 0,
+      "stage": "official_link_evidence"
+    },
+    {
+      "completed": 14,
+      "denominator": 36,
+      "meaning": "Normalized tenants with point-in-time anonymous listing evidence.",
+      "percentage": 38.8889,
+      "remaining": 22,
+      "stage": "live_listing_validation"
+    },
+    {
+      "completed": 12,
+      "denominator": 36,
+      "meaning": "Normalized tenants with live full-detail or explicitly metadata-only detail evidence.",
+      "percentage": 33.3333,
+      "remaining": 24,
+      "stage": "detail_validation"
+    },
+    {
+      "completed": 0,
+      "denominator": 36,
+      "meaning": "Normalized tenants with an anonymously downloaded representative document; metadata alone does not qualify.",
+      "percentage": 0.0,
+      "remaining": 36,
+      "stage": "document_validation"
+    },
+    {
+      "completed": 0,
+      "denominator": 36,
+      "meaning": "Normalized tenants with scheduled-live or production-monitoring evidence.",
+      "percentage": 0.0,
+      "remaining": 36,
+      "stage": "scheduled_production_monitoring"
+    }
+  ],
+  "derivation": {
+    "generator": "sled_aggregator.coverage.validation_metrics",
+    "next_wave": "data/coverage/next_validation_wave.json",
+    "source_registry": "data/coverage/sources.json"
+  },
+  "evidence_tier_distribution": {
+    "blocked": 0,
+    "configured_unverified": 0,
+    "fixture_verified": 22,
+    "live_public_verified": 9,
+    "not_researched": 0,
+    "official_link_verified": 2,
+    "production_monitored": 0,
+    "public_metadata_only": 5,
+    "scheduled_live_verified": 0
+  },
+  "next_wave_target_count": 10,
+  "schema_version": "1.0"
+}

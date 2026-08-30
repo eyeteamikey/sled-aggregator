@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "as_of": "2026-08-24",
+  "as_of": "2026-08-30",
   "sources": [
     {
       "key": "al-alabamabuys",
@@ -59,7 +59,27 @@
         "Codex Cloud outbound CONNECT returned 403 before reaching the official host, so no live access claim is made."
       ],
       "blocker_reason": "Tenant, public routes, request parameters, response fields, access behavior, and attachment contract require sanitized capture.",
-      "recommended_next_action": "Capture a bounded anonymous AlabamaBuys public bid-board contract and sanitize representative fixtures before selecting a connector profile."
+      "recommended_next_action": "Capture a bounded anonymous AlabamaBuys public bid-board contract and sanitize representative fixtures before selecting a connector profile.",
+      "tenant_id": "al-alabamabuys",
+      "buyer_class": "state",
+      "evidence_tier": "official_link_verified",
+      "capabilities": {
+        "listing_discovery": "not_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "not_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "oh-ohiobuys",
@@ -118,7 +138,27 @@
         "Codex Cloud outbound CONNECT returned 403 before reaching the official host, so no live access claim is made."
       ],
       "blocker_reason": "Tenant, public routes, request parameters, response fields, access behavior, and attachment contract require sanitized capture.",
-      "recommended_next_action": "Capture a bounded anonymous OhioBuys public bid-board contract and sanitize representative fixtures before selecting a connector profile."
+      "recommended_next_action": "Capture a bounded anonymous OhioBuys public bid-board contract and sanitize representative fixtures before selecting a connector profile.",
+      "tenant_id": "oh-ohiobuys",
+      "buyer_class": "state",
+      "evidence_tier": "official_link_verified",
+      "capabilities": {
+        "listing_discovery": "not_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "not_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "ca-cal-eprocure",
@@ -184,7 +224,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Repeat a bounded anonymous GET validation from an environment permitted to reach California government hosts.",
-      "evidence_url": "https://www.dgs.ca.gov/PD/Resources/Page-Content/Procurement-Division-Resources-List-Folder/Cal-eProcure"
+      "evidence_url": "https://www.dgs.ca.gov/PD/Resources/Page-Content/Procurement-Division-Resources-List-Folder/Cal-eProcure",
+      "tenant_id": "ca-cal-eprocure",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "ga-gpr",
@@ -249,7 +309,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Repeat a bounded anonymous GET validation from an environment permitted to reach Georgia government hosts.",
-      "evidence_url": "https://doas.ga.gov/state-purchasing/georgia-procurement-registry-for-local-governments"
+      "evidence_url": "https://doas.ga.gov/state-purchasing/georgia-procurement-registry-for-local-governments",
+      "tenant_id": "ga-gpr",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "md-emma",
@@ -314,7 +394,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Repeat a bounded anonymous GET validation from an environment permitted to reach Maryland government hosts.",
-      "evidence_url": "https://procurement.maryland.gov/emma-2/"
+      "evidence_url": "https://procurement.maryland.gov/emma-2/",
+      "tenant_id": "md-emma",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "pa-emarketplace",
@@ -379,7 +479,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Repeat a bounded anonymous GET validation from an environment permitted to reach Pennsylvania government hosts.",
-      "evidence_url": "https://www.emarketplace.state.pa.us/"
+      "evidence_url": "https://www.emarketplace.state.pa.us/",
+      "tenant_id": "pa-emarketplace",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "ri-rivip-external",
@@ -441,7 +561,27 @@
         "local and education external notices"
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "tenant_id": "ri-rivip-external",
+      "buyer_class": "cooperative",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "tx-esbd",
@@ -503,7 +643,27 @@
         "statewide"
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "tenant_id": "tx-esbd",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "va-eva",
@@ -565,7 +725,27 @@
         "statewide"
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "tenant_id": "va-eva",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "oh-summit-county-tyler-munis-vss",
@@ -641,7 +821,27 @@
         "Awards and amendments were not separately established by this capture."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Run bounded connector validation periodically and fail closed on login, CAPTCHA, or contract drift."
+      "recommended_next_action": "Run bounded connector validation periodically and fail closed on login, CAPTCHA, or contract drift.",
+      "tenant_id": "oh-summit-county-tyler-munis-vss",
+      "buyer_class": "county",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "al-opelika-tyler-munis-vss",
@@ -709,7 +909,27 @@
         "Capture proves observed anonymous contracts, not continuous availability."
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift."
+      "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
+      "tenant_id": "al-opelika-tyler-munis-vss",
+      "buyer_class": "cooperative",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "mi-sigma-vss",
@@ -783,7 +1003,27 @@
       ],
       "blocker_reason": "Observed solicitation-search route returned HTTP 404.",
       "recommended_next_action": "Reconfirm the current official public route before another bounded capture.",
-      "evidence_url": "https://www.michigan.gov/budget/budget-offices/sigma"
+      "evidence_url": "https://www.michigan.gov/budget/budget-offices/sigma",
+      "tenant_id": "michigan/sigma-vss",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "mi-detroit-oracle-fusion",
@@ -851,7 +1091,27 @@
         "City of Detroit procurement"
       ],
       "blocker_reason": null,
-      "recommended_next_action": "Perform bounded lawful anonymous live validation."
+      "recommended_next_action": "Perform bounded lawful anonymous live validation.",
+      "tenant_id": "mi-detroit-oracle-fusion",
+      "buyer_class": "cooperative",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "fixture_verified",
+        "OCR_when_required": "pipeline_available"
+      }
     },
     {
       "key": "me-vss",
@@ -924,7 +1184,27 @@
       ],
       "blocker_reason": "Observed AltSelfService route produced HTTP 404/403 and failed requests.",
       "recommended_next_action": "Reconfirm the current official public route and access policy before another bounded capture.",
-      "evidence_url": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system"
+      "evidence_url": "https://www.maine.gov/dafs/bbm/procurementservices/vendors/vendor-self-service-system",
+      "tenant_id": "maine/vss",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "ia-impacs",
@@ -996,7 +1276,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
-      "evidence_url": "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities"
+      "evidence_url": "https://das.iowa.gov/procurement/vendors/doing-business-state/bid-opportunities",
+      "tenant_id": "iowa/impacs",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "ut-u3p",
@@ -1068,7 +1368,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
-      "evidence_url": "https://purchasing.utah.gov/currentbids/"
+      "evidence_url": "https://purchasing.utah.gov/currentbids/",
+      "tenant_id": "utah/u3p",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "il-bidbuy",
@@ -1191,6 +1511,26 @@
           "[id*=bidSearchResults]"
         ],
         "requires_empty_or_results_state": true
+      },
+      "tenant_id": "illinois/bidbuy",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
       }
     },
     {
@@ -1263,7 +1603,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Run bounded periodic validation and fail closed on login, CAPTCHA, or contract drift.",
-      "evidence_url": "https://www.mass.gov/commbuys"
+      "evidence_url": "https://www.mass.gov/commbuys",
+      "tenant_id": "massachusetts/commbuys",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "nv-nevadaepro",
@@ -1334,7 +1694,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
-      "evidence_url": "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/"
+      "evidence_url": "https://purchasing.nv.gov/DoingBusiness/Current_Bid_Opportunities/",
+      "tenant_id": "nevada/nevadaepro",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "nj-njstart",
@@ -1405,7 +1785,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
-      "evidence_url": "https://www.nj.gov/treasury/purchase/njstart.shtml"
+      "evidence_url": "https://www.nj.gov/treasury/purchase/njstart.shtml",
+      "tenant_id": "new-jersey/njstart",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "or-oregonbuys",
@@ -1476,7 +1876,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
-      "evidence_url": "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx"
+      "evidence_url": "https://www.oregon.gov/das/Procurement/Pages/oregonbuys.aspx",
+      "tenant_id": "oregon/oregonbuys",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "vi-gvibuy",
@@ -1547,7 +1967,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Perform bounded anonymous GET validation of discovery, detail, and one explicitly public attachment from a permitted network.",
-      "evidence_url": "https://dpp.vi.gov/gvibuy"
+      "evidence_url": "https://dpp.vi.gov/gvibuy",
+      "tenant_id": "us-virgin-islands/gvibuy",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "fixture_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "fixture_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "ct-ctsource",
@@ -1615,7 +2055,27 @@
       ],
       "blocker_reason": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
       "recommended_next_action": "Retain CAPTCHA-boundary evidence and do not promote unattended discovery without a future lawful challenge-free capture.",
-      "evidence_url": "https://portal.ct.gov/das/ctsource/ctsource"
+      "evidence_url": "https://portal.ct.gov/das/ctsource/ctsource",
+      "tenant_id": "connecticut/ctsource",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "metadata_only",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "ri-ocean-state-procures",
@@ -1683,7 +2143,27 @@
       ],
       "blocker_reason": "Operator encountered reCAPTCHA during the public WebProcure workflow.",
       "recommended_next_action": "Retain CAPTCHA-boundary evidence and do not promote unattended discovery without a future lawful challenge-free capture.",
-      "evidence_url": "https://www.purchasing.ri.gov/"
+      "evidence_url": "https://www.purchasing.ri.gov/",
+      "tenant_id": "rhode-island/ocean-state-procures",
+      "buyer_class": "state",
+      "evidence_tier": "fixture_verified",
+      "capabilities": {
+        "listing_discovery": "fixture_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "metadata_only",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "nj-ocean-county-opengov",
@@ -1777,7 +2257,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
-      "evidence_url": "https://procurement.opengov.com/portal/oceancounty"
+      "evidence_url": "https://procurement.opengov.com/portal/oceancounty",
+      "tenant_id": "ocean-county-nj",
+      "buyer_class": "county",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "live_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "gated",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "ca-alameda-county-opengov",
@@ -1866,7 +2366,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Repeat bounded anonymous contract validation periodically and fail closed on login, CAPTCHA, or schema drift.",
-      "evidence_url": "https://procurement.opengov.com/portal/acgov"
+      "evidence_url": "https://procurement.opengov.com/portal/acgov",
+      "tenant_id": "alameda-county-ca",
+      "buyer_class": "county",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "live_verified",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "gated",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "il-will-county-demandstar",
@@ -1933,7 +2453,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Capture a desktop HAR to verify UI search controls and any unobserved award or Q&A routes.",
-      "evidence_url": "https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids"
+      "evidence_url": "https://willcounty.gov/County-Offices/Administration/Purchasing/Current-Bids",
+      "tenant_id": "il-will-county",
+      "buyer_class": "county",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "fixture_verified",
+        "filters": "fixture_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "live_verified",
+        "public_contacts": "live_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "live_verified",
+        "attachment_metadata": "live_verified",
+        "anonymous_document_download": "gated",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "mn-ramsey-county-demandstar",
@@ -2000,7 +2540,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Capture a desktop HAR to verify UI search controls and any unobserved award or Q&A routes.",
-      "evidence_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county"
+      "evidence_url": "https://www.ramseycountymn.gov/businesses/doing-business-ramsey-county/contracts-vendors/how-contract-ramsey-county",
+      "tenant_id": "mn-ramsey-county",
+      "buyer_class": "county",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "fixture_verified",
+        "filters": "fixture_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "live_verified",
+        "public_contacts": "live_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "live_verified",
+        "attachment_metadata": "live_verified",
+        "anonymous_document_download": "gated",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "ca-ventura-county-bonfire",
@@ -2064,7 +2624,27 @@
       ],
       "blocker_reason": "Cloudflare security verification on project detail in the cloud browser.",
       "recommended_next_action": "Capture a bounded anonymous desktop HAR for detail and document validation.",
-      "evidence_url": "https://ventura.bonfirehub.com/portal/?tab=openOpportunities"
+      "evidence_url": "https://ventura.bonfirehub.com/portal/?tab=openOpportunities",
+      "tenant_id": "ventura-county-ca",
+      "buyer_class": "county",
+      "evidence_tier": "public_metadata_only",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "live_verified",
+        "sorting": "live_verified",
+        "pagination": "client_side_live_verified",
+        "opportunity_details": "blocked",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "fl-hillsborough-county-bonfire",
@@ -2128,7 +2708,27 @@
       ],
       "blocker_reason": "Cloudflare security verification on project detail in the cloud browser.",
       "recommended_next_action": "Capture a bounded anonymous desktop HAR for detail and document validation.",
-      "evidence_url": "https://hillsboroughcounty.bonfirehub.com/portal/?tab=openOpportunities"
+      "evidence_url": "https://hillsboroughcounty.bonfirehub.com/portal/?tab=openOpportunities",
+      "tenant_id": "hillsborough-county-fl",
+      "buyer_class": "county",
+      "evidence_tier": "public_metadata_only",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "live_verified",
+        "sorting": "live_verified",
+        "pagination": "client_side_live_verified",
+        "opportunity_details": "blocked",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "az-maricopa-county-bidnet",
@@ -2195,7 +2795,27 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Capture and sanitize a desktop HAR before scheduled live promotion.",
-      "evidence_url": "https://www.maricopa.gov/2190/Solicitations"
+      "evidence_url": "https://www.maricopa.gov/2190/Solicitations",
+      "tenant_id": "az-maricopa-county",
+      "buyer_class": "county",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "not_verified",
+        "sorting": "live_verified",
+        "pagination": "live_verified",
+        "opportunity_details": "metadata_only",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "metadata_only",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "gated",
+        "anonymous_document_download": "gated",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     },
     {
       "key": "co-denver-general-services-bidnet",
@@ -2263,7 +2883,585 @@
       ],
       "blocker_reason": null,
       "recommended_next_action": "Capture and sanitize a desktop HAR before scheduled live promotion.",
-      "evidence_url": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities"
+      "evidence_url": "https://www.denvergov.org/Government/Agencies-Departments-Offices/Agencies-Departments-Offices-Directory/General-Services/Purchasing/Bidding-Opportunities",
+      "tenant_id": "co-denver-general-services",
+      "buyer_class": "municipality",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "not_verified",
+        "sorting": "live_verified",
+        "pagination": "live_verified",
+        "opportunity_details": "metadata_only",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "metadata_only",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "gated",
+        "anonymous_document_download": "gated",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
+    },
+    {
+      "key": "ca-fresno-county-public-purchase",
+      "jurisdiction_code": "CA",
+      "name": "Fresno County",
+      "source_level": "county",
+      "source_role": "supplemental",
+      "official_url": "https://www.fresnocountyca.gov/Departments/General-Services-Department/Purchasing-Services/Bid-Opportunities",
+      "discovery_url": "https://www.publicpurchase.com/gems/fresnoco,ca/buyer/public/publicInfo",
+      "platform_family": "public-purchase",
+      "connector_name": "public-purchase",
+      "connector_status": "implemented",
+      "verification_status": "public_metadata_only",
+      "discovery_access": "public",
+      "detail_access": "gated",
+      "document_access": "login_required",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": true,
+      "source_status": "active",
+      "authentication_requirement": "none_for_listing",
+      "registration_requirement": "required_for_response",
+      "captcha_status": "not_observed",
+      "robots_policy_status": "not_observed",
+      "automated_access_status": "browser_observed",
+      "migration_status": "current",
+      "last_verified": "2026-08-30",
+      "evidence_url": "https://www.fresnocountyca.gov/Departments/General-Services-Department/Purchasing-Services/Bid-Opportunities",
+      "fixture_references": [
+        "tests/fixtures/public_purchase_gems_open_table.html"
+      ],
+      "notes": "Point-in-time browser evidence; capability claims are tenant-specific.",
+      "priority": 2,
+      "expected_coverage_impact": "reusable local platform tenant",
+      "covers_levels": [
+        "county"
+      ],
+      "source_id": "ca-fresno-county-public-purchase",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local_supplemental",
+      "owning_public_entity": "Fresno County",
+      "official_landing_page": "https://www.fresnocountyca.gov/Departments/General-Services-Department/Purchasing-Services/Bid-Opportunities",
+      "public_bid_board_url": "https://www.publicpurchase.com/gems/fresnoco,ca/buyer/public/publicInfo",
+      "public_search_url": "https://www.publicpurchase.com/gems/fresnoco,ca/buyer/public/publicInfo",
+      "connector_key": "public-purchase",
+      "portal_profile_key": "fresno-county-ca",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "gated",
+      "attachment_classification": "login_required",
+      "document_pipeline_classification": "manifest_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "browser_only_point_in_time",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "https://www.fresnocountyca.gov/Departments/General-Services-Department/Purchasing-Services/Bid-Opportunities",
+        "docs/connector_validation/public_purchase_two_tenants_2026-08-30.md",
+        "tests/fixtures/public_purchase_gems_open_table.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/public_purchase_gems_open_table.html"
+      ],
+      "test_location": [
+        "tests/test_sled_validation_metrics.py"
+      ],
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Details and documents require login."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture scheduled listing checks; do not attempt gated detail access.",
+      "tenant_id": "fresno-county-ca",
+      "buyer_class": "county",
+      "evidence_tier": "public_metadata_only",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "live_verified",
+        "sorting": "live_verified",
+        "pagination": "live_verified",
+        "opportunity_details": "gated",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "metadata_only",
+        "public_q_and_a": "not_verified",
+        "awards": "metadata_only",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "gated",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
+    },
+    {
+      "key": "ca-kern-county-public-purchase",
+      "jurisdiction_code": "CA",
+      "name": "Kern County",
+      "source_level": "county",
+      "source_role": "supplemental",
+      "official_url": "https://www.kerncounty.com/government/county-administrative-office/how-do-i/view/current-bid-opportunities",
+      "discovery_url": "https://www.publicpurchase.com/gems/kern,ca/buyer/public/publicInfo",
+      "platform_family": "public-purchase",
+      "connector_name": "public-purchase",
+      "connector_status": "implemented",
+      "verification_status": "public_metadata_only",
+      "discovery_access": "public",
+      "detail_access": "gated",
+      "document_access": "login_required",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": true,
+      "source_status": "active",
+      "authentication_requirement": "none_for_listing",
+      "registration_requirement": "required_for_response",
+      "captcha_status": "not_observed",
+      "robots_policy_status": "not_observed",
+      "automated_access_status": "browser_observed",
+      "migration_status": "current",
+      "last_verified": "2026-08-30",
+      "evidence_url": "https://www.kerncounty.com/government/county-administrative-office/how-do-i/view/current-bid-opportunities",
+      "fixture_references": [
+        "tests/fixtures/public_purchase_gems_open_table.html"
+      ],
+      "notes": "Point-in-time browser evidence; capability claims are tenant-specific.",
+      "priority": 2,
+      "expected_coverage_impact": "reusable local platform tenant",
+      "covers_levels": [
+        "county"
+      ],
+      "source_id": "ca-kern-county-public-purchase",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local_supplemental",
+      "owning_public_entity": "Kern County",
+      "official_landing_page": "https://www.kerncounty.com/government/county-administrative-office/how-do-i/view/current-bid-opportunities",
+      "public_bid_board_url": "https://www.publicpurchase.com/gems/kern,ca/buyer/public/publicInfo",
+      "public_search_url": "https://www.publicpurchase.com/gems/kern,ca/buyer/public/publicInfo",
+      "connector_key": "public-purchase",
+      "portal_profile_key": "kern-county-ca",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "gated",
+      "attachment_classification": "login_required",
+      "document_pipeline_classification": "manifest_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "browser_only_point_in_time",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "https://www.kerncounty.com/government/county-administrative-office/how-do-i/view/current-bid-opportunities",
+        "docs/connector_validation/public_purchase_two_tenants_2026-08-30.md",
+        "tests/fixtures/public_purchase_gems_open_table.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/public_purchase_gems_open_table.html"
+      ],
+      "test_location": [
+        "tests/test_sled_validation_metrics.py"
+      ],
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Details and documents require login."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture scheduled listing checks; do not attempt gated detail access.",
+      "tenant_id": "kern-county-ca",
+      "buyer_class": "county",
+      "evidence_tier": "public_metadata_only",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "live_verified",
+        "sorting": "live_verified",
+        "pagination": "live_verified",
+        "opportunity_details": "gated",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "metadata_only",
+        "public_q_and_a": "not_verified",
+        "awards": "metadata_only",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "gated",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
+    },
+    {
+      "key": "fl-palm-beach-county-cgi-vss",
+      "jurisdiction_code": "FL",
+      "name": "Palm Beach County",
+      "source_level": "county",
+      "source_role": "supplemental",
+      "official_url": "https://discover.pbcgov.org/purchasing/Pages/Solicitations.aspx",
+      "discovery_url": "https://pbcvssp.pbc.gov/vssprd/Advantage4",
+      "platform_family": "cgi/advantage-vss",
+      "connector_name": "cgi/advantage-vss",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "mixed",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": true,
+      "source_status": "active",
+      "authentication_requirement": "none_for_listing",
+      "registration_requirement": "required_for_response",
+      "captcha_status": "not_observed",
+      "robots_policy_status": "not_observed",
+      "automated_access_status": "browser_observed",
+      "migration_status": "current",
+      "last_verified": "2026-08-30",
+      "evidence_url": "https://discover.pbcgov.org/purchasing/Pages/Solicitations.aspx",
+      "fixture_references": [
+        "tests/fixtures/cgi_vss_palm_beach_live_sanitized.html"
+      ],
+      "notes": "Point-in-time browser evidence; capability claims are tenant-specific.",
+      "priority": 2,
+      "expected_coverage_impact": "reusable local platform tenant",
+      "covers_levels": [
+        "county"
+      ],
+      "source_id": "fl-palm-beach-county-cgi-vss",
+      "jurisdiction_id": "FL",
+      "jurisdiction_scope": "local_supplemental",
+      "owning_public_entity": "Palm Beach County",
+      "official_landing_page": "https://discover.pbcgov.org/purchasing/Pages/Solicitations.aspx",
+      "public_bid_board_url": "https://pbcvssp.pbc.gov/vssprd/Advantage4",
+      "public_search_url": "https://pbcvssp.pbc.gov/vssprd/Advantage4",
+      "connector_key": "cgi/advantage-vss",
+      "portal_profile_key": "palm-beach-county-fl",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "mixed",
+      "document_pipeline_classification": "manifest_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "browser_only_point_in_time",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "https://discover.pbcgov.org/purchasing/Pages/Solicitations.aspx",
+        "docs/connector_validation/cgi_advantage_vss_palm_beach_los_angeles_2026-08-30.md",
+        "tests/fixtures/cgi_vss_palm_beach_live_sanitized.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/cgi_vss_palm_beach_live_sanitized.html"
+      ],
+      "test_location": [
+        "tests/test_sled_validation_metrics.py"
+      ],
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Attachment metadata observed; no download evidence; stateful Sofia actions need HAR."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture sanitized desktop HAR for read-only actions and one anonymous download, if offered.",
+      "tenant_id": "palm-beach-county-fl",
+      "buyer_class": "county",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "live_verified",
+        "sorting": "live_verified",
+        "pagination": "live_verified",
+        "opportunity_details": "live_verified",
+        "public_contacts": "live_verified",
+        "amendments_addenda": "metadata_only",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "live_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
+    },
+    {
+      "key": "ca-los-angeles-county-cgi-vss",
+      "jurisdiction_code": "CA",
+      "name": "Los Angeles County",
+      "source_level": "county",
+      "source_role": "supplemental",
+      "official_url": "https://doingbusiness.lacounty.gov/",
+      "discovery_url": "https://lacovss.lacounty.gov/webapp/VSSPSRV11/AltSelfService",
+      "platform_family": "cgi/advantage-vss",
+      "connector_name": "cgi/advantage-vss",
+      "connector_status": "implemented",
+      "verification_status": "public_metadata_only",
+      "discovery_access": "public",
+      "detail_access": "metadata_only",
+      "document_access": "unknown",
+      "award_access": "unknown",
+      "authoritative": true,
+      "supplemental": true,
+      "source_status": "active",
+      "authentication_requirement": "none_for_listing",
+      "registration_requirement": "required_for_response",
+      "captcha_status": "not_observed",
+      "robots_policy_status": "not_observed",
+      "automated_access_status": "browser_observed",
+      "migration_status": "current",
+      "last_verified": "2026-08-30",
+      "evidence_url": "https://doingbusiness.lacounty.gov/",
+      "fixture_references": [
+        "tests/fixtures/cgi_vss_los_angeles_live_sanitized.html"
+      ],
+      "notes": "Point-in-time browser evidence; capability claims are tenant-specific.",
+      "priority": 2,
+      "expected_coverage_impact": "reusable local platform tenant",
+      "covers_levels": [
+        "county"
+      ],
+      "source_id": "ca-los-angeles-county-cgi-vss",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local_supplemental",
+      "owning_public_entity": "Los Angeles County",
+      "official_landing_page": "https://doingbusiness.lacounty.gov/",
+      "public_bid_board_url": "https://lacovss.lacounty.gov/webapp/VSSPSRV11/AltSelfService",
+      "public_search_url": "https://lacovss.lacounty.gov/webapp/VSSPSRV11/AltSelfService",
+      "connector_key": "cgi/advantage-vss",
+      "portal_profile_key": "los-angeles-county-ca",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "metadata_only",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "manifest_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "browser_only_point_in_time",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "https://doingbusiness.lacounty.gov/",
+        "docs/connector_validation/cgi_advantage_vss_palm_beach_los_angeles_2026-08-30.md",
+        "tests/fixtures/cgi_vss_los_angeles_live_sanitized.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/cgi_vss_los_angeles_live_sanitized.html"
+      ],
+      "test_location": [
+        "tests/test_sled_validation_metrics.py"
+      ],
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Legacy VSS and custom LACoBids are distinct contracts; full detail not exercised."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture legacy VSS HAR and validate LACoBids as a distinct variant.",
+      "tenant_id": "los-angeles-county-ca",
+      "buyer_class": "county",
+      "evidence_tier": "public_metadata_only",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "not_verified",
+        "filters": "not_verified",
+        "sorting": "not_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "metadata_only",
+        "public_contacts": "not_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "not_verified",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
+    },
+    {
+      "key": "ca-stanislaus-county-planetbids",
+      "jurisdiction_code": "CA",
+      "name": "County of Stanislaus",
+      "source_level": "county",
+      "source_role": "supplemental",
+      "official_url": "https://www.stancounty.com/purchasing/county-bids.shtm",
+      "discovery_url": "https://vendors.planetbids.com/portal/14599/bo/bo-search",
+      "platform_family": "planetbids",
+      "connector_name": "planetbids",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "unknown",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": true,
+      "source_status": "active",
+      "authentication_requirement": "none_for_listing",
+      "registration_requirement": "required_for_response",
+      "captcha_status": "not_observed",
+      "robots_policy_status": "not_observed",
+      "automated_access_status": "browser_observed",
+      "migration_status": "current",
+      "last_verified": "2026-08-30",
+      "evidence_url": "https://www.stancounty.com/purchasing/county-bids.shtm",
+      "fixture_references": [
+        "tests/fixtures/planetbids_rendered_listing.html"
+      ],
+      "notes": "Point-in-time browser evidence; capability claims are tenant-specific.",
+      "priority": 2,
+      "expected_coverage_impact": "reusable local platform tenant",
+      "covers_levels": [
+        "county"
+      ],
+      "source_id": "ca-stanislaus-county-planetbids",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local_supplemental",
+      "owning_public_entity": "County of Stanislaus",
+      "official_landing_page": "https://www.stancounty.com/purchasing/county-bids.shtm",
+      "public_bid_board_url": "https://vendors.planetbids.com/portal/14599/bo/bo-search",
+      "public_search_url": "https://vendors.planetbids.com/portal/14599/bo/bo-search",
+      "connector_key": "planetbids",
+      "portal_profile_key": "stanislaus-county-ca",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "manifest_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "browser_only_point_in_time",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "https://www.stancounty.com/purchasing/county-bids.shtm",
+        "docs/connector_validation/planetbids_two_tenants_2026-08-30.md",
+        "tests/fixtures/planetbids_rendered_listing.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/planetbids_rendered_listing.html"
+      ],
+      "test_location": [
+        "tests/test_sled_validation_metrics.py"
+      ],
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Tabs observed, but attachment metadata and downloads were not proven."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture bounded desktop HAR and validate two details and one public document.",
+      "tenant_id": "stanislaus-county-ca",
+      "buyer_class": "county",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "live_verified",
+        "sorting": "live_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "live_verified",
+        "public_contacts": "live_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "metadata_only",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
+    },
+    {
+      "key": "ca-lacoe-planetbids",
+      "jurisdiction_code": "CA",
+      "name": "Los Angeles County Office of Education",
+      "source_level": "education",
+      "source_role": "supplemental",
+      "official_url": "https://www.lacoe.edu/services/business/vendors",
+      "discovery_url": "https://vendors.planetbids.com/portal/61954/bo/bo-search",
+      "platform_family": "planetbids",
+      "connector_name": "planetbids",
+      "connector_status": "implemented",
+      "verification_status": "live_public_verified",
+      "discovery_access": "public",
+      "detail_access": "public",
+      "document_access": "unknown",
+      "award_access": "metadata_only",
+      "authoritative": true,
+      "supplemental": true,
+      "source_status": "active",
+      "authentication_requirement": "none_for_listing",
+      "registration_requirement": "required_for_response",
+      "captcha_status": "not_observed",
+      "robots_policy_status": "not_observed",
+      "automated_access_status": "browser_observed",
+      "migration_status": "current",
+      "last_verified": "2026-08-30",
+      "evidence_url": "https://www.lacoe.edu/services/business/vendors",
+      "fixture_references": [
+        "tests/fixtures/planetbids_rendered_listing.html"
+      ],
+      "notes": "Point-in-time browser evidence; capability claims are tenant-specific.",
+      "priority": 2,
+      "expected_coverage_impact": "reusable local platform tenant",
+      "covers_levels": [
+        "K–12"
+      ],
+      "source_id": "ca-lacoe-planetbids",
+      "jurisdiction_id": "CA",
+      "jurisdiction_scope": "local_supplemental",
+      "owning_public_entity": "Los Angeles County Office of Education",
+      "official_landing_page": "https://www.lacoe.edu/services/business/vendors",
+      "public_bid_board_url": "https://vendors.planetbids.com/portal/61954/bo/bo-search",
+      "public_search_url": "https://vendors.planetbids.com/portal/61954/bo/bo-search",
+      "connector_key": "planetbids",
+      "portal_profile_key": "lacoe-ca",
+      "anonymous_discovery_classification": "public",
+      "anonymous_detail_classification": "public",
+      "attachment_classification": "unknown",
+      "document_pipeline_classification": "manifest_only",
+      "captcha_classification": "none_observed",
+      "robots_access_notes": "browser_only_point_in_time",
+      "allowed_http_methods": [
+        "GET"
+      ],
+      "evidence_type": "live_browser_observation_with_synthetic_fixture",
+      "evidence_location": [
+        "https://www.lacoe.edu/services/business/vendors",
+        "docs/connector_validation/planetbids_two_tenants_2026-08-30.md",
+        "tests/fixtures/planetbids_rendered_listing.html"
+      ],
+      "fixture_location": [
+        "tests/fixtures/planetbids_rendered_listing.html"
+      ],
+      "test_location": [
+        "tests/test_sled_validation_metrics.py"
+      ],
+      "last_verified_date": "2026-08-30",
+      "known_limitations": [
+        "Education entity is distinct from Los Angeles County; downloads not proven."
+      ],
+      "blocker_reason": null,
+      "recommended_next_action": "Capture bounded desktop HAR and validate education-specific details and documents.",
+      "tenant_id": "lacoe-ca",
+      "buyer_class": "K–12",
+      "evidence_tier": "live_public_verified",
+      "capabilities": {
+        "listing_discovery": "live_verified",
+        "keyword_search": "live_verified",
+        "filters": "live_verified",
+        "sorting": "live_verified",
+        "pagination": "not_verified",
+        "opportunity_details": "live_verified",
+        "public_contacts": "live_verified",
+        "amendments_addenda": "not_verified",
+        "public_q_and_a": "not_verified",
+        "awards": "metadata_only",
+        "vendors_bidders_awardees": "not_verified",
+        "attachment_metadata": "not_verified",
+        "anonymous_document_download": "not_verified",
+        "document_text_extraction": "not_verified",
+        "OCR_when_required": "not_verified"
+      }
     }
   ],
   "evidence": [

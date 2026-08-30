@@ -23,6 +23,7 @@ def main(argv=None) -> int:
     report.add_argument("--as-of")
     sub.add_parser("gaps")
     sub.add_parser("recommend")
+    sub.add_parser("metrics")
     for name in (
         "status",
         "matrix",
@@ -65,6 +66,9 @@ def main(argv=None) -> int:
         content = json.dumps(result["gap_analysis"], indent=2, sort_keys=True) + "\n"
         if args.command == "missing":
             content = generated_reports(result)["missing-coverage.md"]
+    elif args.command == "metrics":
+        from .validation_metrics import derive_metrics
+        content = json.dumps(derive_metrics(), indent=2, sort_keys=True) + "\n"
     elif args.command in {"recommend", "queue"}:
         content = json.dumps(result["prioritized_recommendations"], indent=2, sort_keys=True) + "\n"
     elif args.command == "matrix":

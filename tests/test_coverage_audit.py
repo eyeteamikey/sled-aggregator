@@ -138,9 +138,7 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertTrue(all(x["source_ids"] and x["jurisdiction_ids"] for x in first))
         self.assertFalse(any("hypothetical" in str(x).lower() for x in first))
         capture = [x for x in first if x["task_type"] == "public_contract_capture"]
-        self.assertEqual(
-            [x["source_ids"] for x in capture], [["al-alabamabuys"], ["oh-ohiobuys"]]
-        )
+        self.assertEqual([x["source_ids"] for x in capture], [["al-alabamabuys"], ["oh-ohiobuys"]])
         self.assertTrue(all(x["score"] == 20 for x in capture))
 
     def test_breadth_closeout_is_complete_and_machine_executable(self):
@@ -165,14 +163,10 @@ class CoverageAuditTests(unittest.TestCase):
             },
         )
         self.assertEqual(len(plan["unidentified_primary_sources"]), 36)
-        self.assertEqual(
-            plan["unclassified_primary_sources"], ["al-alabamabuys", "oh-ohiobuys"]
-        )
+        self.assertEqual(plan["unclassified_primary_sources"], ["al-alabamabuys", "oh-ohiobuys"])
         self.assertEqual(plan["platform_identified_connector_missing"], [])
         self.assertEqual(len(plan["validation_tasks"]), 18)
-        self.assertEqual(
-            [task["order"] for task in plan["validation_tasks"]], list(range(1, 19))
-        )
+        self.assertEqual([task["order"] for task in plan["validation_tasks"]], list(range(1, 19)))
         method_policies = {
             task["source_id"]: task["method_policy"] for task in plan["validation_tasks"]
         }
@@ -243,7 +237,9 @@ class CoverageAuditTests(unittest.TestCase):
             self.assertEqual(source["verification_status"], "fixture_verified")
             self.assertEqual(source["last_verified_date"], "2026-08-13")
             self.assertEqual(source["document_pipeline_classification"], "manifest_only")
-            self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
+            self.assertTrue(
+                any(x["evidence_type"] == "official_public_landing_page" for x in evidence)
+            )
             self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
             self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
@@ -276,7 +272,9 @@ class CoverageAuditTests(unittest.TestCase):
             else:
                 self.assertIsNone(source["last_verified_date"])
             self.assertEqual(source["document_pipeline_classification"], "manifest_only")
-            self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
+            self.assertTrue(
+                any(x["evidence_type"] == "official_public_landing_page" for x in evidence)
+            )
             self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
             self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
@@ -300,7 +298,9 @@ class CoverageAuditTests(unittest.TestCase):
             self.assertEqual(source["last_verified_date"], "2026-08-13")
             self.assertEqual(source["captcha_classification"], "captcha_present")
             self.assertEqual(source["document_pipeline_classification"], "unknown")
-            self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
+            self.assertTrue(
+                any(x["evidence_type"] == "official_public_landing_page" for x in evidence)
+            )
             self.assertTrue(any(x["evidence_type"] == "sanitized_fixture" for x in evidence))
             self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
@@ -340,15 +340,11 @@ class CoverageAuditTests(unittest.TestCase):
 
     def test_california_official_evidence_does_not_overstate_live_validation(self):
         source = next(x for x in self.sdata["sources"] if x["source_id"] == "ca-cal-eprocure")
-        evidence = [
-            x for x in self.sdata["evidence"] if x["source_id"] == "ca-cal-eprocure"
-        ]
+        evidence = [x for x in self.sdata["evidence"] if x["source_id"] == "ca-cal-eprocure"]
         self.assertEqual(source["verification_status"], "fixture_verified")
         self.assertIsNone(source["last_verified_date"])
         self.assertIn("www.dgs.ca.gov", source["evidence_url"])
-        self.assertTrue(
-            any(x["evidence_type"] == "official_public_landing_page" for x in evidence)
-        )
+        self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
         self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
     def test_georgia_official_evidence_does_not_overstate_live_validation(self):
@@ -357,9 +353,7 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(source["verification_status"], "fixture_verified")
         self.assertIsNone(source["last_verified_date"])
         self.assertIn("doas.ga.gov", source["evidence_url"])
-        self.assertTrue(
-            any(x["evidence_type"] == "official_public_landing_page" for x in evidence)
-        )
+        self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
         self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
     def test_maryland_official_evidence_does_not_overstate_live_validation(self):
@@ -368,9 +362,7 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(source["verification_status"], "fixture_verified")
         self.assertIsNone(source["last_verified_date"])
         self.assertIn("procurement.maryland.gov", source["evidence_url"])
-        self.assertTrue(
-            any(x["evidence_type"] == "official_public_landing_page" for x in evidence)
-        )
+        self.assertTrue(any(x["evidence_type"] == "official_public_landing_page" for x in evidence))
         self.assertFalse(any("live" in x["capabilities"] for x in evidence))
 
     def test_pennsylvania_official_evidence_does_not_overstate_live_validation(self):
@@ -420,11 +412,17 @@ class CoverageAuditTests(unittest.TestCase):
         self.assertEqual(render_json(report), render_json(report))
         self.assertEqual(json.loads(render_json(report))["summary"]["jurisdiction_count"], 56)
         rows = list(csv.DictReader(io.StringIO(render_csv(report))))
-        # Rhode Island and Michigan retain separate supplemental sources; New
-        # Jersey and California include validated local OpenGov sources; Will
-        # and Ramsey add DemandStar, while Ventura and Hillsborough add
-        # evidence-scoped local Bonfire sources.
-        self.assertEqual(len(rows), 64)
+        expected_rows = sum(
+            max(
+                1,
+                sum(
+                    source["jurisdiction_code"] == jurisdiction["code"]
+                    for source in self.sdata["sources"]
+                ),
+            )
+            for jurisdiction in self.jdata["jurisdictions"]
+        )
+        self.assertEqual(len(rows), expected_rows)
         self.assertEqual(len({x["jurisdiction_code"] for x in rows}), 56)
         markdown = render_markdown(report)
         self.assertEqual(markdown, render_markdown(report))
