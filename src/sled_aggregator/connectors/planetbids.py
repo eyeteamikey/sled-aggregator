@@ -26,7 +26,16 @@ from sled_aggregator.domain.enums import AccessState, OpportunityStatus
 from sled_aggregator.domain.models import DocumentCandidate, RawOpportunity, SourceRef
 
 CANONICAL_FAMILY = "planetbids"
-PLATFORM_HOSTS = frozenset({"planetbids.com", "www.planetbids.com", "pbsystem.planetbids.com"})
+PLATFORM_HOSTS = frozenset(
+    {
+        "planetbids.com",
+        "www.planetbids.com",
+        "pbsystem.planetbids.com",
+        "vendors.planetbids.com",
+        "api-external.prod.planetbids.com",
+    }
+)
+API_ROOT = "https://api-external.prod.planetbids.com/papi"
 
 
 class PlanetBidsAccessState(StrEnum):
@@ -36,7 +45,9 @@ class PlanetBidsAccessState(StrEnum):
     LOGIN_REQUIRED = "login_required"
     PROSPECTIVE_BIDDER_REQUIRED = "prospective_bidder_required"
     INVITATION_ONLY = "invitation_only"
+    CAPTCHA_REQUIRED = "captcha_required"
     RESTRICTED = "restricted"
+    NOT_FOUND = "not_found"
     UNAVAILABLE = "unavailable"
     UNKNOWN = "unknown"
     CHANGED_MARKUP = "changed_markup"
@@ -124,7 +135,54 @@ FIXTURE_PROFILE = PlanetBidsProfile(
     approved_hosts=("www.planetbids.com",),
     approved_document_hosts=("docs.fixture.gov",),
 )
-PLANETBIDS_PROFILES = {FIXTURE_PROFILE.profile_key: FIXTURE_PROFILE}
+STANISLAUS_COUNTY = PlanetBidsProfile(
+    profile_key="ca-stanislaus-county",
+    jurisdiction="Stanislaus County, California",
+    state_code="CA",
+    government_level="county",
+    agency_name="Stanislaus County",
+    agency_slug="stanislaus-county",
+    organization_id="14599",
+    agency_page_url="https://vendors.planetbids.com/portal/14599/bo/bo-search",
+    discovery_url=f"{API_ROOT}/bids",
+    detail_url_template=f"{API_ROOT}/bid-details/{{opportunity_id}}",
+    official_procurement_url="https://www.stancounty.com/purchasing/",
+    profile_status="active",
+    verification_status="har_verified",
+    verification_timestamp=datetime(2026, 9, 23, tzinfo=UTC),
+    verification_notes="Anonymous JSON:API listing, detail, addenda, file metadata, Q&A, and one PDF download observed.",
+    approved_hosts=("vendors.planetbids.com", "api-external.prod.planetbids.com"),
+    approved_document_hosts=("files-prod01.planetbids.com",),
+    page_size=30,
+)
+LOS_ANGELES_COUNTY_OFFICE_OF_EDUCATION = PlanetBidsProfile(
+    profile_key="ca-los-angeles-county-office-of-education",
+    jurisdiction="Los Angeles County, California",
+    state_code="CA",
+    government_level="education",
+    agency_name="Los Angeles County Office of Education",
+    agency_slug="los-angeles-county-office-of-education",
+    organization_id="61954",
+    agency_page_url="https://vendors.planetbids.com/portal/61954/bo/bo-search",
+    discovery_url=f"{API_ROOT}/bids",
+    detail_url_template=f"{API_ROOT}/bid-details/{{opportunity_id}}",
+    official_procurement_url="https://www.lacoe.edu/services/business/procurement",
+    profile_status="active",
+    verification_status="har_verified",
+    verification_timestamp=datetime(2026, 9, 23, tzinfo=UTC),
+    verification_notes="Anonymous JSON:API listing, detail, file metadata, addenda, Q&A, and line-item routes observed.",
+    approved_hosts=("vendors.planetbids.com", "api-external.prod.planetbids.com"),
+    approved_document_hosts=("files-prod01.planetbids.com",),
+    page_size=30,
+)
+PLANETBIDS_PROFILES = {
+    profile.profile_key: profile
+    for profile in (
+        FIXTURE_PROFILE,
+        STANISLAUS_COUNTY,
+        LOS_ANGELES_COUNTY_OFFICE_OF_EDUCATION,
+    )
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -153,7 +211,13 @@ class PlanetBidsHealth:
 
 
 class Transport(Protocol):
-    async def get(self, url: str, *, params: Mapping[str, Any] | None = None) -> httpx.Response: ...
+    async def get(
+        self,
+        url: str,
+        *,
+        params: Mapping[str, Any] | None = None,
+        headers: Mapping[str, str] | None = None,
+    ) -> httpx.Response: ...
     async def aclose(self) -> None: ...
 
 
@@ -192,6 +256,10 @@ class _PageParser(HTMLParser):
 def detect_access_boundary(text: str) -> PlanetBidsAccessState:
     value = re.sub(r"\s+", " ", text).casefold()
     for state, terms in (
+        (
+            PlanetBidsAccessState.CAPTCHA_REQUIRED,
+            ("captcha", "verify you are human", "human verification", "security challenge"),
+        ),
         (
             PlanetBidsAccessState.INVITATION_ONLY,
             ("by invitation only", "invited vendors only", "invitation only"),
@@ -232,13 +300,67 @@ def parse_page(
             value = json.loads(block)
         except json.JSONDecodeError:
             continue
-        if isinstance(value, dict):
+        if isinstance(value, dict) and "data" in value:
+            resources = value.get("data")
+            resources = resources if isinstance(resources, list) else [resources]
+            for resource in resources:
+                if not isinstance(resource, dict):
+                    continue
+                attributes = resource.get("attributes")
+                if not isinstance(attributes, dict):
+                    attributes = {}
+                payloads.append(
+                    {
+                        **attributes,
+                        "id": str(resource.get("id") or attributes.get("bidId") or ""),
+                        "resourceType": resource.get("type"),
+                    }
+                )
+        elif isinstance(value, dict):
             candidates = value.get("opportunities") or value.get("items") or [value]
             if isinstance(candidates, list):
                 payloads.extend(x for x in candidates if isinstance(x, dict))
         elif isinstance(value, list):
             payloads.extend(x for x in value if isinstance(x, dict))
     return payloads, parser.links
+
+
+def parse_api_response(text: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Flatten the observed PlanetBids JSON:API resource envelope."""
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError:
+        return [], {}
+    if not isinstance(value, dict) or "data" not in value:
+        return [], {}
+    resources = value.get("data")
+    resources = resources if isinstance(resources, list) else [resources]
+    records = []
+    for resource in resources:
+        if not isinstance(resource, dict):
+            continue
+        attributes = resource.get("attributes")
+        if not isinstance(attributes, dict):
+            attributes = {}
+        records.append(
+            {
+                **attributes,
+                "id": str(resource.get("id") or attributes.get("bidId") or ""),
+                "resourceType": resource.get("type"),
+            }
+        )
+    included = value.get("included")
+    if isinstance(included, list):
+        records.extend(
+            {
+                **(resource.get("attributes") or {}),
+                "id": str(resource.get("id") or ""),
+                "resourceType": resource.get("type"),
+            }
+            for resource in included
+            if isinstance(resource, dict) and isinstance(resource.get("attributes"), dict)
+        )
+    return records, value.get("meta") if isinstance(value.get("meta"), dict) else {}
 
 
 class PlanetBidsConnector(BaseConnector):
@@ -315,12 +437,23 @@ class PlanetBidsConnector(BaseConnector):
         records = {}
         next_url = self.profile.discovery_url
         for page in range(1, pages + 1):
+            params = {
+                "page": page,
+                "per_page": min(q.page_size or self.profile.page_size, self.profile.page_size),
+            }
+            if self.profile.organization_id:
+                params.update(
+                    {
+                        "bid_type_id": 0,
+                        "cid": self.profile.organization_id,
+                        "dept_id": 0,
+                        "sort_order": -1,
+                        "stage_id": 0,
+                    }
+                )
             response = await self._get(
                 next_url,
-                params={
-                    "page": page,
-                    "pageSize": min(q.page_size or self.profile.page_size, self.profile.page_size),
-                },
+                params=params,
             )
             digest = hashlib.sha256(response.content).digest()
             if digest in seen_pages:
@@ -329,7 +462,11 @@ class PlanetBidsConnector(BaseConnector):
             boundary = detect_access_boundary(response.text)
             if boundary is not PlanetBidsAccessState.PUBLIC:
                 raise PlanetBidsAccessError(boundary)
-            items, links = parse_page(response.text)
+            items, meta = parse_api_response(response.text)
+            if not items:
+                items, links = parse_page(response.text)
+            else:
+                links = []
             if not items:
                 if page == 1 and not re.search(
                     r"no (?:open )?(?:opportunities|solicitations)|data-planetbids-list",
@@ -350,7 +487,11 @@ class PlanetBidsConnector(BaseConnector):
                 records.setdefault(raw_id, data)
             if len(records) >= maximum:
                 break
-            if not any(rel == "next" for _, rel, _, _ in links):
+            total_pages = meta.get("totalPages") if isinstance(meta, dict) else None
+            if total_pages is not None:
+                if page >= int(total_pages):
+                    break
+            elif not any(rel == "next" for _, rel, _, _ in links):
                 break
         for raw_id, data in sorted(
             records.items(), key=lambda x: (str(x[1].get("postedDate", "")), x[0]), reverse=True
@@ -362,12 +503,17 @@ class PlanetBidsConnector(BaseConnector):
                 continue
             if q.include_details:
                 response = await self._get(self.profile.detail_url(raw_id))
-                detail, _ = parse_page(response.text)
+                detail, _ = parse_api_response(response.text)
+                if not detail:
+                    detail, _ = parse_page(response.text)
                 boundary = detect_access_boundary(response.text)
                 # Structured opportunity data may legitimately describe individual
                 # gated packages; that must not classify the whole public page as gated.
                 if detail:
-                    item = self._normalize({**data, **detail[0]}, raw_id)
+                    enriched = {**data, **detail[0]}
+                    if self.profile.organization_id:
+                        enriched.update(await self._public_supplements(raw_id))
+                    item = self._normalize(enriched, raw_id)
                 elif boundary is not PlanetBidsAccessState.PUBLIC:
                     item.raw_payload["detail_access_state"] = boundary.value
                 else:
@@ -378,14 +524,14 @@ class PlanetBidsConnector(BaseConnector):
                 break
 
     def _normalize(self, data, raw_id):
-        url = str(data.get("url") or self.profile.detail_url(raw_id))
+        url = str(data.get("url") or self._public_detail_url(raw_id))
         safe = self._safe_url(url) or self.profile.detail_url(raw_id)
         docs = data.get("documents") if isinstance(data.get("documents"), list) else []
         source_id = f"{CANONICAL_FAMILY}:{self.profile.profile_key}:{raw_id}"
-        posted = self._datetime(data.get("postedDate"))
-        due = self._datetime(data.get("dueDate"))
+        posted = self._datetime(data.get("postedDate") or data.get("issueDate"))
+        due = self._datetime(data.get("dueDate") or data.get("bidDueDate"))
         provenance = {
-            k: {"source": "public embedded JSON", "value": v, "inferred": False}
+            k: {"source": "public PlanetBids JSON", "value": v, "inferred": False}
             for k, v in data.items()
             if v not in (None, "")
         }
@@ -398,9 +544,9 @@ class PlanetBidsConnector(BaseConnector):
             ),
             title=str(data.get("title") or data.get("name")),
             agency=str(data.get("agency") or self.profile.agency_name),
-            description=data.get("description"),
-            solicitation_number=data.get("solicitationNumber"),
-            status=self._status(data.get("status")),
+            description=data.get("description") or data.get("details") or data.get("scope"),
+            solicitation_number=data.get("solicitationNumber") or data.get("invitationNum"),
+            status=self._status(data.get("status") or data.get("stageStr")),
             posted_at=posted,
             due_at=due,
             categories=list(data.get("categories") or []),
@@ -411,6 +557,13 @@ class PlanetBidsConnector(BaseConnector):
                 "authoritative_url": safe,
                 "official_agency_url": self.profile.official_procurement_url,
                 "documents": docs,
+                "contact_name_and_phone": data.get("contactNameAndPhone"),
+                "contact_email": data.get("contactEmail"),
+                "department": data.get("deptName"),
+                "pre_bid_meetings": data.get("preBidMeetings", []),
+                "addenda": data.get("addenda", []),
+                "questions_and_answers": data.get("questionsAndAnswers", []),
+                "public_notices": data.get("publicNotices", []),
                 "source_provenance": provenance,
                 "access_state": data.get("accessState", "public"),
                 "documents_complete": all(
@@ -420,6 +573,73 @@ class PlanetBidsConnector(BaseConnector):
                 ),
             },
         )
+
+    async def _public_supplements(self, raw_id: str) -> dict[str, Any]:
+        routes = {
+            "documents": "bid-downloadable-files",
+            "addenda": "bid-addenda",
+            "questionsAndAnswers": "bid-q-and-a-items",
+            "publicNotices": "bid-email-history-items",
+            "preBidMeetings": "pre-bid-meetings",
+        }
+        result: dict[str, Any] = {}
+        for key, route in routes.items():
+            try:
+                response = await self._get(f"{API_ROOT}/{route}", params={"bid_id": raw_id})
+            except PlanetBidsError:
+                result[key] = []
+                continue
+            records, _ = parse_api_response(response.text)
+            if key == "documents":
+                result[key] = [self._document_record(record) for record in records]
+            elif key == "addenda":
+                result[key] = [
+                    record
+                    for record in records
+                    if record.get("resourceType") != "bid-addendum-attachments"
+                ]
+                result.setdefault("documents", []).extend(
+                    self._document_record(record, category="addendum")
+                    for record in records
+                    if record.get("resourceType") == "bid-addendum-attachments"
+                )
+            else:
+                result[key] = records
+        return result
+
+    def _document_record(
+        self, record: Mapping[str, Any], *, category: str | None = None
+    ) -> dict[str, Any]:
+        path = str(record.get("serverFullPath") or "").strip()
+        filename = str(record.get("serverFilename") or record.get("filename") or "").strip()
+        if path and not path.startswith(("http://", "https://")):
+            path = f"https://{path.lstrip('/')}"
+        url = f"{path.rstrip('/')}/{filename}" if path and filename else ""
+        url = self._safe_url(url, document=True) or ""
+        return {
+            "id": str(record.get("downloadableFileId") or record.get("id") or ""),
+            "label": record.get("fileTitle") or record.get("filename") or "document",
+            "filename": record.get("filename") or filename,
+            "url": url,
+            "mediaType": None,
+            # Metadata was anonymous for both tenants, but only one Stanislaus PDF
+            # was actually downloaded. Leave automatic retrieval conservative.
+            "accessState": "public_metadata_only",
+            "direct": False,
+            "category": category,
+            "fileSize": record.get("fileSize"),
+            "uploadedDate": record.get("uploadedDate"),
+            "publiclyVisible": record.get("publiclyVisible"),
+            "recalled": record.get("recalled"),
+        }
+
+    def _public_detail_url(self, raw_id: str) -> str:
+        if self.profile.organization_id:
+            return (
+                f"https://vendors.planetbids.com/portal/{self.profile.organization_id}"
+                f"/bo/bo-detail/{raw_id}"
+            )
+        return self.profile.detail_url(raw_id)
 
     def document_candidates(self, opportunity):
         result = []
@@ -473,13 +693,25 @@ class PlanetBidsConnector(BaseConnector):
             raise PlanetBidsError("unsafe URL")
         for attempt in range(self.profile.retries + 1):
             try:
-                response = await self._transport.get(safe, params=params)
+                headers = {"accept": "application/vnd.api+json"}
+                if self.profile.organization_id:
+                    headers["company-id"] = self.profile.organization_id
+                response = await self._transport.get(safe, params=params, headers=headers)
                 self._last_status = response.status_code
                 if response.status_code in self._transient and attempt < self.profile.retries:
                     await self._sleep(self._backoff(attempt, response.headers.get("retry-after")))
                     continue
-                if response.status_code in {401, 403}:
+                if response.status_code == 401:
                     raise PlanetBidsAccessError(PlanetBidsAccessState.LOGIN_REQUIRED)
+                if response.status_code == 403:
+                    boundary = detect_access_boundary(response.text)
+                    raise PlanetBidsAccessError(
+                        boundary
+                        if boundary is not PlanetBidsAccessState.PUBLIC
+                        else PlanetBidsAccessState.RESTRICTED
+                    )
+                if response.status_code == 404:
+                    raise PlanetBidsAccessError(PlanetBidsAccessState.NOT_FOUND)
                 response.raise_for_status()
                 self._failures = 0
                 self._access = PlanetBidsAccessState.PUBLIC

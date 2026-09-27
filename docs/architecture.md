@@ -644,10 +644,15 @@ count, results, retries, timeouts, backoff, and circuit state. Redirected attach
 remain the responsibility of the shared safe downloader, which revalidates every hop;
 the connector does not weaken SSRF, MIME, size, HTML-wall, archive, or filename rules.
 
-Embedded fixture JSON and semantic server HTML are supported without a browser. Public
+The production adapter consumes the anonymous PlanetBids JSON:API contract observed for
+Stanislaus County and the Los Angeles County Office of Education. It sends the agency
+identifier as both the bounded `cid` parameter and `company-id` header and performs no
+OAuth refresh, user-context mutation, analytics POST, login, or registration action.
+Embedded fixture JSON and semantic server HTML remain supported without a browser. Public
 Q&A, addenda, tabulations, intent-to-award, and award resources become provenance-rich
 document candidates. Mixed public and gated resources retain independent access states,
-and only anonymous direct files enter retrieval. Platform identity is agency-qualified,
+and only separately proven anonymous direct files enter retrieval. Anonymous file-list
+metadata alone is classified `public_metadata_only`. Platform identity is agency-qualified,
 while migration metadata prevents stale PlanetBids portals from being treated as the
 current platform. VendorLine is explicitly out of scope.
 

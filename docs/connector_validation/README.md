@@ -164,8 +164,10 @@ Do not use paid DemandStar aggregation as the evidence source. Capture agency-sc
 
 ### PlanetBids
 
-- [ ] First authoritative agency PlanetBids portal
-- [ ] Second independently operated agency PlanetBids portal
+- [x] Stanislaus County, California — agency 14599
+- [x] Los Angeles County Office of Education, California — agency 61954
+
+Evidence: [PlanetBids two-tenant validation](planetbids_two_tenants_2026-09-23.md).
 
 Do not infer support from VendorLine or unrelated PlanetBids marketing pages. Both targets require authoritative agency linkage and observed public routes.
 

@@ -914,9 +914,13 @@ a public PlanetBids page, or a sanitized fixture; record verification notes rath
 assuming all opportunities and files are public. Profiles may be `active`,
 `configured_unverified`, `legacy`, `migrated`, or `unavailable`.
 
-Discovery uses bounded anonymous GET requests and fixture-supported embedded JSON or
-semantic HTML. It deduplicates tenant-qualified records, detects repeated pages and
-changed markup, applies query filters, then retrieves public detail pages. Stable IDs
+Discovery supports the production JSON:API contract observed anonymously at
+`api-external.prod.planetbids.com`, plus fixture-supported embedded JSON or semantic
+HTML. Production presets are Stanislaus County (`company-id`/`cid` 14599) and the Los
+Angeles County Office of Education (61954). Bounded GET requests cover listings,
+details, downloadable-file metadata, addenda, Q&A, public email-history notices, and
+pre-bid meetings. The connector deduplicates tenant-qualified records, detects repeated pages and
+changed markup, applies query filters, then retrieves public detail metadata. Stable IDs
 have the form `planetbids:{profile_key}:{upstream_id}` so identical solicitation
 numbers at different agencies never collide. Detail payloads preserve field
 provenance, canonical and official URLs, public Q&A, addenda, results, award data, and
@@ -936,10 +940,16 @@ invitation-only solicitations, uses VendorLine paid aggregation, bypasses CAPTCH
 circumvents portal controls. It uses no POST navigation. Migrated and inactive profiles
 fail closed and retain replacement metadata without relabeling the replacement system.
 
-Fixture-verified behavior demonstrates connector behavior against captured test inputs.
-It does not prove that every PlanetBids agency portal, opportunity, or document remains
+The two production presets were reconciled against anonymous sanitized HAR evidence
+captured on 2026-09-23. The evidence demonstrates the shared JSON:API contract but does
+not prove that every PlanetBids agency portal, opportunity, or document remains
 anonymously accessible. Portal generations and agency configuration differ; unsupported
-markup is reported as `changed_markup`. No live profile is enabled by this change.
+markup is reported as `changed_markup`. File metadata is retained as
+`public_metadata_only` unless anonymous retrieval is separately established; the
+Stanislaus capture includes one representative HTTP 200 PDF download, but that does not
+promote every listed file or the LACOE tenant to automatic retrieval. A cookie-free direct
+transport check on 2026-09-27 returned HTTP 403; the connector reports that boundary and
+does not synthesize browser/session headers to circumvent it.
 
 ## Maryland eMMA public connector
 
